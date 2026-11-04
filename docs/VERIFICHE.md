@@ -15,7 +15,10 @@ Eseguite il 4 novembre 2026 in ambiente Codex.
 | Raggiungibilità provider | Endpoint sport ufficiale restituisce HTTP 401 senza chiave | Non prova copertura né validità chiave |
 | Browser Android/PC | Non eseguito | Strumento browser QA non disponibile; CSS responsive predisposto |
 | Modello statistico | Non eseguito | Nessun modello o dataset: nessuna previsione operativa |
+| Salvataggio GitHub | Bloccato: HTTP 403 | Push Git e creazione ramo tramite integrazione entrambi negati; nessuna pull request creata |
 
 I test degli endpoint richiedono apertura di socket locali. Nell'ambiente Codex è stato necessario eseguirli fuori dal vincolo di rete locale della sandbox; nessun servizio pubblico è stato avviato. La suite CI richiede Node 22 e ripete `npm run check`.
 
 Controllo credenziali: `.env` ignorato; `.env.example` contiene solo valori vuoti. Il provider usa esclusivamente variabili server; nessuna API key reale disponibile o inserita nel repository. Il bundle frontend non importa i moduli server.
+
+Il codice è conservato nel ramo locale `feat/phase-1-foundation` e fornito anche come archivio sorgenti e bundle Git. La lettura del repository pubblico funziona; la scrittura richiede correzione dei permessi della connessione. I metadati che indicavano permessi di scrittura non sono confermati dalla prova effettiva, fallita con `Resource not accessible by integration`.
