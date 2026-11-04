@@ -59,3 +59,5 @@ Value Tracker: matematica e soglie testate su fixture sintetiche; HTTP privato v
 - Intervalli Wilson descrittivi nella scheda giocatore verificati matematicamente; non sono intervalli predittivi della prossima partita.
 - Nessuna chiave o cache grezza nei nuovi file; migrazioni Vercel `APP_DATABASE_SETUP=0` e `APP_CHOICES_SETUP=0` verificate tramite metadati, nessuna nuova migrazione.
 - Il login reale dell'utente e l'accesso browser alla produzione dietro protezione Vercel non sono stati automatizzati. Il test locale usa una sessione fittizia, non l'account reale.
+
+Pubblicazione della ricerca: commit applicativo `6869ee6cbc25cc5a12a5f44c93f48d849af0e5b8`, deployment Vercel `dpl_EpdXs3XpTkUTU7NpqSsMJRq7n3km` **READY**. Alias `https://ping-pong-ping-pong3.vercel.app` verificato sul nuovo deployment. Build cloud riuscita: feed reale 362 partite / 10 competizioni / 38 nomi mercato; verifiche DB in sola lettura, RLS e schema riuscite. Protezione Vercel mantenuta; navigazione locale verificata, sessione reale in produzione non automatizzata.
