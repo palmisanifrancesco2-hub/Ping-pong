@@ -13,6 +13,11 @@ async function start(handler: ReturnType<typeof createHandler>) {
   return `http://127.0.0.1:${address.port}`;
 }
 describe('private HTTP API', () => {
+  it('verifies private access independently from having an Auth session',async()=>{
+    const denied=await start(createHandler({env:{},authorize:async()=>null}));expect((await fetch(`${denied}/api/access`,{headers:{Authorization:'Bearer registered-outsider'}})).status).toBe(401);
+    const allowed=await start(createHandler({authorize:async()=>'member'}));const result=await fetch(`${allowed}/api/access`,{headers:{Authorization:'Bearer verified-member'}});
+    expect(await result.json()).toEqual({authorized:true});expect(result.headers.get('cache-control')).toBe('private, no-store');
+  });
   it('protects choice mutations and rejects forged fields before saving',async()=>{
     const choices={list:vi.fn(),save:vi.fn(),update:vi.fn()};const base=await start(createHandler({env:{},choices}));
     for(const method of ['POST','PATCH'])expect((await fetch(`${base}/api/choices`,{method,headers:{'Content-Type':'application/json'},body:'{}'})).status).toBe(401);

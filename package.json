@@ -15,6 +15,7 @@
     "check:moviodds": "tsx scripts/check-moviodds.ts",
     "check:feed": "tsx scripts/check-feed.ts",
     "check:history-schema": "tsx scripts/check-history-schema.ts",
+    "check:google-auth": "tsx scripts/check-google-auth.ts",
     "check:players": "tsx scripts/check-players.ts",
     "db:choices": "tsx scripts/setup-choices.ts",
     "db:bootstrap": "tsx scripts/bootstrap-db.ts",

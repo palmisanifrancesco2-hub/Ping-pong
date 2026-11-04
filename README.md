@@ -6,6 +6,10 @@ Supabase Auth e registro privato proteggono gli endpoint. Le due migrazioni iniz
 
 App privata: https://ping-pong-ping-pong3.vercel.app — indirizzo fisso assegnato al deployment Production aggiornato.
 
+## Accesso Google
+
+Pulsante “Continua con Google” con PKCE e verifica disponibilità reale del provider. È necessario abilitare il proprio client OAuth in Supabase: [configurazione da telefono e stato](docs/GOOGLE-LOGIN.md). La registrazione non concede accesso ai dati senza membership; nessuna modifica al registro privato.
+
 ## Quote e mercati
 
 Sono incluse solo partite live con lettura recente e partite con orario di inizio futuro. Ogni scheda permette di confrontare i giocatori e salvare partita o selezione nello storico personale, mantenendo quota e timestamp originali. La nuova tabella personale è attiva in Production, con quota originale non riscrivibile dal client.
@@ -39,6 +43,7 @@ Nell'ambiente Codex con proxy, Node 24 usa `NODE_USE_ENV_PROXY=1 npm run check:f
 
 | Metodo | Endpoint | Accesso | Comportamento |
 |---|---|---|---|
+| GET | `/api/access` | Token Supabase + appartenenza privata | Verifica accesso prima di caricare i dati |
 | GET | `/api/health` | Pubblico | Stato processo, nessun segreto |
 | GET | `/api/board` | Token Supabase verificato + appartenenza privata | Intero feed MoviOdds validato; risposta privata, no-store |
 | GET/POST/PATCH | `/api/choices` | Token e RLS del chiamante | Scelte personali, snapshot quota e note/esiti manuali |
@@ -52,7 +57,7 @@ Timeout, schema, identità evento/selezione, errori, dimensione del payload e ti
 
 ## Stato e limiti
 
-**155 test, TypeScript e build superati.** Chromium locale verificato su viewport mobile e desktop con feed reale e autenticazione sintetica isolata; questo non equivale a un nuovo login di produzione automatizzato.
+**162 test, TypeScript e build superati.** Chromium locale verificato su viewport mobile e desktop con feed reale e autenticazione sintetica isolata; questo non equivale a un nuovo login di produzione automatizzato.
 
 [Integrazione e verifiche MoviOdds](docs/FASE-3.md), [database e ricerca fornitori](docs/FASE-2.md), [configurazione cloud](docs/CONFIGURAZIONE.md), [registro verifiche](docs/VERIFICHE.md).
 

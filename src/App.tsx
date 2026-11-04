@@ -8,12 +8,15 @@ import type { HistoryPeriod } from './shared/history';
 import { isFreshLive } from './shared/board';
 import { PersonalChoices } from './Choices';
 import { ModelStats } from './ModelStats';
+import { GoogleSignIn } from './GoogleSignIn';
+import { usePrivateAccess } from './usePrivateAccess';
+import { cleanAuthCallbackUrl, googleCallbackError } from './shared/google-auth';
 
 const url = import.meta.env.VITE_SUPABASE_URL;
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 const auth = (() => {
   if (!url || !key) return null;
-  try { return createClient(url, key); } catch { return null; }
+  try { return createClient(url, key, { auth: { flowType: 'pkce', detectSessionInUrl: true } }); } catch { return null; }
 })();
 const sections = ['Dashboard', 'Partite e mercati', 'Value Tracker', 'Statistiche modello', 'Storico pronostici', 'Le mie scelte', 'Smart Stake', 'Collegamenti'] as const;
 type Section = typeof sections[number];
@@ -23,15 +26,16 @@ export function App() {
   const [section, setSection] = useState<Section>('Dashboard');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [notice, setNotice] = useState('');
+  const [notice, setNotice] = useState(() => googleCallbackError(window.location.search, window.location.hash) ?? '');
   const [busy, setBusy] = useState(false);
   const [report, setReport] = useState<ConnectionReport | null>(null);
   const [period, setPeriod] = useState<HistoryPeriod>('30');
-  const feed = useBoard(session?.access_token, !!session && !demo);
+  const access = usePrivateAccess(session?.access_token, !!session && !demo);
+  const feed = useBoard(session?.access_token, !!session && !demo && access.status === 'allowed');
   useEffect(() => {
     if (!auth) return;
     let active = true;
-    auth.auth.getSession().then(({ data }) => { if (active) setSession(data.session); }).catch(() => { if (active) setNotice('Sessione non disponibile. Accedi nuovamente.'); });
+    auth.auth.getSession().then(({ data, error }) => { if (active) { setSession(data.session); if (error) setNotice('Accesso o ripristino della sessione non riuscito. Riprova.'); } }).catch(() => { if (active) setNotice('Sessione non disponibile. Accedi nuovamente.'); }).finally(() => { window.history.replaceState(window.history.state, '', cleanAuthCallbackUrl(window.location.href)); });
     const { data } = auth.auth.onAuthStateChange((_event, value) => {
       if (active) { setSession(value); setReport(null); }
     });
@@ -64,9 +68,11 @@ export function App() {
     <section className="intro"><Brand/><span className="eyebrow">IL TUO OSSERVATORIO PRIVATO</span><h1>Il gioco cambia.<br/><em>I dati contano.</em></h1><p>Quote verificabili, confronti rigorosi e analisi trasparenti. Un unico spazio dedicato al tennistavolo.</p><div className="court" aria-hidden="true"><span>01</span><i/><b>↗</b></div><p className="fine">Nessuna scommessa automatica. Nessuna promessa di rendimento.</p></section>
     <section className="login-card"><span className="eyebrow">PING PONG ANALYTICS · V0.1</span><h2>Accedi al tuo spazio</h2><p>L’accesso è riservato agli utenti invitati.</p>
       {!auth && <div className="banner">Configurazione iniziale richiesta: Supabase Auth non è ancora collegato. Nessun dato privato è disponibile.</div>}
+      <GoogleSignIn auth={auth} url={url} publicKey={key} busy={busy} onBusy={setBusy} onNotice={setNotice}/>
       <form onSubmit={login}><label>Email<input type="email" autoComplete="username" required value={email} onChange={e => setEmail(e.target.value)} disabled={!auth}/></label><label>Password<input type="password" autoComplete="current-password" required value={password} onChange={e => setPassword(e.target.value)} disabled={!auth}/></label><button className="primary" disabled={busy || !auth}>{busy ? 'Accesso in corso…' : 'Accedi →'}</button></form>
       <p role="status">{notice}</p><button className="text-button" onClick={() => { setDemo(true); setNotice(''); }}>Esplora l’anteprima senza dati →</button><p className="fine">L’anteprima non accede alle API e non contiene quote o previsioni.</p>
     </section></main>;
+  if (session && !demo && access.status !== 'allowed') return <main className="login-shell access-shell"><section className="intro"><Brand/><h1>Il tuo spazio<br/><em>resta privato.</em></h1></section><section className="login-card"><span className="eyebrow">VERIFICA ACCESSO</span><h2>{access.status === 'checking' ? 'Verifica del tuo account…' : access.status === 'denied' ? 'Account non abilitato' : 'Verifica non disponibile'}</h2><p role="status">{access.status === 'checking' ? 'Attendi la verifica dell’accesso privato.' : access.status === 'denied' ? 'La registrazione o l’accesso Google non concedono automaticamente l’accesso ai dati. Usa l’account autorizzato dal proprietario.' : 'Non possiamo verificare l’abilitazione in questo momento. Nessun dato privato è stato caricato.'}</p>{access.status !== 'checking' && <button className="primary" onClick={access.retry}>Riprova verifica</button>}<button className="text-button" onClick={async () => { await auth?.auth.signOut(); setSession(null); setNotice(''); }}>Esci o usa un altro account →</button></section></main>;
   return <div className="app-shell"><aside><Brand/><span className="eyebrow workspace">WORKSPACE PRIVATO</span><nav aria-label="Navigazione principale">{sections.map((name, i) => <button key={name} className={section === name ? 'nav-item active' : 'nav-item'} onClick={() => { setSection(name); setNotice(''); }}><span aria-hidden="true">{['◫','≋','↗','◷','▤','☆','◎','⚙'][i]}</span>{name}</button>)}</nav><div className="sidebar-bottom"><span className="status-dot"/> {demo ? 'Anteprima' : 'Sessione autenticata'}<small>Pronostici soggetti a verifica</small><button className="text-button" onClick={async () => { if (session) await auth?.auth.signOut(); setDemo(false); setReport(null); setNotice(''); }}>Esci dallo spazio ↗</button></div></aside>
     <main className="workspace-main"><header><div><span className="eyebrow">ANALISI / {section.toUpperCase()}</span><h1>{section}</h1></div><div className="header-actions"><span className="badge">{demo ? 'DEMO · SENZA DATI' : 'MODALITÀ REALE'}</span><button className="text-button" onClick={async () => { if (session) await auth?.auth.signOut(); setDemo(false); setReport(null); setNotice(''); }}>Esci ↗</button></div></header>
       <div className="banner">{demo ? 'Anteprima dell’interfaccia. Nessuna chiamata API, quota o statistica simulata.' : 'MoviOdds · Quote bet365 estere. Solo live confermati e partite da iniziare. Pronostici soggetti a dati e validazione; scelte personali separate.'}</div>

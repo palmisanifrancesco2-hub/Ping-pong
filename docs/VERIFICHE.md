@@ -4,7 +4,7 @@ Eseguite il 4 novembre 2026 in ambiente Codex.
 
 | Controllo | Risultato | Limiti |
 |---|---|---|
-| Vitest | 155 test superati in 18 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
+| Vitest | 162 test superati in 19 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
 | Endpoint HTTP | Health, auth, metodo, percorso e cache verificati su localhost | Token/provider sostituiti nei test HTTP; nessun login remoto certificato |
 | Auth Supabase | Gate di autorizzazione e gestione errori testati | Test unitari Auth con risposte simulate; account e appartenenza verificati anche sul database remoto |
 | PostgreSQL/RLS | Due migrazioni remote e 14 tabelle RLS; successivo controllo remoto READ ONLY conferma proprietario verificato/autorizzato, profilo isolato e rifiuto estranei/anonimi | Il proprietario ha confermato di riuscire a entrare dal telefono; verifica manuale riferita, non automatizzata |
@@ -43,3 +43,5 @@ Storico/LIVE Production `826338a`, deployment `dpl_AinxFK9ZZ1z4154Qd59KQBjK99qm`
 Versione giocatori/scelte: suite 155 test superata; Chromium conferma solo live/futuri e statistiche reali, salvataggi personali e note/esiti in ambiente isolato. Il modello Elo è realmente testato ma bloccato: Brier 0,251484 e Log Loss 0,696029 su 118 casi fuori campione. Nessuna previsione retroattiva creata. Dettagli in [Giocatori e scelte](GIOCATORI-E-SCELTE.md).
 
 Release giocatori/scelte `0704182` Production READY, alias fisso confermato. Migrazione terza applicata (1 nuova / 3 totali); flag entrambi 0 dopo riuscita. Server Vercel verifica feed solo attivo, archivio giocatori reale, RLS proprietario, accesso anonimo negato e snapshot immutabile. Query storico/scelte a limite zero riuscite. Nessuna previsione operativa: modello globale fallisce il test. Vedere [dettagli della pubblicazione](GIOCATORI-E-SCELTE.md).
+
+Google OAuth: 162 test e build superati. Browser locale con provider/sessioni sintetici conferma PKCE, account autorizzato, non membro senza feed, annullamento e provider spento. Il login Google reale non è stato eseguito e l’attivazione del provider va verificata sul progetto; nessun nuovo utente remoto o modifica di membership. [Dettagli](GOOGLE-LOGIN.md).

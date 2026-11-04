@@ -7,6 +7,10 @@ const env = { SUPABASE_URL: 'https://test.supabase.co', SUPABASE_ANON_KEY: 'sb_p
 beforeEach(() => rpc.mockResolvedValue({ data: true, error: null }));
 afterEach(() => { getUser.mockReset(); rpc.mockReset(); });
 describe('Supabase authorization gate', () => {
+  it('does not grant access solely because a new account used Google',async()=>{
+    getUser.mockResolvedValue({data:{user:{id:'new-google-user',email:'synthetic@example.test',app_metadata:{provider:'google'}}},error:null});rpc.mockResolvedValue({data:false,error:null});
+    expect(await authorize('synthetic-google-session',{...env,ALLOWED_USER_IDS:''})).toBeNull();expect(rpc).toHaveBeenCalledWith('is_authorized_user');
+  });
   it('requires both a verified token and explicit membership', async () => {
     getUser.mockResolvedValue({ data: { user: { id: 'allowed-user' } }, error: null });
     expect(await authorize('test-token',env)).toBe('allowed-user');
