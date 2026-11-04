@@ -13,12 +13,14 @@ export type HistoryEntry = {
   odds: number; probability: number; sampleSize: number; model: string; modelValidated: boolean;
   bookmaker: string; quoteUpdatedAt: string; status: OutcomeStatus; settledAt: string | null;
   result: string | null; resultSource: string | null; theoreticalProfit: number | null;
+  reportedStatus?: 'won' | 'lost' | null;
 };
 export type HistoryReport = {
   checkedAt: string; from: string | null; to: string; period: HistoryPeriod; page: number; pageSize: number;
   totalRecorded: number; analyzed: number; partial: boolean; filteredCount: number;
   summary: { won: number; lost: number; void: number; pending: number; unverified: number; hitRate: number | null; theoreticalProfit: number | null };
   entries: HistoryEntry[];
+  sourceSummary?: {won:number;lost:number;hitRate:number|null};
 };
 export function historyWindow(period: string, now: number) {
   if (!HISTORY_PERIODS.some(([v]) => v === period) || !Number.isFinite(now)) throw new Error('INVALID_HISTORY_PERIOD');

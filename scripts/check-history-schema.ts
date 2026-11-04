@@ -12,6 +12,9 @@ async function main() {
     global: { fetch: (input, init) => fetch(input, { ...init, signal: AbortSignal.timeout(12_000) }) } });
   const result = await client.from('predictions').select(HISTORY_SELECT).limit(0);
   if (result.error || !Array.isArray(result.data) || result.data.length !== 0) throw new Error('HISTORY_SCHEMA_QUERY_FAILED');
+  const choices = await client.from('personal_choices').select('id,snapshot,saved_at,notes,manual_status,manual_settled_at').limit(0);
+  if(choices.error||!Array.isArray(choices.data)||choices.data.length!==0)throw new Error('CHOICES_SCHEMA_QUERY_FAILED');
   console.info(JSON.stringify({ historySchemaVerification: 'success', readOnly: true, returnedRows: 0 }));
+  console.info(JSON.stringify({ choicesSchemaVerification: 'success', readOnly: true, returnedRows: 0 }));
 }
 try { await main(); } catch { console.error('HISTORY_SCHEMA_VERIFICATION_FAILED'); process.exitCode = 1; }

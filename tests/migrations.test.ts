@@ -31,10 +31,10 @@ describe('transactional database setup', () => {
   });
   it('applies all reviewed migrations once and verifies their checksums on rerun', async () => {
     const { db,adapter } = await fresh(); const migrations = await files();
-    expect(await applyMigrations(adapter,migrations)).toEqual({ applied:2,total:2 });
-    expect(await applyMigrations(adapter,migrations)).toEqual({ applied:0,total:2 });
+    expect(await applyMigrations(adapter,migrations)).toEqual({ applied:3,total:3 });
+    expect(await applyMigrations(adapter,migrations)).toEqual({ applied:0,total:3 });
     const tables = await db.query<{ rowsecurity:boolean }>("select rowsecurity from pg_tables where schemaname='public'");
-    expect(tables.rows).toHaveLength(14); expect(tables.rows.every(t => t.rowsecurity)).toBe(true);
+    expect(tables.rows).toHaveLength(15); expect(tables.rows.every(t => t.rowsecurity)).toBe(true);
   });
   it('refuses an existing unknown database without creating the ledger', async () => {
     const { db,adapter } = await fresh(); await db.exec('create table public.existing_data(id int)');

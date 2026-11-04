@@ -13,6 +13,16 @@ async function start(handler: ReturnType<typeof createHandler>) {
   return `http://127.0.0.1:${address.port}`;
 }
 describe('private HTTP API', () => {
+  it('protects choice mutations and rejects forged fields before saving',async()=>{
+    const choices={list:vi.fn(),save:vi.fn(),update:vi.fn()};const base=await start(createHandler({env:{},choices}));
+    for(const method of ['POST','PATCH'])expect((await fetch(`${base}/api/choices`,{method,headers:{'Content-Type':'application/json'},body:'{}'})).status).toBe(401);
+    expect(choices.save).not.toHaveBeenCalled();const privateBase=await start(createHandler({choices,authorize:async()=>'owner'}));
+    const response=await fetch(`${privateBase}/api/choices`,{method:'POST',headers:{Authorization:'Bearer test','Content-Type':'application/json'},body:JSON.stringify({eventId:'e',userId:'other',odds:100})});
+    expect(response.status).toBe(400);expect(choices.save).not.toHaveBeenCalled();
+  });
+  it('protects analysis and settlement from unauthorized or unsafe methods',async()=>{
+    const base=await start(createHandler({env:{}}));expect((await fetch(`${base}/api/analysis?eventId=e`,{method:'POST'})).status).toBe(401);expect((await fetch(`${base}/api/settle`,{method:'POST'})).status).toBe(401);expect((await fetch(`${base}/api/settle`)).status).toBe(405);
+  });
   it('protects history and validates filters before querying the database', async () => {
     const history = vi.fn();
     const denied = await start(createHandler({ env: {}, history }));

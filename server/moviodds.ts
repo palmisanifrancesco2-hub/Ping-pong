@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { Board } from '../src/shared/board.js';
-import { quoteIdentity } from '../src/shared/board.js';
+import { isUpcomingOrLive, quoteIdentity } from '../src/shared/board.js';
 import { MOVIODDS_URL } from './moviodds-discovery.js';
 
 const text = z.string().max(500);
@@ -46,6 +46,10 @@ export class MoviOddsFeed {
   private failedAt?: number;
   constructor(private fetcher: typeof fetch = fetch, private now: () => number = Date.now) {}
   async board(): Promise<Board> {
+    const board = await this.rawBoard();
+    return { ...board, matches: board.matches.filter(m => isUpcomingOrLive(m, this.now())) };
+  }
+  private async rawBoard(): Promise<Board> {
     if (this.cached && this.now() - this.cached.at < 30_000) return this.cached.board;
     if (this.failedAt !== undefined && this.now() - this.failedAt < 30_000) throw new Error('MOVIODDS_COOLDOWN');
     if (this.pending) return this.pending;

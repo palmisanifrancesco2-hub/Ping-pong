@@ -6,7 +6,7 @@ import { historyWindow, summarizeHistory, type HistoryEntry, type HistoryReport,
 
 const number = z.union([z.number(), z.string().regex(/^-?\d+(?:\.\d+)?$/)]).transform(Number).pipe(z.number().finite());
 const outcome = z.object({ status: z.enum(['won', 'lost', 'void', 'pending']), settled_at: z.string().nullable(), result_event_id: z.string(),
-  result: z.object({ status: z.enum(['official', 'cancelled', 'void']), score: z.unknown(), source: z.string() }).nullable() });
+  result: z.object({ status: z.enum(['official', 'reported', 'cancelled', 'void']), score: z.unknown(), source: z.string() }).nullable() });
 const rowSchema = z.object({
   id: z.string(), user_id: z.string(), mode: z.literal('real'), predicted_at: z.iso.datetime({ offset: true }),
   selection: z.string(), probability: number.pipe(z.number().min(0).max(1)), sample_size: z.number().int().positive(),
@@ -21,9 +21,12 @@ export function historyEntry(payload: unknown, userId: string, now = Date.now())
   const p = rowSchema.parse(payload);
   if (p.user_id !== userId) throw new Error('HISTORY_OWNER_MISMATCH');
   let status: OutcomeStatus = p.outcome?.status ?? 'pending';
+  let reportedStatus: 'won' | 'lost' | null = null;
   if (p.outcome && status !== 'pending') {
     const settledAt = Date.parse(p.outcome.settled_at ?? '');
     const result = p.outcome.result;
+    if (result?.status === 'reported' && (status === 'won' || status === 'lost') && p.outcome.result_event_id === p.market.event_id
+      && Number.isFinite(settledAt) && settledAt >= Date.parse(p.predicted_at) && settledAt <= now) reportedStatus=status;
     if (p.outcome.result_event_id !== p.market.event_id || !Number.isFinite(settledAt) || settledAt < Date.parse(p.predicted_at) || settledAt > now
       || !result || (status !== 'void' && result.status !== 'official')) status = 'unverified';
   }
@@ -34,8 +37,8 @@ export function historyEntry(payload: unknown, userId: string, now = Date.now())
     selection: p.selection, odds: p.quote.decimal_odds, probability: p.probability, sampleSize: p.sample_size,
     model: `${p.model.name} ${p.model.version}`, modelValidated: p.model.validated,
     bookmaker: p.quote.bookmaker.name, quoteUpdatedAt: p.quote.source_updated_at,
-    status, settledAt: status === 'unverified' ? null : p.outcome?.settled_at ?? null,
-    result: status === 'pending' || status === 'unverified' || p.outcome?.result?.score == null ? null : JSON.stringify(p.outcome.result.score).slice(0, 300),
+    status, reportedStatus, settledAt: status === 'unverified' && !reportedStatus ? null : p.outcome?.settled_at ?? null,
+    result: status === 'pending' || (status === 'unverified' && !reportedStatus) || p.outcome?.result?.score == null ? null : JSON.stringify(p.outcome.result.score).slice(0, 300),
     resultSource: p.outcome?.result?.source ?? null, theoreticalProfit: profit };
 }
 export function parseHistoryQuery(params: URLSearchParams) {
@@ -75,7 +78,7 @@ export async function readHistory(input: HistoryRequest, fetcher: typeof fetch =
     const start = (input.page - 1) * 50;
     return { checkedAt: new Date(now).toISOString(), ...window, page: input.page, pageSize: 50, totalRecorded: total,
       analyzed: entries.length, partial: entries.length < total, filteredCount: filtered.length,
-      summary: summarizeHistory(entries), entries: filtered.slice(start, start + 50) };
+      summary: summarizeHistory(entries),sourceSummary:(()=>{const won=entries.filter(e=>e.reportedStatus==='won').length,lost=entries.filter(e=>e.reportedStatus==='lost').length;return{won,lost,hitRate:won+lost?won/(won+lost):null};})(), entries: filtered.slice(start, start + 50) };
   } catch { throw new Error('HISTORY_UNAVAILABLE'); }
   finally { clearTimeout(timeout); controller.abort(); }
 }

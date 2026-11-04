@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Board } from './shared/board';
+import { isUpcomingOrLive } from './shared/board';
 
 export function useBoard(token: string | undefined, enabled: boolean) {
   const [board, setBoard] = useState<Board | null>(null);
@@ -32,5 +33,6 @@ export function useBoard(token: string | undefined, enabled: boolean) {
     document.addEventListener('visibilitychange', onVisibility);
     return () => { active = false; controller.abort(); clearInterval(poll); clearInterval(clock); document.removeEventListener('visibilitychange', onVisibility); };
   }, [token, enabled, revision]);
-  return { board: enabled && token ? board : null, error: enabled ? error : '', loading: enabled && loading, now, refresh: () => setRevision(v => v + 1) };
+  const visible = useMemo(() => enabled && token && board ? { ...board, matches: board.matches.filter(m => isUpcomingOrLive(m, now)) } : null, [board, enabled, token, now]);
+  return { board: visible, error: enabled ? error : '', loading: enabled && loading, now, refresh: () => setRevision(v => v + 1) };
 }

@@ -35,12 +35,12 @@ describe('all-market foreign board', () => {
   });
   it('filters exactly by competition and market and keeps unavailable rows explicit', () => {
     const f = { search: 'TEST a', competition: match.league, market: 'Game 2', state: 'live', minOdds: 1.3, includeUnavailable: true };
-    expect(filterBoard([match], f)).toEqual([match]);
-    expect(filterBoard([match], { ...f, competition: 'Different' })).toEqual([]);
-    expect(filterBoard([match], { ...f, market: 'Game 3' })).toEqual([]);
-    expect(filterBoard([match], { ...f, minOdds: 3 })).toEqual([]);
-    expect(filterBoard([{ ...match, quotes: [{ ...q, odds_dec: 0 }] }], f)).toHaveLength(1);
-    expect(filterBoard([{ ...match, quotes: [{ ...q, odds_dec: 0 }] }], { ...f, includeUnavailable: false })).toEqual([]);
+    expect(filterBoard([match], f, now)).toEqual([match]);
+    expect(filterBoard([match], { ...f, competition: 'Different' }, now)).toEqual([]);
+    expect(filterBoard([match], { ...f, market: 'Game 3' }, now)).toEqual([]);
+    expect(filterBoard([match], { ...f, minOdds: 3 }, now)).toEqual([]);
+    expect(filterBoard([{ ...match, quotes: [{ ...q, odds_dec: 0 }] }], f, now)).toHaveLength(1);
+    expect(filterBoard([{ ...match, quotes: [{ ...q, odds_dec: 0 }] }], { ...f, includeUnavailable: false }, now)).toEqual([]);
   });
   it('deduplicates concurrent requests, caches for 30 seconds and refreshes thereafter', async () => {
     let clock = now;

@@ -8,6 +8,8 @@ App privata: https://ping-pong-ping-pong3.vercel.app — indirizzo fisso assegna
 
 ## Quote e mercati
 
+Sono incluse solo partite live con lettura recente e partite con orario di inizio futuro. Ogni scheda permette di confrontare i giocatori e salvare partita o selezione nello storico personale, mantenendo quota e timestamp originali. La nuova tabella richiede l’apposita migrazione privata.
+
 Dashboard e sezione **Partite e mercati** leggono tutti i campionati e mercati restituiti dal feed MoviOdds, senza una lista fissa. Filtri per giocatore, campionato, stato e nome mercato; quota minima iniziale 1,30, nessuna massima, voci sospese identificabili e paginazione a blocchi di 25. Impostando quota minima 1 si vedono tutti i prezzi disponibili.
 
 Fonte: **bet365.com.au**, tramite un progetto indipendente da bet365. Non sono prezzi italiani verificati e non vengono trattati come quote ADM. Nessun abbinamento tra mercati ambigui, nessuna probabilità o previsione calcolata da questo feed. Il catalogo può contenere eventi oltre l'orario previsto, segnalati esplicitamente; le voci sospese/zero non sono quote giocabili.
@@ -39,6 +41,10 @@ Nell'ambiente Codex con proxy, Node 24 usa `NODE_USE_ENV_PROXY=1 npm run check:f
 |---|---|---|---|
 | GET | `/api/health` | Pubblico | Stato processo, nessun segreto |
 | GET | `/api/board` | Token Supabase verificato + appartenenza privata | Intero feed MoviOdds validato; risposta privata, no-store |
+| GET/POST/PATCH | `/api/choices` | Token e RLS del chiamante | Scelte personali, snapshot quota e note/esiti manuali |
+| POST | `/api/analysis` | Token + appartenenza privata | Statistiche giocatori e verifica requisiti pronostico |
+| GET | `/api/model` | Token + appartenenza privata | Metriche effettive del modello, bloccato |
+| POST | `/api/settle` | Token + appartenenza privata | Aggiornamento risultati riportati delle previsioni proprie |
 | GET | `/api/history` | Token Supabase + appartenenza, JWT del chiamante e RLS | Previsioni reali proprie, intervalli, esiti e riepilogo |
 | GET | `/api/connection` | Token Supabase verificato + appartenenza privata | Diagnostica catalogo The Odds API |
 
@@ -46,8 +52,10 @@ Timeout, schema, identità evento/selezione, errori, dimensione del payload e ti
 
 ## Stato e limiti
 
-**140 test, TypeScript e build superati.** Chromium locale verificato su viewport mobile e desktop con feed reale e autenticazione sintetica isolata; questo non equivale a un nuovo login di produzione automatizzato.
+**155 test, TypeScript e build superati.** Chromium locale verificato su viewport mobile e desktop con feed reale e autenticazione sintetica isolata; questo non equivale a un nuovo login di produzione automatizzato.
 
 [Integrazione e verifiche MoviOdds](docs/FASE-3.md), [database e ricerca fornitori](docs/FASE-2.md), [configurazione cloud](docs/CONFIGURAZIONE.md), [registro verifiche](docs/VERIFICHE.md).
+
+[Giocatori, scelte personali e prova del modello](docs/GIOCATORI-E-SCELTE.md). Il primo modello Elo è stato addestrato e testato realmente ma NON supera i controlli: Brier 0,251484 e Log Loss 0,696029 su 118 casi fuori campione. Non genera previsioni operative.
 
 Lo storico delle previsioni ora legge le tabelle esistenti con intervalli da 24 ore a 365 giorni e storico completo, filtri esito e riepilogo; resta vuoto fino a vere registrazioni. Il generatore e il settlement automatico non sono attivi. Lo storico quote non viene ancora raccolto nel database. Risultati ufficiali, validazione temporale, calibrazione, Value Tracker operativo e Smart Stake attendono dati sufficienti e verificati. Nessuna garanzia di gratuità futura o continuità del fornitore; concessioni ADM e diritti a valle non verificati indipendentemente.

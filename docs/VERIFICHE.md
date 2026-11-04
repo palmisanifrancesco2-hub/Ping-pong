@@ -4,7 +4,7 @@ Eseguite il 4 novembre 2026 in ambiente Codex.
 
 | Controllo | Risultato | Limiti |
 |---|---|---|
-| Vitest | 140 test superati in 15 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
+| Vitest | 155 test superati in 18 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
 | Endpoint HTTP | Health, auth, metodo, percorso e cache verificati su localhost | Token/provider sostituiti nei test HTTP; nessun login remoto certificato |
 | Auth Supabase | Gate di autorizzazione e gestione errori testati | Test unitari Auth con risposte simulate; account e appartenenza verificati anche sul database remoto |
 | PostgreSQL/RLS | Due migrazioni remote e 14 tabelle RLS; successivo controllo remoto READ ONLY conferma proprietario verificato/autorizzato, profilo isolato e rifiuto estranei/anonimi | Il proprietario ha confermato di riuscire a entrare dal telefono; verifica manuale riferita, non automatizzata |
@@ -39,3 +39,5 @@ Deployment MoviOdds Production `b3de748` READY: https://ping-pong-cvsy6nrzk-ping
 Storico e badge LIVE: [dettagli implementazione e prove](STORICO-E-LIVE.md). Polling 30 secondi osservato nel browser. Intervalli da 24 ore fino a un anno, nessuna previsione retroattiva e nessuna nuova migrazione. Il nuovo storico richiede future registrazioni autentiche prima di avere esiti da mostrare.
 
 Storico/LIVE Production `826338a`, deployment `dpl_AinxFK9ZZ1z4154Qd59KQBjK99qm` READY. Query PostgREST reale a limite zero riuscita, controllo database READ ONLY e feed riusciti, bootstrap non richiesto. Alias fisso https://ping-pong-ping-pong3.vercel.app confermato sul nuovo deployment; HEAD 302 verso login Vercel. Nessun dato fittizio o previsione retroattiva inserito.
+
+Versione giocatori/scelte: suite 155 test superata; Chromium conferma solo live/futuri e statistiche reali, salvataggi personali e note/esiti in ambiente isolato. Il modello Elo è realmente testato ma bloccato: Brier 0,251484 e Log Loss 0,696029 su 118 casi fuori campione. Nessuna previsione retroattiva creata. Dettagli in [Giocatori e scelte](GIOCATORI-E-SCELTE.md).

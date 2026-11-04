@@ -18,6 +18,9 @@ export function isFreshLive(match: FeedMatch, now: number): boolean {
   const age = now - Date.parse(match.polled_at ?? '');
   return match.in_play && Number.isFinite(age) && age >= -60_000 && age <= 60_000;
 }
+export function isUpcomingOrLive(match: FeedMatch, now: number): boolean {
+  return isFreshLive(match, now) || (!match.in_play && Number.isFinite(Date.parse(match.kickoff_utc ?? '')) && Date.parse(match.kickoff_utc!) > now);
+}
 // Preserve provider identity including changing game period and sub-market.
 export function marketIdentity(q: FeedQuote): string {
   return JSON.stringify([q.group_id, q.market_key ?? '', q.period ?? '', q.market_id ?? '', q.phase ?? 'prematch']);
@@ -35,9 +38,9 @@ export function quoteStatus(match: FeedMatch, q: FeedQuote, now: number): string
   return 'Letta di recente dalla fonte';
 }
 export type BoardFilters = { search: string; competition: string; market: string; state: string; minOdds: number; includeUnavailable: boolean };
-export function filterBoard(matches: FeedMatch[], f: BoardFilters): FeedMatch[] {
+export function filterBoard(matches: FeedMatch[], f: BoardFilters, now = Date.now()): FeedMatch[] {
   const text = f.search.trim().toLocaleLowerCase('it');
-  return matches.filter(m => (!text || `${m.home} ${m.away}`.toLocaleLowerCase('it').includes(text))
+  return matches.filter(m => isUpcomingOrLive(m, now) && (!text || `${m.home} ${m.away}`.toLocaleLowerCase('it').includes(text))
     && (!f.competition || m.league === f.competition)
     && (!f.state || (f.state === 'live' ? m.in_play : !m.in_play)))
     .map(m => ({ ...m, quotes: m.quotes.filter(q => (!f.market || marketName(q) === f.market)
