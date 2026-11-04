@@ -4,13 +4,13 @@ Eseguite il 4 novembre 2026 in ambiente Codex.
 
 | Controllo | Risultato | Limiti |
 |---|---|---|
-| Vitest | 98 test superati in 9 file | Include migrazioni transazionali, rollback, checksum e appartenenza del proprietario verificato |
+| Vitest | 101 test superati in 10 file | Include migrazioni transazionali, rollback, checksum, appartenenza e verifica CA |
 | Endpoint HTTP | Health, auth, metodo, percorso e cache verificati su localhost | Token/provider sostituiti nei test HTTP; nessun login remoto certificato |
 | Auth Supabase | Gate di autorizzazione e gestione errori testati | Risposte Auth simulate, nessuna credenziale remota configurata |
-| PostgreSQL/RLS | Migrazione eseguita su PGlite; isolamento, letture e scritture verificati | Nessuna migrazione sul progetto Supabase del proprietario |
-| Supabase su Vercel | Integrazione e variabili presenti in Production | Attivazione migrazione remota bloccata dal controllo automatico, in attesa di approvazione esplicita |
+| PostgreSQL/RLS | Due migrazioni applicate al database Supabase remoto dopo approvazione; 14 tabelle con RLS confermate | Isolamento utenti testato su PGlite; sessione Auth reale ancora da creare/verificare |
+| Supabase su Vercel | Integrazione e variabili Production verificate; bootstrap riuscito con CA ufficiale e flag disattivato dopo l'esecuzione | Nessun segreto copiato nelle Preview |
 | TypeScript | Controllo superato | Non sostituisce prove del provider reale |
-| Build Vite / Vercel | Build e deployment Preview riusciti | Nessuna promozione di questo ramo a produzione |
+| Build Vite / Vercel | Build e deployment Production del commit `92514b3` READY | Verifica HTTP automatica del deployment protetto non riuscita |
 | Dipendenze produzione | `npm audit --omit=dev`: zero vulnerabilità segnalate | Fotografia delle segnalazioni disponibili, non garanzia generale |
 | Test connessione sul server Vercel | Connessione autenticata riuscita | Catalogo senza tennistavolo; nessuna chiamata quote |
 | Raggiungibilità provider | Endpoint sport ufficiale restituisce HTTP 401 senza chiave | Non prova copertura né validità chiave |

@@ -1,6 +1,6 @@
 # Avanzamento Fase 2 — integrazioni e copertura
 
-Rilevazione: 4 novembre 2026. Questa fase non è ancora completa: Supabase è collegato a Vercel, ma lo schema applicativo remoto e il feed quote non sono ancora operativi.
+Rilevazione: 4 novembre 2026. Supabase è collegato a Vercel e le due migrazioni iniziali sono state applicate al database remoto dopo approvazione esplicita. Questa fase non è ancora completa: account di login e feed quote restano da attivare.
 
 ## Completato e verificato
 
@@ -43,6 +43,10 @@ Percorso supportato: [Supabase nel Marketplace Vercel](https://vercel.com/market
 
 La presenza delle variabili native è stata verificata senza stamparne i valori. Il runner server di bootstrap è pronto: transazioni, lock, checksum, controllo database vuoto e verifica TLS. La seconda migrazione unifica l'autorizzazione API con il registro RLS e riserva l'email del proprietario in una tabella privata, con appartenenza concessa solo dopo verifica email. Non crea account o password e non invia messaggi.
 
-L'attivazione `APP_DATABASE_SETUP=1` è stata rifiutata dal controllo automatico di approvazione perché l'effetto è una modifica dello schema sul database Production. Il flag non è stato attivato e il database reale non è stato modificato. È richiesta approvazione esplicita per le sole due migrazioni iniziali, eseguite tramite build Production protetto. Dopo l'esecuzione il flag sarà disattivato.
+L'attivazione era stata inizialmente rifiutata dal controllo automatico per assenza di approvazione specifica. Il proprietario ha poi autorizzato esplicitamente le due migrazioni iniziali e la prenotazione dell'email. Il primo tentativo si è fermato prima di modificare il database per `SELF_SIGNED_CERT_IN_CHAIN`; è stata aggiunta la CA pubblica ufficiale Supabase, verificata e fissata per impronta, mantenendo verifica certificati e hostname. La provenienza è in `certs/README.md`.
 
-Restano da eseguire: migrazione su progetto remoto, configurazione registrazioni/inviti e lista privata utenti, test Auth/RLS remoto, pipeline dati con budget richieste persistente, verifica ADM e disponibilità di una fonte risultati ufficiali. Nessun modello, opportunità o stake operativo attivato.
+Il deployment Production del commit `92514b3` ha confermato: due migrazioni applicate, 14 tabelle pubbliche con RLS abilitata su tutte, email proprietario riservata, zero account Auth nuovi collegati. Il flag `APP_DATABASE_SETUP` è stato quindi riportato a `0`. Non sono stati creati account/password, inviati messaggi o eseguite scommesse. L'indirizzo del proprietario non è incluso nel repository.
+
+Deployment: https://ping-pong-3nnu10rr3-ping-pong3.vercel.app — stato Vercel READY. Il fetch HTTP automatico del deployment protetto continua a fallire per risoluzione/accesso nello strumento; questo limite non è stato risolto disattivando la protezione. Il login completo va verificato dopo la creazione dell'account Auth.
+
+Restano da eseguire: creazione dell'utente Auth con password scelta dal proprietario e conferma email, verifica impostazioni registrazioni, test login/RLS con sessione reale, pipeline dati con budget richieste persistente, verifica ADM e disponibilità di una fonte risultati ufficiali. Nessun modello, opportunità o stake operativo attivato.

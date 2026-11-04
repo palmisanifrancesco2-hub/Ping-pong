@@ -6,7 +6,7 @@ Il repository iniziale conteneva soltanto questo README. Il provider confermato 
 
 Leggi [analisi, fonti e blocchi](docs/FASE-1.md) e [configurazione cloud da Android](docs/CONFIGURAZIONE.md).
 
-Il [riepilogo Fase 2](docs/FASE-2.md) documenta Supabase collegato a Vercel e la ricerca di fonti alternative. Lo schema remoto è in attesa di approvazione esplicita: la migrazione server è predisposta e verificata su PostgreSQL incorporato, ma non eseguita sul database reale. ODSS-API elenca pubblicamente tre competizioni richieste, ma la sua licenza per value betting richiede autorizzazione espressa: nessun provider alternativo è stato attivato.
+Il [riepilogo Fase 2](docs/FASE-2.md) documenta Supabase collegato a Vercel, due migrazioni remote completate dopo approvazione e 14 tabelle con RLS attiva. **101 test, TypeScript e build superati.** L'email proprietario è riservata; l'account Auth e il login reale restano da creare/verificare. ODSS-API elenca pubblicamente tre competizioni richieste, ma la sua licenza per value betting richiede autorizzazione espressa: nessun provider alternativo è stato attivato.
 
 ## Implementato
 
@@ -53,4 +53,4 @@ Il runner `db:bootstrap` applica le migrazioni dal server Vercel solo con opt-in
 
 `npm run check` esegue test, TypeScript e build; CI ripete i controlli. Test su errori API, assenza chiave, timeout, quota, endpoint HTTP, RLS con PostgreSQL incorporato, quote/linee/unità diverse, probabilità implicita, EV e Kelly.
 
-Vercel ha completato un deployment Preview del ramo di sviluppo e il test autenticato del provider. Il segreto esistente `oddsapi` è supportato come alias server di `THE_ODDS_API_KEY` senza rivelarne il valore. Restano non verificati: login e migrazione Supabase remoto, browser Android e flusso HTTP end-to-end del deployment protetto. Lo strumento di accesso automatico alla Preview non è riuscito a risolvere il deployment; la protezione Vercel è stata mantenuta. Modello non addestrato/validato, pipeline dati non collegata. Nessun servizio acquistato e nessuna scommessa eseguita.
+Vercel ha completato un deployment Production del ramo di sviluppo, il test autenticato del provider e le due migrazioni iniziali Supabase. Il segreto esistente `oddsapi` è supportato come alias server di `THE_ODDS_API_KEY` senza rivelarne il valore. Restano non verificati: login Supabase con sessione reale, browser Android e flusso HTTP end-to-end del deployment protetto. Lo strumento di accesso automatico non è riuscito a risolvere/accedere al deployment; la protezione Vercel è stata mantenuta. Modello non addestrato/validato, pipeline dati non collegata. Nessun servizio acquistato e nessuna scommessa eseguita.
