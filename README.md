@@ -2,7 +2,7 @@
 
 Web app privata per analisi statistiche del ping pong. **Base tecnica di Fase 1 implementata; dati reali e modello non operativi.**
 
-Il repository iniziale conteneva soltanto questo README. Il provider confermato è **The Odds API V4**, diverso da odss-api.com. Il catalogo pubblico non elenca tennistavolo; manca la verifica autenticata con la chiave del proprietario.
+Il repository iniziale conteneva soltanto questo README. Il provider confermato è **The Odds API V4**, diverso da odss-api.com. La verifica autenticata eseguita sul server Vercel è riuscita, ma il catalogo ricevuto **non include tennistavolo**. Nessuna copertura operativa per le competizioni richieste.
 
 Leggi [analisi, fonti e blocchi](docs/FASE-1.md) e [configurazione cloud da Android](docs/CONFIGURAZIONE.md).
 
@@ -46,4 +46,4 @@ Cache catalogo di 60 secondi per istanza server, errori sanitizzati. Nessun endp
 
 `npm run check` esegue test, TypeScript e build; CI ripete i controlli. Test su errori API, assenza chiave, timeout, quota, endpoint HTTP, RLS con PostgreSQL incorporato, quote/linee/unità diverse, probabilità implicita, EV e Kelly.
 
-Non verificati: chiave reale, copertura autenticata, login e migrazione Supabase remoto, browser Android e deploy online. Modello non addestrato/validato, pipeline dati non collegata. Nessun servizio acquistato e nessuna scommessa eseguita.
+Vercel ha completato un deployment Preview del ramo di sviluppo e il test autenticato del provider. Il segreto esistente `oddsapi` è supportato come alias server di `THE_ODDS_API_KEY` senza rivelarne il valore. Restano non verificati: login e migrazione Supabase remoto, browser Android e flusso HTTP end-to-end del deployment protetto. Lo strumento di accesso automatico alla Preview non è riuscito a risolvere il deployment; la protezione Vercel è stata mantenuta. Modello non addestrato/validato, pipeline dati non collegata. Nessun servizio acquistato e nessuna scommessa eseguita.

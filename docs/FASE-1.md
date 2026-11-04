@@ -2,6 +2,10 @@
 
 Rilevazione: 4 novembre 2026. Repository iniziale: commit `5110a08`.
 
+## Aggiornamento dopo configurazione Vercel
+
+La connessione autenticata al provider è stata verificata durante la build della Preview Vercel del commit `9b27cc5`: richiesta catalogo riuscita, ma nessuna voce tennistavolo. Le quattro competizioni richieste non sono nel catalogo ricevuto. Nessuna chiamata quote avviata. Il segreto `oddsapi` resta nel server e viene accettato come alias: Vercel non permette di rinominare direttamente le variabili Sensitive. Il deployment Preview risulta READY; il test HTTP automatico del deployment protetto non è riuscito a ottenere accesso tramite lo strumento Vercel disponibile. Login Supabase, dati e modello restano non operativi. I blocchi elencati più sotto descrivono la rilevazione iniziale; chiave e deployment Preview sono stati successivamente configurati come indicato qui.
+
 ## Analisi integrale del repository
 
 L'albero originale contiene soltanto `README.md` (67 byte), con titolo e descrizione. Non esistono starter React, backend, endpoint, database, test o integrazioni da conservare. La chiave del provider non è configurata nell'ambiente di lavoro.
