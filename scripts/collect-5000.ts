@@ -1,9 +1,10 @@
-import{readFile,writeFile,mkdir,symlink,stat}from'node:fs/promises';
+import{readFile,writeFile,mkdir,symlink}from'node:fs/promises';
 import{createHash}from'node:crypto';
 import{parseResult}from'../server/results.js';
 import{verifiedStart}from'../src/domain/research-source.js';
 import{playerKey,type MatchResult}from'../src/domain/player-model.js';
 import protocol from'../research/protocol-v5.json';
+import{fetchResearchClosing}from'../src/domain/research-retry.js';
 const archivePath=process.argv[2],out=process.argv[3];if(!archivePath||!out)throw Error('Usage: collect-5000 archive.json output.json');
 const cache=out+'.cache';await mkdir(cache,{recursive:true});
 const raw=JSON.parse(await readFile(archivePath,'utf8'));if(raw.source!=='postgres'||!Array.isArray(raw.results))throw Error('ARCHIVE_INCOMPLETE');
@@ -20,15 +21,18 @@ for(const path of['/tmp/pingpong-research-v2.json','/tmp/pingpong-research-v3.js
  }}
 const digest=(id:string)=>createHash('sha256').update(id).digest('hex');
 const targets=results.filter(r=>Date.parse(r.finishedAt)>=begins&&Date.parse(r.finishedAt)<ends&&!known.has(r.id)&&eligible(r,Date.parse(r.finishedAt)-6*3600000)).map(r=>({r,hash:digest(r.id)})).sort((a,b)=>a.hash.localeCompare(b.hash)).map(x=>x.r);
-let processed=0,requested=0,missing=0,nextRequest=0;
+let processed=0,requested=0,missing=0,nextRequest=0,pauseUntil=0;
 async function save(status:string){const starts=[...training,...test.values()].sort((a,b)=>a.at-b.at||a.id.localeCompare(b.id));const data={protocolHash:digest(JSON.stringify(protocol)),collectedAt:new Date().toISOString(),source:'MoviOdds',results,starts,requested,missing,testCases:test.size,target:protocol.targetCases,status,processed,potential:targets.length};await writeFile(out,JSON.stringify(data));await writeFile(out+'.progress.json',JSON.stringify({...data,results:undefined,starts:undefined}));}
 await save('collecting');console.info(JSON.stringify({cachedEligible:test.size,additionalCandidates:targets.length,target:protocol.targetCases}));
 for(let i=0;i<targets.length&&test.size<protocol.targetCases;i+=4){
  const batch=targets.slice(i,i+4);
  const answers=await Promise.all(batch.map(async r=>{let p:unknown;try{p=JSON.parse(await readFile(`${cache}/${r.id}.json`,'utf8'));}catch{
-  const slot=Math.max(Date.now(),nextRequest);nextRequest=slot+700;await new Promise(resolve=>setTimeout(resolve,Math.max(0,slot-Date.now())));
-  const response=await fetch(`https://moviodds.com/closing?fi=${encodeURIComponent(r.id)}`,{signal:AbortSignal.timeout(15000),redirect:'error',headers:{Accept:'application/json'}});requested++;
-  if(response.status===429||response.status===503)throw Error('RATE_LIMIT_OR_SOURCE_BUSY');if(!response.ok)return{r,at:null};p=await response.json();await writeFile(`${cache}/${r.id}.json`,JSON.stringify(p));
+  const response=await fetchResearchClosing(`https://moviodds.com/closing?fi=${encodeURIComponent(r.id)}`,{
+   fetcher:fetch,now:Date.now,wait:ms=>new Promise(resolve=>setTimeout(resolve,ms)),
+   beforeAttempt:async()=>{for(;;){const slot=Math.max(Date.now(),nextRequest,pauseUntil);nextRequest=slot+700;await new Promise(resolve=>setTimeout(resolve,Math.max(0,slot-Date.now())));if(Date.now()>=pauseUntil)break;}requested++;},
+   onRetry:async info=>{pauseUntil=Math.max(pauseUntil,Date.now()+info.delayMs);await save('source_cooldown');console.info(JSON.stringify({event:r.id,...info,resumeAfter:new Date(pauseUntil).toISOString()}));}
+  });
+  if([401,403].includes(response.status))throw Error('HISTORY_ACCESS_DENIED');if(!response.ok)return{r,at:null};p=await response.json();await writeFile(`${cache}/${r.id}.json`,JSON.stringify(p));
  }return{r,at:verifiedStart(p,r)};}));
  for(const {r,at}of answers){processed++;if(at!==null&&at>=begins&&at<ends&&eligible(r,at)){if(test.size<protocol.targetCases)test.set(r.id,{id:r.id,at});}else missing++;}
  if(processed%40===0||test.size>=protocol.targetCases){await save('collecting');console.info(JSON.stringify({processed,testCases:test.size,target:protocol.targetCases,requested,missing}));}
