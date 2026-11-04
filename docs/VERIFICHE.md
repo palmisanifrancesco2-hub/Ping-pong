@@ -4,7 +4,7 @@ Eseguite il 4 novembre 2026 in ambiente Codex.
 
 | Controllo | Risultato | Limiti |
 |---|---|---|
-| Vitest | 114 test superati in 12 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
+| Vitest | 119 test superati in 13 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
 | Endpoint HTTP | Health, auth, metodo, percorso e cache verificati su localhost | Token/provider sostituiti nei test HTTP; nessun login remoto certificato |
 | Auth Supabase | Gate di autorizzazione e gestione errori testati | Test unitari Auth con risposte simulate; account e appartenenza verificati anche sul database remoto |
 | PostgreSQL/RLS | Due migrazioni remote e 14 tabelle RLS; successivo controllo remoto READ ONLY conferma proprietario verificato/autorizzato, profilo isolato e rifiuto estranei/anonimi | Il proprietario ha confermato di riuscire a entrare dal telefono; verifica manuale riferita, non automatizzata |
@@ -29,3 +29,5 @@ Preview del commit `9b27cc5`: https://ping-pong-5nfa5733j-ping-pong3.vercel.app 
 Verifica successiva dopo creazione dell'account da parte del proprietario: deployment Production `e4f68ce`, https://ping-pong-oscdwxx87-ping-pong3.vercel.app. Il controllo server ha eseguito una transazione `READ ONLY`, verificando account, email confermata, registro privato, visibilità del profilo proprietario, rifiuto di un'identità estranea e dei privilegi anonimi. Rollback finale della transazione; nessuna modifica a utenti/schema/dati. Il build conferma che il bootstrap non è richiesto: flag migrazione a `0`. Nessuna password del proprietario usata o acquisita.
 
 Vincolo economico confermato dal proprietario: soltanto servizi gratuiti. Diagnostica OddsPapi testata con fixture sintetiche: massimo due richieste, opt-in esplicito, nessun retry, errori senza chiave, nessuna esecuzione automatica durante build. Connessione reale OddsPapi non eseguita: manca una chiave distinta del piano gratuito.
+
+MoviOdds: chiamate pubbliche reali senza chiave riuscite via curl; payload reale validato dal parser. Anche il comando HTTP completo è riuscito usando `NODE_USE_ENV_PROXY=1` per rispettare il proxy configurato. Feed bet365.com.au, prezzi italiani e ADM non verificati. Nuovi test coprono timestamp obsoleti/futuri, schema, identità duplicate, quote di altro evento, HTTP 429 e separazione fonte estera/ADM. Nessuna attivazione nella dashboard.

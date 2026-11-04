@@ -62,3 +62,18 @@ OddsPapi dichiara [250 richieste gratuite al mese senza carta](https://oddspapi.
 Preparato `npm run check:oddspapi -- --consume-free-requests`: legge soltanto i cataloghi ufficiali [sports](https://oddspapi.io/us/docs/get-sports) e [bookmakers](https://oddspapi.io/us/docs/get-bookmakers). Usa `ODDSPAPI_API_KEY` esclusivamente server-side, massimo due richieste per invocazione, timeout e nessun retry. Senza flag esplicito o chiave non effettua richieste. Non è incluso nel build, negli endpoint o in cron; non offre un budget persistente per futuri aggiornamenti. Errori sanitizzati; redirect vietati per evitare inoltro della chiave in query. Il suffisso `.it` segnala solo candidati da verificare, senza attribuire concessioni ADM o copertura live.
 
 Azione da telefono: creare esclusivamente un account gratuito su https://oddspapi.io/us/sign-up e salvare la relativa chiave in Vercel, progetto `ping-pong`, Settings → Environment Variables, nome `ODDSPAPI_API_KEY`, ambiente Production, tipo Sensitive. Non inviare la chiave in chat. Il salvataggio non attiva polling né prova da solo la copertura. La connessione reale di questo nuovo connettore non è stata eseguita; nessuna quota acquisita o previsione generata. Prima di un utilizzo operativo restano da verificare i [termini](https://oddspapi.io/us/legal/terms), il piano assegnato all'account e tutti i requisiti di qualità del progetto.
+
+## Fonte gratuita bet365 trovata: MoviOdds
+
+Il 4 novembre 2026 è stato interrogato realmente l'[endpoint pubblico tennistavolo](https://moviodds.com/odds?sport=table_tennis), senza account, chiavi o pagamenti. Prima rilevazione ore 19:13:06 UTC: 474 partite, 4.132 voci quota, 20 flag live. Seconda rilevazione validata dal nuovo parser alle 19:15:06 UTC: 473 partite, 3.957 voci quota, 19 flag live. Sono conteggi della risposta, inclusi prezzi sospesi/zero ed eventi oltre l'orario programmato; non conteggi di selezioni attualmente giocabili. Non sono dati demo.
+
+| Competizione | Partite nella seconda rilevazione |
+|---|---:|
+| Czech Liga Pro | 207 |
+| TT Cup | 29 |
+| TT Elite Series | 97 |
+| Challenger Series TT | 18 |
+
+Il provider [dichiara accesso gratuito senza chiave](https://moviodds.com/bet365-table-tennis-odds-api/). È un progetto indipendente, non un'API ufficiale bet365. La [documentazione, sezione 11](https://moviodds.com/doc), identifica la fonte predefinita come **bet365.com.au** e offre l'opzione `.com`; non documenta una fonte `.it`. Non si presume pertanto equivalenza con prezzi o mercati dell'operatore italiano. ADM e diritti di utilizzo a valle non verificati indipendentemente; nessuna garanzia di continuità gratuita. I risultati dichiarati dal servizio non sono stati ancora verificati con una fonte ufficiale.
+
+Aggiunto `npm run check:moviodds`: diagnostica manuale lato server, una richiesta senza retry, timeout, schema e timestamp controllati, identità evento/quote coerenti, conteggi separati per competizione. Nessun endpoint pubblico nuovo, polling, salvataggio database, confronto ADM o previsione operativa. Non modifica la dashboard né sostituisce automaticamente The Odds API. Test sintetici separati dalla rilevazione reale. Il primo tentativo Node diretto nell'ambiente Codex è fallito; la richiesta via curl attraverso il proxy e la validazione del payload reale sono riuscite. Con `NODE_USE_ENV_PROXY=1 npm run check:moviodds` anche il connettore HTTP completo è riuscito: alle 19:15:22 UTC, 473 partite, 3.930 voci quota e timestamp della fonte distante 0,467 secondi dalla verifica. Non sono state disabilitate verifiche TLS.
