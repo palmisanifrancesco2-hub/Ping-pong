@@ -11,6 +11,7 @@
     "check": "npm run test && npm run build",
     "check:connection": "tsx scripts/check-connection.ts",
     "check:coverage": "tsx scripts/check-public-coverage.ts",
+    "check:oddspapi": "tsx scripts/check-oddspapi.ts",
     "db:bootstrap": "tsx scripts/bootstrap-db.ts",
     "db:verify": "tsx scripts/verify-db.ts"
   },
