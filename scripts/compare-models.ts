@@ -1,12 +1,13 @@
 import {readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import protocol from '../research/protocol-v4.json';
+import defaultProtocol from '../research/protocol-v4.json';
 import {featureRows,fitScore,predictScore,featureGroups,type LogisticModel} from '../src/domain/score-model.js';
 import {researchRows,type Candidate} from '../src/domain/model-research.js';
 import {modelMetrics,type MatchResult} from '../src/domain/player-model.js';
 import {splitPeriod,scaleProbability,calibrateTemperature,validateCommonCases,pairedDayBootstrap} from '../src/domain/model-comparison.js';
 import {verifiedStart} from '../src/domain/research-source.js';
 const [first,second,output,auditOutput]=process.argv.slice(2);if(!first||!second||!output||!auditOutput||output===auditOutput)throw Error('Usage: compare-models v2-data.json v3-data.json new-report.json private-audit.json');
+const protocol=process.argv[6]?JSON.parse(await readFile(process.argv[6],'utf8')) as typeof defaultProtocol:defaultProtocol;
 const hash=(s:string)=>createHash('sha256').update(s).digest('hex');
 const texts=await Promise.all([readFile(first,'utf8'),readFile(second,'utf8')]);
 const datasets=texts.map(t=>JSON.parse(t) as {results:MatchResult[];starts:{id:string;at:number}[]});
@@ -42,6 +43,7 @@ for(let f=0;f<protocol.foldStarts.length;f++){
  console.info(JSON.stringify({fold:f+1,training:split.train.length,calibration:split.calibration.length,test:split.test.length}));
 }
 const ids=validateCommonCases(predictions);if(!ids.length)throw Error('NO_COMPARABLE_TESTS');
+if('targetCases' in protocol&&ids.length!==protocol.targetCases)throw Error('TARGET_CASE_COUNT_NOT_MET');
 const ranking=protocol.candidates.map(name=>{
  const rows=predictions[name],days=[...new Set(rows.map(r=>new Date(r.at).toISOString().slice(0,10)))];
  const daily=days.map(day=>({day,...modelMetrics(rows.filter(r=>new Date(r.at).toISOString().startsWith(day)))}));
