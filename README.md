@@ -6,12 +6,12 @@ Il repository iniziale conteneva soltanto questo README. Il provider confermato 
 
 Leggi [analisi, fonti e blocchi](docs/FASE-1.md) e [configurazione cloud da Android](docs/CONFIGURAZIONE.md).
 
-Il [riepilogo Fase 2](docs/FASE-2.md) documenta la compatibilità con Supabase nativo Vercel e la ricerca di fonti alternative. Sono passati **87 test**, TypeScript e build; Supabase remoto e acquisizione quote restano da collegare. ODSS-API elenca pubblicamente tre competizioni richieste, ma la sua licenza per value betting richiede autorizzazione espressa: nessun provider alternativo è stato attivato.
+Il [riepilogo Fase 2](docs/FASE-2.md) documenta Supabase collegato a Vercel e la ricerca di fonti alternative. Lo schema remoto è in attesa di approvazione esplicita: la migrazione server è predisposta e verificata su PostgreSQL incorporato, ma non eseguita sul database reale. ODSS-API elenca pubblicamente tre competizioni richieste, ma la sua licenza per value betting richiede autorizzazione espressa: nessun provider alternativo è stato attivato.
 
 ## Implementato
 
 - React/TypeScript/Vite, dashboard responsive, anteprima esplicita senza dati, login Supabase predisposto.
-- Backend Node/Vercel: health pubblica e catalogo protetto da token Supabase e lista UUID privata.
+- Backend Node/Vercel: health pubblica e catalogo protetto da token Supabase e registro privato nel database.
 - Connettore V4 con validazione runtime, timeout, gestione errori/quota e credenziali server.
 - Primitive matematiche e confronto quote prudente con test automatici.
 - Migrazione PostgreSQL/RLS e workflow GitHub Actions.

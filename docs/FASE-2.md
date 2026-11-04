@@ -1,6 +1,6 @@
 # Avanzamento Fase 2 — integrazioni e copertura
 
-Rilevazione: 4 novembre 2026. Questa fase non è ancora completa: database remoto e feed quote non sono collegati.
+Rilevazione: 4 novembre 2026. Questa fase non è ancora completa: Supabase è collegato a Vercel, ma lo schema applicativo remoto e il feed quote non sono ancora operativi.
 
 ## Completato e verificato
 
@@ -8,7 +8,7 @@ Rilevazione: 4 novembre 2026. Questa fase non è ancora completa: database remot
 - Il build valida la chiave pubblicabile prima di includerla nel frontend. Chiavi `sb_secret_*`, JWT service-role, URL non compatibili e configurazioni parziali vengono rifiutati con errori privi del valore segreto. Il backend continua a verificare token e lista utenti: nessun accesso aperto automaticamente.
 - Corretto il trattamento dell'errore di ripristino sessione nel client.
 - Comando di audit pubblico `npm run check:coverage`: interroga esclusivamente due endpoint senza chiave di odss-api.com, valida i payload, riporta timestamp della fonte e della verifica, distingue presenza nel catalogo da copertura operativa. Nessuna richiesta a `/odds`, nessuna quota o previsione.
-- **87 test superati in 8 file**, controllo TypeScript e build riusciti. Audit pubblico eseguito realmente: uscita 0. Migrazione database ancora verificata soltanto su PostgreSQL incorporato.
+- Suite estesa con test delle migrazioni transazionali, checksum, rollback, registro privato e verifica email proprietario. Audit pubblico eseguito realmente: uscita 0. Migrazione database ancora verificata soltanto su PostgreSQL incorporato.
 
 ## Fonti quote alternative: verifica concreta
 
@@ -37,10 +37,12 @@ La [scheda ufficiale AdmiralBet IT](https://odds-api.io/sportsbooks/admiralbet-i
 
 ## Supabase: stato effettivo e azione necessaria
 
-La ricerca dei collegamenti disponibili non espone strumenti Supabase; l'integrazione Supabase risulta assente nel team Vercel `ping-pong3`. Il tentativo di consultazione tramite CLI ha richiesto autenticazione, quindi è stato interrotto senza creare risorse. Il collegamento Vercel già funzionante non costituisce accesso amministrativo a Supabase.
+Il proprietario ha completato il collegamento Supabase: l'integrazione è presente nel team Vercel `ping-pong3`, e le variabili Postgres/Auth sono disponibili soltanto in Production. Non sono state copiate nelle Preview né lette in chiaro. Gli strumenti amministrativi Supabase diretti non sono disponibili in questa sessione.
 
 Percorso supportato: [Supabase nel Marketplace Vercel](https://vercel.com/marketplace/supabase), **Install**, team `ping-pong3`, piano **Free** e collegamento al progetto Vercel `ping-pong`. Se si possiede già un progetto, verificare l'opzione di collegamento all'account esistente prima di crearne un altro. La [guida ufficiale Supabase](https://supabase.com/docs/guides/integrations/vercel-marketplace) descrive provisioning dal dashboard e sincronizzazione delle variabili.
 
-Dopo il collegamento sarà possibile verificare la presenza delle variabili senza stamparne i valori. L'app è già compatibile con quelle native: non serve copiare manualmente chiavi amministrative nel frontend.
+La presenza delle variabili native è stata verificata senza stamparne i valori. Il runner server di bootstrap è pronto: transazioni, lock, checksum, controllo database vuoto e verifica TLS. La seconda migrazione unifica l'autorizzazione API con il registro RLS e riserva l'email del proprietario in una tabella privata, con appartenenza concessa solo dopo verifica email. Non crea account o password e non invia messaggi.
+
+L'attivazione `APP_DATABASE_SETUP=1` è stata rifiutata dal controllo automatico di approvazione perché l'effetto è una modifica dello schema sul database Production. Il flag non è stato attivato e il database reale non è stato modificato. È richiesta approvazione esplicita per le sole due migrazioni iniziali, eseguite tramite build Production protetto. Dopo l'esecuzione il flag sarà disattivato.
 
 Restano da eseguire: migrazione su progetto remoto, configurazione registrazioni/inviti e lista privata utenti, test Auth/RLS remoto, pipeline dati con budget richieste persistente, verifica ADM e disponibilità di una fonte risultati ufficiali. Nessun modello, opportunità o stake operativo attivato.

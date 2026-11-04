@@ -1,7 +1,7 @@
 import { PGlite } from '@electric-sql/pglite';
 import { readFile, readdir } from 'node:fs/promises';
 import { afterEach, describe, expect, it } from 'vitest';
-import { applyMigrations, reserveOwner, type Database, type Migration } from '../server/migrations';
+import { applyMigrations, isInitialMigrationSet, reserveOwner, type Database, type Migration } from '../server/migrations';
 const instances: PGlite[] = [];
 afterEach(async () => { await Promise.all(instances.splice(0).map(db => db.close())); });
 async function fresh() {
@@ -23,6 +23,11 @@ async function files(): Promise<Migration[]> {
   return Promise.all(names.map(async name => ({ name,sql:await readFile(new URL(name,root),'utf8') })));
 }
 describe('transactional database setup', () => {
+  it('limits the production bootstrap to the exact two initial migrations', () => {
+    expect(isInitialMigrationSet(['202611040001_initial.sql','202611040002_private_membership.sql'])).toBe(true);
+    expect(isInitialMigrationSet(['202611040001_initial.sql','202611040002_private_membership.sql','202611040003_extra.sql'])).toBe(false);
+    expect(isInitialMigrationSet([])).toBe(false);
+  });
   it('applies all reviewed migrations once and verifies their checksums on rerun', async () => {
     const { db,adapter } = await fresh(); const migrations = await files();
     expect(await applyMigrations(adapter,migrations)).toEqual({ applied:2,total:2 });

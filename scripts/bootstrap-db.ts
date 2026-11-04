@@ -1,6 +1,6 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { Client } from 'pg';
-import { applyMigrations, reserveOwner } from '../server/migrations.js';
+import { applyMigrations, isInitialMigrationSet, reserveOwner } from '../server/migrations.js';
 async function main() {
   if (process.env.APP_DATABASE_SETUP !== '1') {
     console.info('Database setup: non richiesto per questo deployment.'); return;
@@ -26,6 +26,7 @@ async function main() {
     if (!identity.rows.length) throw new Error('DB_IDENTITY');
     const directory = new URL('../supabase/migrations/', import.meta.url);
     const names = (await readdir(directory)).filter(name => name.endsWith('.sql')).sort();
+    if (!isInitialMigrationSet(names)) throw new Error('DB_NEW_MIGRATIONS_NEED_APPROVAL');
     const migrations = await Promise.all(names.map(async name => ({ name,sql:await readFile(new URL(name,directory),'utf8') })));
     const result = await applyMigrations(db,migrations);
     const owner = await reserveOwner(db,process.env.APP_OWNER_EMAIL);

@@ -36,6 +36,8 @@ Un repository pubblico può contenere codice e configurazioni di esempio, mai se
 
 `APP_DATABASE_SETUP=1`, solo in Production, abilita `npm run db:bootstrap` durante il build Vercel. Il runner usa `POSTGRES_URL` nativo sul server, verifica corrispondenza con `SUPABASE_URL`, TLS con certificati verificati e schema iniziale vuoto. Non legge né stampa credenziali nel client Codex. Migrazioni transazionali con lock e checksum: un errore annulla la transazione; database sconosciuti o migrazioni applicate e poi modificate vengono rifiutati. L'operazione è idempotente. Le tabelle sportive non ricevono seed fittizi.
 
+Il bootstrap accetta soltanto i due file iniziali `202611040001_initial.sql` e `202611040002_private_membership.sql`: nuove migrazioni richiedono una revisione separata. L'attivazione sul database Production è in attesa dell'approvazione esplicita richiesta dal controllo automatico. Dopo l'esecuzione iniziale il flag sarà disattivato; non è un'autorizzazione per future modifiche dello schema.
+
 La variabile server `APP_OWNER_EMAIL` riserva un indirizzo in una tabella privata. Non crea utenti Auth, non imposta password e non invia messaggi. Un account con quell'email ottiene appartenenza soltanto dopo la verifica dell'indirizzo da parte di Supabase, oppure tramite creazione confermata nell'Auth dashboard amministrativo. Senza account autorizzato l'accesso ai dati resta negato.
 
 Il comando non modifica l'impostazione di registrazione pubblica di Supabase: disabilitarla dall'Auth dashboard resta una verifica separata. Non copiare i segreti del database di Production nelle Preview per completare il setup.

@@ -4,10 +4,11 @@ Eseguite il 4 novembre 2026 in ambiente Codex.
 
 | Controllo | Risultato | Limiti |
 |---|---|---|
-| Vitest | 87 test superati in 8 file | Payload sintetici confinati ai test; chiavi pubblicabili e cataloghi verificati |
+| Vitest | 98 test superati in 9 file | Include migrazioni transazionali, rollback, checksum e appartenenza del proprietario verificato |
 | Endpoint HTTP | Health, auth, metodo, percorso e cache verificati su localhost | Token/provider sostituiti nei test HTTP; nessun login remoto certificato |
 | Auth Supabase | Gate di autorizzazione e gestione errori testati | Risposte Auth simulate, nessuna credenziale remota configurata |
 | PostgreSQL/RLS | Migrazione eseguita su PGlite; isolamento, letture e scritture verificati | Nessuna migrazione sul progetto Supabase del proprietario |
+| Supabase su Vercel | Integrazione e variabili presenti in Production | Attivazione migrazione remota bloccata dal controllo automatico, in attesa di approvazione esplicita |
 | TypeScript | Controllo superato | Non sostituisce prove del provider reale |
 | Build Vite / Vercel | Build e deployment Preview riusciti | Nessuna promozione di questo ramo a produzione |
 | Dipendenze produzione | `npm audit --omit=dev`: zero vulnerabilità segnalate | Fotografia delle segnalazioni disponibili, non garanzia generale |

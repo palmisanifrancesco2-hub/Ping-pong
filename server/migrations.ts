@@ -2,6 +2,9 @@ import { createHash } from 'node:crypto';
 export type Database = { query(sql: string, params?: unknown[]): Promise<{ rows: Record<string, unknown>[] }> };
 export type Migration = { name: string; sql: string };
 const checksum = (sql: string) => createHash('sha256').update(sql).digest('hex');
+export function isInitialMigrationSet(names: string[]) {
+  return names.join(',') === '202611040001_initial.sql,202611040002_private_membership.sql';
+}
 export async function applyMigrations(db: Database, migrations: Migration[]) {
   let applied = 0;
   await db.query('begin');
