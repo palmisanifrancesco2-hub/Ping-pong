@@ -6,7 +6,7 @@ Il repository iniziale conteneva soltanto questo README. Il provider confermato 
 
 Leggi [analisi, fonti e blocchi](docs/FASE-1.md) e [configurazione cloud da Android](docs/CONFIGURAZIONE.md).
 
-Il [riepilogo Fase 2](docs/FASE-2.md) documenta Supabase collegato a Vercel, due migrazioni remote completate dopo approvazione e 14 tabelle con RLS attiva. **101 test, TypeScript e build superati.** L'email proprietario è riservata; l'account Auth e il login reale restano da creare/verificare. ODSS-API elenca pubblicamente tre competizioni richieste, ma la sua licenza per value betting richiede autorizzazione espressa: nessun provider alternativo è stato attivato.
+Il [riepilogo Fase 2](docs/FASE-2.md) documenta Supabase collegato a Vercel, due migrazioni remote completate dopo approvazione e 14 tabelle con RLS attiva. **106 test, TypeScript e build superati.** L'utente creato dal proprietario è confermato e autorizzato; il controllo remoto READ ONLY verifica profilo privato e rifiuto estranei/anonimi. Resta il login dal browser. ODSS-API elenca pubblicamente tre competizioni richieste, ma la sua licenza per value betting richiede autorizzazione espressa: nessun provider alternativo è stato attivato.
 
 ## Implementato
 

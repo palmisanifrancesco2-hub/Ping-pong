@@ -1,6 +1,6 @@
 # Avanzamento Fase 2 — integrazioni e copertura
 
-Rilevazione: 4 novembre 2026. Supabase è collegato a Vercel e le due migrazioni iniziali sono state applicate al database remoto dopo approvazione esplicita. Questa fase non è ancora completa: account di login e feed quote restano da attivare.
+Rilevazione: 4 novembre 2026. Supabase è collegato a Vercel e le due migrazioni iniziali sono state applicate al database remoto dopo approvazione esplicita. L'utente creato dal proprietario è confermato e autorizzato, verificato sul server. Questa fase non è ancora completa: login nel browser e feed quote restano da verificare/attivare.
 
 ## Completato e verificato
 
@@ -49,4 +49,6 @@ Il deployment Production del commit `92514b3` ha confermato: due migrazioni appl
 
 Deployment: https://ping-pong-3nnu10rr3-ping-pong3.vercel.app — stato Vercel READY. Il fetch HTTP automatico del deployment protetto continua a fallire per risoluzione/accesso nello strumento; questo limite non è stato risolto disattivando la protezione. Il login completo va verificato dopo la creazione dell'account Auth.
 
-Restano da eseguire: creazione dell'utente Auth con password scelta dal proprietario e conferma email, verifica impostazioni registrazioni, test login/RLS con sessione reale, pipeline dati con budget richieste persistente, verifica ADM e disponibilità di una fonte risultati ufficiali. Nessun modello, opportunità o stake operativo attivato.
+L'utente Auth è stato successivamente creato dal proprietario. Il controllo remoto READ ONLY del deployment `e4f68ce` conferma account presente, email confermata, appartenenza privata, profilo visibile solo al proprietario e rifiuto per estranei/anonimi. Nessuna password usata dall'assistente, nessun messaggio inviato. Il deployment risulta READY e l'URL risponde con redirect di autenticazione Vercel.
+
+Restano da eseguire: login dal browser del proprietario, verifica impostazioni registrazioni e API con sessione reale, pipeline dati con budget richieste persistente, verifica ADM e disponibilità di una fonte risultati ufficiali. Nessun modello, opportunità o stake operativo attivato.
