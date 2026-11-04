@@ -1,5 +1,7 @@
 # Selezione statistica delle quote
 
+Stato attuale: filtro ADM rimosso su richiesta, stime sperimentali dal feed reale visibili separatamente. Modello ancora non validato; nessuna opportunità dichiarata affidabile.
+
 Il Value Tracker è la schermata iniziale: il catalogo completo resta disponibile nei dettagli. Non propone automaticamente tutte le quote, quote alte o vincitori storicamente frequenti.
 
 Motore matematico predisposto e testato: probabilità implicita 1/quota, quota equa 1/p, EV=p×quota−1, EV prudente=p_lower×quota−1. Una selezione richiede modello validato, fonte/bookmaker ADM verificati, quote recenti, almeno 30 osservazioni, almeno 100 casi di validazione ed EV prudente positivo. Soglia quota minima 1,30, nessuna massima. Possibile valore anche su un underdog: non è imposto p>50%.
@@ -21,3 +23,7 @@ Il requisito ADM è rimosso dalla selezione statistica per esplicita richiesta. 
 Poiché il modello ha fallito la validazione, queste righe sono restituite separatamente come `experimental` e mostrate con etichetta “Sperimentale”, senza “Ottima”, senza registrazioni come pronostici validati e senza chiamarle opportunità affidabili. L'elenco operativo `opportunities` resta vuoto fino a un modello valido. Questo non certifica efficacia del modello e non soddisfa una richiesta di affidabilità operativa: mostra soltanto calcoli reali con limiti espliciti. Live escluso, perché il modello non integra il punteggio corrente. Quote minime 1,30, nessuna massima.
 
 Il precedente blocco del provider ADM descritto sopra è superato da questa nuova scelta del proprietario; il blocco della validazione rimane. Google va nuovamente verificato sul server dopo la configurazione dichiarata dall'utente.
+
+Prova reale del collegamento: 372 eventi ricevuti, quattro righe sperimentali con probabilità Elo e margine prudente positivo nella rilevazione. Nessun numero casuale, nessuna registrazione retroattiva o promozione del modello a validato. Suite 169 test e build superati; ricontrollo mirato HTTP/value 18 test superati.
+
+Release stime sperimentali: commit applicativo `50fa59f8f751c030dc9e793214133605670a41b6`, deployment Production `dpl_62eojyFjCPsurtHmWLipt5CTahar`, build completato in 42 secondi. Controlli remoti database e schemi riusciti. Google nuovamente verificato: provider ancora disattivato, signup consentita; quanto completato dall'utente non risulta ancora un'attivazione del provider Supabase.
