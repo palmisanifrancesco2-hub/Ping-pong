@@ -38,3 +38,7 @@ Il build Production esegue un controllo in sola lettura delle impostazioni pubbl
 Deployment `dpl_A3uwzeHWCiUwqxMyHndzUgLUMnH1`, commit applicativo `b914c8164472fd151f456de994f28b18c8733db8`, build completato in 29 secondi. Il controllo reale sul server Supabase conferma `googleEnabled=false`, `signupEnabled=true`. Google non è pertanto attivo: il pulsante lo segnala e resta disabilitato fino alla configurazione del provider. Il callback effettivo va copiato dalla pagina Google di Supabase; l'output del connettore lo oscura e non viene ricostruito aggirando la protezione.
 
 Feed, risultati giocatori, verifica accesso database e query storico/scelte sono riusciti. Entrambi i runner migrazione risultano non richiesti; nessuna modifica al database, agli account Auth o all'autorizzazione. URL fisso https://ping-pong-ping-pong3.vercel.app. Nessun login Google reale è stato eseguito; creazione client OAuth e configurazione richiedono il proprietario.
+
+## Conferma successiva del proprietario
+
+Il 4 novembre 2026 il proprietario ha completato il client OAuth Web Google, impostato origine e callback Supabase, inserito Client ID e Client Secret direttamente nel provider Supabase e confermato in chat: «Fatto funziona». L'accesso Google sul suo account è pertanto confermato dal test manuale dell'utente. Non è stato eseguito un login automatizzato con il suo account e nessun segreto è stato richiesto o registrato in chat. Il precedente `googleEnabled=false` descrive la configurazione al momento del vecchio build, prima di questa attivazione.
