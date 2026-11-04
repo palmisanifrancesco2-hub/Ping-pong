@@ -11,7 +11,8 @@
     "check": "npm run test && npm run build",
     "check:connection": "tsx scripts/check-connection.ts",
     "check:coverage": "tsx scripts/check-public-coverage.ts",
-    "db:bootstrap": "tsx scripts/bootstrap-db.ts"
+    "db:bootstrap": "tsx scripts/bootstrap-db.ts",
+    "db:verify": "tsx scripts/verify-db.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.80.0",

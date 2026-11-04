@@ -2,6 +2,7 @@ import { PGlite } from '@electric-sql/pglite';
 import { readFile, readdir } from 'node:fs/promises';
 import { afterEach, describe, expect, it } from 'vitest';
 import { applyMigrations, isInitialMigrationSet, reserveOwner, type Database, type Migration } from '../server/migrations';
+import { verifyPrivateAccess } from '../server/verify-access';
 const instances: PGlite[] = [];
 afterEach(async () => { await Promise.all(instances.splice(0).map(db => db.close())); });
 async function fresh() {
@@ -78,5 +79,17 @@ describe('transactional database setup', () => {
     await db.exec("insert into auth.users(id,email,email_confirmed_at) values ('11111111-1111-4111-8111-111111111111','owner@example.test',now())");
     expect(await reserveOwner(adapter,'owner@example.test')).toEqual({ reserved:true,linkedUsers:1 });
     expect(await reserveOwner(adapter,'owner@example.test')).toEqual({ reserved:true,linkedUsers:0 });
+  });
+  it('verifies owner and outsider access in a read-only transaction, leaving data unchanged',async()=>{
+    const {db,adapter}=await fresh(); await applyMigrations(adapter,await files()); await reserveOwner(adapter,'owner@example.test');
+    await db.exec("insert into auth.users(id,email,email_confirmed_at) values ('11111111-1111-4111-8111-111111111111','owner@example.test',now())");
+    expect(await verifyPrivateAccess(adapter,'owner@example.test')).toMatchObject({ ownerExists:true,ownerEmailConfirmed:true,ownerIsMember:true,outsidersDenied:true,anonymousAccessDenied:true });
+    expect((await db.query('select * from public.authorized_users')).rows).toHaveLength(1);
+  });
+  it('reports an unconfirmed owner without granting membership',async()=>{
+    const {db,adapter}=await fresh(); await applyMigrations(adapter,await files()); await reserveOwner(adapter,'owner@example.test');
+    await db.exec("insert into auth.users(id,email,email_confirmed_at) values ('11111111-1111-4111-8111-111111111111','owner@example.test',null)");
+    await expect(verifyPrivateAccess(adapter,'owner@example.test')).rejects.toThrow('DB_OWNER_EMAIL_UNCONFIRMED');
+    expect((await db.query('select * from public.authorized_users')).rows).toHaveLength(0);
   });
 });

@@ -42,4 +42,10 @@ La variabile server `APP_OWNER_EMAIL` riserva un indirizzo in una tabella privat
 
 Il comando non modifica l'impostazione di registrazione pubblica di Supabase: disabilitarla dall'Auth dashboard resta una verifica separata. Non copiare i segreti del database di Production nelle Preview per completare il setup.
 
+## Verifica dell'utente creato
+
+Il build Production esegue `npm run db:verify`, usando le credenziali native sul server. La transazione è `READ ONLY`: verifica account proprietario, conferma email, appartenenza, visibilità del solo profilo proprietario e rifiuto di accesso per identità estranee e ruolo anonimo. Non modifica utenti, schema, dati, password o inviti e non richiede la password del proprietario. Il flag di migrazione resta a `0`.
+
+Un esito positivo verifica il database e RLS; non prova il login completo nel browser. La prova finale richiede che il proprietario acceda personalmente all'app con la password scelta, senza condividerla in chat.
+
 Prima di attivare pronostici occorrono storico sufficiente, validazione temporale fuori campione e calibrazione. Se il provider non offre tennistavolo, l'app deve dichiararlo senza sostituirlo con tennis o quote inventate.

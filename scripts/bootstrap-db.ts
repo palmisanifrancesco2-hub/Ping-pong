@@ -1,30 +1,18 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { Client } from 'pg';
 import { applyMigrations, isInitialMigrationSet, reserveOwner } from '../server/migrations.js';
-import { databaseTls } from '../server/database-tls.js';
+import { databaseClientConfig } from '../server/database-client.js';
 async function main() {
   if (process.env.APP_DATABASE_SETUP !== '1') {
     console.info('Database setup: non richiesto per questo deployment.'); return;
   }
   if (process.env.VERCEL_ENV !== 'production') throw new Error('DB_ENVIRONMENT');
-  const connectionString = process.env.POSTGRES_URL;
-  if (!connectionString || !process.env.SUPABASE_URL) throw new Error('DB_CONFIG');
-  const url = new URL(connectionString);
-  if (!['postgres:','postgresql:'].includes(url.protocol) || !url.password || !url.hostname.endsWith('.supabase.com') && !url.hostname.endsWith('.supabase.co')) throw new Error('DB_TARGET');
-  // Never let URL SSL modes disable certificate verification.
-  for (const key of ['sslmode','sslcert','sslkey','sslrootcert']) url.searchParams.delete(key);
   const ca = await readFile(new URL('../certs/supabase-ca-2021.crt',import.meta.url),'utf8');
-  const db = new Client({ connectionString: url.toString(), ssl: databaseTls(ca), connectionTimeoutMillis: 15_000, query_timeout: 35_000 });
+  const db = new Client(databaseClientConfig(process.env,ca));
   db.on('error', () => { /* Query/connect rejection is handled below without leaking credentials. */ });
   try {
     await db.connect();
-    const projectUrl = new URL(process.env.SUPABASE_URL);
-    const ref = projectUrl.hostname.split('.')[0];
     const identity = await db.query('select current_user as username');
-    // Pooler usernames encode project identity, but SQL current_user normally does not.
-    // Verify the credential selector instead, never its password.
-    const selector = decodeURIComponent(url.username);
-    if (selector !== `postgres.${ref}` && url.hostname !== `db.${ref}.supabase.co`) throw new Error('DB_PROJECT_MISMATCH');
     if (!identity.rows.length) throw new Error('DB_IDENTITY');
     const directory = new URL('../supabase/migrations/', import.meta.url);
     const names = (await readdir(directory)).filter(name => name.endsWith('.sql')).sort();
