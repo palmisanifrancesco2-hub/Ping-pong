@@ -3,7 +3,7 @@ import { createClient, type Session } from '@supabase/supabase-js';
 import { COMPETITIONS, type ConnectionReport } from './shared/contracts';
 
 const url = import.meta.env.VITE_SUPABASE_URL;
-const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 const auth = (() => {
   if (!url || !key) return null;
   try { return createClient(url, key); } catch { return null; }
@@ -24,7 +24,7 @@ export function App() {
   useEffect(() => {
     if (!auth) return;
     let active = true;
-    auth.auth.getSession().then(({ data }) => { if (active) setSession(data.session); });
+    auth.auth.getSession().then(({ data }) => { if (active) setSession(data.session); }).catch(() => { if (active) setNotice('Sessione non disponibile. Accedi nuovamente.'); });
     const { data } = auth.auth.onAuthStateChange((_event, value) => {
       if (active) { setSession(value); setReport(null); }
     });

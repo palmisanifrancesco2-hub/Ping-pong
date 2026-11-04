@@ -14,11 +14,13 @@ Il build Vercel esegue anche il test catalogo con un riepilogo sanitizzato nei l
 
 ## Supabase
 
+Percorso più diretto da Android: aprire [Supabase nel Marketplace Vercel](https://vercel.com/marketplace/supabase), installare nel team `ping-pong3` con piano Free e collegare il progetto Vercel `ping-pong`. Il codice riconosce le variabili native `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` e gli alias pubblicabili `NEXT_PUBLIC_SUPABASE_*`; non serve rinominarle o esporre chiavi amministrative. Le chiavi legacy anon rimangono supportate. Il build rifiuta chiavi segrete/service-role nei campi pubblici.
+
 1. Dal dashboard Supabase creare o selezionare un progetto, verificando che il piano non comporti spese.
 2. Applicare nel SQL Editor la migrazione del repository. Su database esistenti controllare prima la compatibilità; non applicarla alla cieca su dati reali.
 3. In Authentication disabilitare nuove registrazioni pubbliche. Creare soltanto gli utenti privati attraverso la gestione utenti, impostando le password tramite i flussi sicuri del servizio.
 4. Copiare l'UUID utente e inserirlo tramite SQL Editor in `public.authorized_users`. Inserire lo stesso UUID nella variabile backend `ALLOWED_USER_IDS`. Il browser dell'app non può autorizzare nuovi utenti.
-5. Usare Project URL e anon/publishable key compatibile per il frontend. Mai utilizzare la service-role key come chiave frontend.
+5. Usare Project URL e anon/publishable key compatibile per il frontend. Mai utilizzare la service-role key come chiave frontend. La sincronizzazione native Vercel è preferibile alla copia manuale.
 
 ## Vercel
 

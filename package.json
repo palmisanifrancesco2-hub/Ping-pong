@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "check": "npm run test && npm run build",
-    "check:connection": "tsx scripts/check-connection.ts"
+    "check:connection": "tsx scripts/check-connection.ts",
+    "check:coverage": "tsx scripts/check-public-coverage.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.80.0",

@@ -6,6 +6,8 @@ Il repository iniziale conteneva soltanto questo README. Il provider confermato 
 
 Leggi [analisi, fonti e blocchi](docs/FASE-1.md) e [configurazione cloud da Android](docs/CONFIGURAZIONE.md).
 
+Il [riepilogo Fase 2](docs/FASE-2.md) documenta la compatibilità con Supabase nativo Vercel e la ricerca di fonti alternative. Sono passati **87 test**, TypeScript e build; Supabase remoto e acquisizione quote restano da collegare. ODSS-API elenca pubblicamente tre competizioni richieste, ma la sua licenza per value betting richiede autorizzazione espressa: nessun provider alternativo è stato attivato.
+
 ## Implementato
 
 - React/TypeScript/Vite, dashboard responsive, anteprima esplicita senza dati, login Supabase predisposto.
@@ -25,9 +27,12 @@ npm ci
 npm run dev
 npm run check
 npm run check:connection
+npm run check:coverage
 ```
 
 `check:connection` interroga solo il catalogo sport; esce con codice 1 se manca la chiave o il test fallisce. Connessione riuscita non significa copertura tennistavolo.
+
+`check:coverage` interroga soltanto i cataloghi pubblici di ODSS-API (un servizio diverso), senza chiave o costo. Distingue presenza nel catalogo da quote autenticate, ADM, live e mercati confrontabili: questi ultimi restano non verificati.
 
 Variabili in [.env.example](.env.example). Non committare `.env` e non usare prefisso `VITE_` per segreti. Le variabili `VITE_SUPABASE_*` sono pubblicabili e protette da RLS; mai usare service-role key.
 
