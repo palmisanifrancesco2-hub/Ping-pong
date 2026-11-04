@@ -4,7 +4,7 @@ Eseguite il 4 novembre 2026 in ambiente Codex.
 
 | Controllo | Risultato | Limiti |
 |---|---|---|
-| Vitest | 162 test superati in 19 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
+| Vitest | 168 test superati in 20 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
 | Endpoint HTTP | Health, auth, metodo, percorso e cache verificati su localhost | Token/provider sostituiti nei test HTTP; nessun login remoto certificato |
 | Auth Supabase | Gate di autorizzazione e gestione errori testati | Test unitari Auth con risposte simulate; account e appartenenza verificati anche sul database remoto |
 | PostgreSQL/RLS | Due migrazioni remote e 14 tabelle RLS; successivo controllo remoto READ ONLY conferma proprietario verificato/autorizzato, profilo isolato e rifiuto estranei/anonimi | Il proprietario ha confermato di riuscire a entrare dal telefono; verifica manuale riferita, non automatizzata |
@@ -47,3 +47,5 @@ Release giocatori/scelte `0704182` Production READY, alias fisso confermato. Mig
 Google OAuth: 162 test e build superati. Browser locale con provider/sessioni sintetici conferma PKCE, account autorizzato, non membro senza feed, annullamento e provider spento. Il login Google reale non è stato eseguito e l’attivazione del provider va verificata sul progetto; nessun nuovo utente remoto o modifica di membership. [Dettagli](GOOGLE-LOGIN.md).
 
 Google Production `b914c81`: controllo nativo riuscito, provider Google spento e signup consentita. Codice PKCE pubblicato, attivazione OAuth ancora da eseguire nel progetto Google/Supabase dal proprietario. Nessuna modifica di credenziali o utenti.
+
+Value Tracker: matematica e soglie testate su fixture sintetiche; HTTP privato verifica blocco reale. Nessuna opportunità o percentuale mostrata senza modello idoneo e fonte ADM verificata.

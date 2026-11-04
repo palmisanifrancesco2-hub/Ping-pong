@@ -8,6 +8,7 @@ import { Choices, saveChoiceSchema, updateChoiceSchema } from './choices.js';
 import { Analyses } from './analysis.js';
 import { ForecastStore } from './forecast-store.js';
 import modelData from '../models/elo-v1.json' with {type:'json'};
+import {currentValueReport}from'./value.js';
 
 type Dependencies = { env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
 export function createHandler(deps: Dependencies = {}) {
@@ -32,12 +33,13 @@ export function createHandler(deps: Dependencies = {}) {
     const methods = path === '/api/choices' ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle'].includes(path)?['POST']:['GET'];
     if (!methods.includes(req.method ?? '')) { res.setHeader('Allow', methods.join(', ')); return send(405, { error: 'Metodo non consentito.' }); }
     if (path === '/api/health') return send(200, { status: 'ok', version: '0.1.0' });
-    if (!['/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
+    if (!['/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
     const match = /^Bearer ([^\s]+)$/.exec(req.headers.authorization ?? '');
     const userId = match ? await checkAuth(match[1], env) : null;
     if (!match || !userId) return send(401, { error: 'Accesso riservato agli utenti autorizzati.' });
     try {
       if(path==='/api/access')return send(200,{authorized:true});
+      if(path==='/api/value')return send(200,currentValueReport(now()));
       if(path==='/api/model')return send(200,{version:modelData.version,validated:modelData.validated,generatedAt:modelData.generatedAt,trainingCutoff:modelData.trainingCutoff,validation:modelData.validation,calibration:modelData.calibration,leagues:modelData.leagues,source:'MoviOdds; validazione preliminare su risultati riportati'});
       if(path==='/api/settle')return send(200,await forecasts.settle(userId,()=>analyses.results.archive()));
       if(path==='/api/analysis'){

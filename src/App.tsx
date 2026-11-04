@@ -9,6 +9,7 @@ import { isFreshLive } from './shared/board';
 import { PersonalChoices } from './Choices';
 import { ModelStats } from './ModelStats';
 import { GoogleSignIn } from './GoogleSignIn';
+import { ValueTracker } from './ValueTracker';
 import { usePrivateAccess } from './usePrivateAccess';
 import { cleanAuthCallbackUrl, googleCallbackError } from './shared/google-auth';
 
@@ -23,7 +24,7 @@ type Section = typeof sections[number];
 export function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [demo, setDemo] = useState(false);
-  const [section, setSection] = useState<Section>('Dashboard');
+  const [section, setSection] = useState<Section>('Value Tracker');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [notice, setNotice] = useState(() => googleCallbackError(window.location.search, window.location.hash) ?? '');
@@ -31,7 +32,7 @@ export function App() {
   const [report, setReport] = useState<ConnectionReport | null>(null);
   const [period, setPeriod] = useState<HistoryPeriod>('30');
   const access = usePrivateAccess(session?.access_token, !!session && !demo);
-  const feed = useBoard(session?.access_token, !!session && !demo && access.status === 'allowed');
+  const feed = useBoard(session?.access_token, !!session && !demo && access.status === 'allowed' && ['Dashboard','Partite e mercati','Collegamenti'].includes(section));
   useEffect(() => {
     if (!auth) return;
     let active = true;
@@ -86,7 +87,7 @@ export function App() {
       {section === 'Collegamenti' && <FeedStatus {...feed}/>}
       {section === 'Collegamenti' && <section className="panel"><div className="panel-heading"><div><span className="eyebrow">FORNITORE CONFERMATO</span><h2>The Odds API · V4</h2></div><span className="badge">{report?.status === 'connected' ? 'Catalogo ricevuto' : report?.status === 'error' ? 'Errore di connessione' : 'Da configurare / verificare'}</span></div><p>La chiave resta sul server. Il test interroga soltanto il catalogo sport, senza costo in crediti quota. Il risultato è riutilizzato per 60 secondi per istanza server.</p><button className="primary" disabled={busy || demo} onClick={check}>{busy ? 'Verifica in corso…' : 'Verifica connessione'}</button>{demo && <p className="fine">Accedi con un utente autorizzato per eseguire il test.</p>}{report && <div className="report" role="status"><p>{report.message}</p><dl><dt>Ultimo controllo</dt><dd>{new Date(report.checkedAt).toLocaleString('it-IT')}</dd><dt>Sport nel catalogo</dt><dd>{report.status === 'connected' ? report.sports.length : 'Non verificato'}</dd><dt>Tennistavolo</dt><dd>{report.status !== 'connected' ? 'Non verificato' : report.tableTennisKeys.join(', ') || 'Assente dal catalogo ricevuto'}</dd><dt>Crediti rimanenti</dt><dd>{report.quota?.remaining ?? 'Non comunicati'}</dd><dt>Bookmaker ADM / Live</dt><dd>Da verificare</dd></dl></div>}<CompetitionList report={report}/><p className="fine">Il catalogo pubblico non elenca il tennistavolo. Non si presume che il tennis sia equivalente.</p><a href="https://the-odds-api.com/liveapi/guides/v4/" target="_blank" rel="noreferrer">Documentazione ufficiale ↗</a></section>}
       {section === 'Partite e mercati' && <><FeedStatus {...feed}/><Markets board={feed.board} now={feed.now} token={demo?undefined:session?.access_token}/></>}
-      {section === 'Value Tracker' && <section className="panel"><h2>Opportunità con dati verificati</h2><Empty title="Nessuna opportunità operativa" text="Servono probabilità calibrate fuori campione, quote recenti e bookmaker ADM verificati. L’EV non viene stimato senza questi requisiti."/><p className="formula">EV = probabilità stimata × quota − 1</p><p className="fine">Quota minima iniziale 1,30 · Nessun limite massimo · Preferenza non vincolante intorno a 2,00.</p></section>}
+      {section === 'Value Tracker' && <ValueTracker token={session?.access_token} demo={demo} onMarkets={()=>setSection('Partite e mercati')}/>}
       {section === 'Le mie scelte' && <PersonalChoices key={`${demo?'demo':session?.user.id}-${period}`} token={session?.access_token} demo={demo} period={period} onPeriod={setPeriod}/>}
       {section === 'Storico pronostici' && <PredictionHistory key={`${demo ? 'demo' : session?.user.id}-${period}`} token={session?.access_token} demo={demo} period={period} onPeriod={setPeriod}/>}
       {section === 'Statistiche modello' && <ModelStats token={session?.access_token} demo={demo}/>}

@@ -10,6 +10,10 @@ App privata: https://ping-pong-ping-pong3.vercel.app — indirizzo fisso assegna
 
 Pulsante “Continua con Google” con PKCE e verifica disponibilità reale del provider. Il controllo Production conferma Google ancora disattivato (signup consentita). È necessario abilitare il proprio client OAuth in Supabase: [configurazione da telefono e stato](docs/GOOGLE-LOGIN.md). La registrazione non concede accesso ai dati senza membership; nessuna modifica al registro privato.
 
+## Value Tracker
+
+Schermata iniziale dedicata alle sole quote selezionate per valore statistico. Il motore matematico è predisposto; la pipeline reale resta bloccata per modello non validato e fonte ADM non verificata. Nessuna opportunità inventata. [Criteri e limiti](docs/VALUE-TRACKER.md).
+
 ## Quote e mercati
 
 Sono incluse solo partite live con lettura recente e partite con orario di inizio futuro. Ogni scheda permette di confrontare i giocatori e salvare partita o selezione nello storico personale, mantenendo quota e timestamp originali. La nuova tabella personale è attiva in Production, con quota originale non riscrivibile dal client.
@@ -57,7 +61,7 @@ Timeout, schema, identità evento/selezione, errori, dimensione del payload e ti
 
 ## Stato e limiti
 
-**162 test, TypeScript e build superati.** Chromium locale verificato su viewport mobile e desktop con feed reale e autenticazione sintetica isolata; questo non equivale a un nuovo login di produzione automatizzato.
+**168 test, TypeScript e build superati.** Chromium locale verificato su viewport mobile e desktop con feed reale e autenticazione sintetica isolata; questo non equivale a un nuovo login di produzione automatizzato.
 
 [Integrazione e verifiche MoviOdds](docs/FASE-3.md), [database e ricerca fornitori](docs/FASE-2.md), [configurazione cloud](docs/CONFIGURAZIONE.md), [registro verifiche](docs/VERIFICHE.md).
 
