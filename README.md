@@ -1,2 +1,49 @@
-# Ping-pong
- Web app privata per analisi statistiche del ping pong
+# Ping Pong Analytics
+
+Web app privata per analisi statistiche del ping pong. **Base tecnica di Fase 1 implementata; dati reali e modello non operativi.**
+
+Il repository iniziale conteneva soltanto questo README. Il provider confermato è **The Odds API V4**, diverso da odss-api.com. Il catalogo pubblico non elenca tennistavolo; manca la verifica autenticata con la chiave del proprietario.
+
+Leggi [analisi, fonti e blocchi](docs/FASE-1.md) e [configurazione cloud da Android](docs/CONFIGURAZIONE.md).
+
+## Implementato
+
+- React/TypeScript/Vite, dashboard responsive, anteprima esplicita senza dati, login Supabase predisposto.
+- Backend Node/Vercel: health pubblica e catalogo protetto da token Supabase e lista UUID privata.
+- Connettore V4 con validazione runtime, timeout, gestione errori/quota e credenziali server.
+- Primitive matematiche e confronto quote prudente con test automatici.
+- Migrazione PostgreSQL/RLS e workflow GitHub Actions.
+
+Sezioni modello/storico/stake in stato **Dati insufficienti** o non operativo. Nessuna quota, risultato o probabilità simulata. I filtri non interrogano ancora il provider.
+
+## Sviluppo cloud (per Codex e CI)
+
+Node >=22.12. Il proprietario non deve eseguire comandi sul PC.
+
+```sh
+npm ci
+npm run dev
+npm run check
+npm run check:connection
+```
+
+`check:connection` interroga solo il catalogo sport; esce con codice 1 se manca la chiave o il test fallisce. Connessione riuscita non significa copertura tennistavolo.
+
+Variabili in [.env.example](.env.example). Non committare `.env` e non usare prefisso `VITE_` per segreti. Le variabili `VITE_SUPABASE_*` sono pubblicabili e protette da RLS; mai usare service-role key.
+
+## Endpoint
+
+| Metodo | Endpoint | Accesso | Comportamento |
+|---|---|---|---|
+| GET | `/api/health` | Pubblico | Stato processo e versione; nessuna verifica servizi esterni |
+| GET | `/api/connection` | Token Supabase verificato + UUID consentito | Catalogo sport; nessuna chiave restituita |
+
+Cache catalogo di 60 secondi per istanza server, errori sanitizzati. Nessun endpoint pubblico quote o scommesse.
+
+## Database e verifiche
+
+[Migrazione](supabase/migrations/202611040001_initial.sql): dati sportivi in lettura ai membri; previsioni e puntate isolate per utente; scrittura modelli/dati sportivi negata al browser. L'amministratore SQL gestisce `authorized_users`. Storico quote in righe append-only per i client browser (sola lettura); futura pipeline server tenuta a rispettare l'immutabilità.
+
+`npm run check` esegue test, TypeScript e build; CI ripete i controlli. Test su errori API, assenza chiave, timeout, quota, endpoint HTTP, RLS con PostgreSQL incorporato, quote/linee/unità diverse, probabilità implicita, EV e Kelly.
+
+Non verificati: chiave reale, copertura autenticata, login e migrazione Supabase remoto, browser Android e deploy online. Modello non addestrato/validato, pipeline dati non collegata. Nessun servizio acquistato e nessuna scommessa eseguita.
