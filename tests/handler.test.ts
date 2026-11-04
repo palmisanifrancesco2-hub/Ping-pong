@@ -13,6 +13,15 @@ async function start(handler: ReturnType<typeof createHandler>) {
   return `http://127.0.0.1:${address.port}`;
 }
 describe('private HTTP API', () => {
+  it('keeps the research report private and separate from validated production forecasts',async()=>{
+    const base=await start(createHandler({authorize:async t=>t==='member'?'owner':null}));
+    expect((await fetch(`${base}/api/model`)).status).toBe(401);
+    const response=await fetch(`${base}/api/model`,{headers:{Authorization:'Bearer member'}});
+    expect(response.status).toBe(200);expect(response.headers.get('cache-control')).toBe('private, no-store');
+    const body=await response.json();expect(body.research.productionValidated).toBe(false);
+    expect(Object.keys(body.research.candidateSelection)).toHaveLength(6);
+    expect(body.research.finalPredictions).toBeUndefined();expect(body.validated).toBe(false);
+  });
   it('keeps value estimates private and reports the actual model block',async()=>{
     const base=await start(createHandler({authorize:async t=>t==='member'?'owner':null,feed:{board:async()=>({provider:'MoviOdds',bookmakerSite:'bet365.com.au',checkedAt:new Date().toISOString(),serverTime:new Date().toISOString(),warming:false,matches:[]})}}));expect((await fetch(`${base}/api/value`)).status).toBe(401);
     const response=await fetch(`${base}/api/value`,{headers:{Authorization:'Bearer member'}});expect(response.status).toBe(200);const report=await response.json();expect(report.status).toBe('experimental');expect(report.opportunities).toEqual([]);

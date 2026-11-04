@@ -49,3 +49,13 @@ Google OAuth: 162 test e build superati. Browser locale con provider/sessioni si
 Google Production `b914c81`: controllo nativo riuscito, provider Google spento e signup consentita. Codice PKCE pubblicato, attivazione OAuth ancora da eseguire nel progetto Google/Supabase dal proprietario. Nessuna modifica di credenziali o utenti.
 
 Value Tracker: matematica e soglie testate su fixture sintetiche; HTTP privato verifica blocco reale. Nessuna opportunità o percentuale mostrata senza modello idoneo e fonte ADM verificata.
+
+## Ricerca modelli — 4 novembre 2026, 21:54 UTC
+
+- Protocollo preregistrato `a18faf0`, sei varianti, dati MoviOdds reali; report completo `research/report-v2.json` e metodo `docs/RICERCA-MODELLI.md`.
+- 1.000 eventi campionati, 956 start verificati, 570 casi con storico; sviluppo 321, calibrazione 99, test finale 146. Elo K=10 selezionato nello sviluppo; Brier finale 0,252164, 53,42% corretti. Criteri non superati, nessuna promozione o pronostico retroattivo.
+- `npm run check`: 182 test / 21 file, TypeScript e build superati.
+- Browser Chromium locale: accesso sintetico isolato → endpoint privato reale `/api/model` → report reale → rendering Android 393×851 e desktop 1440×1000. Nessun errore JavaScript né overflow orizzontale. Controllato visivamente screenshot mobile.
+- Intervalli Wilson descrittivi nella scheda giocatore verificati matematicamente; non sono intervalli predittivi della prossima partita.
+- Nessuna chiave o cache grezza nei nuovi file; migrazioni Vercel `APP_DATABASE_SETUP=0` e `APP_CHOICES_SETUP=0` verificate tramite metadati, nessuna nuova migrazione.
+- Il login reale dell'utente e l'accesso browser alla produzione dietro protezione Vercel non sono stati automatizzati. Il test locale usa una sessione fittizia, non l'account reale.
