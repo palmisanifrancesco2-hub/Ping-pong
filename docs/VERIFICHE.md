@@ -61,3 +61,12 @@ Value Tracker: matematica e soglie testate su fixture sintetiche; HTTP privato v
 - Il login reale dell'utente e l'accesso browser alla produzione dietro protezione Vercel non sono stati automatizzati. Il test locale usa una sessione fittizia, non l'account reale.
 
 Pubblicazione della ricerca: commit applicativo `6869ee6cbc25cc5a12a5f44c93f48d849af0e5b8`, deployment Vercel `dpl_EpdXs3XpTkUTU7NpqSsMJRq7n3km` **READY**. Alias `https://ping-pong-ping-pong3.vercel.app` verificato sul nuovo deployment. Build cloud riuscita: feed reale 362 partite / 10 competizioni / 38 nomi mercato; verifiche DB in sola lettura, RLS e schema riuscite. Protezione Vercel mantenuta; navigazione locale verificata, sessione reale in produzione non automatizzata.
+
+## Ricerca su punteggi e campione futuro — 4 novembre 2026
+
+- Protocollo v3 preregistrato (`7cc3386`), nove configurazioni logistiche. 600 eventi nuovi rispetto agli ID noti v2, 577 orari verificabili, 385 casi finali. Brier 0,247901, 55,32% corretti; Elo sugli stessi casi 0,247380. Controlli non superati; periodo già esplorato, nessuna promozione.
+- Registrate 304 osservazioni prospettiche alle 22:17:32 UTC, prima dell'inizio previsto più vicino (22:25 UTC). Modello e hash in Git (`39f93c9`) prima degli esiti; file completi e archivio in `.research-data/`, ignorati da Git. Nessun aggiornamento in background attivato.
+- 189 test in 22 file, TypeScript e build superati. Controlli su causalità delle caratteristiche, simmetria, regolarizzazione, assenza di risultati futuri, quote incomplete e osservazioni obsolete.
+- Chromium locale con autenticazione sintetica isolata e API reale del report: Android 393×851 e desktop 1440×1000, nove candidati e manifesto 304 eventi renderizzati, nessun errore JavaScript o overflow. Login dell'utente in produzione non automatizzato.
+- API `/api/model` protetta; restituisce i riepiloghi e il manifesto, non le righe individuali dei test o del campione futuro. Nessuna modifica al database o alle credenziali.
+- Audit iniziale del campione futuro eseguito realmente alle 22:20:52 UTC: hash valido, 304 in attesa, 0 valutati, metriche correttamente nulle. Il ramo di valutazione di partite realmente concluse non è ancora verificabile su questo campione; nessun esito è stato inventato.

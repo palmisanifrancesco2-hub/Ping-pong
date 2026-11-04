@@ -64,3 +64,9 @@ Fonte: MoviOdds. Risultati aggregati, non certificati indipendentemente. Nessun 
 - Il miglioramento rispetto al riferimento neutrale è piccolo e non statisticamente convincente con tre giorni. Il modello non supera Elo sugli stessi casi. **Controlli di validazione non superati.**
 
 Questo è un segnale da studiare, non un modello dichiarato affidabile. Non si confronta direttamente il Brier 0,247901 con il precedente 0,252164 come prova di superiorità: i campioni sono differenti. Il confronto corretto con Elo è quello sugli stessi 385 eventi riportato sopra.
+
+## Prima osservazione prospettica effettiva
+
+Il 4 novembre 2026 alle **22:17:32 UTC** sono state registrate **304 previsioni**, per eventi previsti tra le 22:25 UTC del 4 novembre e le 21:30 UTC del 5 novembre. Il manifesto e il modello congelato sono nel commit `39f93c9`, inviato a GitHub prima dell'inizio previsto del primo evento. L'hash del file completo è stato verificato; dati individuali e archivio necessario alla ricostruzione sono esclusi da Git.
+
+Questo gruppo copre meno di due giorni: non soddisfa da solo il requisito di almeno sette giorni. Non è stata attivata una raccolta periodica automatica. La schermata mostra il manifesto del campione; non presenta esiti ancora non verificati.

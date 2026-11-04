@@ -21,6 +21,8 @@ describe('private HTTP API', () => {
     const body=await response.json();expect(body.research.productionValidated).toBe(false);
     expect(Object.keys(body.research.candidateSelection)).toHaveLength(6);
     expect(body.research.finalPredictions).toBeUndefined();expect(body.validated).toBe(false);
+    expect(body.scoreResearch.productionValidated).toBe(false);expect(body.scoreResearch.candidates).toHaveLength(9);expect(body.scoreResearch.finalPredictions).toBeUndefined();
+    expect(body.forwardStudy.events).toBeGreaterThan(0);expect(body.forwardStudy.captureHash).toMatch(/^[a-f0-9]{64}$/);expect(body.forwardStudy.predictions).toBeUndefined();
   });
   it('keeps value estimates private and reports the actual model block',async()=>{
     const base=await start(createHandler({authorize:async t=>t==='member'?'owner':null,feed:{board:async()=>({provider:'MoviOdds',bookmakerSite:'bet365.com.au',checkedAt:new Date().toISOString(),serverTime:new Date().toISOString(),warming:false,matches:[]})}}));expect((await fetch(`${base}/api/value`)).status).toBe(401);

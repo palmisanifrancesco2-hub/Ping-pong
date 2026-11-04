@@ -78,3 +78,12 @@ Il report è disponibile nella sezione **Statistiche modello** e in
 [docs/RICERCA-MODELLI.md](docs/RICERCA-MODELLI.md). Le schede giocatore mostrano
 anche l'intervallo descrittivo della frequenza storica; non è una probabilità
 validata per la prossima partita. Nessuna promozione automatica dei modelli.
+
+La ricerca successiva introduce nove regressioni logistiche su punti, set,
+forma e scontri diretti. Su 385 nuovi eventi utilizzabili, il candidato scelto
+ottiene Brier 0,247901 e 55,32% di esiti corretti, ma non supera Elo sullo stesso
+campione né i controlli di stabilità. Sono state inoltre congelate 304 previsioni
+prima dell'inizio previsto degli eventi, con manifesto di integrità in Git e dati
+individuali esclusi dal repository. Dettagli in
+[docs/RICERCA-PUNTEGGI.md](docs/RICERCA-PUNTEGGI.md). Nessuna validazione automatica
+e nessuna raccolta periodica attivata.
