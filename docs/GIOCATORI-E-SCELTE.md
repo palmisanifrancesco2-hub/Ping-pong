@@ -47,3 +47,13 @@ La quota e probabilità originali restano collegate a ogni registrazione autenti
 155 test in 18 file, TypeScript e build superati anche dopo la correzione del timeout. Test specifici su esclusione eventi, schema risultati, statistiche, punteggi di validazione, blocco del modello, snapshot/quote cambiate, duplicati, autorizzazioni, RLS tra due utenti autorizzati e un estraneo, divieto di riscrivere il prezzo e cancellare storico. Le fixture sintetiche esistono soltanto nei test. Nessun account, risultato o pronostico fittizio viene inserito in produzione.
 
 Chromium locale: 396 partite tutte live recenti o future, dati reali dei due giocatori (32 e 56 incontri nella scheda verificata), salvataggio partita e selezione, esito personale manuale, quota originale invariata, dati mantenuti dopo ricaricamento, filtro annuale, mobile 393×851 e desktop 1440×1000 senza overflow o errori JS. Auth e scelte erano isolate nel server locale di prova esterno al repository; quote e risultati giocatori provenivano realmente da MoviOdds. Nessuna scrittura di fixture in Supabase.
+
+## Pubblicazione e migrazione effettive
+
+Versione applicativa `0704182a62f7f0a1033aaf3a5180a547e0c1e4f5`, deployment Production `dpl_9RtYviosPhvo7czBBSDV1LsXRZ8w`, stato READY. Alias fisso verificato sul nuovo deployment: https://ping-pong-ping-pong3.vercel.app. URL versione: https://ping-pong-qyffhaxyr-ping-pong3.vercel.app.
+
+La migrazione dedicata è stata realmente eseguita: una applicata, tre complessive nel registro, RLS della nuova tabella confermata. Il bootstrap iniziale è rimasto disattivato. Le verifiche remote READ ONLY confermano accesso del proprietario, isolamento da estranei, accesso anonimo negato, snapshot non riscrivibile e cancellazione negata ai client. Le query PostgREST di storico e scelte sono riuscite a limite zero, senza restituire righe private.
+
+Alle 20:51 UTC Vercel ha verificato 393 eventi live/futuri e un archivio di 23.624 risultati utilizzabili, con 1.067 righe escluse per incompletezza o incoerenza. La copertura osservata in quel momento va dal 5 ottobre al 4 novembre. Il modello resta `validated=false`. Build completato in 30 secondi.
+
+Dopo riuscita, `APP_CHOICES_SETUP` è stato disattivato a `0`; anche `APP_DATABASE_SETUP` resta `0`, verificati nella configurazione Production. Nessuna previsione o esito fittizio inserito, nessun nuovo utente Auth o servizio a pagamento. Il flusso con token reale del proprietario e il nuovo salvataggio dal telefono non sono stati automatizzati: browser locale con auth/scelte isolate, RLS e schema remoto verificati separatamente. La protezione Vercel resta attiva.

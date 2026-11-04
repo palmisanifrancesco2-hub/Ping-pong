@@ -2,13 +2,13 @@
 
 Web app privata React/TypeScript per consultare quote di tennistavolo. **Feed gratuito MoviOdds collegato; modello, previsioni e stake non operativi.**
 
-Supabase Auth e registro privato proteggono gli endpoint. Due migrazioni iniziali sono applicate in Production; 14 tabelle hanno RLS attiva. Il proprietario ha confermato l'accesso dal telefono. Nessun acquisto, dato simulato nella modalità reale o scommessa automatica.
+Supabase Auth e registro privato proteggono gli endpoint. Le due migrazioni iniziali e la nuova migrazione delle scelte personali sono applicate in Production. Le tabelle originarie e la nuova tabella personale hanno RLS attiva. Il proprietario ha confermato l'accesso dal telefono. Nessun acquisto, dato simulato nella modalità reale o scommessa automatica.
 
 App privata: https://ping-pong-ping-pong3.vercel.app — indirizzo fisso assegnato al deployment Production aggiornato.
 
 ## Quote e mercati
 
-Sono incluse solo partite live con lettura recente e partite con orario di inizio futuro. Ogni scheda permette di confrontare i giocatori e salvare partita o selezione nello storico personale, mantenendo quota e timestamp originali. La nuova tabella richiede l’apposita migrazione privata.
+Sono incluse solo partite live con lettura recente e partite con orario di inizio futuro. Ogni scheda permette di confrontare i giocatori e salvare partita o selezione nello storico personale, mantenendo quota e timestamp originali. La nuova tabella personale è attiva in Production, con quota originale non riscrivibile dal client.
 
 Dashboard e sezione **Partite e mercati** leggono tutti i campionati e mercati restituiti dal feed MoviOdds, senza una lista fissa. Filtri per giocatore, campionato, stato e nome mercato; quota minima iniziale 1,30, nessuna massima, voci sospese identificabili e paginazione a blocchi di 25. Impostando quota minima 1 si vedono tutti i prezzi disponibili.
 

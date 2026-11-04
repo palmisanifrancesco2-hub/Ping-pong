@@ -53,3 +53,9 @@ Il build Production esegue `npm run db:verify`, usando le credenziali native sul
 Un esito positivo verifica il database e RLS; non prova il login completo nel browser. La prova finale richiede che il proprietario acceda personalmente all'app con la password scelta, senza condividerla in chat.
 
 Prima di attivare pronostici occorrono storico sufficiente, validazione temporale fuori campione e calibrazione. Se il provider non offre tennistavolo, l'app deve dichiararlo senza sostituirlo con tennis o quote inventate.
+
+## Scelte personali e modello (release successiva)
+
+La migrazione `202611040003_personal_choices.sql` è stata applicata separatamente per la richiesta di storico personale. Aggiunge tabella con RLS e lo stato `reported` per i risultati aggregati; nessun dato cancellato. Il runner dedicato `db:choices` richiede `APP_CHOICES_SETUP=1` solo in Production e controlla i checksum delle tre migrazioni. Dopo riuscita è stato riportato a `0`; anche il bootstrap iniziale resta a `0`. Non riattivare questi flag per normali aggiornamenti.
+
+L'app aggiornata è su https://ping-pong-ping-pong3.vercel.app. “Giocatori e pronostico” recupera dati reali; “Segna questa partita” o “Scelgo questa selezione” salva nello storico “Le mie scelte”. Nessuna chiave MoviOdds richiesta. Il modello Elo è addestrato ma bloccato dopo la validazione fallita, come documentato in `GIOCATORI-E-SCELTE.md`.
