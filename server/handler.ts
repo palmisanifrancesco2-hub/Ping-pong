@@ -3,8 +3,9 @@ import { authorize, type Env } from './auth.js';
 import { OddsApi } from './provider.js';
 import { oddsApiKey } from './env.js';
 import { MoviOddsFeed } from './moviodds.js';
+import { parseHistoryQuery, readHistory } from './history.js';
 
-type Dependencies = { env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'> };
+type Dependencies = { env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory };
 export function createHandler(deps: Dependencies = {}) {
   const env = deps.env ?? process.env;
   const provider = deps.provider ?? new OddsApi(oddsApiKey(env));
@@ -20,12 +21,19 @@ export function createHandler(deps: Dependencies = {}) {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     const send = (status: number, body: unknown) => { res.statusCode = status; res.end(JSON.stringify(body)); };
     if (req.method !== 'GET') { res.setHeader('Allow', 'GET'); return send(405, { error: 'Metodo non consentito.' }); }
-    const path = new URL(req.url ?? '/', 'http://localhost').pathname;
+    const url = new URL(req.url ?? '/', 'http://localhost');
+    const path = url.pathname;
     if (path === '/api/health') return send(200, { status: 'ok', version: '0.1.0' });
-    if (path !== '/api/connection' && path !== '/api/board') return send(404, { error: 'Endpoint non disponibile.' });
+    if (!['/api/connection', '/api/board', '/api/history'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
     const match = /^Bearer ([^\s]+)$/.exec(req.headers.authorization ?? '');
-    if (!match || !await checkAuth(match[1], env)) return send(401, { error: 'Accesso riservato agli utenti autorizzati.' });
+    const userId = match ? await checkAuth(match[1], env) : null;
+    if (!match || !userId) return send(401, { error: 'Accesso riservato agli utenti autorizzati.' });
     try {
+      if (path === '/api/history') {
+        let query;
+        try { query = parseHistoryQuery(url.searchParams); } catch { return send(400, { error: 'Intervallo, pagina o filtro esito non valido.' }); }
+        return send(200, await (deps.history ?? readHistory)({ ...query, token: match[1], userId, env }));
+      }
       if (path === '/api/board') return send(200, await feed.board());
       if (!cached || now() - cached.at >= 60_000) {
         pending ??= provider.connection();

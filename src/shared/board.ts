@@ -14,6 +14,10 @@ export type Board = {
   provider: 'MoviOdds'; bookmakerSite: 'bet365.com.au'; checkedAt: string;
   serverTime: string; warming: boolean; matches: FeedMatch[];
 };
+export function isFreshLive(match: FeedMatch, now: number): boolean {
+  const age = now - Date.parse(match.polled_at ?? '');
+  return match.in_play && Number.isFinite(age) && age >= -60_000 && age <= 60_000;
+}
 // Preserve provider identity including changing game period and sub-market.
 export function marketIdentity(q: FeedQuote): string {
   return JSON.stringify([q.group_id, q.market_key ?? '', q.period ?? '', q.market_id ?? '', q.phase ?? 'prematch']);

@@ -13,6 +13,19 @@ async function start(handler: ReturnType<typeof createHandler>) {
   return `http://127.0.0.1:${address.port}`;
 }
 describe('private HTTP API', () => {
+  it('protects history and validates filters before querying the database', async () => {
+    const history = vi.fn();
+    const denied = await start(createHandler({ env: {}, history }));
+    expect((await fetch(`${denied}/api/history?period=365`)).status).toBe(401);
+    expect(history).not.toHaveBeenCalled();
+    const base = await start(createHandler({ history, authorize: async () => 'test-owner' }));
+    expect((await fetch(`${base}/api/history?period=0`, { headers: { Authorization: 'Bearer test' } })).status).toBe(400);
+    expect(history).not.toHaveBeenCalled();
+    history.mockResolvedValue({ entries: [], totalRecorded: 0 });
+    const response = await fetch(`${base}/api/history?period=365&status=won`, { headers: { Authorization: 'Bearer test' } });
+    expect(response.status).toBe(200); expect(response.headers.get('cache-control')).toBe('private, no-store');
+    expect(history.mock.calls[0][0]).toMatchObject({ userId: 'test-owner', token: 'test', period: '365', page: 1, status: 'won' });
+  });
   it('protects the complete board before requesting public provider data', async () => {
     const feed = { board: vi.fn() };
     const base = await start(createHandler({ env: {}, feed }));

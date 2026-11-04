@@ -14,6 +14,8 @@ Una richiesta per l'intero tennistavolo, aggiornamento ogni 30 secondi quando la
 
 The Odds API V4 resta disponibile soltanto come diagnostica opzionale: il suo catalogo autenticato non include tennistavolo. Nessuna sua chiave è usata con altri fornitori. MoviOdds non richiede chiavi o registrazioni per questo endpoint.
 
+Badge LIVE evidente con timestamp recente, punteggio se disponibile, stato non confermato se la lettura diventa vecchia e filtro rapido Solo LIVE. [Dettagli storico e live](docs/STORICO-E-LIVE.md).
+
 ## Sviluppo e verifica cloud
 
 Node >=22.12; deploy verificato su Node 24. Il proprietario non deve eseguire comandi sul PC.
@@ -35,14 +37,15 @@ Nell'ambiente Codex con proxy, Node 24 usa `NODE_USE_ENV_PROXY=1 npm run check:f
 |---|---|---|---|
 | GET | `/api/health` | Pubblico | Stato processo, nessun segreto |
 | GET | `/api/board` | Token Supabase verificato + appartenenza privata | Intero feed MoviOdds validato; risposta privata, no-store |
+| GET | `/api/history` | Token Supabase + appartenenza, JWT del chiamante e RLS | Previsioni reali proprie, intervalli, esiti e riepilogo |
 | GET | `/api/connection` | Token Supabase verificato + appartenenza privata | Diagnostica catalogo The Odds API |
 
 Timeout, schema, identità evento/selezione, errori, dimensione del payload e timestamp sono controllati lato server. In errore il client rimuove la vecchia risposta; nessun fallback a quote inventate. Anteprima senza dati e senza chiamate API.
 
 ## Stato e limiti
 
-**129 test, TypeScript e build superati.** Chromium locale verificato su viewport mobile e desktop con feed reale e autenticazione sintetica isolata; questo non equivale a un nuovo login di produzione automatizzato.
+**140 test, TypeScript e build superati.** Chromium locale verificato su viewport mobile e desktop con feed reale e autenticazione sintetica isolata; questo non equivale a un nuovo login di produzione automatizzato.
 
 [Integrazione e verifiche MoviOdds](docs/FASE-3.md), [database e ricerca fornitori](docs/FASE-2.md), [configurazione cloud](docs/CONFIGURAZIONE.md), [registro verifiche](docs/VERIFICHE.md).
 
-Lo storico non viene ancora raccolto nel database. Risultati ufficiali, validazione temporale, calibrazione, Value Tracker operativo e Smart Stake attendono dati sufficienti e verificati. Nessuna garanzia di gratuità futura o continuità del fornitore; concessioni ADM e diritti a valle non verificati indipendentemente.
+Lo storico delle previsioni ora legge le tabelle esistenti con intervalli da 24 ore a 365 giorni e storico completo, filtri esito e riepilogo; resta vuoto fino a vere registrazioni. Il generatore e il settlement automatico non sono attivi. Lo storico quote non viene ancora raccolto nel database. Risultati ufficiali, validazione temporale, calibrazione, Value Tracker operativo e Smart Stake attendono dati sufficienti e verificati. Nessuna garanzia di gratuità futura o continuità del fornitore; concessioni ADM e diritti a valle non verificati indipendentemente.

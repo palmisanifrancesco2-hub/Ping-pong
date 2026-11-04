@@ -3,6 +3,9 @@ import { createClient, type Session } from '@supabase/supabase-js';
 import { COMPETITIONS, type ConnectionReport } from './shared/contracts';
 import { FeedStatus, Markets } from './Markets';
 import { useBoard } from './useBoard';
+import { PeriodSelect, PredictionHistory } from './History';
+import type { HistoryPeriod } from './shared/history';
+import { isFreshLive } from './shared/board';
 
 const url = import.meta.env.VITE_SUPABASE_URL;
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -21,7 +24,7 @@ export function App() {
   const [notice, setNotice] = useState('');
   const [busy, setBusy] = useState(false);
   const [report, setReport] = useState<ConnectionReport | null>(null);
-  const [period, setPeriod] = useState('30');
+  const [period, setPeriod] = useState<HistoryPeriod>('30');
   const feed = useBoard(session?.access_token, !!session && !demo);
   useEffect(() => {
     if (!auth) return;
@@ -70,13 +73,14 @@ export function App() {
         ['Partite nel feed', feed.board ? String(feed.board.matches.length) : '—'],
         ['Campionati nel feed', feed.board ? String(new Set(feed.board.matches.map(m => m.league)).size) : '—'],
         ['Voci quota ricevute', feed.board ? String(feed.board.matches.reduce((n, m) => n + m.quotes.length, 0)) : '—'],
-        ['Previsioni operative', 'Non attive'],
+        ['Partite LIVE aggiornate', feed.board ? String(feed.board.matches.filter(m => isFreshLive(m, feed.now)).length) : '—'],
       ].map(([label, value]) => <article className="metric" key={label}><span>{label}</span><strong>{value}</strong><small>Fonte estera · ADM non verificato</small></article>)}</div><div className="two-columns"><section className="panel"><h2>Competizioni monitorate</h2><p>Campionati presenti nella risposta MoviOdds, aggiornati con il feed.</p>{feed.board ? <ul className="competition-list">{[...new Set(feed.board.matches.map(m => m.league))].sort().map(name => <li key={name}><span>{name}</span><small>{feed.board!.matches.filter(m => m.league === name).length} partite</small></li>)}</ul> : <p>Catalogo in attesa di caricamento.</p>}</section><section className="panel"><span className="eyebrow">MODELLO STATISTICO</span><h2>Trasparente, fin dall’inizio.</h2><div className="empty-symbol">↗</div><h3>Dati insufficienti</h3><p>Nessuna previsione operativa. Il modello richiede risultati verificabili e validazione temporale fuori campione.</p><button className="text-button" onClick={() => setSection('Statistiche modello')}>Stato della validazione →</button></section></div></>}
       {section === 'Collegamenti' && <FeedStatus {...feed}/>}
       {section === 'Collegamenti' && <section className="panel"><div className="panel-heading"><div><span className="eyebrow">FORNITORE CONFERMATO</span><h2>The Odds API · V4</h2></div><span className="badge">{report?.status === 'connected' ? 'Catalogo ricevuto' : report?.status === 'error' ? 'Errore di connessione' : 'Da configurare / verificare'}</span></div><p>La chiave resta sul server. Il test interroga soltanto il catalogo sport, senza costo in crediti quota. Il risultato è riutilizzato per 60 secondi per istanza server.</p><button className="primary" disabled={busy || demo} onClick={check}>{busy ? 'Verifica in corso…' : 'Verifica connessione'}</button>{demo && <p className="fine">Accedi con un utente autorizzato per eseguire il test.</p>}{report && <div className="report" role="status"><p>{report.message}</p><dl><dt>Ultimo controllo</dt><dd>{new Date(report.checkedAt).toLocaleString('it-IT')}</dd><dt>Sport nel catalogo</dt><dd>{report.status === 'connected' ? report.sports.length : 'Non verificato'}</dd><dt>Tennistavolo</dt><dd>{report.status !== 'connected' ? 'Non verificato' : report.tableTennisKeys.join(', ') || 'Assente dal catalogo ricevuto'}</dd><dt>Crediti rimanenti</dt><dd>{report.quota?.remaining ?? 'Non comunicati'}</dd><dt>Bookmaker ADM / Live</dt><dd>Da verificare</dd></dl></div>}<CompetitionList report={report}/><p className="fine">Il catalogo pubblico non elenca il tennistavolo. Non si presume che il tennis sia equivalente.</p><a href="https://the-odds-api.com/liveapi/guides/v4/" target="_blank" rel="noreferrer">Documentazione ufficiale ↗</a></section>}
       {section === 'Partite e mercati' && <><FeedStatus {...feed}/><Markets board={feed.board} now={feed.now}/></>}
       {section === 'Value Tracker' && <section className="panel"><h2>Opportunità con dati verificati</h2><Empty title="Nessuna opportunità operativa" text="Servono probabilità calibrate fuori campione, quote recenti e bookmaker ADM verificati. L’EV non viene stimato senza questi requisiti."/><p className="formula">EV = probabilità stimata × quota − 1</p><p className="fine">Quota minima iniziale 1,30 · Nessun limite massimo · Preferenza non vincolante intorno a 2,00.</p></section>}
-      {(section === 'Statistiche modello' || section === 'Storico pronostici') && <section className="panel"><div className="panel-heading"><h2>{section === 'Statistiche modello' ? 'Validazione temporale' : 'Previsioni registrate'}</h2><label>Intervallo<select value={period} onChange={e => setPeriod(e.target.value)}>{['5','10','15','30','all'].map(v => <option key={v} value={v}>{v === 'all' ? 'Storico completo' : `Ultimi ${v} giorni`}</option>)}</select></label></div><Empty title="Dati insufficienti" text={section === 'Statistiche modello' ? 'Nessun modello addestrato o validato. Brier Score, Log Loss, calibrazione e profitto teorico non disponibili.' : 'Non sono ancora state registrate previsioni o puntate manuali. Le due categorie saranno mantenute separate.'}/></section>}
+      {section === 'Storico pronostici' && <PredictionHistory key={`${demo ? 'demo' : session?.user.id}-${period}`} token={session?.access_token} demo={demo} period={period} onPeriod={setPeriod}/>}
+      {section === 'Statistiche modello' && <section className="panel"><div className="panel-heading"><h2>Validazione temporale</h2><PeriodSelect value={period} onChange={setPeriod}/></div><Empty title="Dati insufficienti" text="Nessun modello addestrato o validato. Brier Score, Log Loss e calibrazione non disponibili. Gli esiti delle previsioni registrate sono consultabili nello Storico pronostici e non sostituiscono una validazione fuori campione."/></section>}
       {section === 'Smart Stake' && <section className="panel"><span className="badge">DISATTIVATO</span><h2>Bankroll sotto controllo</h2><Empty title="Modulo non operativo" text="Il calcolo richiede un modello validato e una stima prudente dell’incertezza. La funzione Kelly frazionaria è predisposta e testata, ma non produce indicazioni operative in questa fase."/><p>Limite massimo previsto: 2% del bankroll. Nessun recupero automatico delle perdite e nessuna esecuzione di scommesse.</p></section>}
       <footer>Ping Pong Analytics <span>Quote estere · Nessuna previsione validata · Nessun rendimento garantito</span></footer>
     </main></div>;

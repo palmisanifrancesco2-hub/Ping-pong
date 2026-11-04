@@ -14,6 +14,7 @@
     "check:oddspapi": "tsx scripts/check-oddspapi.ts",
     "check:moviodds": "tsx scripts/check-moviodds.ts",
     "check:feed": "tsx scripts/check-feed.ts",
+    "check:history-schema": "tsx scripts/check-history-schema.ts",
     "db:bootstrap": "tsx scripts/bootstrap-db.ts",
     "db:verify": "tsx scripts/verify-db.ts"
   },

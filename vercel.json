@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "buildCommand": "npm run build && npm run check:feed && npm run db:bootstrap && npm run db:verify",
+  "buildCommand": "npm run build && npm run check:feed && npm run db:bootstrap && npm run db:verify && npm run check:history-schema",
   "outputDirectory": "dist",
   "headers": [{
     "source": "/(.*)",

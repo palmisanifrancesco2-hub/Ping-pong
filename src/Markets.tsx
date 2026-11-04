@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { filterBoard, marketIdentity, marketName, quoteIdentity, quoteStatus, type Board, type FeedMatch, type FeedQuote } from './shared/board';
+import { filterBoard, isFreshLive, marketIdentity, marketName, quoteIdentity, quoteStatus, type Board, type FeedMatch, type FeedQuote } from './shared/board';
 
 export function FeedStatus({ board, loading, error, refresh }: { board: Board | null; loading: boolean; error: string; refresh: () => void }) {
   return <section className="panel feed-status"><div className="panel-heading"><div><span className="eyebrow">FONTE GRATUITA · SENZA CHIAVE</span><h2>MoviOdds · bet365 estero</h2></div><button className="primary" disabled={loading} onClick={refresh}>{loading ? 'Aggiornamento…' : 'Aggiorna quote'}</button></div>
@@ -21,6 +21,7 @@ export function Markets({ board, now }: { board: Board | null; now: number }) {
     minOdds: Math.max(1, Number(minOdds) || 1), includeUnavailable }), [board, search, competition, state, market, minOdds, includeUnavailable]);
   const changed = () => setLimit(25);
   return <section className="panel"><h2>Tutti i campionati e mercati del feed</h2><p>Nomi e linee originali della fonte. Nessuna selezione viene convertita in un pronostico o abbinata a mercati diversi.</p>
+    <div className="history-controls"><button className={state === 'live' ? 'primary' : 'text-button'} onClick={() => { setState(state === 'live' ? '' : 'live'); changed(); }}>● {state === 'live' ? 'Mostra tutte le partite' : `Solo LIVE (${board?.matches.filter(m => isFreshLive(m, now)).length ?? 0} aggiornate)`}</button></div>
     <div className="filters"><label>Giocatore<input type="search" value={search} placeholder="Cerca per nome" onChange={e => { setSearch(e.target.value); changed(); }}/></label>
       <label>Campionato<select aria-label="Campionato" value={competition} onChange={e => { setCompetition(e.target.value); changed(); }}><option value="">Tutti ({competitions.length})</option>{competitions.map(c => <option key={c}>{c}</option>)}</select></label>
       <label>Stato<select aria-label="Stato" value={state} onChange={e => { setState(e.target.value); changed(); }}><option value="">Tutti</option><option value="prematch">Non live secondo la fonte</option><option value="live">Live secondo la fonte</option></select></label>
@@ -35,11 +36,10 @@ export function Markets({ board, now }: { board: Board | null; now: number }) {
 function Match({ match: m, now }: { match: FeedMatch; now: number }) {
   const groups = new Map<string, FeedQuote[]>();
   for (const q of m.quotes) { const id = marketIdentity(q); const group = groups.get(id) ?? []; group.push(q); groups.set(id, group); }
-  const liveRead = Date.parse(m.polled_at ?? '');
-  const liveFresh = m.in_play && now - liveRead <= 60_000 && now - liveRead >= -60_000;
+  const liveFresh = isFreshLive(m, now);
   const state = m.in_play ? (liveFresh ? 'Live · fonte aggiornata' : 'Live segnalato · aggiornamento non confermato')
     : m.kickoff_utc && Date.parse(m.kickoff_utc) > now ? 'Prematch' : 'Orario superato / stato da verificare';
-  return <details className="match-card"><summary><span><small>{m.league}</small><strong>{m.home} — {m.away}</strong><span>{dateTime(m.kickoff_utc)} · {state}</span></span><span className="badge">{m.quotes.length} voci quota · Apri</span></summary>
+  return <details className={liveFresh ? 'match-card match-live' : 'match-card'}><summary><span><small>{m.league}</small><strong>{m.home} — {m.away}</strong><span>{dateTime(m.kickoff_utc)} · {state}</span></span><span className="match-badges">{m.in_play && <span className={liveFresh ? 'live-badge' : 'live-badge live-uncertain'}><i aria-hidden="true"/>{liveFresh ? 'LIVE' : 'LIVE NON CONFERMATO'}</span>}{m.in_play && m.score && <span className="score-badge" aria-label={`Punteggio dalla fonte: ${m.score}`}>{m.score}</span>}<span className="badge">{m.quotes.length} voci quota · Apri</span></span></summary>
     <div className="match-content"><p className="fine">Bet365.com.au · ID evento {m.id} · Ultima lettura evento: {dateTime(m.polled_at)}{m.score ? ` · Punteggio riportato dalla fonte: ${m.score}` : ''}</p>
       {[...groups].map(([id, quotes]) => <section className="market-group" key={id}><h3>{marketName(quotes[0])}</h3><p className="fine">Periodo: {quotes[0].period ?? 'Non specificato'} · Gruppo {quotes[0].group_id} · Sottomercato {quotes[0].market_id ?? 'Non specificato'} · Fase {quotes[0].phase ?? 'prematch'}</p>
         <div className="quote-grid">{quotes.map(q => <article className="quote" key={quoteIdentity(q)}><strong>{q.label || q.side || 'Selezione senza etichetta'}</strong>

@@ -1,10 +1,10 @@
-# Verifiche Fase 1
+# Verifiche tecniche
 
 Eseguite il 4 novembre 2026 in ambiente Codex.
 
 | Controllo | Risultato | Limiti |
 |---|---|---|
-| Vitest | 129 test superati in 14 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
+| Vitest | 140 test superati in 15 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
 | Endpoint HTTP | Health, auth, metodo, percorso e cache verificati su localhost | Token/provider sostituiti nei test HTTP; nessun login remoto certificato |
 | Auth Supabase | Gate di autorizzazione e gestione errori testati | Test unitari Auth con risposte simulate; account e appartenenza verificati anche sul database remoto |
 | PostgreSQL/RLS | Due migrazioni remote e 14 tabelle RLS; successivo controllo remoto READ ONLY conferma proprietario verificato/autorizzato, profilo isolato e rifiuto estranei/anonimi | Il proprietario ha confermato di riuscire a entrare dal telefono; verifica manuale riferita, non automatizzata |
@@ -14,7 +14,7 @@ Eseguite il 4 novembre 2026 in ambiente Codex.
 | Dipendenze produzione | `npm audit --omit=dev`: zero vulnerabilità segnalate | Fotografia delle segnalazioni disponibili, non garanzia generale |
 | Test connessione sul server Vercel | Connessione autenticata riuscita | Catalogo senza tennistavolo; nessuna chiamata quote |
 | Raggiungibilità provider | Endpoint sport ufficiale restituisce HTTP 401 senza chiave | Non prova copertura né validità chiave |
-| Browser Android/PC | Accesso dal telefono confermato dal proprietario | Verifica manuale riferita; interazioni complete, layout e PC non verificati automaticamente |
+| Browser Android/PC | Chromium locale 393×851 e 1440×1000: feed reale, filtri, live, storico, intervalli, errori, demo | Auth e registrazioni storiche sintetiche solo nel test locale; login Production della nuova versione non automatizzato |
 | Modello statistico | Non eseguito | Nessun modello o dataset: nessuna previsione operativa |
 | Salvataggio GitHub | Riuscito dopo aggiornamento autorizzazione | Ramo `feat/phase-1-foundation` caricato; il precedente errore 403 è risolto |
 
@@ -35,3 +35,5 @@ MoviOdds: chiamate pubbliche reali senza chiave riuscite via curl; payload reale
 Integrazione UI MoviOdds: vedere [Fase 3](FASE-3.md). Connettore completo verificato sul feed reale. Chromium locale con auth sintetica e API reale conferma mobile/desktop, quote/mercati, filtri, paginazione, logout/demo e rifiuto senza token. Nessun bypass Auth nel codice distribuito. Risultati storici delle righe precedenti non sostituiscono questa verifica più recente.
 
 Deployment MoviOdds Production `b3de748` READY: https://ping-pong-cvsy6nrzk-ping-pong3.vercel.app. Il server Vercel conferma schema completo del feed (455 partite/10 campionati/46 nomi mercato al build), controllo database READ ONLY riuscito e bootstrap non richiesto. Root HTTP 302 verso autenticazione Vercel. Fetch protetto automatico non riuscito; login Production di questa nuova versione da provare dal proprietario. Nessun log error/fatal nella scansione iniziale di 10 minuti, con copertura limitata al traffico effettivamente presente.
+
+Storico e badge LIVE: [dettagli implementazione e prove](STORICO-E-LIVE.md). Polling 30 secondi osservato nel browser. Intervalli da 24 ore fino a un anno, nessuna previsione retroattiva e nessuna nuova migrazione. Il nuovo storico richiede future registrazioni autentiche prima di avere esiti da mostrare.
