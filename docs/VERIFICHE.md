@@ -80,3 +80,5 @@ Pubblicazione v3: commit applicativo `77658bb96d8a3cc6eddf09c63be71abe7b6a4b52`,
 - Browser Chromium locale, API reale del report e sessione sintetica: 15 righe di classifica e dettagli dell'incertezza verificati su Android 393×851 e desktop 1440×1000, nessun errore JavaScript o overflow.
 - Hash dell'audit v4 verificato. Hash del campione prospettico v3 ancora identico. Previsioni individuali e pesi per finestra esclusi da Git e dall'API; nessuna modifica DB o credenziale.
 - Il controllo browser locale non equivale al login reale nella produzione protetta Vercel, che non è stato automatizzato.
+
+Pubblicazione classifica v4: commit applicativo `1071fbe58ace80d47021da2bf0d619b45651d715`, deployment `dpl_6vwdDRuaBa1TuZPmQUKKK4FVnKa8` **READY**. Alias `https://ping-pong-ping-pong3.vercel.app` verificato sul nuovo deployment. Build cloud completata, feed reale 590 partite / 10 competizioni / 40 nomi mercato; controlli DB e accessi in sola lettura riusciti. Protezione Vercel mantenuta; nessuna promozione del modello e nessuna modifica al campione futuro.
