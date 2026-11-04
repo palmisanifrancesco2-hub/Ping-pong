@@ -1,0 +1,43 @@
+import { readFile, readdir } from 'node:fs/promises';
+import { Client } from 'pg';
+import { applyMigrations, reserveOwner } from '../server/migrations.js';
+async function main() {
+  if (process.env.APP_DATABASE_SETUP !== '1') {
+    console.info('Database setup: non richiesto per questo deployment.'); return;
+  }
+  if (process.env.VERCEL_ENV !== 'production') throw new Error('DB_ENVIRONMENT');
+  const connectionString = process.env.POSTGRES_URL;
+  if (!connectionString || !process.env.SUPABASE_URL) throw new Error('DB_CONFIG');
+  const url = new URL(connectionString);
+  if (!['postgres:','postgresql:'].includes(url.protocol) || !url.password || !url.hostname.endsWith('.supabase.com') && !url.hostname.endsWith('.supabase.co')) throw new Error('DB_TARGET');
+  // Never let URL SSL modes disable certificate verification.
+  for (const key of ['sslmode','sslcert','sslkey','sslrootcert']) url.searchParams.delete(key);
+  const db = new Client({ connectionString: url.toString(), ssl: { rejectUnauthorized: true }, connectionTimeoutMillis: 15_000, query_timeout: 35_000 });
+  db.on('error', () => { /* Query/connect rejection is handled below without leaking credentials. */ });
+  try {
+    await db.connect();
+    const projectUrl = new URL(process.env.SUPABASE_URL);
+    const ref = projectUrl.hostname.split('.')[0];
+    const identity = await db.query('select current_user as username');
+    // Pooler usernames encode project identity, but SQL current_user normally does not.
+    // Verify the credential selector instead, never its password.
+    const selector = decodeURIComponent(url.username);
+    if (selector !== `postgres.${ref}` && url.hostname !== `db.${ref}.supabase.co`) throw new Error('DB_PROJECT_MISMATCH');
+    if (!identity.rows.length) throw new Error('DB_IDENTITY');
+    const directory = new URL('../supabase/migrations/', import.meta.url);
+    const names = (await readdir(directory)).filter(name => name.endsWith('.sql')).sort();
+    const migrations = await Promise.all(names.map(async name => ({ name,sql:await readFile(new URL(name,directory),'utf8') })));
+    const result = await applyMigrations(db,migrations);
+    const owner = await reserveOwner(db,process.env.APP_OWNER_EMAIL);
+    const check = await db.query("select count(*)::int as tables, bool_and(rowsecurity) as rls from pg_tables where schemaname='public'");
+    if (check.rows[0].tables !== 14 || check.rows[0].rls !== true) throw new Error('DB_SCHEMA_VERIFICATION');
+    console.info(JSON.stringify({ databaseSetup: 'success', ...result, publicTables: check.rows[0].tables, rlsEnabledOnAllPublicTables: check.rows[0].rls, ownerReserved: owner.reserved, newlyLinkedOwnerAccounts: owner.linkedUsers }));
+  } finally { await db.end().catch(() => {}); }
+}
+try { await main(); } catch (error) {
+  // Connection errors may include passwords, URLs, SQL, user emails or server internals.
+  console.error('Database setup non riuscito: controllo target, TLS o migrazione fallito. Nessuna credenziale viene mostrata.');
+  const code = typeof error === 'object' && error !== null && 'code' in error ? String(error.code) : error instanceof Error ? error.message : '';
+  if (/^[A-Z0-9_]{3,60}$/.test(code)) console.error(`Diagnostic code: ${code}`);
+  process.exitCode = 1;
+}

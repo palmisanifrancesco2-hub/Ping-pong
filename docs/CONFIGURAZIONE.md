@@ -19,17 +19,25 @@ Percorso più diretto da Android: aprire [Supabase nel Marketplace Vercel](https
 1. Dal dashboard Supabase creare o selezionare un progetto, verificando che il piano non comporti spese.
 2. Applicare nel SQL Editor la migrazione del repository. Su database esistenti controllare prima la compatibilità; non applicarla alla cieca su dati reali.
 3. In Authentication disabilitare nuove registrazioni pubbliche. Creare soltanto gli utenti privati attraverso la gestione utenti, impostando le password tramite i flussi sicuri del servizio.
-4. Copiare l'UUID utente e inserirlo tramite SQL Editor in `public.authorized_users`. Inserire lo stesso UUID nella variabile backend `ALLOWED_USER_IDS`. Il browser dell'app non può autorizzare nuovi utenti.
+4. L'accesso richiede appartenenza a `public.authorized_users`. Il backend verifica questo registro tramite RPC con il token dell'utente, senza chiavi amministrative. `ALLOWED_USER_IDS` è una restrizione UUID aggiuntiva facoltativa, non sostituisce il registro. Il browser dell'app non può autorizzare nuovi utenti.
 5. Usare Project URL e anon/publishable key compatibile per il frontend. Mai utilizzare la service-role key come chiave frontend. La sincronizzazione native Vercel è preferibile alla copia manuale.
 
 ## Vercel
 
 1. Dal dashboard Vercel importare il repository GitHub e il ramo dell'implementazione. Framework Vite, build `npm run build`, output `dist`, Node 22 o successivo compatibile.
-2. Variabili server: `THE_ODDS_API_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `ALLOWED_USER_IDS` (UUID separati da virgola).
+2. Variabili server: `THE_ODDS_API_KEY` (o il Secret esistente `oddsapi`), `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` (o anon legacy). `ALLOWED_USER_IDS`, se impostata, restringe ulteriormente gli utenti a UUID separati da virgola.
 3. Variabili pubblicabili: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. Le loro modifiche richiedono una nuova build.
 4. Verificare protezioni deployment e antiabuso disponibili senza spese. Non rimuovere l'autorizzazione dell'app per risolvere problemi di configurazione.
 5. Configurare gli URL di Auth quando necessari. Verificare login autorizzato, rifiuto utenti estranei, rifiuto endpoint senza token, catalogo, sessioni scadute e logout da telefono.
 
 Un repository pubblico può contenere codice e configurazioni di esempio, mai segreti, report autenticati o storico privato. Il deploy non certifica il funzionamento completo: acquisizione, ADM, risultati ufficiali e modello vanno verificati separatamente.
+
+## Migrazione server e proprietario
+
+`APP_DATABASE_SETUP=1`, solo in Production, abilita `npm run db:bootstrap` durante il build Vercel. Il runner usa `POSTGRES_URL` nativo sul server, verifica corrispondenza con `SUPABASE_URL`, TLS con certificati verificati e schema iniziale vuoto. Non legge né stampa credenziali nel client Codex. Migrazioni transazionali con lock e checksum: un errore annulla la transazione; database sconosciuti o migrazioni applicate e poi modificate vengono rifiutati. L'operazione è idempotente. Le tabelle sportive non ricevono seed fittizi.
+
+La variabile server `APP_OWNER_EMAIL` riserva un indirizzo in una tabella privata. Non crea utenti Auth, non imposta password e non invia messaggi. Un account con quell'email ottiene appartenenza soltanto dopo la verifica dell'indirizzo da parte di Supabase, oppure tramite creazione confermata nell'Auth dashboard amministrativo. Senza account autorizzato l'accesso ai dati resta negato.
+
+Il comando non modifica l'impostazione di registrazione pubblica di Supabase: disabilitarla dall'Auth dashboard resta una verifica separata. Non copiare i segreti del database di Production nelle Preview per completare il setup.
 
 Prima di attivare pronostici occorrono storico sufficiente, validazione temporale fuori campione e calibrazione. Se il provider non offre tennistavolo, l'app deve dichiararlo senza sostituirlo con tennis o quote inventate.

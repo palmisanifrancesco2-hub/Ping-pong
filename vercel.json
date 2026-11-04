@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "buildCommand": "npm run build && npm run check:connection -- --summary",
+  "buildCommand": "npm run build && npm run check:connection -- --summary && npm run db:bootstrap",
   "outputDirectory": "dist",
   "headers": [{
     "source": "/(.*)",

@@ -41,13 +41,15 @@ Variabili in [.env.example](.env.example). Non committare `.env` e non usare pre
 | Metodo | Endpoint | Accesso | Comportamento |
 |---|---|---|---|
 | GET | `/api/health` | Pubblico | Stato processo e versione; nessuna verifica servizi esterni |
-| GET | `/api/connection` | Token Supabase verificato + UUID consentito | Catalogo sport; nessuna chiave restituita |
+| GET | `/api/connection` | Token Supabase verificato + appartenenza al registro privato | Catalogo sport; nessuna chiave restituita |
 
 Cache catalogo di 60 secondi per istanza server, errori sanitizzati. Nessun endpoint pubblico quote o scommesse.
 
 ## Database e verifiche
 
 [Migrazione](supabase/migrations/202611040001_initial.sql): dati sportivi in lettura ai membri; previsioni e puntate isolate per utente; scrittura modelli/dati sportivi negata al browser. L'amministratore SQL gestisce `authorized_users`. Storico quote in righe append-only per i client browser (sola lettura); futura pipeline server tenuta a rispettare l'immutabilità.
+
+Il runner `db:bootstrap` applica le migrazioni dal server Vercel solo con opt-in Production, lock, checksum e controllo database vuoto. La [seconda migrazione](supabase/migrations/202611040002_private_membership.sql) aggiunge RPC di appartenenza e prenotazione privata dell'email proprietario senza creare account o inviare inviti. Il backend e RLS usano lo stesso registro; una whitelist UUID opzionale può restringere ulteriormente l'accesso.
 
 `npm run check` esegue test, TypeScript e build; CI ripete i controlli. Test su errori API, assenza chiave, timeout, quota, endpoint HTTP, RLS con PostgreSQL incorporato, quote/linee/unità diverse, probabilità implicita, EV e Kelly.
 

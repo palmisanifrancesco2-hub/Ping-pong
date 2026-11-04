@@ -26,7 +26,7 @@ describe('private HTTP API', () => {
     expect((await fetch(`${base}/api/connection`, { headers: { Authorization: 'Bearer forged' } })).status).toBe(401);
     expect(spy).not.toHaveBeenCalled();
   });
-  it('fails closed when allowlist is absent', async () => {
+  it('fails closed when Supabase configuration is incomplete', async () => {
     expect(await authorize('anything', {})).toBeNull();
     expect(await authorize('anything', { SUPABASE_URL: 'https://example.supabase.co', SUPABASE_ANON_KEY: 'test' })).toBeNull();
   });
