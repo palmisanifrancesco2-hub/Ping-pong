@@ -1,6 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { Client } from 'pg';
 import { applyMigrations, isInitialMigrationSet, reserveOwner } from '../server/migrations.js';
+import { databaseTls } from '../server/database-tls.js';
 async function main() {
   if (process.env.APP_DATABASE_SETUP !== '1') {
     console.info('Database setup: non richiesto per questo deployment.'); return;
@@ -12,7 +13,8 @@ async function main() {
   if (!['postgres:','postgresql:'].includes(url.protocol) || !url.password || !url.hostname.endsWith('.supabase.com') && !url.hostname.endsWith('.supabase.co')) throw new Error('DB_TARGET');
   // Never let URL SSL modes disable certificate verification.
   for (const key of ['sslmode','sslcert','sslkey','sslrootcert']) url.searchParams.delete(key);
-  const db = new Client({ connectionString: url.toString(), ssl: { rejectUnauthorized: true }, connectionTimeoutMillis: 15_000, query_timeout: 35_000 });
+  const ca = await readFile(new URL('../certs/supabase-ca-2021.crt',import.meta.url),'utf8');
+  const db = new Client({ connectionString: url.toString(), ssl: databaseTls(ca), connectionTimeoutMillis: 15_000, query_timeout: 35_000 });
   db.on('error', () => { /* Query/connect rejection is handled below without leaking credentials. */ });
   try {
     await db.connect();
