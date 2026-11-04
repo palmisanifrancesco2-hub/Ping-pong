@@ -32,3 +32,9 @@ Il callback è gestito dall'SDK ufficiale in PKCE. Nessuno scambio manuale dupli
 Chromium locale, 393×851 e 1440×1000: ritorno OAuth simulato con PKCE e scambio codice; membro entra e carica feed; non membro non carica alcun feed; annullamento senza sessione; provider disabilitato e successiva rilettura; nessun errore JS o overflow. Questi test usano esclusivamente sessioni sintetiche locali e non effettuano un vero login Google, né creano utenti remoti.
 
 Il build Production esegue un controllo in sola lettura delle impostazioni pubbliche Supabase, riportando flag Google/signup e callback pubblico, senza chiavi. Lo stato reale verrà riportato dopo quel controllo; nessuna migrazione o modifica di utenti è necessaria per il codice.
+
+## Stato Production verificato
+
+Deployment `dpl_A3uwzeHWCiUwqxMyHndzUgLUMnH1`, commit applicativo `b914c8164472fd151f456de994f28b18c8733db8`, build completato in 29 secondi. Il controllo reale sul server Supabase conferma `googleEnabled=false`, `signupEnabled=true`. Google non è pertanto attivo: il pulsante lo segnala e resta disabilitato fino alla configurazione del provider. Il callback effettivo va copiato dalla pagina Google di Supabase; l'output del connettore lo oscura e non viene ricostruito aggirando la protezione.
+
+Feed, risultati giocatori, verifica accesso database e query storico/scelte sono riusciti. Entrambi i runner migrazione risultano non richiesti; nessuna modifica al database, agli account Auth o all'autorizzazione. URL fisso https://ping-pong-ping-pong3.vercel.app. Nessun login Google reale è stato eseguito; creazione client OAuth e configurazione richiedono il proprietario.

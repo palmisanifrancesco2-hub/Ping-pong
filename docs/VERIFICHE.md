@@ -45,3 +45,5 @@ Versione giocatori/scelte: suite 155 test superata; Chromium conferma solo live/
 Release giocatori/scelte `0704182` Production READY, alias fisso confermato. Migrazione terza applicata (1 nuova / 3 totali); flag entrambi 0 dopo riuscita. Server Vercel verifica feed solo attivo, archivio giocatori reale, RLS proprietario, accesso anonimo negato e snapshot immutabile. Query storico/scelte a limite zero riuscite. Nessuna previsione operativa: modello globale fallisce il test. Vedere [dettagli della pubblicazione](GIOCATORI-E-SCELTE.md).
 
 Google OAuth: 162 test e build superati. Browser locale con provider/sessioni sintetici conferma PKCE, account autorizzato, non membro senza feed, annullamento e provider spento. Il login Google reale non è stato eseguito e l’attivazione del provider va verificata sul progetto; nessun nuovo utente remoto o modifica di membership. [Dettagli](GOOGLE-LOGIN.md).
+
+Google Production `b914c81`: controllo nativo riuscito, provider Google spento e signup consentita. Codice PKCE pubblicato, attivazione OAuth ancora da eseguire nel progetto Google/Supabase dal proprietario. Nessuna modifica di credenziali o utenti.

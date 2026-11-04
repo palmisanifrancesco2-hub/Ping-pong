@@ -8,7 +8,7 @@ App privata: https://ping-pong-ping-pong3.vercel.app — indirizzo fisso assegna
 
 ## Accesso Google
 
-Pulsante “Continua con Google” con PKCE e verifica disponibilità reale del provider. È necessario abilitare il proprio client OAuth in Supabase: [configurazione da telefono e stato](docs/GOOGLE-LOGIN.md). La registrazione non concede accesso ai dati senza membership; nessuna modifica al registro privato.
+Pulsante “Continua con Google” con PKCE e verifica disponibilità reale del provider. Il controllo Production conferma Google ancora disattivato (signup consentita). È necessario abilitare il proprio client OAuth in Supabase: [configurazione da telefono e stato](docs/GOOGLE-LOGIN.md). La registrazione non concede accesso ai dati senza membership; nessuna modifica al registro privato.
 
 ## Quote e mercati
 
