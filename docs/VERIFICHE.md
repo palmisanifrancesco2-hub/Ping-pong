@@ -72,3 +72,11 @@ Pubblicazione della ricerca: commit applicativo `6869ee6cbc25cc5a12a5f44c93f48d8
 - Audit iniziale del campione futuro eseguito realmente alle 22:20:52 UTC: hash valido, 304 in attesa, 0 valutati, metriche correttamente nulle. Il ramo di valutazione di partite realmente concluse non è ancora verificabile su questo campione; nessun esito è stato inventato.
 
 Pubblicazione v3: commit applicativo `77658bb96d8a3cc6eddf09c63be71abe7b6a4b52`, deployment `dpl_J8DLe9Pd24dXjXwGmV4bihHwZovx` **READY**. Alias `https://ping-pong-ping-pong3.vercel.app` verificato sul nuovo deployment. Build cloud conclusa, feed reale 419 partite / 10 competizioni / 43 nomi mercato, verifiche degli accessi e dello schema in sola lettura riuscite. Il modello operativo non è stato promosso; protezione Vercel mantenuta e login reale non automatizzato.
+
+## Classifica comune v4 — 4 novembre 2026
+
+- Protocollo preregistrato `0ff475a`; 15 modelli, esattamente gli stessi 784 ID in ciascun test, 9 giorni e 5 finestre. Brier primario fissato prima dell'esecuzione. Primo logistica completa λ=0,001: 0,246657, 452/784 corretti; Elo K=10: 0,246808. Nessuna superiorità netta sul secondo; primo per uguale peso giornaliero Elo K=10.
+- 194 test / 23 file passati; TypeScript e build passati. Test specifici su esclusione degli esiti tardivi, coorti identiche, duplicati, calibrazione e ricampionamento riproducibile per giorni, coerenza dei conteggi della classifica.
+- Browser Chromium locale, API reale del report e sessione sintetica: 15 righe di classifica e dettagli dell'incertezza verificati su Android 393×851 e desktop 1440×1000, nessun errore JavaScript o overflow.
+- Hash dell'audit v4 verificato. Hash del campione prospettico v3 ancora identico. Previsioni individuali e pesi per finestra esclusi da Git e dall'API; nessuna modifica DB o credenziale.
+- Il controllo browser locale non equivale al login reale nella produzione protetta Vercel, che non è stato automatizzato.

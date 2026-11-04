@@ -1,0 +1,2 @@
+import type{ResearchMetrics}from'./research';
+export type ModelComparisonReport={generatedAt:string;winner:string;secondPlace:string;equalDayWinner:string;testCases:number;days:number;evaluatedFolds:number;robustWinner:boolean;productionValidated:boolean;reason:string;ranking:(ResearchMetrics&{name:string;accuracy:number;equalDayBrier:number})[];paired:Record<string,{lower95:number|null;upper95:number|null}>};

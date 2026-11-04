@@ -87,3 +87,12 @@ prima dell'inizio previsto degli eventi, con manifesto di integrità in Git e da
 individuali esclusi dal repository. Dettagli in
 [docs/RICERCA-PUNTEGGI.md](docs/RICERCA-PUNTEGGI.md). Nessuna validazione automatica
 e nessuna raccolta periodica attivata.
+
+La classifica v4 confronta **15 modelli sulle stesse 784 partite**, in cinque
+finestre temporali e nove giorni. Primo per Brier aggregato: logistica completa
+λ=0,001 (0,246657; 57,65% corretti), seguita da Elo K=10 (0,246808).
+Il vantaggio sul secondo non è statisticamente convincente e, dando uguale peso
+ai giorni, prevale Elo K=10. Classifica e incertezza sono visibili in
+**Statistiche modello**; metodo in [docs/CLASSIFICA-MODELLI.md](docs/CLASSIFICA-MODELLI.md).
+Il confronto è esplorativo su uno storico già studiato; nessuna promozione
+automatica e nessuna modifica alle 304 previsioni future congelate.

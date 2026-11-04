@@ -9,7 +9,7 @@ import { Analyses } from './analysis.js';
 import { ForecastStore } from './forecast-store.js';
 import modelData from '../models/elo-v1.json' with {type:'json'};
 import {currentValueReport}from'./value.js';
-import {researchReport,scoreResearchReport,forwardStudy}from'./research-report.js';
+import {researchReport,scoreResearchReport,forwardStudy,modelComparison}from'./research-report.js';
 
 type Dependencies = { env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
 export function createHandler(deps: Dependencies = {}) {
@@ -41,7 +41,7 @@ export function createHandler(deps: Dependencies = {}) {
     try {
       if(path==='/api/access')return send(200,{authorized:true});
       if(path==='/api/value')return send(200,currentValueReport(now(),await feed.board()));
-      if(path==='/api/model')return send(200,{research:researchReport,scoreResearch:scoreResearchReport,forwardStudy,version:modelData.version,validated:modelData.validated,generatedAt:modelData.generatedAt,trainingCutoff:modelData.trainingCutoff,validation:modelData.validation,calibration:modelData.calibration,leagues:modelData.leagues,source:'MoviOdds; validazione preliminare su risultati riportati'});
+      if(path==='/api/model')return send(200,{comparison:modelComparison,research:researchReport,scoreResearch:scoreResearchReport,forwardStudy,version:modelData.version,validated:modelData.validated,generatedAt:modelData.generatedAt,trainingCutoff:modelData.trainingCutoff,validation:modelData.validation,calibration:modelData.calibration,leagues:modelData.leagues,source:'MoviOdds; validazione preliminare su risultati riportati'});
       if(path==='/api/settle')return send(200,await forecasts.settle(userId,()=>analyses.results.archive()));
       if(path==='/api/analysis'){
         const eventId=url.searchParams.get('eventId');if(!eventId||eventId.length>100)return send(400,{error:'Partita non valida.'});
