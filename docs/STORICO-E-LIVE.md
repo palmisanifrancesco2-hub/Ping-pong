@@ -33,3 +33,11 @@ Il build Production esegue anche `check:history-schema`, una query di sola lettu
 ## Limite attuale
 
 Il generatore di previsioni validate e la pipeline di settlement non sono ancora attivi. Lo storico è un lettore effettivo delle registrazioni esistenti, non un generatore di pronostici: finché non vengono registrate vere previsioni ed esiti, resta vuoto. Il solo feed MoviOdds non basta per validare un modello. Raccolta storico sportivo, fonti risultati verificati, addestramento e calibrazione restano lavoro necessario. Non viene promesso uno storico passato di un anno dove non esistono registrazioni.
+
+## Pubblicazione reale
+
+Commit applicativo `826338aa6e35957de83ccce4e7af13a6583ec004`, deployment Production `dpl_AinxFK9ZZ1z4154Qd59KQBjK99qm`, stato READY, build 23 secondi. URL fisso verificato assegnato a questo deployment e progetto: https://ping-pong-ping-pong3.vercel.app. URL versione: https://ping-pong-cib1h34sb-ping-pong3.vercel.app.
+
+Alle 20:03 UTC il server Vercel ha confermato feed reale valido (437 partite, 10 campionati, 50 nomi mercato), accesso proprietario e isolamento database con transazione READ ONLY, bootstrap non richiesto e query reale dello storico riuscita a limite zero. La query diagnostica non ha restituito righe private e non misura il numero di previsioni presenti.
+
+HEAD dell'URL fisso risponde 302 verso login Vercel. La protezione rimane attiva; il login della nuova versione di produzione non è stato automatizzato. Nessun abbonamento, aggiornamento dello schema o seed di previsioni effettuato.
