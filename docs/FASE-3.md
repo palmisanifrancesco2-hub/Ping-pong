@@ -27,3 +27,13 @@ La [documentazione del provider](https://moviodds.com/doc) indica fonte predefin
 Questa integrazione visualizza i dati ricevuti, senza inventare una tassonomia di settlement per ogni mercato. Non esegue confronti operativi tra bookmaker, addestramento, calcoli EV, suggerimenti di stake o scommesse. Persistenza storico, risultati ufficiali e modelli validati restano da sviluppare. Nessun servizio a pagamento attivato.
 
 Il test browser locale non certifica l'intero flusso autenticato del deployment Vercel protetto. La verifica del deployment va riportata separatamente dopo build e controllo server.
+
+## Pubblicazione verificata
+
+Deployment Production `dpl_8nEVHmM3Y4L1ra2NDjVtMpJVHrdK`, commit applicativo `b3de748939d427f0fdc23bc3f9bb96ed4900a99b`, Node 24/Vite, stato **READY**:
+
+https://ping-pong-cvsy6nrzk-ping-pong3.vercel.app
+
+Build completato in 25 secondi. Il controllo eseguito sul server Vercel alle 19:38:11 UTC ha confermato feed MoviOdds valido: 455 partite, 10 campionati, 46 nomi mercato, 3.856 voci quota. Le quantità sono una rilevazione, non un elenco fisso. La verifica database READ ONLY ha confermato proprietario autorizzato e isolamento da estranei/anonimi; il bootstrap ha riportato «non richiesto». Nessuna nuova migrazione eseguita.
+
+HEAD della root risponde HTTP 302 verso autenticazione Vercel. Il fetch protetto dello strumento continua a fallire per risoluzione/accesso al deployment e non è disponibile un CLI Vercel autenticato locale; nessuna protezione disattivata. Il nuovo flusso completo con login di produzione non è stato automatizzato. La scansione runtime error/fatal nella finestra di 10 minuti non ha trovato log; questo non certifica traffico utente o assenza generale di errori. Nessun nuovo drain o servizio di monitoraggio acquistato.
