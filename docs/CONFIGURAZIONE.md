@@ -8,6 +8,10 @@ Se disponibile nell'interfaccia, aggiungere ai segreti dell'ambiente cloud di qu
 
 Se l'interfaccia mobile non offre i segreti ambiente, usare le Environment Variables del backend Vercel dopo il collegamento hosting; non creare un campo pubblico di inserimento chiave.
 
+Il segreto già configurato dal proprietario come `oddsapi` è supportato dal backend come alias di `THE_ODDS_API_KEY`. Il nome documentato ha precedenza se entrambi esistono. Non occorre ricopiare o rivelare il segreto: Vercel non permette di rinominare le variabili Sensitive in posizione.
+
+Il build Vercel esegue anche il test catalogo con un riepilogo sanitizzato nei log, senza stampare la chiave. Il test richiede una chiave valida e può bloccare un nuovo deployment se il provider non è raggiungibile; non interrompe i deployment già attivi. Una risposta riuscita non implica disponibilità tennistavolo.
+
 ## Supabase
 
 1. Dal dashboard Supabase creare o selezionare un progetto, verificando che il piano non comporti spese.

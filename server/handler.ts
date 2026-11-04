@@ -1,11 +1,12 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { authorize, type Env } from './auth.js';
 import { OddsApi } from './provider.js';
+import { oddsApiKey } from './env.js';
 
 type Dependencies = { env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number };
 export function createHandler(deps: Dependencies = {}) {
   const env = deps.env ?? process.env;
-  const provider = deps.provider ?? new OddsApi(env.THE_ODDS_API_KEY);
+  const provider = deps.provider ?? new OddsApi(oddsApiKey(env));
   const checkAuth = deps.authorize ?? authorize;
   const now = deps.now ?? Date.now;
   // Single-flight plus shared cache limits upstream usage per warm server instance.
