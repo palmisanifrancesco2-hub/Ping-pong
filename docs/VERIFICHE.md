@@ -4,7 +4,7 @@ Eseguite il 4 novembre 2026 in ambiente Codex.
 
 | Controllo | Risultato | Limiti |
 |---|---|---|
-| Vitest | 119 test superati in 13 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
+| Vitest | 129 test superati in 14 file | Include migrazioni transazionali, rollback, checksum, appartenenza, CA e verifica accesso in sola lettura |
 | Endpoint HTTP | Health, auth, metodo, percorso e cache verificati su localhost | Token/provider sostituiti nei test HTTP; nessun login remoto certificato |
 | Auth Supabase | Gate di autorizzazione e gestione errori testati | Test unitari Auth con risposte simulate; account e appartenenza verificati anche sul database remoto |
 | PostgreSQL/RLS | Due migrazioni remote e 14 tabelle RLS; successivo controllo remoto READ ONLY conferma proprietario verificato/autorizzato, profilo isolato e rifiuto estranei/anonimi | Il proprietario ha confermato di riuscire a entrare dal telefono; verifica manuale riferita, non automatizzata |
@@ -31,3 +31,5 @@ Verifica successiva dopo creazione dell'account da parte del proprietario: deplo
 Vincolo economico confermato dal proprietario: soltanto servizi gratuiti. Diagnostica OddsPapi testata con fixture sintetiche: massimo due richieste, opt-in esplicito, nessun retry, errori senza chiave, nessuna esecuzione automatica durante build. Connessione reale OddsPapi non eseguita: manca una chiave distinta del piano gratuito.
 
 MoviOdds: chiamate pubbliche reali senza chiave riuscite via curl; payload reale validato dal parser. Anche il comando HTTP completo è riuscito usando `NODE_USE_ENV_PROXY=1` per rispettare il proxy configurato. Feed bet365.com.au, prezzi italiani e ADM non verificati. Nuovi test coprono timestamp obsoleti/futuri, schema, identità duplicate, quote di altro evento, HTTP 429 e separazione fonte estera/ADM. Nessuna attivazione nella dashboard.
+
+Integrazione UI MoviOdds: vedere [Fase 3](FASE-3.md). Connettore completo verificato sul feed reale. Chromium locale con auth sintetica e API reale conferma mobile/desktop, quote/mercati, filtri, paginazione, logout/demo e rifiuto senza token. Nessun bypass Auth nel codice distribuito. Risultati storici delle righe precedenti non sostituiscono questa verifica più recente.

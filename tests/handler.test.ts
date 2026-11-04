@@ -13,6 +13,24 @@ async function start(handler: ReturnType<typeof createHandler>) {
   return `http://127.0.0.1:${address.port}`;
 }
 describe('private HTTP API', () => {
+  it('protects the complete board before requesting public provider data', async () => {
+    const feed = { board: vi.fn() };
+    const base = await start(createHandler({ env: {}, feed }));
+    expect((await fetch(`${base}/api/board`)).status).toBe(401);
+    expect(feed.board).not.toHaveBeenCalled();
+  });
+  it('serves the complete board privately and sanitizes upstream failures', async () => {
+    const payload = { provider: 'MoviOdds' as const, bookmakerSite: 'bet365.com.au' as const, checkedAt: new Date().toISOString(), serverTime: new Date().toISOString(), warming: false, matches: [] };
+    const feed = { board: vi.fn().mockResolvedValueOnce(payload).mockRejectedValue(new Error('internal details')) };
+    const base = await start(createHandler({ feed, authorize: async () => 'authorized-test-user' }));
+    const request = () => fetch(`${base}/api/board`, { headers: { Authorization: 'Bearer synthetic' } });
+    const first = await request(); expect(first.status).toBe(200);
+    expect(first.headers.get('cache-control')).toBe('private, no-store');
+    expect(await first.json()).toEqual(payload);
+    const second = await request(); expect(second.status).toBe(503);
+    expect(second.headers.get('retry-after')).toBe('30');
+    expect(JSON.stringify(await second.json())).not.toContain('internal details');
+  });
   it('exposes health without disclosing server configuration', async () => {
     const base = await start(createHandler({ env: { THE_ODDS_API_KEY: 'TEST_SECRET' } }));
     const res = await fetch(`${base}/api/health`);

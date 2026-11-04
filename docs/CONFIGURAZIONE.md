@@ -1,8 +1,12 @@
 # Configurazione privata da browser Android
 
-Procedura preparata per il deploy futuro: nessun servizio già collegato e nessun PC necessario. Non inviare chiavi API, password o service-role key in chat. Nessun acquisto senza consenso.
+Supabase e Vercel sono già collegati; il proprietario ha confermato il login da telefono. Queste istruzioni servono per manutenzione o nuove installazioni, senza PC. Non inviare chiavi API, password o service-role key in chat. Nessun acquisto senza consenso.
 
-## Test provider in Codex
+## Feed attivo e diagnostica
+
+MoviOdds usa un endpoint pubblico gratuito, senza nuove chiavi: `/api/board` resta protetto dal login dell’app. Tutti i campionati e mercati del feed sono dinamici. Fonte bet365.com.au, prezzi italiani/ADM non verificati. Non occorre registrarsi a OddsPapi per usare MoviOdds.
+
+## Test provider precedente in Codex
 
 Se disponibile nell'interfaccia, aggiungere ai segreti dell'ambiente cloud di questa attività la variabile **THE_ODDS_API_KEY** con la propria chiave. Dopo l'applicazione delle impostazioni, Codex può eseguire il test catalogo. Non inserire il valore in messaggi, file tracciati, URL o comandi.
 

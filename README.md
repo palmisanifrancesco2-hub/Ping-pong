@@ -1,56 +1,48 @@
 # Ping Pong Analytics
 
-Web app privata per analisi statistiche del ping pong. **Base tecnica di Fase 1 implementata; dati reali e modello non operativi.**
+Web app privata React/TypeScript per consultare quote di tennistavolo. **Feed gratuito MoviOdds collegato; modello, previsioni e stake non operativi.**
 
-Il repository iniziale conteneva soltanto questo README. Il provider confermato è **The Odds API V4**, diverso da odss-api.com. La verifica autenticata eseguita sul server Vercel è riuscita, ma il catalogo ricevuto **non include tennistavolo**. Nessuna copertura operativa per le competizioni richieste.
+Supabase Auth e registro privato proteggono gli endpoint. Due migrazioni iniziali sono applicate in Production; 14 tabelle hanno RLS attiva. Il proprietario ha confermato l'accesso dal telefono. Nessun acquisto, dato simulato nella modalità reale o scommessa automatica.
 
-Leggi [analisi, fonti e blocchi](docs/FASE-1.md) e [configurazione cloud da Android](docs/CONFIGURAZIONE.md).
+## Quote e mercati
 
-Il [riepilogo Fase 2](docs/FASE-2.md) documenta Supabase collegato a Vercel, due migrazioni remote completate dopo approvazione e 14 tabelle con RLS attiva. **106 test, TypeScript e build superati.** L'utente creato dal proprietario è confermato e autorizzato; il controllo remoto READ ONLY verifica profilo privato e rifiuto estranei/anonimi. Resta il login dal browser. ODSS-API elenca pubblicamente tre competizioni richieste, ma la sua licenza per value betting richiede autorizzazione espressa: nessun provider alternativo è stato attivato.
+Dashboard e sezione **Partite e mercati** leggono tutti i campionati e mercati restituiti dal feed MoviOdds, senza una lista fissa. Filtri per giocatore, campionato, stato e nome mercato; quota minima iniziale 1,30, nessuna massima, voci sospese identificabili e paginazione a blocchi di 25. Impostando quota minima 1 si vedono tutti i prezzi disponibili.
 
-## Implementato
+Fonte: **bet365.com.au**, tramite un progetto indipendente da bet365. Non sono prezzi italiani verificati e non vengono trattati come quote ADM. Nessun abbinamento tra mercati ambigui, nessuna probabilità o previsione calcolata da questo feed. Il catalogo può contenere eventi oltre l'orario previsto, segnalati esplicitamente; le voci sospese/zero non sono quote giocabili.
 
-- React/TypeScript/Vite, dashboard responsive, anteprima esplicita senza dati, login Supabase predisposto.
-- Backend Node/Vercel: health pubblica e catalogo protetto da token Supabase e registro privato nel database.
-- Connettore V4 con validazione runtime, timeout, gestione errori/quota e credenziali server.
-- Primitive matematiche e confronto quote prudente con test automatici.
-- Migrazione PostgreSQL/RLS e workflow GitHub Actions.
+Una richiesta per l'intero tennistavolo, aggiornamento ogni 30 secondi quando la pagina è visibile. Cache e single-flight per istanza server; cooldown dopo errori. La cache non è globale tra istanze. Non è un flusso WebSocket continuo e non offre una garanzia di latenza live. Nomi, linee, handicap, periodi, ID e timestamp originali sono conservati. La lettura recente del singolo mercato resta distinta dall'ultima modifica di prezzo.
 
-Sezioni modello/storico/stake in stato **Dati insufficienti** o non operativo. Nessuna quota, risultato o probabilità simulata. I filtri non interrogano ancora il provider.
+The Odds API V4 resta disponibile soltanto come diagnostica opzionale: il suo catalogo autenticato non include tennistavolo. Nessuna sua chiave è usata con altri fornitori. MoviOdds non richiede chiavi o registrazioni per questo endpoint.
 
-## Sviluppo cloud (per Codex e CI)
+## Sviluppo e verifica cloud
 
-Node >=22.12. Il proprietario non deve eseguire comandi sul PC.
+Node >=22.12; deploy verificato su Node 24. Il proprietario non deve eseguire comandi sul PC.
 
 ```sh
 npm ci
 npm run dev
 npm run check
-npm run check:connection
-npm run check:coverage
+npm run check:feed
 ```
 
-`check:connection` interroga solo il catalogo sport; esce con codice 1 se manca la chiave o il test fallisce. Connessione riuscita non significa copertura tennistavolo.
+Nell'ambiente Codex con proxy, Node 24 usa `NODE_USE_ENV_PROXY=1 npm run check:feed`. Il build Vercel esegue build, controllo reale MoviOdds, bootstrap solo se autorizzato dal flag e verifica database in sola lettura. **Mantenere `APP_DATABASE_SETUP=0`**: nessuna nuova migrazione è necessaria per il feed.
 
-`check:coverage` interroga soltanto i cataloghi pubblici di ODSS-API (un servizio diverso), senza chiave o costo. Distingue presenza nel catalogo da quote autenticate, ADM, live e mercati confrontabili: questi ultimi restano non verificati.
-
-Variabili in [.env.example](.env.example). Non committare `.env` e non usare prefisso `VITE_` per segreti. Le variabili `VITE_SUPABASE_*` sono pubblicabili e protette da RLS; mai usare service-role key.
+`check:connection` verifica il vecchio catalogo The Odds API; `check:coverage` e `check:oddspapi` sono diagnostiche di ricerca separate, non attivate nella dashboard. Configurazioni in [.env.example](.env.example). Mai inserire segreti in variabili `VITE_*`, log o commit.
 
 ## Endpoint
 
 | Metodo | Endpoint | Accesso | Comportamento |
 |---|---|---|---|
-| GET | `/api/health` | Pubblico | Stato processo e versione; nessuna verifica servizi esterni |
-| GET | `/api/connection` | Token Supabase verificato + appartenenza al registro privato | Catalogo sport; nessuna chiave restituita |
+| GET | `/api/health` | Pubblico | Stato processo, nessun segreto |
+| GET | `/api/board` | Token Supabase verificato + appartenenza privata | Intero feed MoviOdds validato; risposta privata, no-store |
+| GET | `/api/connection` | Token Supabase verificato + appartenenza privata | Diagnostica catalogo The Odds API |
 
-Cache catalogo di 60 secondi per istanza server, errori sanitizzati. Nessun endpoint pubblico quote o scommesse.
+Timeout, schema, identità evento/selezione, errori, dimensione del payload e timestamp sono controllati lato server. In errore il client rimuove la vecchia risposta; nessun fallback a quote inventate. Anteprima senza dati e senza chiamate API.
 
-## Database e verifiche
+## Stato e limiti
 
-[Migrazione](supabase/migrations/202611040001_initial.sql): dati sportivi in lettura ai membri; previsioni e puntate isolate per utente; scrittura modelli/dati sportivi negata al browser. L'amministratore SQL gestisce `authorized_users`. Storico quote in righe append-only per i client browser (sola lettura); futura pipeline server tenuta a rispettare l'immutabilità.
+**129 test, TypeScript e build superati.** Chromium locale verificato su viewport mobile e desktop con feed reale e autenticazione sintetica isolata; questo non equivale a un nuovo login di produzione automatizzato.
 
-Il runner `db:bootstrap` applica le migrazioni dal server Vercel solo con opt-in Production, lock, checksum e controllo database vuoto. La [seconda migrazione](supabase/migrations/202611040002_private_membership.sql) aggiunge RPC di appartenenza e prenotazione privata dell'email proprietario senza creare account o inviare inviti. Il backend e RLS usano lo stesso registro; una whitelist UUID opzionale può restringere ulteriormente l'accesso.
+[Integrazione e verifiche MoviOdds](docs/FASE-3.md), [database e ricerca fornitori](docs/FASE-2.md), [configurazione cloud](docs/CONFIGURAZIONE.md), [registro verifiche](docs/VERIFICHE.md).
 
-`npm run check` esegue test, TypeScript e build; CI ripete i controlli. Test su errori API, assenza chiave, timeout, quota, endpoint HTTP, RLS con PostgreSQL incorporato, quote/linee/unità diverse, probabilità implicita, EV e Kelly.
-
-Vercel ha completato un deployment Production del ramo di sviluppo, il test autenticato del provider e le due migrazioni iniziali Supabase. Il segreto esistente `oddsapi` è supportato come alias server di `THE_ODDS_API_KEY` senza rivelarne il valore. Restano non verificati: login Supabase con sessione reale, browser Android e flusso HTTP end-to-end del deployment protetto. Lo strumento di accesso automatico non è riuscito a risolvere/accedere al deployment; la protezione Vercel è stata mantenuta. Modello non addestrato/validato, pipeline dati non collegata. Nessun servizio acquistato e nessuna scommessa eseguita.
+Lo storico non viene ancora raccolto nel database. Risultati ufficiali, validazione temporale, calibrazione, Value Tracker operativo e Smart Stake attendono dati sufficienti e verificati. Nessuna garanzia di gratuità futura o continuità del fornitore; concessioni ADM e diritti a valle non verificati indipendentemente.
