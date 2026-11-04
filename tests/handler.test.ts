@@ -14,8 +14,8 @@ async function start(handler: ReturnType<typeof createHandler>) {
 }
 describe('private HTTP API', () => {
   it('keeps value estimates private and reports the actual model block',async()=>{
-    const base=await start(createHandler({authorize:async t=>t==='member'?'owner':null}));expect((await fetch(`${base}/api/value`)).status).toBe(401);
-    const response=await fetch(`${base}/api/value`,{headers:{Authorization:'Bearer member'}});expect(response.status).toBe(200);const report=await response.json();expect(report.status).toBe('blocked');expect(report.opportunities).toEqual([]);
+    const base=await start(createHandler({authorize:async t=>t==='member'?'owner':null,feed:{board:async()=>({provider:'MoviOdds',bookmakerSite:'bet365.com.au',checkedAt:new Date().toISOString(),serverTime:new Date().toISOString(),warming:false,matches:[]})}}));expect((await fetch(`${base}/api/value`)).status).toBe(401);
+    const response=await fetch(`${base}/api/value`,{headers:{Authorization:'Bearer member'}});expect(response.status).toBe(200);const report=await response.json();expect(report.status).toBe('experimental');expect(report.opportunities).toEqual([]);
   });
   it('verifies private access independently from having an Auth session',async()=>{
     const denied=await start(createHandler({env:{},authorize:async()=>null}));expect((await fetch(`${denied}/api/access`,{headers:{Authorization:'Bearer registered-outsider'}})).status).toBe(401);

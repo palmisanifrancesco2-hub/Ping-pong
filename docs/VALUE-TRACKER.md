@@ -13,3 +13,11 @@ Le schede future prevedono probabilità stimata e implicita, quota corrente ed e
 Verifica: 168 test in 20 file, TypeScript e build superati. Chromium locale con sessione sintetica verifica l'apertura iniziale del Value Tracker, messaggio di blocco e zero richieste al catalogo. Nessun login di produzione automatizzato.
 
 Pubblicazione Production del commit `e7720d2e7275328526a97f8a598087add2a0cd14`: deployment `dpl_vkwvP9aUrQfCKahDtYG8RuVYRGGU` READY, alias fisso https://ping-pong-ping-pong3.vercel.app confermato. Build 31 secondi; controlli remoti feed, risultati, database/RLS e schemi riusciti. Modello sempre non validato, Google ancora disattivato; nessuna migrazione o acquisto. L'implementazione corrente dell'endpoint segnala soltanto il blocco: il collegamento operativo di candidati reali al motore di ranking è ancora da completare dopo la disponibilità dei requisiti.
+
+## Aggiornamento richiesto dal proprietario
+
+Il requisito ADM è rimosso dalla selezione statistica per esplicita richiesta. Il provider resta bet365.com.au. Il server collega ora il feed reale ai rating Elo congelati: entrambe le selezioni del vincente partita prematch possono essere valutate, con almeno 30 risultati per giocatore, campione noto, prezzi freschi e margine prudente positivo. Nessun prezzo o probabilità è casuale.
+
+Poiché il modello ha fallito la validazione, queste righe sono restituite separatamente come `experimental` e mostrate con etichetta “Sperimentale”, senza “Ottima”, senza registrazioni come pronostici validati e senza chiamarle opportunità affidabili. L'elenco operativo `opportunities` resta vuoto fino a un modello valido. Questo non certifica efficacia del modello e non soddisfa una richiesta di affidabilità operativa: mostra soltanto calcoli reali con limiti espliciti. Live escluso, perché il modello non integra il punteggio corrente. Quote minime 1,30, nessuna massima.
+
+Il precedente blocco del provider ADM descritto sopra è superato da questa nuova scelta del proprietario; il blocco della validazione rimane. Google va nuovamente verificato sul server dopo la configurazione dichiarata dall'utente.

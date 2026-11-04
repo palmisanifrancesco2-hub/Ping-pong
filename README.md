@@ -12,7 +12,7 @@ Pulsante “Continua con Google” con PKCE e verifica disponibilità reale del 
 
 ## Value Tracker
 
-Schermata iniziale dedicata alle sole quote selezionate per valore statistico. Il motore matematico è predisposto; la pipeline reale resta bloccata per modello non validato e fonte ADM non verificata. Nessuna opportunità inventata. [Criteri e limiti](docs/VALUE-TRACKER.md).
+Schermata iniziale dedicata alle sole quote selezionate per valore statistico. Il motore matematico è predisposto; il filtro ADM è rimosso su richiesta. Il feed alimenta stime sperimentali, separate dalle opportunità validate ancora bloccate dal modello non idoneo. Nessuna opportunità inventata. [Criteri e limiti](docs/VALUE-TRACKER.md).
 
 ## Quote e mercati
 
@@ -61,7 +61,7 @@ Timeout, schema, identità evento/selezione, errori, dimensione del payload e ti
 
 ## Stato e limiti
 
-**168 test, TypeScript e build superati.** Chromium locale verificato su viewport mobile e desktop con feed reale e autenticazione sintetica isolata; questo non equivale a un nuovo login di produzione automatizzato.
+**169 test, TypeScript e build superati.** Chromium locale verificato su viewport mobile e desktop con feed reale e autenticazione sintetica isolata; questo non equivale a un nuovo login di produzione automatizzato.
 
 [Integrazione e verifiche MoviOdds](docs/FASE-3.md), [database e ricerca fornitori](docs/FASE-2.md), [configurazione cloud](docs/CONFIGURAZIONE.md), [registro verifiche](docs/VERIFICHE.md).
 
