@@ -1,5 +1,13 @@
 # Verifiche tecniche
 
+## Ricerca mercati v8 — 5 novembre 2026
+
+Quattro famiglie, 14 target, 1804 casi storici comuni, 249 casi successivi con orario closing verificato. Selezione congelata prima dell'apertura delle nuove etichette; quelle nuove non alimentano le caratteristiche. Nessun candidato supera tutti i criteri; nessuna promozione o modifica al test prospettico precedente. [Dettagli e limiti](MODELLI-MERCATI-V8.md).
+
+Verifiche riuscite: **235 test Vitest in 33 file**, **5 test Python** della ricerca, TypeScript, build Vite e import/endpoint del server ESM compilato (health 200, anonimi access/board/cron 401, zero chiamate esterne). Una prima esecuzione sandbox non permetteva `listen` su localhost ed è stata interrotta; riesecuzione nell'ambiente autorizzato completa e superata, senza modificare i test o allentarne i criteri.
+
+Nuovo componente Statistiche modello renderizzato isolatamente in Chromium a 393×851 e 1440×1000, con il report aggregato effettivo: 14 risultati, apertura dei dettagli/EV, zero errori JavaScript/HTTP e nessuno scorrimento orizzontale. È una verifica locale del componente; non certifica un nuovo login reale del proprietario. Nessuna nuova API, migrazione, dipendenza frontend o chiave.
+
 Eseguite il 4 novembre 2026 in ambiente Codex.
 
 | Controllo | Risultato | Limiti |

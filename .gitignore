@@ -11,3 +11,5 @@ coverage/
 .research-data/
 
 .server-build/
+__pycache__/
+*.pyc

@@ -131,3 +131,7 @@ The Odds API rimossa dalla navigazione. Vista principale con sole quote di valor
 ## Ensemble, pannelli persistenti e profili
 
 La partita aperta conserva statistiche e posizione durante polling, variazioni di convenienza ed errori. Disponibile un ensemble sperimentale di tre modelli, distinto dal modello del test congelato; confronto storico di 7 candidati su 1804 casi comuni con almeno 30 precedenti per giocatore. Nuovi target primo set/totali set testati ma non attivati perché non superano i criteri. Fonte aggiuntiva Wikidata CC0 per profili pubblici compatibili, con copertura parziale e identità da verificare. [Risultati, fonti e limiti](docs/MULTI-MODELLO-E-PROFILI.md).
+
+## Test dedicati per Over/Under e handicap
+
+Quattro famiglie confrontate su 1804 casi comuni, con target distinti per 14 risultati. Candidati fissati sullo storico prima di esaminare 249 partite successive verificate, mantenendo le caratteristiche ferme al giorno precedente. Alcuni handicap sono promettenti; nessun nuovo modello supera tutti i criteri, soprattutto i 500 casi richiesti e la conferma su più giorni. Nessuna nuova probabilità operativa attivata. Report e spiegazione di probabilità/EV nella sezione **Statistiche modello**. [Metodo, risultati e riproduzione](docs/MODELLI-MERCATI-V8.md). Protocollo e modello del test prospettico originale invariati.

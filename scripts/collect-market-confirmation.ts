@@ -1,0 +1,20 @@
+import{readFile,writeFile,mkdir}from'node:fs/promises';import{createHash}from'node:crypto';import{ResultsFeed}from'../server/results.js';import{verifiedStart}from'../src/domain/research-source.js';import{playerKey,type MatchResult}from'../src/domain/player-model.js';import protocol from'../research/protocol-v8.json'with{type:'json'};
+const dir='.research-data/market-v8-confirmation';await mkdir(dir,{recursive:true});
+const old=JSON.parse(await readFile(protocol.historyInput,'utf8'))as{results:MatchResult[];collectedAt:string};const oldIds=new Set(old.results.map(r=>r.id)),counts=new Map<string,number>();for(const r of old.results)for(const name of[r.home,r.away]){const k=playerKey(r.league,name);counts.set(k,(counts.get(k)??0)+1);}
+const feed=new ResultsFeed(),source=await feed.archive();if(source.source!=='postgres')throw Error('CONFIRMATION_SOURCE_INCOMPLETE');
+const from=Date.parse(protocol.freshStartInclusive),end=Date.parse(protocol.freshCollectionEndExclusive);
+const candidates=source.results.filter(r=>!oldIds.has(r.id)&&Date.parse(r.availableAt)<end&&Date.parse(r.finishedAt)>from&&Math.max(r.sets.filter(s=>s[0]>s[1]).length,r.sets.filter(s=>s[0]<s[1]).length)===3&&[r.home,r.away].every(n=>(counts.get(playerKey(r.league,n))??0)>=protocol.minimumPlayerHistory)).map(r=>({r,key:createHash('sha256').update('v8:'+r.id).digest('hex')})).sort((a,b)=>a.key.localeCompare(b.key)).map(x=>x.r);
+await writeFile(dir+'/source.json',JSON.stringify({checkedAt:source.checkedAt,collectedAt:new Date().toISOString(),candidates}),{mode:0o600,flag:'wx'});
+const starts:{id:string;at:number;index:number}[]=[];let cursor=0,requests=0,rejected=0,errors=0,next=0,stopped=false;
+async function progress(status:string){await writeFile(dir+'/progress.json',JSON.stringify({status,candidates:candidates.length,requested:requests,verified:starts.length,rejected,errors,checkedAt:new Date().toISOString()}));}
+await progress('collecting');console.info(JSON.stringify({phase:'confirmation_source_sealed',candidates:candidates.length,target:protocol.freshTargetCases,maximumRequests:protocol.freshMaximumRequests}));
+async function worker(){while(cursor<candidates.length&&requests<protocol.freshMaximumRequests&&starts.length<protocol.freshTargetCases&&!stopped){const index=cursor++,r=candidates[index];let text:string;const path=`${dir}/${r.id}.json`;
+ try{text=await readFile(path,'utf8');}catch{const slot=Math.max(Date.now(),next);next=slot+750;await new Promise(resolve=>setTimeout(resolve,Math.max(0,slot-Date.now())));if(stopped)break;requests++;
+  try{const response=await fetch(`https://moviodds.com/closing?fi=${encodeURIComponent(r.id)}`,{signal:AbortSignal.timeout(7000),redirect:'error'});if(response.status===429||response.status===503){stopped=true;errors++;break;}if(!response.ok){errors++;continue;}text=await response.text();if(text.length>2000000){errors++;continue;}await writeFile(path,text,{mode:0o600});}catch{errors++;continue;}
+ }
+ try{const at=verifiedStart(JSON.parse(text),r);if(at===null||at<from||at>=end){rejected++;continue;}starts.push({id:r.id,at,index});}catch{errors++;}
+ if((starts.length+rejected+errors)%40===0){await progress('collecting');console.info(JSON.stringify({phase:'confirmation_collecting',requested:requests,verified:starts.length,rejected,errors}));}
+ }}
+await Promise.all([worker(),worker(),worker()]);const chosen=starts.sort((a,b)=>a.index-b.index).slice(0,protocol.freshTargetCases).map(({id,at})=>({id,at}));
+const byId=new Map(candidates.map(r=>[r.id,r]));const snapshot={protocolVersion:protocol.version,source:'MoviOdds reported results + verified closing start',collectedAt:new Date().toISOString(),oldCollectedAt:old.collectedAt,requests,rejected,errors,complete:chosen.length===protocol.freshTargetCases,starts:chosen,results:chosen.map(s=>byId.get(s.id)!)};
+await writeFile(dir+'/sealed.json',JSON.stringify(snapshot),{mode:0o600,flag:'wx'});await progress(snapshot.complete?'sealed_complete':'sealed_partial');console.info(JSON.stringify({phase:'confirmation_sealed',cases:chosen.length,complete:snapshot.complete,requested:requests,rejected,errors,sourceCount:candidates.length}));
