@@ -96,3 +96,10 @@ ai giorni, prevale Elo K=10. Classifica e incertezza sono visibili in
 **Statistiche modello**; metodo in [docs/CLASSIFICA-MODELLI.md](docs/CLASSIFICA-MODELLI.md).
 Il confronto è esplorativo su uno storico già studiato; nessuna promozione
 automatica e nessuna modifica alle 304 previsioni future congelate.
+
+Su richiesta del proprietario, l'obiettivo da 5.000 è stato ridotto a **3.000
+partite**. Il nuovo confronto è completato: 15 modelli sugli stessi 3.000 casi,
+11 giorni e cinque finestre. Primo per Brier: modello completo λ=0,001
+(**0,247647; 53,77% corretti, 1.613/3.000**). Il campione da 5.000 non è stato
+completato e la sua raccolta è stata fermata. Il report attivo in Statistiche
+modello è ora quello da 3.000; dettagli in [docs/TEST-3000.md](docs/TEST-3000.md).

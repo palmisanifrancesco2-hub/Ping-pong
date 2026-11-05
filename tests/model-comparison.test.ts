@@ -1,6 +1,6 @@
 import {describe,it,expect} from 'vitest';
 import {splitPeriod,scaleProbability,calibrateTemperature,validateCommonCases,pairedDayBootstrap} from '../src/domain/model-comparison';
-import report from '../research/report-v4.json';
+import report from '../research/report-v6.json';
 describe('fair temporal comparison',()=>{
  it('purges results unavailable at the training and calibration cutoffs',()=>{
  const day=86400000,start=10*day;
@@ -23,7 +23,7 @@ describe('fair temporal comparison',()=>{
  expect(pairedDayBootstrap(rows.slice(0,1),1000).upper95).toBeNull();
  });
  it('counts every evaluated event exactly once for every model in the published report',()=>{
- expect(report.ranking).toHaveLength(15);expect(report.ranking.every(r=>r.n===report.testCases)).toBe(true);
+ expect(report.testCases).toBe(3000);expect(report.ranking).toHaveLength(15);expect(report.ranking.every(r=>r.n===report.testCases)).toBe(true);
  expect(report.folds.filter(f=>f.status==='evaluated').reduce((n,f)=>n+f.test,0)).toBe(report.testCases);
  for(const r of report.ranking)expect(r.daily.reduce((n,d)=>n+d.n,0)).toBe(report.testCases);
  expect(report.ranking.map(r=>r.brier)).toEqual([...report.ranking.map(r=>r.brier)].sort((a,b)=>a-b));

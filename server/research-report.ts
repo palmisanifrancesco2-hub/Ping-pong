@@ -11,6 +11,6 @@ const {finalPredictions:_scoreRows,...scoreSummary}=scoreData;
 export const scoreResearchReport:ScoreResearchReport=scoreSummary;
 export const forwardStudy:ForwardManifest=forwardData;
 
-import comparisonData from '../research/report-v4.json' with {type:'json'};
+import comparisonData from '../research/report-v6.json' with {type:'json'};
 import type{ModelComparisonReport}from'../src/shared/comparison.js';
 export const modelComparison:ModelComparisonReport=comparisonData;

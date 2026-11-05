@@ -82,3 +82,12 @@ Pubblicazione v3: commit applicativo `77658bb96d8a3cc6eddf09c63be71abe7b6a4b52`,
 - Il controllo browser locale non equivale al login reale nella produzione protetta Vercel, che non è stato automatizzato.
 
 Pubblicazione classifica v4: commit applicativo `1071fbe58ace80d47021da2bf0d619b45651d715`, deployment `dpl_6vwdDRuaBa1TuZPmQUKKK4FVnKa8` **READY**. Alias `https://ping-pong-ping-pong3.vercel.app` verificato sul nuovo deployment. Build cloud completata, feed reale 590 partite / 10 competizioni / 40 nomi mercato; controlli DB e accessi in sola lettura riusciti. Protezione Vercel mantenuta; nessuna promozione del modello e nessuna modifica al campione futuro.
+
+## Confronto completato su 3.000 — 5 novembre 2026
+
+- Nuova richiesta esplicita del proprietario: riduzione da 5.000 a 3.000. Processo precedente fermato verificando comando e identità di avvio; cache preservata, stato precedente `superseded_by_3000`.
+- Protocollo v6 nel commit `264a809` prima del confronto. Esattamente 3.000 casi selezionati nella stessa sequenza; zero nuove richieste di rete nella preparazione.
+- Cinque finestre, 11 giorni, 15 modelli sugli stessi ID. Primo modello completo λ=0,001: Brier 0,247647, Log Loss 0,688382, ECE 0,016377, 1.613/3.000 esiti corretti (53,77%). Nessuna superiorità robusta sul secondo. Nessuna promozione del modello operativo.
+- Audit e campione prospettico originale verificati tramite hash; le 304 osservazioni future rimangono immutate. Stato locale 3.000 `completed`; non si dichiara completato il test da 5.000.
+- 199 test in 24 file, TypeScript e build passati. Test di integrità del report controllano esattamente 3.000 casi e coerenza di tutti i modelli e delle finestre; API privata verificata sul nuovo campione.
+- Browser locale Chromium con sessione sintetica e report reale: Android 393×851 e desktop 1440×1000, 15 modelli renderizzati senza errori JavaScript né overflow. Non equivale al login reale dell'utente nella produzione protetta.
