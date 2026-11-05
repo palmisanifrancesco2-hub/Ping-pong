@@ -45,12 +45,12 @@ export class MoviOddsFeed {
   private pending?: Promise<Board>;
   private failedAt?: number;
   constructor(private fetcher: typeof fetch = fetch, private now: () => number = Date.now) {}
-  async board(): Promise<Board> {
-    const board = await this.rawBoard();
+  async board(force = false): Promise<Board> {
+    const board = await this.rawBoard(force);
     return { ...board, matches: board.matches.filter(m => isUpcomingOrLive(m, this.now())) };
   }
-  private async rawBoard(): Promise<Board> {
-    if (this.cached && this.now() - this.cached.at < 30_000) return this.cached.board;
+  private async rawBoard(force: boolean): Promise<Board> {
+    if (this.cached && this.now() - this.cached.at < (force ? 10_000 : 30_000)) return this.cached.board;
     if (this.failedAt !== undefined && this.now() - this.failedAt < 30_000) throw new Error('MOVIODDS_COOLDOWN');
     if (this.pending) return this.pending;
     this.pending = this.read();

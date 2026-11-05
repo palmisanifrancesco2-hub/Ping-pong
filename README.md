@@ -123,3 +123,7 @@ Le stime restano non validate; pronostici live e altri mercati non vengono inven
 ## Test prospettico durante l’uso dell’app
 
 Raccolta cloud giornaliera con protocollo e pesi congelati, previsioni virtuali separate dalle scelte personali e controllo in Statistiche modello. [Regole, criteri e limiti del test](docs/TEST-PROSPETTICO.md). 216 test in 28 file, TypeScript/build superati; browser locale verifica tutte le otto sezioni su Android/desktop con fonte reale e salvataggi isolati.
+
+## Quote selezionate e controlli mobile
+
+The Odds API rimossa dalla navigazione. Vista principale con sole quote di valore prudente positivo, una per evento e ordinate per probabilità stimata decrescente, percentuale/quota/EV in evidenza. Aggiornamento manuale della fonte e pulsanti fissi di chiusura; eventi e statistiche separati. [Comportamento attuale](docs/SEZIONI-FUNZIONANTI.md). Test prospettico e pesi congelati invariati.

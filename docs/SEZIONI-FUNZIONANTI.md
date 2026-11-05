@@ -5,13 +5,13 @@ Aggiornamento del 5 novembre 2026. La modalità reale usa dati MoviOdds e access
 | Sezione | Comportamento implementato |
 | --- | --- |
 | Dashboard | Eventi disponibili, competizioni, quote e live confermati dalla fonte; accesso alle partite e allo stato del modello. |
-| Partite e mercati | Ricerca, filtri, quote originali con linee e periodi, badge live, statistiche reali dei giocatori, scelte personali e stime prematch quando ci sono dati sufficienti. |
-| Value Tracker | Modello completo selezionato nel confronto da 3.000 casi, probabilità ed EV sperimentali, controllo di freschezza e margine prudente, accesso ai giocatori, salvataggio scelta e registrazione esplicita della previsione. |
+| Partite e mercati | Quote selezionate con probabilità in evidenza, una per evento, ordine decrescente di probabilità dopo il filtro EV prudente positivo. Vista Eventi e giocatori per live/futuri e statistiche, senza catalogo indiscriminato delle quote. Filtri espandibili, aggiornamento manuale e comandi fissi di chiusura. |
+| Value Tracker | Stessa selezione statistica e ordinamento per probabilità, con controlli di prezzo/freschezza, EV, accesso ai giocatori e registrazione esplicita. Pesi del modello e raccolta prospettica invariati. |
 | Statistiche modello | Report storico da 3.000 e metriche delle previsioni realmente registrate nel periodo: corrette, quote medie vinte/perse, saldo teorico a 1 unità, Brier, Log Loss e calibrazione. Esiti verificati e provvisori distinti. |
 | Storico pronostici | Prima probabilità e quota immutabili, versione del modello, marcatura non validata, filtri fino a un anno/completo. Lettura immediata e sincronizzazione degli esiti in background o tramite pulsante. |
 | Le mie scelte | Partite osservate e selezioni personali con primo prezzo conservato, note ed esito manuale; passaggio al diario delle puntate senza inviare operazioni a bookmaker. |
 | Smart Stake | Simulatore Kelly manuale disattivabile, riduzione per incertezza, limite massimo 2%; diario reale manuale in Supabase con importi, quote effettive, esiti e saldi. |
-| Collegamenti | Feed MoviOdds attivo, controllo accesso privato, lettura DB, disponibilità Google e modello. The Odds API resta un diagnostico opzionale. |
+| Collegamenti | Feed MoviOdds attivo, controllo accesso privato, lettura DB, disponibilità Google e modello. The Odds API rimossa dall’interfaccia: nessun suo controllo o richiesta nel flusso dell’app. |
 
 ## Modello e registrazioni
 
@@ -36,3 +36,11 @@ Il simulatore non collega automaticamente probabilità sperimentali a una raccom
 Un'unica funzione API catch-all condivide cache di quote e risultati per istanza e mantiene ridotto il numero di funzioni sul piano gratuito. Tutti gli endpoint privati verificano membership; `/api/health` è un diagnostico privo di dati privati; `/api/study-run` accetta esclusivamente il segreto server del cron. Nessuna nuova migrazione o chiave richiesta. Il controllo build verifica anche lo schema di `manual_bets` senza restituire righe.
 
 I test API e SQL locali verificano salvataggio sperimentale, integrità degli snapshot, vincoli FK, isolamento dei membri, calcoli, rifiuto di proprietà/probabilità/profitti falsificati e quote cambiate. Il test browser usa dati pubblici reali, un account sintetico, salvataggi isolati in memoria e indicatori di stato simulati; non crea puntate o utenti nel database reale. La scrittura con il JWT reale del proprietario non viene impersonata né dichiarata testata automaticamente.
+
+## Comodità delle quote selezionate
+
+La vista normale non espone tutti i prezzi del fornitore. Richiede coppia vincente prematch coerente e fresca, storico minimo e EV prudente positivo; una selezione per evento, prima probabilità decrescente, poi EV prudente e vicinanza a 2. Il test prospettico conserva il proprio ordinamento originale per EV e non cambia campione o pesi. Le percentuali restano sperimentali.
+
+Il pulsante manuale aggiorna insieme feed e valutazione, con nuove letture della fonte distanziate almeno 10 secondi per istanza; polling visibile sempre ogni 30 secondi. Snapshot ricevuti prima/dopo un cambio prezzo non sono abbinati: una quota cambiata o sospesa sparisce finché la valutazione coerente è disponibile. Gli aggiornamenti non azzerano l’elenco a ogni polling.
+
+Pulsanti fissi sullo schermo per aggiornare e chiudere la partita aperta, oppure chiudere l’intero elenco; comandi anche nella scheda e in fondo alle statistiche, Escape da tastiera e focus restituito al riepilogo. Lista riapribile e altre 12 selezioni per volta. Gli eventi live restano consultabili, ma non ricevono percentuali del modello prematch.

@@ -75,7 +75,7 @@ export function createHandler(deps: Dependencies = {}) {
         return send(200,await forecasts.record(userId,m,f));
       }
 
-      if(path==='/api/value'){const[board,archive]=await Promise.all([feed.board(),analyses.results.archive()]);return send(200,scoreValueReport(board,archive,now()));}
+      if(path==='/api/value'){const[board,archive]=await Promise.all([feed.board(url.searchParams.get('refresh')==='1'),analyses.results.archive()]);return send(200,scoreValueReport(board,archive,now()));}
       if(path==='/api/model')return send(200,{comparison:modelComparison,research:researchReport,scoreResearch:scoreResearchReport,forwardStudy,version:runtimeModel.version,validated:false,generatedAt:runtimeModel.generatedAt,trainingCutoff:runtimeModel.calibrationCutoff,validation:runtimeModel.validation,calibration:{temperature:runtimeModel.temperature},leagues:{},source:'MoviOdds; validazione preliminare su risultati riportati'});
       if(path==='/api/settle')return send(200,await forecasts.settle(userId,()=>analyses.results.archive()));
       if(path==='/api/analysis'){
@@ -111,7 +111,7 @@ export function createHandler(deps: Dependencies = {}) {
         try { query = parseHistoryQuery(url.searchParams); } catch { return send(400, { error: 'Intervallo, pagina o filtro esito non valido.' }); }
         return send(200, await (deps.history ?? readHistory)({ ...query, token: match[1], userId, env }));
       }
-      if (path === '/api/board') return send(200, await feed.board());
+      if (path === '/api/board') return send(200, await feed.board(url.searchParams.get('refresh')==='1'));
       if (!cached || now() - cached.at >= 60_000) {
         pending ??= provider.connection();
         try { cached = { at: now(), value: await pending }; } finally { pending = undefined; }

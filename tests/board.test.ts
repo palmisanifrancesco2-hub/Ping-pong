@@ -58,6 +58,12 @@ describe('all-market foreign board', () => {
     expect(fetcher).toHaveBeenCalledTimes(1);
     clock += 30_001; await feed.board(); expect(fetcher).toHaveBeenCalledTimes(2);
   });
+  it('allows a manual source refresh after ten seconds and deduplicates concurrent refreshes',async()=>{
+    let clock=now;const fetcher=vi.fn(async()=>Response.json(payload));const feed=new MoviOddsFeed(fetcher,()=>clock);
+    await feed.board();clock+=9000;await feed.board(true);expect(fetcher).toHaveBeenCalledTimes(1);clock+=1001;
+    await Promise.all([feed.board(true),feed.board(true)]);expect(fetcher).toHaveBeenCalledTimes(2);
+    await feed.board();expect(fetcher).toHaveBeenCalledTimes(2);
+  });
   it('applies error cooldown without retries or returning expired cached prices', async () => {
     let clock = now;
     const fetcher = vi.fn().mockResolvedValueOnce(Response.json(payload)).mockResolvedValue(new Response('upstream details', { status: 429 }));

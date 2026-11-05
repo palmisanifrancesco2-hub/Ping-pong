@@ -1,5 +1,5 @@
 import{expectedValue,impliedProbability}from'./analytics.js';
-export type ValueInput={quoteKey?:string;modelVersion?:string;id:string;eventId:string;match:string;competition:string;market:string;selection:string;odds:number;quoteAt:string;probability:number;probabilityLower:number;sampleSize:number;validationSize:number;modelValidated:boolean;fresh:boolean;admVerified:boolean};
+export type ValueInput={startsAt?:string;marketReadAt?:string;quoteKey?:string;modelVersion?:string;id:string;eventId:string;match:string;competition:string;market:string;selection:string;odds:number;quoteAt:string;probability:number;probabilityLower:number;sampleSize:number;validationSize:number;modelValidated:boolean;fresh:boolean;admVerified:boolean};
 export type ValueOpportunity=ValueInput&{impliedProbability:number;fairOdds:number;ev:number;conservativeEv:number;assessment:'Interessante'|'Ottima'|'Sperimentale';rank:number};
 /** Thresholds are selection policy, never a probability or promise of profit. */
 export function assessValue(input:ValueInput):ValueOpportunity|null{

@@ -14,6 +14,15 @@ async function start(handler: ReturnType<typeof createHandler>) {
   return `http://127.0.0.1:${address.port}`;
 }
 describe('private HTTP API', () => {
+  it('forwards an authenticated manual refresh to the board and value source',async()=>{
+    const board={provider:'MoviOdds' as const,bookmakerSite:'bet365.com.au' as const,checkedAt:new Date().toISOString(),serverTime:new Date().toISOString(),warming:false,matches:[]};
+    const feed={board:vi.fn(async()=>board)},analyses={analyse:vi.fn(),results:new ResultsFeed(async()=>new Response(JSON.stringify({source:'postgres',results:[]})))};
+    const base=await start(createHandler({env:{},feed,analyses,authorize:async t=>t==='member'?'owner':null}));
+    expect((await fetch(`${base}/api/board?refresh=1`)).status).toBe(401);expect(feed.board).not.toHaveBeenCalled();
+    for(const path of ['/api/board?refresh=1','/api/value?refresh=1'])expect((await fetch(base+path,{headers:{Authorization:'Bearer member'}})).status).toBe(200);
+    expect(feed.board.mock.calls).toEqual([[true],[true]]);
+  });
+
   it('keeps the research report private and separate from validated production forecasts',async()=>{
     const base=await start(createHandler({authorize:async t=>t==='member'?'owner':null}));
     expect((await fetch(`${base}/api/model`)).status).toBe(401);

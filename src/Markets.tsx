@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
-import { filterBoard, isFreshLive, marketIdentity, marketName, quoteIdentity, quoteStatus, type Board, type FeedMatch, type FeedQuote } from './shared/board';
+import { useMemo, useRef, useState } from 'react';
+import { isFreshLive, isUpcomingOrLive, type Board, type FeedMatch } from './shared/board';
 import { SaveChoice } from './Choices';
 import { dateTime } from './shared/format';
 import { PlayerAnalysis } from './PlayerAnalysis';
 
-export function FeedStatus({ board, loading, error, refresh,disabled=false }: {disabled?:boolean; board: Board | null; loading: boolean; error: string; refresh: () => void }) {
+export function FeedStatus({ board, loading, error, refresh,disabled=false,compact=false }: {compact?:boolean;disabled?:boolean; board: Board | null; loading: boolean; error: string; refresh: () => void }) {
+  if(compact)return <section className="feed-compact" aria-label="Stato fonte quote"><span><strong>MoviOdds · bet365.com.au</strong><small>{board?`${board.matches.length} eventi · fonte ${dateTime(board.serverTime)}`:loading?'Recupero eventi…':'Feed non disponibile'}</small></span><span className="badge" aria-label="Aggiornamento automatico ogni 30 secondi">30 s</span>{error&&<p role="alert" className="error">{error}</p>}</section>;
   return <section className="panel feed-status"><div className="panel-heading"><div><span className="eyebrow">FONTE GRATUITA · SENZA CHIAVE</span><h2>MoviOdds · bet365 estero</h2></div><button className="primary" disabled={loading||disabled} onClick={refresh}>{loading ? 'Aggiornamento…' : 'Aggiorna quote'}</button></div>
     <p>Quote di bet365.com.au tramite MoviOdds, progetto indipendente. Statistiche e stime sperimentali sono consultabili nei dettagli delle partite.</p>
     {error && <p role="alert" className="error">{error}</p>}
@@ -13,45 +14,76 @@ export function FeedStatus({ board, loading, error, refresh,disabled=false }: {d
   </section>;
 }
 
-export function Markets({ board, now, token }: { board: Board | null; now: number; token?: string }) {
-  const [search, setSearch] = useState(''); const [competition, setCompetition] = useState('');
-  const [state, setState] = useState(''); const [market, setMarket] = useState('');
-  const [minOdds, setMinOdds] = useState('1.30'); const [includeUnavailable, setIncludeUnavailable] = useState(true);
-  const [limit, setLimit] = useState(25);
-  const competitions = useMemo(() => [...new Set(board?.matches.map(m => m.league) ?? [])].sort(), [board]);
-  const markets = useMemo(() => [...new Set(board?.matches.flatMap(m => m.quotes.map(marketName)) ?? [])].sort(), [board]);
-  const matches = useMemo(() => filterBoard(board?.matches ?? [], { search, competition, state, market,
-    minOdds: Math.max(1, Number(minOdds) || 1), includeUnavailable }, now), [board, search, competition, state, market, minOdds, includeUnavailable, now]);
-  const changed = () => setLimit(25);
-  return <section className="panel"><h2>Tutti i campionati e mercati del feed</h2><p>Nomi e linee originali della fonte. Nessuna selezione viene convertita in un pronostico o abbinata a mercati diversi.</p>
-    <div className="history-controls"><button className={state === 'live' ? 'primary' : 'text-button'} onClick={() => { setState(state === 'live' ? '' : 'live'); changed(); }}>● {state === 'live' ? 'Mostra tutte le partite' : `Solo LIVE (${board?.matches.filter(m => isFreshLive(m, now)).length ?? 0} aggiornate)`}</button></div>
-    <div className="filters"><label>Cerca eventi<input type="search" value={search} placeholder="Giocatore, campionato o ID evento" onChange={e => { setSearch(e.target.value); changed(); }}/></label>
-      <label>Campionato<select aria-label="Campionato" value={competition} onChange={e => { setCompetition(e.target.value); changed(); }}><option value="">Tutti ({competitions.length})</option>{competitions.map(c => <option key={c}>{c}</option>)}</select></label>
-      <label>Stato<select aria-label="Stato" value={state} onChange={e => { setState(e.target.value); changed(); }}><option value="">Live e da iniziare</option><option value="prematch">Da iniziare</option><option value="live">Live confermate</option></select></label>
-      <label>Mercato<select aria-label="Mercato" value={market} onChange={e => { setMarket(e.target.value); changed(); }}><option value="">Tutti ({markets.length})</option>{markets.map(m => <option key={m}>{m}</option>)}</select></label>
-      <label>Quota minima<input type="number" min="1" step="0.01" value={minOdds} onChange={e => { setMinOdds(e.target.value); changed(); }}/></label>
-    </div><label className="check-label"><input type="checkbox" checked={includeUnavailable} onChange={e => { setIncludeUnavailable(e.target.checked); changed(); }}/> Mostra anche voci sospese o non disponibili, indipendentemente dalla quota minima</label>
-    <p className="fine">Quota minima iniziale 1,30; imposta 1 per vedere tutti i prezzi. Nessun limite massimo. {matches.length} partite corrispondono ai filtri.</p>
-    {!board ? <p>Nessun feed caricato.</p> : !matches.length ? <p>Nessuna partita corrisponde ai filtri; il catalogo può essere vuoto o in caricamento.</p> : <div className="match-list">{matches.slice(0, limit).map(m => <Match key={m.id} match={m} now={now} token={token}/>)}</div>}
-    {matches.length > limit && <button className="primary more-matches" onClick={() => setLimit(v => v + 25)}>Mostra altre 25 partite ({matches.length - limit} rimanenti)</button>}
+
+import { useValue } from './useValue';
+import { selectedQuotes } from './shared/quote-selection';
+import type { ValueOpportunity } from './domain/value';
+import { RecordPrediction } from './RecordPrediction';
+
+type Props = { board: Board | null; now: number; token?: string; refreshBoard: () => Promise<void>; boardLoading: boolean; tracker?: boolean };
+export function Markets({ board, now, token, refreshBoard, boardLoading, tracker = false }: Props) {
+  const values = useValue(token);
+  const [search, setSearch] = useState(''), [competition, setCompetition] = useState('');
+  const [state, setState] = useState(''), [mode, setMode] = useState<'value' | 'events'>('value');
+  const [minOdds, setMinOdds] = useState('1.30'), [limit, setLimit] = useState(12);
+  const [shown, setShown] = useState(true), [openEvent, setOpenEvent] = useState<string | null>(null);
+  const [manualBusy, setManualBusy] = useState(false);
+  const heading = useRef<HTMLHeadingElement>(null), cards = useRef<HTMLDivElement>(null);
+  const busy = boardLoading || values.loading || manualBusy;
+  const eligible = useMemo(() => selectedQuotes(values.report, board?.matches ?? [], now, Number(minOdds) || 1.3), [values.report, board, now, minOdds]);
+  const byEvent = new Map(eligible.map(o => [o.eventId, o]));
+  const matches = useMemo(() => {
+    const term = search.trim().toLocaleLowerCase('it');
+    const filtered = (board?.matches ?? []).filter(m => isUpcomingOrLive(m, now) && (!competition || m.league === competition)
+      && (!term || `${m.home} ${m.away} ${m.league} ${m.id}`.toLocaleLowerCase('it').includes(term))
+      && (!state || (state === 'live' ? m.in_play : !m.in_play)));
+    if (mode === 'value' || tracker) {
+      const events = new Map(filtered.map(m => [m.id, m]));
+      return eligible.flatMap(o => events.has(o.eventId) ? [events.get(o.eventId)!] : []);
+    }
+    return filtered.sort((a, b) => Number(b.in_play) - Number(a.in_play) || Date.parse(a.kickoff_utc ?? '') - Date.parse(b.kickoff_utc ?? '') || a.id.localeCompare(b.id));
+  }, [board, now, competition, search, state, eligible, mode, tracker]);
+  const competitions = [...new Set(board?.matches.map(m => m.league) ?? [])].sort();
+  function changed() { setLimit(12); setShown(true); }
+  function closeList() { setShown(false); setOpenEvent(null); heading.current?.focus({ preventScroll: true }); heading.current?.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
+  function closeEvent() {
+    const summary = cards.current?.querySelector<HTMLDetailsElement>('details.match-card[open]')?.querySelector('summary');
+    setOpenEvent(null); summary?.focus({ preventScroll: true }); summary?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+  async function refresh() {
+    if (busy) return;
+    setManualBusy(true);
+    try { await Promise.all([refreshBoard(), values.refresh()]); } finally { setManualBusy(false); }
+  }
+  return <section className="panel quote-workspace">
+    <span className="eyebrow">SELEZIONE STATISTICA</span>
+    <h2 ref={heading} tabIndex={-1}>Quote selezionate</h2>
+    <p>Solo margini statistici positivi, dalla probabilità stimata più alta.</p>
+    <div className="selection-notice"><span className="badge">Stime sperimentali</span><span>Solo vincente prematch</span></div>
+    {!tracker && <div className="quote-tabs" role="group" aria-label="Vista partite"><button className={mode === 'value' ? 'primary' : 'secondary'} aria-pressed={mode === 'value'} onClick={() => { setMode('value'); changed(); }}>Quote migliori ({eligible.length})</button><button className={mode === 'events' ? 'primary' : 'secondary'} aria-pressed={mode === 'events'} onClick={() => { setMode('events'); changed(); }}>Eventi e giocatori</button></div>}
+    <div className="quote-search"><label>Cerca eventi<input type="search" value={search} placeholder="Giocatore, campionato o ID evento" onChange={e => { setSearch(e.target.value); changed(); }}/></label></div><details className="quote-filter-details"><summary>Filtri per campionato, stato e quota</summary><div className="filters quote-filters"><label>Campionato<select aria-label="Campionato" value={competition} onChange={e => { setCompetition(e.target.value); changed(); }}><option value="">Tutti ({competitions.length})</option>{competitions.map(c => <option key={c}>{c}</option>)}</select></label><label>Stato<select aria-label="Stato" value={state} onChange={e => { setState(e.target.value); changed(); }}><option value="">Live e da iniziare</option><option value="prematch">Da iniziare</option><option value="live">Live confermate</option></select></label><label>Quota minima<input type="number" min="1.3" step="0.01" value={minOdds} onChange={e => { setMinOdds(e.target.value); changed(); }}/></label></div></details>
+    {(!shown || matches.length === 0) && <div className="quote-toolbar"><button className="primary" disabled={busy} onClick={refresh}>{busy ? 'Aggiornamento…' : '↻ Aggiorna quote ora'}</button><button className="secondary" onClick={() => shown ? closeList() : setShown(true)}>{shown ? 'Chiudi lista quote' : 'Mostra lista quote'}</button></div>}
+    <p className="fine" role="status">{matches.length} {mode === 'value' || tracker ? 'partite con quota selezionata · ordine: probabilità decrescente, poi EV prudente' : 'eventi disponibili · live prima, poi orario'}. {values.report ? `Verifica: ${dateTime(values.report.checkedAt)}` : 'Analisi delle quote in corso…'}</p>
+    {values.error && <p role="alert" className="error">{values.error}</p>}
+    {!board ? <p role="status">{boardLoading ? 'Recupero eventi reali…' : 'Feed non disponibile. Aggiorna per riprovare.'}</p> : shown && <>
+      {!matches.length ? <div className="empty"><h3>{values.loading ? 'Analisi statistica in corso…' : 'Nessuna selezione soddisfa i filtri'}</h3><p>Mostriamo una quota solo con storico sufficiente, prezzo fresco e margine prudente positivo. Per il live non è disponibile un modello di probabilità: puoi consultare gli eventi e le statistiche dei giocatori.</p>{!tracker && <button className="text-button" onClick={() => { setMode('events'); changed(); }}>Consulta eventi e giocatori →</button>}</div> : <div ref={cards} className="match-list">{matches.slice(0, limit).map(m => <SelectedMatch key={m.id} match={m} quote={byEvent.get(m.id)} token={token} now={now} open={openEvent === m.id} onToggle={() => setOpenEvent(id => id === m.id ? null : m.id)} onClose={closeEvent} onRefresh={refresh} busy={busy}/>)}</div>}
+      {matches.length > limit && <button className="primary more-matches" onClick={() => setLimit(n => n + 12)}>Mostra altre 12 partite ({matches.length - limit} rimanenti)</button>}
+    </>}
+    {shown && matches.length > 0 && <div className="quote-dock" role="group" aria-label="Comandi rapidi quote"><button className="primary" disabled={busy} onClick={refresh}>{busy ? 'Aggiornamento…' : openEvent ? '↻ Aggiorna quota' : '↻ Aggiorna quote'}</button><button className="secondary" onClick={openEvent ? closeEvent : closeList}>{openEvent ? '✕ Chiudi quote' : '✕ Chiudi lista'}</button></div>}
+    <details className="selection-method"><summary>Come scegliamo e ordiniamo le quote</summary><p>Probabilità implicita = 1 ÷ quota. EV = probabilità stimata × quota − 1. Per comparire serve anche EV positivo sul limite prudente euristico, almeno 30 precedenti per giocatore e una coppia coerente di quote fresche. Una selezione per partita, ordinata per probabilità decrescente; a parità, EV prudente e vicinanza a quota 2. Minimo 1,30, nessun massimo.</p><p>Percentuali sperimentali, non garanzie. Il test statistico prosegue separatamente.</p></details>
   </section>;
 }
-function Match({ match: m, now, token }: { match: FeedMatch; now: number; token?: string }) {
-  const groups = new Map<string, FeedQuote[]>();
-  for (const q of m.quotes) { const id = marketIdentity(q); const group = groups.get(id) ?? []; group.push(q); groups.set(id, group); }
-  const liveFresh = isFreshLive(m, now);
-  const state = m.in_play ? (liveFresh ? 'Live · fonte aggiornata' : 'Live segnalato · aggiornamento non confermato')
-    : m.kickoff_utc && Date.parse(m.kickoff_utc) > now ? 'Prematch' : 'Orario superato / stato da verificare';
-  return <details className={liveFresh ? 'match-card match-live' : 'match-card'}><summary><span><small>{m.league}</small><strong>{m.home} — {m.away}</strong><span>{dateTime(m.kickoff_utc)} · {state}</span></span><span className="match-badges">{m.in_play && <span className={liveFresh ? 'live-badge' : 'live-badge live-uncertain'}><i aria-hidden="true"/>{liveFresh ? 'LIVE' : 'LIVE NON CONFERMATO'}</span>}{m.in_play && m.score && <span className="score-badge" aria-label={`Punteggio dalla fonte: ${m.score}`}>{m.score}</span>}<span className="badge">{m.quotes.length} voci quota · Apri</span></span></summary>
-    <div className="match-content"><p className="fine">Bet365.com.au · ID evento {m.id} · Ultima lettura evento: {dateTime(m.polled_at)}{m.score ? ` · Punteggio riportato dalla fonte: ${m.score}` : ''}</p>
-      <SaveChoice token={token} eventId={m.id}/>
-      <PlayerAnalysis token={token} eventId={m.id}/>
-      {[...groups].map(([id, quotes]) => <section className="market-group" key={id}><h3>{marketName(quotes[0])}</h3><p className="fine">Periodo: {quotes[0].period ?? 'Non specificato'} · Gruppo {quotes[0].group_id} · Sottomercato {quotes[0].market_id ?? 'Non specificato'} · Fase {quotes[0].phase ?? 'prematch'}</p>
-        <div className="quote-grid">{quotes.map(q => <article className="quote" key={quoteIdentity(q)}><strong>{q.label || q.side || 'Selezione senza etichetta'}</strong>
-          {q.side && q.side !== q.label && <span>Lato: {q.side}</span>}{q.line !== undefined && <span>Linea: {q.line}</span>}{q.handicap !== undefined && <span>Handicap: {q.handicap}</span>}{q.n2 && <span>Partecipante: {q.n2}</span>}
-          <b>{q.suspended || q.odds_dec <= 1 ? '—' : q.odds_dec.toLocaleString('it-IT', { maximumFractionDigits: 4 })}</b>
-          <small>{quoteStatus(m, q, now)}</small><small>Prezzo modificato: {dateTime(q.ts)}</small><small>Mercato letto: {dateTime(m.group_status?.[q.group_id]?.polled_at)}</small><small>ID selezione: {q.sel_id}</small>
-          {quoteStatus(m,q,now)==='Letta di recente dalla fonte'&&<SaveChoice token={token} eventId={m.id} quoteKey={quoteIdentity(q)} expectedOdds={q.odds_dec} expectedUpdatedAt={q.ts}/>}
-        </article>)}</div></section>)}
-    </div></details>;
+function SelectedMatch({ match: m, quote, token, now, open, onToggle, onClose, onRefresh, busy }: { match: FeedMatch; quote?: ValueOpportunity; token?: string; now: number; open: boolean; onToggle: () => void; onClose: () => void; onRefresh: () => void; busy: boolean }) {
+  const live = isFreshLive(m, now);
+  return <details className={`match-card selected-match${live ? ' match-live' : ''}`} data-event-id={m.id} open={open} onKeyDown={e => { if (e.key === 'Escape') { e.stopPropagation(); onClose(); } }}>
+    <summary onClick={e => { e.preventDefault(); onToggle(); }}><span><small>{m.league} · {dateTime(m.kickoff_utc)}</small><strong>{m.home} — {m.away}</strong>{quote ? <span>Vincente partita · {quote.selection}</span> : <span>{live ? 'Live · statistiche disponibili' : 'Nessuna quota con margine prudente disponibile'}</span>}</span><span className="match-badges">{live && <span className="live-badge"><i aria-hidden="true"/>LIVE</span>}{live && m.score && <span className="score-badge">{m.score}</span>}{quote && <span className="summary-price"><b>{(quote.probability * 100).toFixed(1)}%</b><small>Stima modello</small><strong>Quota {quote.odds.toFixed(2)}</strong></span>}<span className="badge">{open ? 'Chiudi ↑' : 'Apri ↓'}</span></span></summary>
+    {open && <div className="match-content"><div className="match-actions"><button className="primary" disabled={busy} onClick={onRefresh}>{busy ? 'Aggiornamento…' : '↻ Aggiorna quota'}</button><button className="secondary" onClick={onClose}>✕ Chiudi quote</button></div>
+      {quote ? <SelectedQuote key={`${quote.quoteAt}:${quote.odds}:${quote.probability}`} quote={quote} token={token}/> : <p>Non proponiamo quote senza una stima supportata dai dati. Puoi salvare questa partita e consultare i giocatori.</p>}
+      <SaveChoice token={token} eventId={m.id}/><PlayerAnalysis token={token} eventId={m.id} showEstimates={false}/>
+      <button className="secondary close-bottom" onClick={onClose}>✕ Chiudi questa partita</button>
+    </div>}
+  </details>;
+}
+function SelectedQuote({ quote: o, token }: { quote: ValueOpportunity; token?: string }) {
+  return <article className="selected-quote" aria-label={`Quota selezionata: ${o.selection}`}><div className="panel-heading"><div><span className="eyebrow">VINCENTE PARTITA · PREMATCH</span><h3>{o.selection}</h3></div><span className="badge">Sperimentale</span></div><div className="quote-highlights"><div><strong>{(o.probability * 100).toFixed(1)}%</strong><span>Probabilità stimata</span></div><div><strong>{o.odds.toFixed(2)}</strong><span>Quota bet365</span></div><div><strong>+{((o.probability * o.odds - 1) * 100).toFixed(1)}%</strong><span>Valore atteso (EV)</span></div></div><p className="fine">Quota modificata: {dateTime(o.quoteAt)} · Mercato letto: {dateTime(o.marketReadAt)} · {o.sampleSize} precedenti nel campione minimo.</p><details className="quote-explanation"><summary>Perché è stata selezionata?</summary><dl><dt>Probabilità implicita nella quota</dt><dd>{(100 / o.odds).toFixed(1)}%</dd><dt>Quota equa stimata</dt><dd>{(1 / o.probability).toFixed(2)}</dd><dt>Limite prudente euristico</dt><dd>{(o.probabilityLower * 100).toFixed(1)}%</dd><dt>EV prudente</dt><dd>+{((o.probabilityLower * o.odds - 1) * 100).toFixed(1)}%</dd></dl><p className="fine">Il prezzo supera la quota equa stimata anche usando il limite prudente. L’affidabilità del modello è ancora in verifica.</p></details><div className="selection-buttons"><RecordPrediction token={token} eventId={o.eventId} selection={o.selection} odds={o.odds} quoteAt={o.quoteAt} probability={o.probability} modelVersion={o.modelVersion ?? ''}/>{o.quoteKey && <SaveChoice token={token} eventId={o.eventId} quoteKey={o.quoteKey} expectedOdds={o.odds} expectedUpdatedAt={o.quoteAt}/>}</div></article>;
 }
