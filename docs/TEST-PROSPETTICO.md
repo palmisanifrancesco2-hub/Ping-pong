@@ -27,3 +27,7 @@ Statistiche modello mostra entrambe le fasi, conteggi, controlli e confronto boo
 Endpoint `/api/study` protetto da JWT e membership; aggiornamento riservato al proprietario configurato. `/api/study-run` usa esclusivamente `CRON_SECRET` server-side, con confronto costante del token. Proprietario ricavato server-side dalla membership e dall'account Auth, mai da input del chiamante. Tabelle esistenti con RLS, nessuna migrazione. Il cron non inserisce puntate reali o messaggi. Nessun piano a pagamento richiesto.
 
 Il bootstrap Production iniziale è esplicito mediante `APP_FORWARD_STUDY_BOOTSTRAP=1`, poi disattivato. La raccolta richiede `APP_FORWARD_STUDY_ENABLED=1`; disabilitandolo si sospendono nuove esecuzioni senza cancellare dati.
+
+## Primo avvio verificato
+
+Protocollo e codice congelati nel commit `7c623d5` prima del bootstrap Production. Primo lotto completato il 5 novembre 2026 alle 03:12:25 UTC: 18 nuove previsioni virtuali, nessun errore o duplicato, nessun esito ancora valutabile. Deployment `dpl_6K3N2m6kAKJDGHwVPX5WbkJScvwb` READY con alias stabile. Bootstrap disabilitato dopo la riuscita; cron configurato, prima successiva esecuzione periodica ancora da osservare.
