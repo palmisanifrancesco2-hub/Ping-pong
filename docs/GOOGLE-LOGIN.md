@@ -42,3 +42,5 @@ Feed, risultati giocatori, verifica accesso database e query storico/scelte sono
 ## Conferma successiva del proprietario
 
 Il 4 novembre 2026 il proprietario ha completato il client OAuth Web Google, impostato origine e callback Supabase, inserito Client ID e Client Secret direttamente nel provider Supabase e confermato in chat: «Fatto funziona». L'accesso Google sul suo account è pertanto confermato dal test manuale dell'utente. Non è stato eseguito un login automatizzato con il suo account e nessun segreto è stato richiesto o registrato in chat. Il precedente `googleEnabled=false` descrive la configurazione al momento del vecchio build, prima di questa attivazione.
+
+Il controllo server nel deployment `dpl_GBRyxhbRpZVxn4wdDvzo7T2mkpfQ` del 5 novembre 2026 conferma `googleEnabled=true`, `signupEnabled=true`. Questo verifica l'attivazione del provider; il login sul conto reale resta quello confermato manualmente dal proprietario, non un test automatizzato con il suo account.
