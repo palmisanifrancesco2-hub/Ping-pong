@@ -1,4 +1,7 @@
-import {createHash} from 'node:crypto';
+import {canonical,marketHash,studyUuid as uuid} from './research-integrity.js';
+export {canonical,marketHash} from './research-integrity.js';
+import {WinnerShadow,winnerCandidates} from './winner-shadow.js';
+import {winnerDiagnostic} from '../src/domain/winner-comparison.js';
 import {ForecastStore} from './forecast-store.js';
 import {ProspectiveStudy} from './prospective-study.js';
 import {ResultsFeed,type ResultsArchive} from './results.js';
@@ -12,9 +15,6 @@ import type {Board} from '../src/shared/board.js';
 import type {Env} from './auth.js';
 
 export {protocol as marketStudyProtocol};
-export const canonical=(v:unknown):string=>Array.isArray(v)?`[${v.map(canonical).join(',')}]`:v!==null&&typeof v==='object'?`{${Object.entries(v).sort(([a],[b])=>a<b?-1:a>b?1:0).map(([k,x])=>`${JSON.stringify(k)}:${canonical(x)}`).join(',')}}`:JSON.stringify(v);
-export const marketHash=(v:unknown)=>createHash('sha256').update(canonical(v)).digest('hex');
-const uuid=(s:string)=>{const h=createHash('sha256').update(s).digest('hex');return`${h.slice(0,8)}-${h.slice(8,12)}-5${h.slice(13,16)}-a${h.slice(17,20)}-${h.slice(20,32)}`;};
 const protocolHash=marketHash(protocol),caseName=`Market observations ${protocol.id}`,batchName=`Market batches ${protocol.id}`,checkpointName=`Market checkpoints ${protocol.id}`;
 
 export function assertMarketCase(c:MarketStudyCase){
@@ -50,9 +50,10 @@ export function settleMarketCase(c:MarketStudyCase,r:MatchResult,payload:unknown
 
 type Stored={id:string;created_at:string;parameters:{studyId:string;userId:string;case:MarketStudyCase}};
 export class MarketStudy{
-  private store:ForecastStore;private owner:ProspectiveStudy;private pending?:Promise<unknown>;
+  private store:ForecastStore;private owner:ProspectiveStudy;private pending?:Promise<unknown>;private shadow:WinnerShadow;
   constructor(private env:Env,private now=Date.now,private results=new ResultsFeed(),private feed:Pick<MoviOddsFeed,'board'>=new MoviOddsFeed()){
     this.store=new ForecastStore(env,now);this.owner=new ProspectiveStudy(env,now,results,feed as MoviOddsFeed);
+    this.shadow=new WinnerShadow(env,now);
   }
   private async cases(owner:string){
     const all:Stored[]=[];
@@ -73,7 +74,13 @@ export class MarketStudy{
     // Private hosting logs contain aggregates only, never event IDs, player names,
     // user IDs, individual probabilities, credentials or personal wagers.
     console.info(JSON.stringify({marketStudyStatus:protocol.id,checkedAt:report.checkedAt,captured:report.captured,settled:report.settled,pending:report.pending,invalid:report.invalid,observedDays:report.observedDays,targets:report.descriptive.map(({target,n,correct,wrong,undecided,accuracy})=>({target,n,correct,wrong,undecided,accuracy}))}));
-    return report;
+    const extra:{winnerReview?:ReturnType<typeof winnerDiagnostic>;winnerShadow?:Awaited<ReturnType<WinnerShadow['report']>>;winnerReviewError?:string}={};
+    try{
+      extra.winnerReview=winnerDiagnostic(cases);extra.winnerShadow=await this.shadow.report(owner);
+      const s=extra.winnerShadow;
+      console.info(JSON.stringify({winnerReview:extra.winnerReview,winnerShadowStatus:s.protocol.id,shadow:{captured:s.captured,settled:s.settled,pending:s.pending,invalid:s.invalid,observedDays:s.observedDays,models:s.models,league:s.league,bookmaker:s.bookmaker,checkpoints:s.checkpoints.map(c=>({size:c.size,consistent:c.consistent,passed:c.result.challengers.filter(x=>x.preliminaryPass).map(x=>x.id)})),validated:false}}));
+    }catch{extra.winnerReviewError='Confronto dei candidati temporaneamente non disponibile.';console.error('WINNER_REVIEW_UNAVAILABLE');}
+    return{...report,...extra};
   }
   async run(userId?:string,deadline=this.now()+240000){
     if(this.env.APP_FORWARD_STUDY_ENABLED!=='1')return{status:'disabled',captured:0,settled:0};
@@ -117,6 +124,9 @@ export class MarketStudy{
         }
       }
     }
+    if(deadline-this.now()>30000){
+      try{const board=await this.feed.board(),at=this.now(),candidates=marketCandidates(board,archive,owner,at,new Set());await this.shadow.capture(owner,winnerCandidates(candidates,rows,board,new Set(archive.results.map(r=>r.id)),owner,at),deadline);}catch{console.error('WINNER_SHADOW_CAPTURE_UNAVAILABLE');}
+    }
     const byId=new Map(archive.results.map(r=>[r.id,r]));let next=0;
     // Bounded work, persisted between invocations; no process left running after response.
     for(const row of rows){
@@ -151,6 +161,7 @@ export class MarketStudy{
       const saved=await saveMeta(uuid(`${protocol.id}:checkpoint:${owner}:${size}`),checkpointName,`${protocol.id}:checkpoint:${size}`,{size,closedAt:new Date(this.now()).toISOString(),prefixHash:marketHash(prefix),result},true);
       if(saved.error&&saved.error.code!=='23505')throw Error('MARKET_STUDY_CHECKPOINT_WRITE_FAILED');
     }
+    if(deadline-this.now()>15000){try{await this.shadow.settle(owner,rows,deadline);}catch{console.error('WINNER_SHADOW_SETTLEMENT_UNAVAILABLE');}}
     const summary={status:'completed',captured,settled,attempted,sourceErrors,total:rows.length,checkedAt:new Date(this.now()).toISOString()};
     const savedRun=await saveMeta(runId,`Market runs ${protocol.id}`,`${protocol.id}:run:${runSlot}`,summary);if(savedRun.error)throw Error('MARKET_STUDY_RUN_WRITE_FAILED');
     console.info(JSON.stringify({marketStudyRun:protocol.id,...summary}));return summary;

@@ -9,7 +9,8 @@ export type MarketObservation={
 export type MarketOutcome={status:'pending'|'settled'|'invalid';y?:number[];availableAt?:string;closingHash?:string;actualStart?:number;reason?:string};
 export type MarketStudyCase={forecast:MarketObservation;forecastHash:string;outcome:MarketOutcome;attempts:number;lastAttempt?:number};
 
-export function marketInterval(rows:{at:number;value:number}[],replicates=protocol.bootstrapReplicates){
+export function marketInterval(rows:{at:number;value:number}[],replicates=protocol.bootstrapReplicates,familyComparisons=protocol.targets.length*protocol.checkpoints.length){
+  if(!Number.isInteger(familyComparisons)||familyComparisons<1)throw Error('MARKET_INTERVAL_FAMILY');
   if(!rows.length)return{n:0,days:0,mean:null,lower:null,upper:null};
   const byDay=new Map<number,{sum:number;n:number}>();
   for(const r of rows){const key=Math.floor(r.at/86400000),g=byDay.get(key)??{sum:0,n:0};g.sum+=r.value;g.n++;byDay.set(key,g);}
@@ -25,7 +26,7 @@ export function marketInterval(rows:{at:number;value:number}[],replicates=protoc
     if(n)samples.push(sum/n);
   }
   samples.sort((a,b)=>a-b);
-  const tail=protocol.familyAlpha/(protocol.targets.length*protocol.checkpoints.length*2);
+  const tail=protocol.familyAlpha/(familyComparisons*2);
   return{n:rows.length,days:days.length,mean,lower:samples[Math.floor(samples.length*tail)],upper:samples[Math.min(samples.length-1,Math.floor(samples.length*(1-tail)))]};
 }
 
