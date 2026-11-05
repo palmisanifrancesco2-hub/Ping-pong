@@ -1,5 +1,11 @@
 # Verifiche tecniche
 
+## Continuazione mercati — 5 novembre 2026, 15:32 UTC
+
+Storico esteso da 249 a **261 incontri verificati**, stessi pesi e contesto congelato, aggiornamento descrittivo senza nuova prova indipendente. Avviata raccolta prospettica privata separata sui 14 target: **100 partite future registrate**, 100 in attesa, 0 risolte/errori, confermate dalla rilettura reale del database. Cron giornaliero esistente condiviso con lo studio precedente, controlli fissi 500/1000/2000/3000 e almeno 14 giorni, nessuna attivazione automatica. [Protocollo, persistenza e limiti](CONTINUAZIONE-TEST-MERCATI.md).
+
+243 test Vitest/34 file, 5 test Python, TypeScript/build/ESM, QA Chromium locale 393×851 e 1440×1000 con risposte prospettiche sintetiche dichiarate e aggregato storico effettivo superati. Codice `2ea8ab833addc1d1793a76d55151c48b88dc4c44`, deployment Production `dpl_BuPFTwFNPeEG9GTSWa2ghoGzf8ti` READY, alias stabile verificato, CI riuscita e probe protetto `/api/health` 200. Bootstrap reale conferma le scritture descritte sopra. La programmazione non certifica l'esecuzione futura del cron; nessun nuovo login reale del proprietario automatizzato.
+
 ## Ricerca mercati v8 — 5 novembre 2026
 
 Quattro famiglie, 14 target, 1804 casi storici comuni, 249 casi successivi con orario closing verificato. Selezione congelata prima dell'apertura delle nuove etichette; quelle nuove non alimentano le caratteristiche. Nessun candidato supera tutti i criteri; nessuna promozione o modifica al test prospettico precedente. [Dettagli e limiti](MODELLI-MERCATI-V8.md).
