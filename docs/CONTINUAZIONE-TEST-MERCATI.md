@@ -61,3 +61,28 @@ Deployment `dpl_AAxdXvpg7wWFtvsQJWRQVudrApPL` READY dal commit documentale `b4ad
 Rieseguita la procedura esistente di continuazione senza modifiche al codice pubblicato `b9cc1a3979248040ef55f5680d2ca87cf9df0341`. **62 ulteriori esiti verificati**, 62 tentativi, zero errori della fonte. La rilettura del database conferma **100 partite registrate, 64 risolte e 36 in attesa**, un solo giorno osservato; raccolta giornaliera configurata, nessuna nuova registrazione nel lotto già arruolato. Le probabilità originali e i protocolli restano invariati; i 261 casi retrospettivi restano separati. Questi conteggi misurano la copertura degli esiti, non l'accuratezza dei pronostici, e non consentono ancora una conclusione sull'affidabilità.
 
 Deployment di controllo `dpl_FpgmAutjGPbAFHq9zF1FLVL8U5tU` READY, alias stabile verificato sullo stesso ID, probe protetto `/api/health` = 200 e smoke ESM compilato riuscito su Node 26.13.0. Nessun aggiornamento di modelli, criteri, filtro EV o credenziali, nessuna puntata o nuovo login remoto con l'account del proprietario. Il controllo manuale non certifica l'esecuzione futura del cron programmato.
+
+### Esiti più probabili corretti/sbagliati — 5 novembre 2026, 20:55:54 UTC
+
+Rilettura Production delle probabilità originali e degli esiti salvati: 100 registrate, **64 risolte, 36 in attesa**, zero invalidi, un giorno osservato. Il controllo restituisce `recent_run`, quindi questa pubblicazione non registra nuovi eventi né modifica esiti. Tutti i numeri seguenti sono descrittivi, su tutte le osservazioni del nuovo studio, non sulle sole opportunità EV positive. Il candidato del vincente in questa raccolta v9 usa le frequenze gerarchiche scelte nel confronto v8; rimane distinto dalla logistica del test originario e delle quote dell'app.
+
+| Mercato binario: si valuta il lato più probabile | Corrette | Sbagliate | Senza preferenza |
+| --- | ---: | ---: | ---: |
+| Vincente partita | 30 | 34 | 0 |
+| Vincente primo set | 30 | 34 | 0 |
+| Totale punti primo set, linea 19,5 | 42 | 22 | 0 |
+| Totale set, linea 3,5 | 46 | 18 | 0 |
+| Totale set, linea 4,5 | 44 | 20 | 0 |
+| Totale punti, linea 74,5 | 33 | 31 | 0 |
+| Totale punti, linea 79,5 | 43 | 21 | 0 |
+| Totale punti, linea 84,5 | 45 | 19 | 0 |
+| Handicap primo giocatore −1,5 set / avversario +1,5 | 43 | 21 | 0 |
+| Handicap primo giocatore +1,5 set / avversario −1,5 | 41 | 23 | 0 |
+| Handicap primo giocatore −5,5 punti / avversario +5,5 | 42 | 22 | 0 |
+| Handicap primo giocatore +5,5 punti / avversario −5,5 | 37 | 27 | 0 |
+| Handicap primo giocatore −9,5 punti / avversario +9,5 | 48 | 16 | 0 |
+| Handicap primo giocatore +9,5 punti / avversario −9,5 | 53 | 11 | 0 |
+
+Sul vincente l'accuratezza descrittiva è 30/64 = **46,875%**. Accuratezza e numerosità di queste righe non provano probabilità attendibili né rendimento; gli esiti dei diversi mercati sono fortemente correlati e non vanno trattati come incontri indipendenti. Nessun candidato promosso e nessun cambio a pesi o criteri.
+
+Codice dei contatori `77161aee0e09bf46a03136450db2721fb3665d4c`, deployment `dpl_2Dt16uUd8ES2k33yqhPHi31tunKL` READY e alias stabile verificato. GitHub CI, 245 test, build e smoke ESM Node 26.13.0 superati, probe protetto `/api/health` = 200. API privata verificata tramite rilettura interna con credenziali server già configurate, senza divulgarle o usare una sessione del proprietario. Nessuna puntata o nuova selezione personale.

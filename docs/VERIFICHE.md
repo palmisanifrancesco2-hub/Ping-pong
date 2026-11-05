@@ -6,6 +6,8 @@ Aggiunti aggregati descrittivi per ogni mercato dalla probabilità immutabile re
 
 245 test in 34 file, TypeScript, build e smoke ESM superati. Test di simmetria delle selezioni opposte, parità al 50%, denominatori e nessuna preferenza contata erroneamente come vinta/persa. QA Chromium locale a 393×851 e 1440×1000 con API sintetica dichiarata: 14 righe di conteggi, aggiornamento e gestione errore, nessun errore JavaScript o overflow. La successiva rilettura Production fornisce i numeri reali; le fixture QA non sono dati dello studio.
 
+Rilettura reale alle 20:55:54 UTC: **64 esiti verificati**, di cui **30 corretti e 34 sbagliati sul vincente partita** (46,875%, zero stime senza preferenza). Altri mercati in [CONTINUAZIONE-TEST-MERCATI.md](CONTINUAZIONE-TEST-MERCATI.md). Sono esiti più probabili del candidato v9 su tutto il campione, distinti dalle selezioni EV positive del test originario/app. Nessuna validazione o promozione. Pubblicato `77161aee0e09bf46a03136450db2721fb3665d4c`, deployment `dpl_2Dt16uUd8ES2k33yqhPHi31tunKL` READY, alias stabile confermato, CI e smoke Node 26.13.0 riusciti, probe protetto `/api/health` 200. La raccolta rispetta il controllo recente, senza nuovi inserimenti o modifiche a probabilità/esiti.
+
 ## Solo EV strettamente positivi — 5 novembre 2026
 
 Filtro già presente nelle nuove selezioni esteso al dettaglio aperto: EV nominale e prudente devono entrambi essere >0, ricalcolati dal prezzo corrente. Quote a zero o negative nascoste anche dopo refresh; pannello e statistiche caricati conservati. Valori positivi molto piccoli indicati «>0%» per evitare arrotondamento a zero. Modifica solo alla visualizzazione; nessun cambiamento a modelli, regole di arruolamento, risultati o storico.
