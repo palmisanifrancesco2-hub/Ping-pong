@@ -3,6 +3,14 @@ const servers:Server[]=[];afterEach(async()=>{await Promise.all(servers.splice(0
 async function start(deps:Parameters<typeof createHandler>[0]){const s=createServer(createHandler(deps));servers.push(s);await new Promise<void>(r=>s.listen(0,'127.0.0.1',r));return`http://127.0.0.1:${(s.address()as{port:number}).port}`;}
 const headers={Authorization:'Bearer member','Content-Type':'application/json'};
 describe('section endpoint authorization and integrity',()=>{
+ it('protects player lookups and derives names only from a source event',async()=>{
+  const profiles={forEvent:vi.fn().mockResolvedValue({eventId:'e',profiles:[]})},feed={board:vi.fn(async()=>({provider:'MoviOdds' as const,bookmakerSite:'bet365.com.au' as const,checkedAt:new Date().toISOString(),serverTime:new Date().toISOString(),warming:false,matches:[{id:'e',sport:'table_tennis' as const,home:'Public A',away:'Public B',league:'Source',in_play:false,quotes:[]}]}))};
+  const base=await start({env:{},profiles,feed,authorize:async t=>t==='member'?'owner':null});
+  expect((await fetch(`${base}/api/profiles?eventId=e`)).status).toBe(401);expect(profiles.forEvent).not.toHaveBeenCalled();expect(feed.board).not.toHaveBeenCalled();
+  expect((await fetch(`${base}/api/profiles`,{headers})).status).toBe(400);
+  expect((await fetch(`${base}/api/profiles?eventId=e&home=Forged`,{headers})).status).toBe(200);expect(profiles.forEvent.mock.calls[0][0].home).toBe('Public A');
+ });
+
  it('rejects unauthenticated writes before touching any data store',async()=>{const bets={list:vi.fn(),save:vi.fn(),update:vi.fn()},record=vi.fn();const base=await start({env:{},bets,forecasts:{record,settle:vi.fn()}});for(const path of['bets','predictions'])expect((await fetch(`${base}/api/${path}`,{method:'POST',body:'{}'})).status).toBe(401);expect(bets.save).not.toHaveBeenCalled();expect(record).not.toHaveBeenCalled();expect((await fetch(`${base}/api/status`)).status).toBe(401);});
  it('rejects forged owner, profit and probability fields and unsafe filters',async()=>{const bets={list:vi.fn(),save:vi.fn(),update:vi.fn()};const base=await start({authorize:async()=>'owner',bets});const post=(path:string,body:unknown)=>fetch(`${base}/api/${path}`,{method:'POST',headers,body:JSON.stringify(body)});
  expect((await post('bets',{user_id:'other',actual_profit:1000})).status).toBe(400);expect((await post('predictions',{eventId:'future',selection:'A',probability:1,expectedOdds:2,expectedUpdatedAt:new Date().toISOString()})).status).toBe(400);expect((await fetch(`${base}/api/bets?period=999`,{headers})).status).toBe(400);expect(bets.save).not.toHaveBeenCalled();});

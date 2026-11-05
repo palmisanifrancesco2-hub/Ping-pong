@@ -1,0 +1,44 @@
+{
+  "version": "multi-model-v7",
+  "createdAt": "2026-11-05T07:04:00.150489+00:00",
+  "input": ".research-data/3000-data.json",
+  "minimumPlayerHistory": 30,
+  "foldStarts": [
+    "2026-10-25T00:00:00Z",
+    "2026-10-27T00:00:00Z",
+    "2026-10-29T00:00:00Z",
+    "2026-10-31T00:00:00Z",
+    "2026-11-02T00:00:00Z"
+  ],
+  "endExclusive": "2026-11-05T00:00:00Z",
+  "calibrationDays": 2,
+  "minimumTraining": 50,
+  "minimumCalibration": 40,
+  "temperatures": [
+    0.25,
+    0.5,
+    0.75,
+    1,
+    1.25,
+    1.5
+  ],
+  "candidates": [
+    "full:0.001",
+    "scores:0.01",
+    "glicko2",
+    "point-markov",
+    "set-bayes",
+    "ensemble-equal",
+    "ensemble-calibrated"
+  ],
+  "targets": [
+    "winner",
+    "first-set",
+    "over-sets-3.5",
+    "over-sets-4.5"
+  ],
+  "additionalMarketModel": "Logistic 0.01; raw signed features for first set; intercept and absolute strengths for totals. Compare Markov baseline and training/calibration-only constant. No outcome-based price backtest.",
+  "eligibility": "30 previous matches per player, source available strictly before verified kickoff minus one minute; Glicko periods are UTC days closed before forecast.",
+  "scope": "Exploratory reuse of already examined historical archive, not independent validation; old 18+ prospective observations and frozen model remain unchanged. No automatic validated=true.",
+  "activation": "New market needs >=500 held-out cases, lower Brier/log loss than calibration constant, ECE<0.08 and adjusted day-bootstrap upper Brier difference <0. No unsupported live or market/line mapping."
+}

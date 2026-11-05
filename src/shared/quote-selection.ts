@@ -25,3 +25,19 @@ export function selectedQuotes(report: ValueReport | null, matches: FeedMatch[],
   const seen = new Set<string>();
   return rows.filter(o => { if (seen.has(o.eventId)) return false; seen.add(o.eventId); return true; });
 }
+
+export type OpenMatch={match:FeedMatch;index:number;selection:string|null};
+/** An open panel stays mounted at the same index, even if its quote loses value. */
+export function keepOpenMatch(rows:FeedMatch[],opened:OpenMatch|null,current:FeedMatch[]):FeedMatch[]{
+  if(!opened)return rows;
+  const latest=current.find(m=>m.id===opened.match.id)??opened.match;
+  const rest=rows.filter(m=>m.id!==opened.match.id);rest.splice(Math.min(opened.index,rest.length),0,latest);return rest;
+}
+export function openQuote(report:ValueReport|null,m:FeedMatch|undefined,selection:string|null,now:number){
+  if(!report||!m||!selection||m.in_play||!isUpcomingOrLive(m,now)||!Number.isFinite(Date.parse(report.checkedAt))||now-Date.parse(report.checkedAt)>120000)return undefined;
+  return [...(report.estimates??[]),...report.opportunities,...(report.experimental??[])].find(o=>{
+    if(o.eventId!==m.id||o.selection!==selection)return false;
+    const q=m.quotes.find(q=>quoteIdentity(q)===o.quoteKey);
+    return !!q&&q.fixture_id===m.id&&q.side===selection&&q.odds_dec===o.odds&&q.ts===o.quoteAt&&q.phase!=='inplay'&&Date.parse(q.ts)<=now&&quoteStatus(m,q,now)==='Letta di recente dalla fonte';
+  });
+}

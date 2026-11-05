@@ -1,0 +1,4 @@
+import{readFile}from'node:fs/promises';import{createHash}from'node:crypto';import{verifiedStart}from'../src/domain/research-source.js';import type{MatchResult}from'../src/domain/player-model.js';
+const data=JSON.parse(await readFile('.research-data/3000-data.json','utf8')) as{results:MatchResult[];starts:{id:string;at:number}[]};const byId=new Map(data.results.map(m=>[m.id,m])),hash=createHash('sha256');let verified=0;
+for(const s of data.starts){const text=await readFile(`.research-data/3000-data.json.cache/${s.id}.json`,'utf8'),m=byId.get(s.id);if(!m||verifiedStart(JSON.parse(text),m)!==s.at)throw Error('UNVERIFIED_HISTORICAL_START');hash.update(s.id).update(text);verified++;}
+console.info(JSON.stringify({verifiedStarts:verified,closingSourceHash:hash.digest('hex'),syntheticInputs:false,networkCalls:0}));

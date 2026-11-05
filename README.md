@@ -127,3 +127,7 @@ Raccolta cloud giornaliera con protocollo e pesi congelati, previsioni virtuali 
 ## Quote selezionate e controlli mobile
 
 The Odds API rimossa dalla navigazione. Vista principale con sole quote di valore prudente positivo, una per evento e ordinate per probabilità stimata decrescente, percentuale/quota/EV in evidenza. Aggiornamento manuale della fonte e pulsanti fissi di chiusura; eventi e statistiche separati. [Comportamento attuale](docs/SEZIONI-FUNZIONANTI.md). Test prospettico e pesi congelati invariati.
+
+## Ensemble, pannelli persistenti e profili
+
+La partita aperta conserva statistiche e posizione durante polling, variazioni di convenienza ed errori. Disponibile un ensemble sperimentale di tre modelli, distinto dal modello del test congelato; confronto storico di 7 candidati su 1804 casi comuni con almeno 30 precedenti per giocatore. Nuovi target primo set/totali set testati ma non attivati perché non superano i criteri. Fonte aggiuntiva Wikidata CC0 per profili pubblici compatibili, con copertura parziale e identità da verificare. [Risultati, fonti e limiti](docs/MULTI-MODELLO-E-PROFILI.md).

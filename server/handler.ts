@@ -1,3 +1,5 @@
+import{ensembleSignals,ensembleValueReport}from'./multi-model.js';
+import{PlayerProfiles}from'./player-profiles.js';
 import{ProspectiveStudy}from'./prospective-study.js';
 import{authorizedStudyCron}from'./cron-auth.js';
 import{z}from'zod';
@@ -17,7 +19,7 @@ import { ForecastStore } from './forecast-store.js';
 import modelData from '../models/elo-v1.json' with {type:'json'};
 import {researchReport,scoreResearchReport,forwardStudy,modelComparison}from'./research-report.js';
 
-type Dependencies = { study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
+type Dependencies = { profiles?:Pick<PlayerProfiles,'forEvent'>; study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
 export function createHandler(deps: Dependencies = {}) {
   const env = deps.env ?? process.env;
   const provider = deps.provider ?? new OddsApi(oddsApiKey(env));
@@ -28,6 +30,7 @@ export function createHandler(deps: Dependencies = {}) {
   const analyses = deps.analyses ?? new Analyses();
   const forecasts = deps.forecasts ?? new ForecastStore(env);
   const bets=deps.bets??new ManualBets(env,now);
+  const profiles=deps.profiles??new PlayerProfiles(undefined,now,true);
   const study=deps.study??new ProspectiveStudy(env,now,analyses.results,feed as MoviOddsFeed);
   // Single-flight plus shared cache limits upstream usage per warm server instance.
   let cached: { at: number; value: Awaited<ReturnType<OddsApi['connection']>> } | undefined;
@@ -42,7 +45,7 @@ export function createHandler(deps: Dependencies = {}) {
     const methods = path==='/api/study'?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
     if (!methods.includes(req.method ?? '')) { res.setHeader('Allow', methods.join(', ')); return send(405, { error: 'Metodo non consentito.' }); }
     if (path === '/api/health') return send(200, { status: 'ok', version: '0.1.0' });
-    if (!['/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
+    if (!['/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run','/api/profiles'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
     if(path==='/api/study-run'){
       if(!authorizedStudyCron(req.headers.authorization,env.CRON_SECRET))return send(401,{error:'Esecuzione non autorizzata.'});
       try{return send(200,await study.run());}catch(error){console.error(JSON.stringify({apiPath:path,code:error instanceof Error&&/^[A-Z_]+$/.test(error.message)?error.message:'STUDY_FAILED'}));return send(503,{error:'Test non aggiornato. Le osservazioni salvate sono conservate.'});}
@@ -52,6 +55,7 @@ export function createHandler(deps: Dependencies = {}) {
     if (!match || !userId) return send(401, { error: 'Accesso riservato agli utenti autorizzati.' });
     try {
       if(path==='/api/study'){try{return send(200,req.method==='POST'?await study.run(userId):await study.report(userId));}catch(error){if(error instanceof Error&&error.message==='STUDY_OWNER_ONLY')return send(403,{error:'Solo il proprietario può aggiornare la raccolta.'});throw error;}}
+      if(path==='/api/profiles'){const id=url.searchParams.get('eventId');if(!id||id.length>100)return send(400,{error:'Evento non valido.'});let m=(await feed.board()).matches.find(m=>m.id===id);if(!m){const r=(await analyses.results.archive()).results.find(r=>r.id===id);if(r)m={...r,sport:'table_tennis',in_play:false,quotes:[]};}if(!m)return send(404,{error:'Evento non disponibile per la ricerca dei profili.'});return send(200,await profiles.forEvent(m));}
       if(path==='/api/access')return send(200,{authorized:true});
       if(path==='/api/status'){
         const db=await userDatabase(match[1],env).from('manual_bets').select('id').limit(0);
@@ -71,11 +75,11 @@ export function createHandler(deps: Dependencies = {}) {
         }
         const schema=z.object({eventId:z.string().min(1).max(100),selection:z.string().min(1).max(500),expectedProbability:z.number().finite().min(0).max(1),expectedModelVersion:z.string().min(1).max(200),expectedOdds:z.number().finite().gt(1),expectedUpdatedAt:z.iso.datetime({offset:true})}).strict();const p=schema.safeParse(payload);if(!p.success)return send(400,{error:'Previsione non valida.'});
         const[board,archive]=await Promise.all([feed.board(),analyses.results.archive()]);const m=board.matches.find(m=>m.id===p.data.eventId);if(!m)return send(409,{error:'Partita non disponibile.'});
-        const f=scoreSignals(m,archive,now()).find(f=>f.selection===p.data.selection&&f.modelVersion===p.data.expectedModelVersion&&(f.probability*100).toFixed(1)===(p.data.expectedProbability*100).toFixed(1)&&f.quote.odds_dec===p.data.expectedOdds&&f.quote.ts===p.data.expectedUpdatedAt);if(!f)return send(409,{error:'Quota, stima o stato della partita cambiati.'});
+        const f=[...scoreSignals(m,archive,now()),...ensembleSignals(m,archive,now())].find(f=>f.selection===p.data.selection&&f.modelVersion===p.data.expectedModelVersion&&(f.probability*100).toFixed(1)===(p.data.expectedProbability*100).toFixed(1)&&f.quote.odds_dec===p.data.expectedOdds&&f.quote.ts===p.data.expectedUpdatedAt);if(!f)return send(409,{error:'Quota, stima o stato della partita cambiati.'});
         return send(200,await forecasts.record(userId,m,f));
       }
 
-      if(path==='/api/value'){const[board,archive]=await Promise.all([feed.board(url.searchParams.get('refresh')==='1'),analyses.results.archive()]);return send(200,scoreValueReport(board,archive,now()));}
+      if(path==='/api/value'){const[board,archive]=await Promise.all([feed.board(url.searchParams.get('refresh')==='1'),analyses.results.archive()]);return send(200,{...scoreValueReport(board,archive,now()),ensemble:ensembleValueReport(board,archive,now())});}
       if(path==='/api/model')return send(200,{comparison:modelComparison,research:researchReport,scoreResearch:scoreResearchReport,forwardStudy,version:runtimeModel.version,validated:false,generatedAt:runtimeModel.generatedAt,trainingCutoff:runtimeModel.calibrationCutoff,validation:runtimeModel.validation,calibration:{temperature:runtimeModel.temperature},leagues:{},source:'MoviOdds; validazione preliminare su risultati riportati'});
       if(path==='/api/settle')return send(200,await forecasts.settle(userId,()=>analyses.results.archive()));
       if(path==='/api/analysis'){

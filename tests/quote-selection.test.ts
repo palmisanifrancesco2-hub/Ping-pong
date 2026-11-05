@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { selectedQuotes } from '../src/shared/quote-selection';
+import { selectedQuotes,keepOpenMatch,openQuote } from '../src/shared/quote-selection';
 import type { FeedMatch } from '../src/shared/board';
 import { quoteIdentity } from '../src/shared/board';
 import type { ValueOpportunity } from '../src/domain/value';
@@ -43,4 +43,18 @@ describe('probability-ranked selected quotes', () => {
     expect(selectedQuotes(report(o, { ...o, id: 'duplicate' }), [m], now)).toHaveLength(1);
     expect(selectedQuotes(report(), [m], now)).toEqual([]);
   });
+});
+
+it('keeps the inspected match at its original position and accepts fresh non-value updates only inside that panel',()=>{
+ const a=fixture('a',.6,2),b=fixture('b',.65,2),c=fixture('c',.55,2.3);
+ const opened={match:b.m,index:1,selection:'A'};
+ const latest={...b.m,quotes:[{...b.m.quotes[0],odds_dec:1.3}]};
+ expect(keepOpenMatch([a.m,c.m],opened,[a.m,latest,c.m]).map(m=>m.id)).toEqual(['a','b','c']);
+ expect(keepOpenMatch([],opened,[])[0]).toBe(b.m);
+ const changed={...b.o,odds:1.3,ev:-.155,conservativeEv:-.2};
+ const r={...report(),estimates:[changed]};
+ expect(selectedQuotes(r,[latest],now)).toEqual([]);
+ expect(openQuote(r,latest,'A',now)?.odds).toBe(1.3);
+ expect(openQuote(r,undefined,'A',now)).toBeUndefined();
+ expect(openQuote(r,latest,'A',now+121000)).toBeUndefined();
 });

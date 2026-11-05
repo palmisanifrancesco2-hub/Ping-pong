@@ -1,3 +1,4 @@
+import{ensembleSignals}from'./multi-model.js';
 import {scoreSignals,runtimeModel}from'./score-signals.js';
 import {createHash}from'node:crypto';
 import {z}from'zod';
@@ -40,7 +41,7 @@ export function buildAnalysis(m:FeedMatch,archive:ResultsArchive,now:number):Pla
  return{eventId:m.id,checkedAt:new Date(now).toISOString(),home,away,h2h:{matches:h2h.length,homeWins,awayWins:h2h.length-homeWins},
   coverage:{from:archive.from,to:archive.to,source:'MoviOdds, risultati riportati; non certificati indipendentemente',rejected:archive.rejected,archive:archive.source},
   identity:'Nomi esatti normalizzati nella stessa competizione, senza abbinamenti approssimativi. Profili anagrafici e ranking non disponibili.',
-  model:{version:runtimeModel.version,validated:false,trainingCutoff:runtimeModel.calibrationCutoff,validation:runtimeModel.validation},...prediction,experimental:scoreSignals(m,archive,now)};
+  model:{version:runtimeModel.version,validated:false,trainingCutoff:runtimeModel.calibrationCutoff,validation:runtimeModel.validation},...prediction,experimental:scoreSignals(m,archive,now),ensemble:ensembleSignals(m,archive,now)};
 }
 export class Analyses{
  constructor(readonly results=new ResultsFeed(),private now=Date.now){}

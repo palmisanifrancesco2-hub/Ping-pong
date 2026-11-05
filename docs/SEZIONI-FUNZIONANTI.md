@@ -44,3 +44,5 @@ La vista normale non espone tutti i prezzi del fornitore. Richiede coppia vincen
 Il pulsante manuale aggiorna insieme feed e valutazione, con nuove letture della fonte distanziate almeno 10 secondi per istanza; polling visibile sempre ogni 30 secondi. Snapshot ricevuti prima/dopo un cambio prezzo non sono abbinati: una quota cambiata o sospesa sparisce finché la valutazione coerente è disponibile. Gli aggiornamenti non azzerano l’elenco a ogni polling.
 
 Pulsanti fissi sullo schermo per aggiornare e chiudere la partita aperta, oppure chiudere l’intero elenco; comandi anche nella scheda e in fondo alle statistiche, Escape da tastiera e focus restituito al riepilogo. Lista riapribile e altre 12 selezioni per volta. Gli eventi live restano consultabili, ma non ricevono percentuali del modello prematch.
+
+Aggiornamento successivo: [ensemble e profili](MULTI-MODELLO-E-PROFILI.md). Il modello di raccolta prospettica resta invariato; ensemble opzionale per le quote, pannelli persistenti e ricerca di profili pubblici Wikidata aggiunti. Altri mercati valutati in ricerca ma ancora non attivi per mancato superamento dei criteri.
