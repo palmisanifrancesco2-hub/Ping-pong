@@ -1,3 +1,4 @@
+import{ResultsFeed}from'../server/results';
 import { createServer, type Server } from 'node:http';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createHandler } from '../server/handler';
@@ -26,7 +27,7 @@ describe('private HTTP API', () => {
     expect(body.comparison.testCases).toBe(3000);expect(body.comparison.ranking).toHaveLength(15);expect(body.comparison.productionValidated).toBe(false);expect(body.comparison.predictions).toBeUndefined();expect(body.comparison.artifacts).toBeUndefined();
   });
   it('keeps value estimates private and reports the actual model block',async()=>{
-    const base=await start(createHandler({authorize:async t=>t==='member'?'owner':null,feed:{board:async()=>({provider:'MoviOdds',bookmakerSite:'bet365.com.au',checkedAt:new Date().toISOString(),serverTime:new Date().toISOString(),warming:false,matches:[]})}}));expect((await fetch(`${base}/api/value`)).status).toBe(401);
+    const base=await start(createHandler({analyses:{analyse:vi.fn(),results:new ResultsFeed(async()=>new Response(JSON.stringify({source:'postgres',results:[]})))},authorize:async t=>t==='member'?'owner':null,feed:{board:async()=>({provider:'MoviOdds',bookmakerSite:'bet365.com.au',checkedAt:new Date().toISOString(),serverTime:new Date().toISOString(),warming:false,matches:[]})}}));expect((await fetch(`${base}/api/value`)).status).toBe(401);
     const response=await fetch(`${base}/api/value`,{headers:{Authorization:'Bearer member'}});expect(response.status).toBe(200);const report=await response.json();expect(report.status).toBe('experimental');expect(report.opportunities).toEqual([]);
   });
   it('verifies private access independently from having an Auth session',async()=>{

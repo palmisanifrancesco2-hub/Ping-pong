@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, useRef, type FormEvent } from 'react';
 import { createClient, type Session } from '@supabase/supabase-js';
 import { COMPETITIONS, type ConnectionReport } from './shared/contracts';
 import { FeedStatus, Markets } from './Markets';
@@ -9,6 +9,9 @@ import { isFreshLive } from './shared/board';
 import { PersonalChoices } from './Choices';
 import { ModelStats } from './ModelStats';
 import { GoogleSignIn } from './GoogleSignIn';
+import{SmartStake}from'./SmartStake';
+import{ConnectionHealth}from'./ConnectionHealth';
+import type{BetPrefill}from'./shared/bets';
 import { ValueTracker } from './ValueTracker';
 import { usePrivateAccess } from './usePrivateAccess';
 import { cleanAuthCallbackUrl, googleCallbackError } from './shared/google-auth';
@@ -30,7 +33,10 @@ export function App() {
   const [notice, setNotice] = useState(() => googleCallbackError(window.location.search, window.location.hash) ?? '');
   const [busy, setBusy] = useState(false);
   const [report, setReport] = useState<ConnectionReport | null>(null);
+  const[betPrefill,setBetPrefill]=useState<BetPrefill|undefined>();
+  function openBet(p:BetPrefill){setBetPrefill(p);setSection('Smart Stake');}
   const [period, setPeriod] = useState<HistoryPeriod>('30');
+  const account=useRef<string|null>(null);
   const access = usePrivateAccess(session?.access_token, !!session && !demo);
   const feed = useBoard(session?.access_token, !!session && !demo && access.status === 'allowed' && ['Dashboard','Partite e mercati','Collegamenti'].includes(section));
   useEffect(() => {
@@ -38,7 +44,7 @@ export function App() {
     let active = true;
     auth.auth.getSession().then(({ data, error }) => { if (active) { setSession(data.session); if (error) setNotice('Accesso o ripristino della sessione non riuscito. Riprova.'); } }).catch(() => { if (active) setNotice('Sessione non disponibile. Accedi nuovamente.'); }).finally(() => { window.history.replaceState(window.history.state, '', cleanAuthCallbackUrl(window.location.href)); });
     const { data } = auth.auth.onAuthStateChange((_event, value) => {
-      if (active) { setSession(value); setReport(null); }
+      if (active) { if(account.current!==value?.user.id){setBetPrefill(undefined);account.current=value?.user.id??null;} setSession(value); setReport(null); }
     });
     return () => { active = false; data.subscription.unsubscribe(); };
   }, []);
@@ -78,25 +84,24 @@ export function App() {
     <main className="workspace-main"><header><div><span className="eyebrow">ANALISI / {section.toUpperCase()}</span><h1>{section}</h1></div><div className="header-actions"><span className="badge">{demo ? 'DEMO · SENZA DATI' : 'MODALITÀ REALE'}</span><button className="text-button" onClick={async () => { if (session) await auth?.auth.signOut(); setDemo(false); setReport(null); setNotice(''); }}>Esci ↗</button></div></header>
       <div className="banner">{demo ? 'Anteprima dell’interfaccia. Nessuna chiamata API, quota o statistica simulata.' : 'MoviOdds · Quote bet365 estere. Solo live confermati e partite da iniziare. Pronostici soggetti a dati e validazione; scelte personali separate.'}</div>
       {notice && <p className="error" role="alert">{notice}</p>}
-      {section === 'Dashboard' && <><section className="hero-panel"><div><span className="eyebrow">PRIMA LA QUALITÀ DEL DATO</span><h2>Ogni opportunità<br/>parte da una verifica.</h2><p>Apri una partita per confrontare i giocatori e verificare se il modello può registrare un pronostico.</p><button className="primary" onClick={() => setSection('Partite e mercati')}>Esplora partite e quote ↗</button></div><div className="hero-mark" aria-hidden="true">◎<span>ANALYTICS</span></div></section><FeedStatus {...feed}/><div className="metrics">{[
+      {section === 'Dashboard' && <><section className="hero-panel"><div><span className="eyebrow">PRIMA LA QUALITÀ DEL DATO</span><h2>Ogni opportunità<br/>parte da una verifica.</h2><p>Apri una partita per confrontare i giocatori e verificare se il modello può registrare un pronostico.</p><button className="primary" onClick={() => setSection('Partite e mercati')}>Esplora partite e quote ↗</button></div><div className="hero-mark" aria-hidden="true">◎<span>ANALYTICS</span></div></section><FeedStatus {...feed} disabled={demo}/><div className="metrics">{[
         ['Partite nel feed', feed.board ? String(feed.board.matches.length) : '—'],
         ['Campionati nel feed', feed.board ? String(new Set(feed.board.matches.map(m => m.league)).size) : '—'],
         ['Voci quota ricevute', feed.board ? String(feed.board.matches.reduce((n, m) => n + m.quotes.length, 0)) : '—'],
         ['Partite LIVE aggiornate', feed.board ? String(feed.board.matches.filter(m => isFreshLive(m, feed.now)).length) : '—'],
-      ].map(([label, value]) => <article className="metric" key={label}><span>{label}</span><strong>{value}</strong><small>Fonte estera · ADM non verificato</small></article>)}</div><div className="two-columns"><section className="panel"><h2>Competizioni monitorate</h2><p>Campionati presenti nella risposta MoviOdds, aggiornati con il feed.</p>{feed.board ? <ul className="competition-list">{[...new Set(feed.board.matches.map(m => m.league))].sort().map(name => <li key={name}><span>{name}</span><small>{feed.board!.matches.filter(m => m.league === name).length} partite</small></li>)}</ul> : <p>Catalogo in attesa di caricamento.</p>}</section><section className="panel"><span className="eyebrow">MODELLO STATISTICO</span><h2>Trasparente, fin dall’inizio.</h2><div className="empty-symbol">↗</div><h3>Un controllo per ogni partita</h3><p>Storico dei giocatori, campione e validazione temporale determinano se un pronostico può essere registrato. In caso contrario compare “Dati insufficienti”.</p><button className="text-button" onClick={() => setSection('Statistiche modello')}>Stato della validazione →</button></section></div></>}
-      {section === 'Collegamenti' && <FeedStatus {...feed}/>}
-      {section === 'Collegamenti' && <section className="panel"><div className="panel-heading"><div><span className="eyebrow">FORNITORE CONFERMATO</span><h2>The Odds API · V4</h2></div><span className="badge">{report?.status === 'connected' ? 'Catalogo ricevuto' : report?.status === 'error' ? 'Errore di connessione' : 'Da configurare / verificare'}</span></div><p>La chiave resta sul server. Il test interroga soltanto il catalogo sport, senza costo in crediti quota. Il risultato è riutilizzato per 60 secondi per istanza server.</p><button className="primary" disabled={busy || demo} onClick={check}>{busy ? 'Verifica in corso…' : 'Verifica connessione'}</button>{demo && <p className="fine">Accedi con un utente autorizzato per eseguire il test.</p>}{report && <div className="report" role="status"><p>{report.message}</p><dl><dt>Ultimo controllo</dt><dd>{new Date(report.checkedAt).toLocaleString('it-IT')}</dd><dt>Sport nel catalogo</dt><dd>{report.status === 'connected' ? report.sports.length : 'Non verificato'}</dd><dt>Tennistavolo</dt><dd>{report.status !== 'connected' ? 'Non verificato' : report.tableTennisKeys.join(', ') || 'Assente dal catalogo ricevuto'}</dd><dt>Crediti rimanenti</dt><dd>{report.quota?.remaining ?? 'Non comunicati'}</dd><dt>Bookmaker ADM / Live</dt><dd>Da verificare</dd></dl></div>}<CompetitionList report={report}/><p className="fine">Il catalogo pubblico non elenca il tennistavolo. Non si presume che il tennis sia equivalente.</p><a href="https://the-odds-api.com/liveapi/guides/v4/" target="_blank" rel="noreferrer">Documentazione ufficiale ↗</a></section>}
-      {section === 'Partite e mercati' && <><FeedStatus {...feed}/><Markets board={feed.board} now={feed.now} token={demo?undefined:session?.access_token}/></>}
+      ].map(([label, value]) => <article className="metric" key={label}><span>{label}</span><strong>{value}</strong><small>Fonte MoviOdds · bet365.com.au</small></article>)}</div><div className="two-columns"><section className="panel"><h2>Competizioni monitorate</h2><p>Campionati presenti nella risposta MoviOdds, aggiornati con il feed.</p>{feed.board ? <ul className="competition-list">{[...new Set(feed.board.matches.map(m => m.league))].sort().map(name => <li key={name}><span>{name}</span><small>{feed.board!.matches.filter(m => m.league === name).length} partite</small></li>)}</ul> : <p>Catalogo in attesa di caricamento.</p>}</section><section className="panel"><span className="eyebrow">MODELLO STATISTICO</span><h2>Trasparente, fin dall’inizio.</h2><div className="empty-symbol">↗</div><h3>Un controllo per ogni partita</h3><p>Storico dei giocatori, campione e validazione temporale determinano se un pronostico può essere registrato. In caso contrario compare “Dati insufficienti”.</p><button className="text-button" onClick={() => setSection('Statistiche modello')}>Stato della validazione →</button></section></div></>}
+      {section === 'Collegamenti' && <><FeedStatus {...feed} disabled={demo}/><ConnectionHealth token={session?.access_token} demo={demo}/></>}
+      {section === 'Collegamenti' && <details className="panel"><summary>Fonte opzionale: The Odds API</summary><section><div className="panel-heading"><div><span className="eyebrow">FONTE OPZIONALE · NON NECESSARIA PER MOVIODDS</span><h2>The Odds API · V4</h2></div><span className="badge">{report?.status === 'connected' ? 'Catalogo ricevuto' : report?.status === 'error' ? 'Errore di connessione' : 'Da configurare / verificare'}</span></div><p>La chiave resta sul server. Il test interroga soltanto il catalogo sport, senza costo in crediti quota. Il risultato è riutilizzato per 60 secondi per istanza server.</p><button className="primary" disabled={busy || demo} onClick={check}>{busy ? 'Verifica in corso…' : 'Verifica connessione'}</button>{demo && <p className="fine">Accedi con un utente autorizzato per eseguire il test.</p>}{report && <div className="report" role="status"><p>{report.message}</p><dl><dt>Ultimo controllo</dt><dd>{new Date(report.checkedAt).toLocaleString('it-IT')}</dd><dt>Sport nel catalogo</dt><dd>{report.status === 'connected' ? report.sports.length : 'Non verificato'}</dd><dt>Tennistavolo</dt><dd>{report.status !== 'connected' ? 'Non verificato' : report.tableTennisKeys.join(', ') || 'Assente dal catalogo ricevuto'}</dd><dt>Crediti rimanenti</dt><dd>{report.quota?.remaining ?? 'Non comunicati'}</dd><dt>Bookmaker ADM / Live</dt><dd>Da verificare</dd></dl></div>}<CompetitionList report={report}/><p className="fine">Il catalogo pubblico non elenca il tennistavolo. Non si presume che il tennis sia equivalente.</p><a href="https://the-odds-api.com/liveapi/guides/v4/" target="_blank" rel="noreferrer">Documentazione ufficiale ↗</a></section></details>}
+      {section === 'Partite e mercati' && <><FeedStatus {...feed} disabled={demo}/><Markets board={feed.board} now={feed.now} token={demo?undefined:session?.access_token}/></>}
       {section === 'Value Tracker' && <ValueTracker token={session?.access_token} demo={demo} onMarkets={()=>setSection('Partite e mercati')}/>}
-      {section === 'Le mie scelte' && <PersonalChoices key={`${demo?'demo':session?.user.id}-${period}`} token={session?.access_token} demo={demo} period={period} onPeriod={setPeriod}/>}
-      {section === 'Storico pronostici' && <PredictionHistory key={`${demo ? 'demo' : session?.user.id}-${period}`} token={session?.access_token} demo={demo} period={period} onPeriod={setPeriod}/>}
-      {section === 'Statistiche modello' && <ModelStats token={session?.access_token} demo={demo}/>}
-      {section === 'Smart Stake' && <section className="panel"><span className="badge">DISATTIVATO</span><h2>Bankroll sotto controllo</h2><Empty title="Modulo non operativo" text="Il calcolo richiede un modello validato e una stima prudente dell’incertezza. La funzione Kelly frazionaria è predisposta e testata, ma non produce indicazioni operative in questa fase."/><p>Limite massimo previsto: 2% del bankroll. Nessun recupero automatico delle perdite e nessuna esecuzione di scommesse.</p></section>}
+      {section === 'Le mie scelte' && <PersonalChoices key={`${demo?'demo':session?.user.id}-${period}`} token={session?.access_token} demo={demo} period={period} onPeriod={setPeriod} onBet={openBet}/>}
+      {section === 'Storico pronostici' && <PredictionHistory key={`${demo ? 'demo' : session?.user.id}-${period}`} token={session?.access_token} demo={demo} period={period} onPeriod={setPeriod} onBet={openBet}/>}
+      {section === 'Statistiche modello' && <ModelStats token={session?.access_token} demo={demo} period={period} onPeriod={setPeriod}/>}
+      {section === 'Smart Stake' && <SmartStake key={JSON.stringify(betPrefill??null)} token={session?.access_token} demo={demo} period={period} onPeriod={setPeriod} prefill={betPrefill}/>}
       <footer>Ping Pong Analytics <span>Quote estere · Stime soggette a verifica · Nessun rendimento garantito</span></footer>
     </main></div>;
 }
 function Brand() { return <div className="brand"><span className="brand-icon" aria-hidden="true">↗</span><div>PING PONG<small>ANALYTICS</small></div></div>; }
-function Empty({ title, text }: { title: string; text: string }) { return <div className="empty"><div className="empty-symbol" aria-hidden="true">◎</div><h3>{title}</h3><p>{text}</p></div>; }
 function CompetitionList({ report }: { report: ConnectionReport | null }) {
   return <ul className="competition-list">{COMPETITIONS.map(name => { const status = report?.competitions.find(c => c.name === name)?.status; return <li key={name}><span>{name}</span><small>{status === 'not_in_catalog' ? 'Assente dal catalogo' : status === 'catalog_match' ? 'Catalogo: quote da verificare' : 'Da verificare'}</small></li>; })}</ul>;
 }

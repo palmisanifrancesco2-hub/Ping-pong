@@ -4,9 +4,9 @@ import { SaveChoice } from './Choices';
 import { dateTime } from './shared/format';
 import { PlayerAnalysis } from './PlayerAnalysis';
 
-export function FeedStatus({ board, loading, error, refresh }: { board: Board | null; loading: boolean; error: string; refresh: () => void }) {
-  return <section className="panel feed-status"><div className="panel-heading"><div><span className="eyebrow">FONTE GRATUITA · SENZA CHIAVE</span><h2>MoviOdds · bet365 estero</h2></div><button className="primary" disabled={loading} onClick={refresh}>{loading ? 'Aggiornamento…' : 'Aggiorna quote'}</button></div>
-    <p>Quote di bet365.com.au tramite MoviOdds, progetto indipendente. Prezzi italiani e autorizzazione ADM della fonte non verificati. Nessuna previsione operativa.</p>
+export function FeedStatus({ board, loading, error, refresh,disabled=false }: {disabled?:boolean; board: Board | null; loading: boolean; error: string; refresh: () => void }) {
+  return <section className="panel feed-status"><div className="panel-heading"><div><span className="eyebrow">FONTE GRATUITA · SENZA CHIAVE</span><h2>MoviOdds · bet365 estero</h2></div><button className="primary" disabled={loading||disabled} onClick={refresh}>{loading ? 'Aggiornamento…' : 'Aggiorna quote'}</button></div>
+    <p>Quote di bet365.com.au tramite MoviOdds, progetto indipendente. Statistiche e stime sperimentali sono consultabili nei dettagli delle partite.</p>
     {error && <p role="alert" className="error">{error}</p>}
     {board ? <p role="status">{board.matches.length} partite nel feed · {new Set(board.matches.map(m => m.league)).size} campionati · Fonte: {dateTime(board.serverTime)} · {board.warming ? 'Caricamento iniziale del fornitore' : 'Aggiornamento ogni 30 secondi a pagina visibile'}</p> : !error && <p role="status">{loading ? 'Recupero delle quote reali…' : 'Accedi per caricare il feed.'}</p>}
     <p className="fine">Mostriamo solo live confermati e partite con inizio futuro. Eventi oltre orario senza conferma live sono esclusi; le quote possono essere sospese. <a href="https://moviodds.com/bet365-table-tennis-odds-api/" target="_blank" rel="noreferrer">Fonte e documentazione ↗</a></p>

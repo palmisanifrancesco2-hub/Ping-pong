@@ -1,3 +1,4 @@
+import {scoreSignals,runtimeModel}from'./score-signals.js';
 import {createHash}from'node:crypto';
 import {z}from'zod';
 import modelData from '../models/elo-v1.json' with {type:'json'};
@@ -27,7 +28,7 @@ export function modelForecast(m:FeedMatch,now:number,model:ModelArtifact=modelDa
  const n=Math.min(a.count,b.count,200),lower=Math.max(0,probability-1.96*Math.sqrt(probability*(1-probability)/n)-metrics.ece);
  if(lower<=.5)return fail('Incertezza troppo elevata: il limite prudente della probabilità non supera il 50%.');
  return{reason:'Vincente partita stimato con Elo e calibrazione temporale. Solo prematch; nessuna garanzia di esito o verifica ADM.',forecast:{selection:winner,homeProbability:p,probability,probabilityLower:lower,sampleSize:n,quote,
-  modelVersion:`${model.version}-${model.datasetHash?.slice(0,16)??'unavailable'}`,trainingCutoff:model.trainingCutoff,
+  modelValidated:true,modelName:'Elo tennistavolo',modelVersion:`${model.version}-${model.datasetHash?.slice(0,16)??'unavailable'}`,trainingCutoff:model.trainingCutoff,
   validation:{n:metrics.n,brier:metrics.brier,logLoss:metrics.logLoss,ece:metrics.ece},reliability:'Preliminare: fonte aggregata e campione limitato'}};
 }
 export function buildAnalysis(m:FeedMatch,archive:ResultsArchive,now:number):PlayerAnalysis{
@@ -39,7 +40,7 @@ export function buildAnalysis(m:FeedMatch,archive:ResultsArchive,now:number):Pla
  return{eventId:m.id,checkedAt:new Date(now).toISOString(),home,away,h2h:{matches:h2h.length,homeWins,awayWins:h2h.length-homeWins},
   coverage:{from:archive.from,to:archive.to,source:'MoviOdds, risultati riportati; non certificati indipendentemente',rejected:archive.rejected,archive:archive.source},
   identity:'Nomi esatti normalizzati nella stessa competizione, senza abbinamenti approssimativi. Profili anagrafici e ranking non disponibili.',
-  model:{version:modelData.version,validated:modelData.validated,trainingCutoff:modelData.trainingCutoff,validation:modelData.validation},...prediction};
+  model:{version:runtimeModel.version,validated:false,trainingCutoff:runtimeModel.calibrationCutoff,validation:runtimeModel.validation},...prediction,experimental:scoreSignals(m,archive,now)};
 }
 export class Analyses{
  constructor(readonly results=new ResultsFeed(),private now=Date.now){}

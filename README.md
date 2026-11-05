@@ -103,3 +103,19 @@ partite**. Il nuovo confronto è completato: 15 modelli sugli stessi 3.000 casi,
 (**0,247647; 53,77% corretti, 1.613/3.000**). Il campione da 5.000 non è stato
 completato e la sua raccolta è stata fermata. Il report attivo in Statistiche
 modello è ora quello da 3.000; dettagli in [docs/TEST-3000.md](docs/TEST-3000.md).
+
+### Flussi applicativi completati
+
+Le otto sezioni ora collegano navigazione, dati e azioni: modello completo per
+stime prematch sperimentali, registrazione esplicita nello storico, statistiche
+sulle registrazioni con esiti della fonte separati da quelli confermati, scelte
+personali, simulatore Kelly disattivabile e diario manuale delle puntate reali in
+Supabase. Le puntate del diario sono esclusivamente inserite dall'utente: nessuna
+esecuzione su bookmaker. Collegamenti mostra i controlli dei servizi principali;
+The Odds API resta opzionale.
+
+211 test in 27 file, TypeScript, build e flusso browser su tutte le sezioni
+verificati. Nel collaudo browser sono reali soltanto feed, risultati pubblici e
+calcoli; account e salvataggi privati sono isolati. Nessuna nuova migrazione.
+Dettagli e limiti in [docs/SEZIONI-FUNZIONANTI.md](docs/SEZIONI-FUNZIONANTI.md).
+Le stime restano non validate; pronostici live e altri mercati non vengono inventati.

@@ -14,6 +14,8 @@ async function main() {
   if (result.error || !Array.isArray(result.data) || result.data.length !== 0) throw new Error('HISTORY_SCHEMA_QUERY_FAILED');
   const choices = await client.from('personal_choices').select('id,snapshot,saved_at,notes,manual_status,manual_settled_at').limit(0);
   if(choices.error||!Array.isArray(choices.data)||choices.data.length!==0)throw new Error('CHOICES_SCHEMA_QUERY_FAILED');
+  const bets=await client.from('manual_bets').select('id,user_id,prediction_id,stake,decimal_odds,currency,placed_at,status,actual_profit,notes').limit(0);if(bets.error||bets.data?.length!==0)throw new Error('BETS_SCHEMA_QUERY_FAILED');
+  console.info(JSON.stringify({manualBetsSchemaVerification:'success',readOnly:true,returnedRows:0}));
   console.info(JSON.stringify({ historySchemaVerification: 'success', readOnly: true, returnedRows: 0 }));
   console.info(JSON.stringify({ choicesSchemaVerification: 'success', readOnly: true, returnedRows: 0 }));
 }

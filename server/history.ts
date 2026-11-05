@@ -1,3 +1,4 @@
+import{registeredMetrics}from'../src/shared/registered-metrics.js';
 import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import type { Env } from './auth.js';
@@ -78,7 +79,7 @@ export async function readHistory(input: HistoryRequest, fetcher: typeof fetch =
     const start = (input.page - 1) * 50;
     return { checkedAt: new Date(now).toISOString(), ...window, page: input.page, pageSize: 50, totalRecorded: total,
       analyzed: entries.length, partial: entries.length < total, filteredCount: filtered.length,
-      summary: summarizeHistory(entries),sourceSummary:(()=>{const won=entries.filter(e=>e.reportedStatus==='won').length,lost=entries.filter(e=>e.reportedStatus==='lost').length;return{won,lost,hitRate:won+lost?won/(won+lost):null};})(), entries: filtered.slice(start, start + 50) };
+      metrics:{verified:registeredMetrics(entries),reported:registeredMetrics(entries,true)},summary: summarizeHistory(entries),sourceSummary:(()=>{const won=entries.filter(e=>e.reportedStatus==='won').length,lost=entries.filter(e=>e.reportedStatus==='lost').length;return{won,lost,hitRate:won+lost?won/(won+lost):null};})(), entries: filtered.slice(start, start + 50) };
   } catch { throw new Error('HISTORY_UNAVAILABLE'); }
   finally { clearTimeout(timeout); controller.abort(); }
 }
