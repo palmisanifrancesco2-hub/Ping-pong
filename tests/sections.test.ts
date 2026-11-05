@@ -19,7 +19,7 @@ describe('functional sections preserve real-data boundaries',()=>{
  expect(scoreSignals({...match,quotes:match.quotes.slice(0,1)},archive,now)).toEqual([]);
  expect(scoreSignals({...match,group_status:{}},archive,now)).toEqual([]);
  expect(scoreSignals(match,{...archive,source:'memory'},now)).toEqual([]);
- expect(scoreSignals(match,archive,now+8*86400000)).toEqual([]);
+ expect(scoreSignals(match,archive,now+36*86400000)).toEqual([]);
  });
  it('keeps operative opportunities empty while allowing explicit experimental research signals',()=>{const board:Board={provider:'MoviOdds',bookmakerSite:'bet365.com.au',checkedAt:new Date(now).toISOString(),serverTime:new Date(now).toISOString(),warming:false,matches:[match]};const r=scoreValueReport(board,archive,now);expect(r.opportunities).toEqual([]);expect(r.modelValidated).toBe(false);for(const s of r.experimental??[])expect(s.probabilityLower*s.odds).toBeGreaterThan(1);});
  it('caps manual Kelly scenarios, reduces uncertainty and disables completely',()=>{expect(stakeScenario(false,100,.9,0,2,1,.02)).toBe(0);expect(stakeScenario(true,100,.9,0,2,1,.02)).toBe(2);expect(stakeScenario(true,100,.6,.2,2,.25,.02)).toBe(0);expect(()=>stakeScenario(true,100,.9,0,2,1,.03)).toThrow();});

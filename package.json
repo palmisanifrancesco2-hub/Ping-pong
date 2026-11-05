@@ -21,7 +21,8 @@
     "db:bootstrap": "tsx scripts/bootstrap-db.ts",
     "db:verify": "tsx scripts/verify-db.ts",
     "research:collect": "tsx scripts/collect-research.ts",
-    "research:evaluate": "tsx scripts/evaluate-models.ts"
+    "research:evaluate": "tsx scripts/evaluate-models.ts",
+    "study:bootstrap": "tsx scripts/bootstrap-forward-study.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.80.0",

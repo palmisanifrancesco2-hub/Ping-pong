@@ -1,3 +1,5 @@
+import{ProspectiveStudy}from'./prospective-study.js';
+import{authorizedStudyCron}from'./cron-auth.js';
 import{z}from'zod';
 import{ManualBets,betSchema,betUpdateSchema}from'./manual-bets.js';
 import{scoreSignals,scoreValueReport,runtimeModel}from'./score-signals.js';
@@ -15,7 +17,7 @@ import { ForecastStore } from './forecast-store.js';
 import modelData from '../models/elo-v1.json' with {type:'json'};
 import {researchReport,scoreResearchReport,forwardStudy,modelComparison}from'./research-report.js';
 
-type Dependencies = { bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
+type Dependencies = { study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
 export function createHandler(deps: Dependencies = {}) {
   const env = deps.env ?? process.env;
   const provider = deps.provider ?? new OddsApi(oddsApiKey(env));
@@ -26,6 +28,7 @@ export function createHandler(deps: Dependencies = {}) {
   const analyses = deps.analyses ?? new Analyses();
   const forecasts = deps.forecasts ?? new ForecastStore(env);
   const bets=deps.bets??new ManualBets(env,now);
+  const study=deps.study??new ProspectiveStudy(env,now,analyses.results,feed as MoviOddsFeed);
   // Single-flight plus shared cache limits upstream usage per warm server instance.
   let cached: { at: number; value: Awaited<ReturnType<OddsApi['connection']>> } | undefined;
   let pending: ReturnType<OddsApi['connection']> | undefined;
@@ -36,14 +39,19 @@ export function createHandler(deps: Dependencies = {}) {
     const send = (status: number, body: unknown) => { res.statusCode = status; res.end(JSON.stringify(body)); };
     const url = new URL(req.url ?? '/', 'http://localhost');
     const path = url.pathname;
-    const methods = ['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
+    const methods = path==='/api/study'?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
     if (!methods.includes(req.method ?? '')) { res.setHeader('Allow', methods.join(', ')); return send(405, { error: 'Metodo non consentito.' }); }
     if (path === '/api/health') return send(200, { status: 'ok', version: '0.1.0' });
-    if (!['/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value','/api/predictions','/api/bets','/api/status'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
+    if (!['/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
+    if(path==='/api/study-run'){
+      if(!authorizedStudyCron(req.headers.authorization,env.CRON_SECRET))return send(401,{error:'Esecuzione non autorizzata.'});
+      try{return send(200,await study.run());}catch(error){console.error(JSON.stringify({apiPath:path,code:error instanceof Error&&/^[A-Z_]+$/.test(error.message)?error.message:'STUDY_FAILED'}));return send(503,{error:'Test non aggiornato. Le osservazioni salvate sono conservate.'});}
+    }
     const match = /^Bearer ([^\s]+)$/.exec(req.headers.authorization ?? '');
     const userId = match ? await checkAuth(match[1], env) : null;
     if (!match || !userId) return send(401, { error: 'Accesso riservato agli utenti autorizzati.' });
     try {
+      if(path==='/api/study'){try{return send(200,req.method==='POST'?await study.run(userId):await study.report(userId));}catch(error){if(error instanceof Error&&error.message==='STUDY_OWNER_ONLY')return send(403,{error:'Solo il proprietario può aggiornare la raccolta.'});throw error;}}
       if(path==='/api/access')return send(200,{authorized:true});
       if(path==='/api/status'){
         const db=await userDatabase(match[1],env).from('manual_bets').select('id').limit(0);

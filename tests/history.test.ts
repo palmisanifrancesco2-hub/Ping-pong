@@ -75,8 +75,8 @@ describe('recorded predictions and rolling intervals (synthetic only)', () => {
     await expect(readHistory({ token: 't', userId: 'owner', env, period: '7', page: 1, status: 'all' }, vi.fn(async () => new Response('private upstream details', { status: 500 })), now)).rejects.toThrow(/^HISTORY_UNAVAILABLE$/);
   });
   it('rejects invalid API query parameters', () => {
-    expect(parseHistoryQuery(new URLSearchParams())).toEqual({ period: '30', page: 1, status: 'all' });
-    for (const query of ['period=0','page=-1','page=1.5','page=0','status=unknown']) expect(() => parseHistoryQuery(new URLSearchParams(query))).toThrow();
+    expect(parseHistoryQuery(new URLSearchParams())).toEqual({ origin: 'all', period: '30', page: 1, status: 'all' });
+    for (const query of ['origin=forged','period=0','page=-1','page=1.5','page=0','status=unknown']) expect(() => parseHistoryQuery(new URLSearchParams(query))).toThrow();
   });
   it('uses a LIVE badge only with the provider flag and a recent fixture read', () => {
     const match = { id: 't', home: 'A', away: 'B', league: 'T', sport: 'table_tennis' as const, in_play: true, polled_at: new Date(now).toISOString(), quotes: [] };

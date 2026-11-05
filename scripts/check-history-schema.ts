@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { STUDY_SELECT } from '../server/prospective-study.js';
 import { HISTORY_SELECT } from '../server/history.js';
 import { validateSupabaseClientConfig } from '../src/shared/supabase-config.js';
 
@@ -12,6 +13,7 @@ async function main() {
     global: { fetch: (input, init) => fetch(input, { ...init, signal: AbortSignal.timeout(12_000) }) } });
   const result = await client.from('predictions').select(HISTORY_SELECT).limit(0);
   if (result.error || !Array.isArray(result.data) || result.data.length !== 0) throw new Error('HISTORY_SCHEMA_QUERY_FAILED');
+  const study=await client.from('predictions').select(STUDY_SELECT).limit(0);if(study.error||study.data?.length!==0)throw Error('STUDY_SCHEMA_QUERY_FAILED');console.info(JSON.stringify({studySchemaVerification:'success',readOnly:true,returnedRows:0}));
   const choices = await client.from('personal_choices').select('id,snapshot,saved_at,notes,manual_status,manual_settled_at').limit(0);
   if(choices.error||!Array.isArray(choices.data)||choices.data.length!==0)throw new Error('CHOICES_SCHEMA_QUERY_FAILED');
   const bets=await client.from('manual_bets').select('id,user_id,prediction_id,stake,decimal_odds,currency,placed_at,status,actual_profit,notes').limit(0);if(bets.error||bets.data?.length!==0)throw new Error('BETS_SCHEMA_QUERY_FAILED');

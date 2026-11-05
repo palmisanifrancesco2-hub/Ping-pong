@@ -9,7 +9,7 @@ export type HistoryPeriod = typeof HISTORY_PERIODS[number][0];
 export type OutcomeStatus = 'won' | 'lost' | 'void' | 'pending' | 'unverified';
 export const OUTCOME_LABELS: Record<OutcomeStatus, string> = { won: 'Corretta', lost: 'Sbagliata', void: 'Annullata', pending: 'In attesa', unverified: 'Esito da verificare' };
 export type HistoryEntry = {
-  id: string; predictedAt: string; match: string; competition: string; market: string; selection: string;
+  studyId?:string|null; id: string; predictedAt: string; match: string; competition: string; market: string; selection: string;
   odds: number; probability: number; sampleSize: number; model: string; modelValidated: boolean;
   bookmaker: string; quoteUpdatedAt: string; status: OutcomeStatus; settledAt: string | null;
   result: string | null; resultSource: string | null; theoreticalProfit: number | null;

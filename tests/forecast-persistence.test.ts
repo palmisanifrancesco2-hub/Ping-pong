@@ -16,8 +16,9 @@ it('persists an experimental snapshot through the real store against actual SQL 
  const m:FeedMatch={id:'future-synthetic',sport:'table_tennis',home:'A',away:'B',league:'Synthetic league',in_play:false,kickoff_utc:new Date(now+3600000).toISOString(),quotes:[q]};
  const f:Forecast={selection:'A',homeProbability:.6,probability:.6,probabilityLower:.5,sampleSize:40,quote:q,modelVersion:'synthetic-experimental',trainingCutoff:new Date(now-86400000).toISOString(),featuresAvailableAt:new Date(now-60000).toISOString(),validation:{n:3000,brier:.248,logLoss:.69,ece:.02},reliability:'synthetic test',modelValidated:false,modelName:'Synthetic score model',modelParameters:{synthetic:true}};
  const store=new ForecastStore({SUPABASE_URL:'https://synthetic.supabase.co',SUPABASE_PUBLISHABLE_KEY:'sb_publishable_SYNTHETIC',SUPABASE_SECRET_KEY:'sb_secret_SYNTHETIC'},()=>now);
- const first=await store.record(a,m,f);predictionId=first.id;expect(first.probability).toBe(.6);
- const again=await store.record(a,m,{...f,probability:.9});expect(again.probability).toBe(.6);
+ const first=await store.record(a,m,f);predictionId=first.id;expect(first.probability).toBe(.6);expect(first.created).toBe(true);
+ const again=await store.record(a,m,{...f,probability:.9});expect(again.probability).toBe(.6);expect(again.created).toBe(false);
+ const trial=await store.record(a,m,f,{studyId:'synthetic-protocol'});expect(trial.created).toBe(true);expect(trial.id).not.toBe(first.id);const trialAgain=await store.record(a,m,{...f,selection:'B',probability:.8},{studyId:'synthetic-protocol'});expect(trialAgain.id).toBe(trial.id);expect(trialAgain.created).toBe(false);expect(trialAgain.probability).toBe(.6);
  const rows=await db.query<{validated:boolean;features_available_at:string;probability:string}>(`select m.validated,p.features_available_at::text,p.probability::text from predictions p join model_versions m on m.id=p.model_id`);expect(rows.rows[0].validated).toBe(false);expect(Number(rows.rows[0].probability)).toBe(.6);expect(Date.parse(rows.rows[0].features_available_at)).toBe(now-60000);
 });
 it('isolates manual bets and enforces the prediction owner relationship in SQL',async()=>{
