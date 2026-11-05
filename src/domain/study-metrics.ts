@@ -1,4 +1,4 @@
-import{modelMetrics}from'./player-model';
+import{modelMetrics}from'./player-model.js';
 export type StudyCase={id:string;at:number;p:number;baseline:number;odds:number;status:'won'|'lost'|'void'|'pending'|'invalid';modelVersion:string};
 export const virtualProfit=(odds:number,status:StudyCase['status'])=>status==='won'?odds-1:status==='lost'?-1:status==='void'?0:null;
 /** Moving 3-day block bootstrap; fixed seed only for uncertainty, never predictions. */

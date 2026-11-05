@@ -1,4 +1,4 @@
-import{binaryMetrics}from'../domain/analytics';import type{HistoryEntry}from'./history';
+import{binaryMetrics}from'../domain/analytics.js';import type{HistoryEntry}from'./history.js';
 export function registeredMetrics(rows:HistoryEntry[],reported=false){
  const settled=rows.flatMap(e=>{const s=reported?e.reportedStatus:e.status;return s==='won'||s==='lost'?[{...e,outcome:s==='won'?1 as const:0 as const}]:[];});
  if(!settled.length)return null;

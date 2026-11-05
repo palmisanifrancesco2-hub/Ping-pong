@@ -1,4 +1,4 @@
-import {validateSupabaseClientConfig} from './supabase-config';
+import {validateSupabaseClientConfig} from './supabase-config.js';
 export const APP_ORIGIN='https://ping-pong-ping-pong3.vercel.app';
 export function googleRedirectUrl(origin:string,development=false){
   const u=new URL(origin);

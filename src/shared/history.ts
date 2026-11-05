@@ -16,7 +16,7 @@ export type HistoryEntry = {
   reportedStatus?: 'won' | 'lost' | null;
 };
 export type HistoryReport = {
-  metrics?:{verified:ReturnType<typeof import('./registered-metrics').registeredMetrics>;reported:ReturnType<typeof import('./registered-metrics').registeredMetrics>};
+  metrics?:{verified:ReturnType<typeof import('./registered-metrics.js').registeredMetrics>;reported:ReturnType<typeof import('./registered-metrics.js').registeredMetrics>};
   checkedAt: string; from: string | null; to: string; period: HistoryPeriod; page: number; pageSize: number;
   totalRecorded: number; analyzed: number; partial: boolean; filteredCount: number;
   summary: { won: number; lost: number; void: number; pending: number; unverified: number; hitRate: number | null; theoreticalProfit: number | null };
