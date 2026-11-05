@@ -69,7 +69,11 @@ export class MarketStudy{
     const rows=await this.cases(owner),cases=rows.map(r=>r.parameters.case),batches=await this.metadata(batchName,owner),checkpoints=await this.metadata(checkpointName,owner);
     const ordered=[...cases].sort((a,b)=>a.forecast.at-b.forecast.at||a.forecast.id.localeCompare(b.forecast.id));
     const sealed=checkpoints.map(row=>{const p=row.parameters as {size:number;prefixHash:string;result:ReturnType<typeof marketCheckpoint>};return{size:p.size,result:p.result,consistent:p.prefixHash===marketHash(ordered.slice(0,p.size)),sealedAt:row.created_at};});
-    return{checkedAt:new Date(this.now()).toISOString(),protocol,enabled:this.env.APP_FORWARD_STUDY_ENABLED==='1',scheduled:this.env.VERCEL_ENV==='production'&&!!this.env.CRON_SECRET&&this.env.APP_FORWARD_STUDY_ENABLED==='1',captured:cases.length,settled:cases.filter(c=>c.outcome.status==='settled').length,pending:cases.filter(c=>c.outcome.status==='pending').length,invalid:cases.filter(c=>c.outcome.status==='invalid').length,observedDays:new Set(cases.map(c=>new Date(c.forecast.at).toISOString().slice(0,10))).size,descriptive:marketDescriptive(cases),batches,checkpoints:sealed,operationallyValidated:false,canRun:true};
+    const report={checkedAt:new Date(this.now()).toISOString(),protocol,enabled:this.env.APP_FORWARD_STUDY_ENABLED==='1',scheduled:this.env.VERCEL_ENV==='production'&&!!this.env.CRON_SECRET&&this.env.APP_FORWARD_STUDY_ENABLED==='1',captured:cases.length,settled:cases.filter(c=>c.outcome.status==='settled').length,pending:cases.filter(c=>c.outcome.status==='pending').length,invalid:cases.filter(c=>c.outcome.status==='invalid').length,observedDays:new Set(cases.map(c=>new Date(c.forecast.at).toISOString().slice(0,10))).size,descriptive:marketDescriptive(cases),batches,checkpoints:sealed,operationallyValidated:false,canRun:true};
+    // Private hosting logs contain aggregates only, never event IDs, player names,
+    // user IDs, individual probabilities, credentials or personal wagers.
+    console.info(JSON.stringify({marketStudyStatus:protocol.id,checkedAt:report.checkedAt,captured:report.captured,settled:report.settled,pending:report.pending,invalid:report.invalid,observedDays:report.observedDays,targets:report.descriptive.map(({target,n,correct,wrong,undecided,accuracy})=>({target,n,correct,wrong,undecided,accuracy}))}));
+    return report;
   }
   async run(userId?:string,deadline=this.now()+240000){
     if(this.env.APP_FORWARD_STUDY_ENABLED!=='1')return{status:'disabled',captured:0,settled:0};

@@ -5,7 +5,7 @@ import {afterEach,describe,it,expect,vi} from 'vitest';
 import parity from '../research/market-runtime-parity.json';
 import artifact from '../models/market-v8-runtime.json';
 import {predictMarkets} from '../src/domain/market-runtime';
-import {marketCheckpoint,marketInterval,marketStudyProtocol as protocol,type MarketStudyCase} from '../src/domain/market-validation';
+import {marketCheckpoint,marketInterval,marketDescriptive,marketStudyProtocol as protocol,type MarketStudyCase} from '../src/domain/market-validation';
 import {assertMarketCase,marketHash,marketCandidates,settleMarketCase} from '../server/market-study';
 import {createHandler} from '../server/handler';
 import type {Board} from '../src/shared/board';
@@ -73,6 +73,17 @@ describe('frozen market runtime and prospective validation',()=>{
     const rows=Array.from({length:14},(_,i)=>({at:at+i*86400000,value:-.1}));
     const ci=marketInterval(rows,1000);expect(ci.upper).toBeCloseTo(-.1,10);expect(ci).toEqual(marketInterval(rows,1000));
     expect(protocol.familyAlpha/(protocol.targets.length*protocol.checkpoints.length)).toBeLessThan(.001);
+  });
+  it('counts the recorded most-likely outcome per market, including opposite selections, exact ties and unresolved cases',()=>{
+    const template=make();
+    const settled=(p:number,y:number):MarketStudyCase=>({...template,forecast:{...template.forecast,p:Array(14).fill(p)},outcome:{status:'settled',y:Array(14).fill(y)}});
+    const rows=[settled(.8,1),settled(.8,0),settled(.2,0),settled(.5,1),{...template,outcome:{status:'pending' as const}},{...template,outcome:{status:'invalid' as const}}];
+    const score=marketDescriptive(rows);
+    expect(score).toHaveLength(14);
+    for(const s of score){expect(s.n).toBe(4);expect(s.correct).toBe(2);expect(s.wrong).toBe(1);expect(s.undecided).toBe(1);expect(s.accuracy).toBeCloseTo(2/3);expect(s.model.n).toBe(4);}
+    const reversed=rows.map(r=>({...r,forecast:{...r.forecast,p:r.forecast.p.map(p=>1-p)},outcome:{...r.outcome,...(r.outcome.y?{y:r.outcome.y.map(y=>1-y)}:{})}}));
+    expect(marketDescriptive(reversed).map(s=>[s.correct,s.wrong,s.undecided])).toEqual(score.map(s=>[s.correct,s.wrong,s.undecided]));
+    expect(marketDescriptive([])[0].accuracy).toBeNull();
   });
 });
 

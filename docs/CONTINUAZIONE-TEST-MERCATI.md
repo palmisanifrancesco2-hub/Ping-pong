@@ -34,6 +34,10 @@ Prima registrazione per evento immutabile tramite ID deterministico e inseriment
 
 La pagina **Statistiche modello** mostra raccolta nuova, risolte/in attesa/invalidi, giorni, controlli e aggiornamento manuale. Il report storico da 261 casi resta consultabile se il nuovo endpoint non risponde.
 
+Il dettaglio **Pronostici corretti e sbagliati per mercato** aggiunge un conteggio descrittivo dall'esito più probabile nelle probabilità originali: p>0,5 indica il target nominato, p<0,5 il complemento (altro giocatore/Under/handicap opposto), p=0,5 nessuna preferenza. Corrette e sbagliate includono soltanto esiti verificati con preferenza; l'accuratezza divide corrette per corrette+sbagliate. In attesa e invalidi sono separati; le stime al 50% restano comunque nei Brier/Log Loss/ECE e in tutti i controlli del protocollo. È una statistica descrittiva aggiuntiva: non modifica previsioni, criteri, coorte o esiti, non filtra lo studio per EV e non rappresenta il bilancio delle puntate personali o delle sole opportunità EV positive.
+
+Per consentire controlli successivi senza leggere credenziali o singoli record, il report privato scrive nei log privati di hosting `marketStudyStatus` con soli aggregati per mercato. Nessun nome, ID giocatore/evento/utente, probabilità individuale o puntata nei log. La pagina continua a richiedere login e proprietà. Test espliciti su preferenze/opposti, 50%, irrisolti e invalidi; 245 test dell'app e build superati, QA locale dei 14 contatori su telefono e PC con API sintetica dichiarata.
+
 ## Cosa non è dimostrato
 
 Passare un controllo statistico non dimostra EV, profitto o prezzi eseguibili: questi target non hanno snapshot di quote operative confrontabili. Le fonti restano referti riportati da MoviOdds, non certificazioni ufficiali indipendenti. Nessuna attivazione automatica dei nuovi mercati o sostituzione del modello del test originario, nessuna garanzia che un candidato diventi affidabile. La programmazione del cron non dimostra l'esecuzione futura: si controllano i lotti realmente salvati.

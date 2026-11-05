@@ -31,9 +31,18 @@ export function marketInterval(rows:{at:number;value:number}[],replicates=protoc
 
 export function marketDescriptive(cases:MarketStudyCase[]){
   const settled=cases.filter(r=>r.outcome.status==='settled'&&r.outcome.y?.length===14);
-  return protocol.targets.map((target,j)=>({target,n:settled.length,
-    model:modelMetrics(settled.map(r=>({p:r.forecast.p[j],y:r.outcome.y![j]}))),
-    reference:modelMetrics(settled.map(r=>({p:r.forecast.baseline[j],y:r.outcome.y![j]})))}));
+  return protocol.targets.map((target,j)=>{
+    let correct=0,wrong=0,undecided=0;
+    for(const r of settled){
+      const p=r.forecast.p[j];
+      // Descriptive most-likely outcome, not an operational bet or an EV filter.
+      // At exactly 50% there is no preferred selection; retain it in proper scores.
+      if(p===.5)undecided++;else if(Number(p>.5)===r.outcome.y![j])correct++;else wrong++;
+    }
+    return{target,n:settled.length,correct,wrong,undecided,accuracy:correct+wrong?correct/(correct+wrong):null,
+      model:modelMetrics(settled.map(r=>({p:r.forecast.p[j],y:r.outcome.y![j]}))),
+      reference:modelMetrics(settled.map(r=>({p:r.forecast.baseline[j],y:r.outcome.y![j]})))};
+  });
 }
 
 /** Check a fixed enrollment prefix, never the first N convenient settled cases. */

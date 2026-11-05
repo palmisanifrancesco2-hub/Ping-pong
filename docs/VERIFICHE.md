@@ -1,5 +1,11 @@
 # Verifiche tecniche
 
+## Conteggi corrette e sbagliate nel nuovo studio — 5 novembre 2026
+
+Aggiunti aggregati descrittivi per ogni mercato dalla probabilità immutabile registrata prima dell'incontro. p>0,5 → esito nominato; p<0,5 → complemento; p=0,5 → senza preferenza. Nessun conteggio per irrisolti/invalidi. Le scelte al 50% restano nei punteggi propri e nei controlli scientifici; nessun cambiamento ai criteri o filtri di arruolamento, modelli, risultati salvati o quote. Report riservato al proprietario e log privati con soli aggregati, senza dati identificativi o credenziali.
+
+245 test in 34 file, TypeScript, build e smoke ESM superati. Test di simmetria delle selezioni opposte, parità al 50%, denominatori e nessuna preferenza contata erroneamente come vinta/persa. QA Chromium locale a 393×851 e 1440×1000 con API sintetica dichiarata: 14 righe di conteggi, aggiornamento e gestione errore, nessun errore JavaScript o overflow. La successiva rilettura Production fornisce i numeri reali; le fixture QA non sono dati dello studio.
+
 ## Solo EV strettamente positivi — 5 novembre 2026
 
 Filtro già presente nelle nuove selezioni esteso al dettaglio aperto: EV nominale e prudente devono entrambi essere >0, ricalcolati dal prezzo corrente. Quote a zero o negative nascoste anche dopo refresh; pannello e statistiche caricati conservati. Valori positivi molto piccoli indicati «>0%» per evitare arrotondamento a zero. Modifica solo alla visualizzazione; nessun cambiamento a modelli, regole di arruolamento, risultati o storico.
