@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "buildCommand": "npm run build && npm run check:feed && npm run check:players && npm run db:bootstrap && npm run db:choices && npm run db:verify && npm run check:history-schema && npm run check:google-auth && npm run study:bootstrap",
+  "buildCommand": "npm run build && npm run check:feed && npm run check:players && npm run db:bootstrap && npm run db:choices && npm run db:verify && npm run check:history-schema && npm run check:google-auth && npm run study:bootstrap && npm run study:markets",
   "outputDirectory": "dist",
   "headers": [
     {

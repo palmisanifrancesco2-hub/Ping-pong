@@ -1,17 +1,8 @@
 import report from '../research/report-v8.json';
+import extension from '../research/report-v8-extension.json';
 
-const names:Record<string,string>={
-  winner:'Vincente partita', 'first-set':'Vincente primo set',
-  'first-set-points-over-19.5':'Primo set: Over 19,5 punti',
-  'sets-over-3.5':'Over 3,5 set', 'sets-over-4.5':'Over 4,5 set',
-  'points-over-74.5':'Over 74,5 punti', 'points-over-79.5':'Over 79,5 punti', 'points-over-84.5':'Over 84,5 punti',
-  'home-set-handicap-minus-1.5':'Primo giocatore: handicap −1,5 set',
-  'home-set-handicap-plus-1.5':'Primo giocatore: handicap +1,5 set',
-  'home-point-handicap-minus-5.5':'Primo giocatore: handicap −5,5 punti',
-  'home-point-handicap-plus-5.5':'Primo giocatore: handicap +5,5 punti',
-  'home-point-handicap-minus-9.5':'Primo giocatore: handicap −9,5 punti',
-  'home-point-handicap-plus-9.5':'Primo giocatore: handicap +9,5 punti',
-};
+import {marketLabels as names} from './shared/market-labels';
+
 const models:Record<string,string>={
   'hierarchical-eb':'Frequenze regolarizzate di giocatori e scontri diretti',
   'logistic-context':'Logistica con statistiche specifiche',
@@ -23,11 +14,13 @@ const decimal=(n:number)=>n.toLocaleString('it-IT',{minimumFractionDigits:5,maxi
 export function MarketResearch(){
   return <section className="panel" aria-labelledby="market-research-title">
     <h2 id="market-research-title">Nuovi test: set, punti e handicap</h2>
+    <p><strong>Storico esteso a {extension.totalCases} partite verificate: {extension.additionalCases} nuove oltre le {extension.originalCases} iniziali.</strong> Stessi modelli e statistiche ferme allo snapshot precedente. È un aggiornamento descrittivo; la nuova conferma su partite future è nel pannello sopra.</p>
+    <details><summary>Metriche dello storico esteso a {extension.totalCases} partite</summary><ul className="competition-list">{extension.targets.map(t=><li key={t.target}><span>{names[t.target]??t.target}<small>Brier {decimal(t.metrics.brier)} · riferimento {decimal(t.reference.brier)} · {t.metrics.n} esiti</small></span></li>)}</ul><p>Estensione decisa dopo aver visto i primi 249 esiti. Non è una nuova prova indipendente e non abilita mercati operativi.</p></details>
     <p>Quattro famiglie di modelli confrontate su {report.historicalCases} partite storiche comuni. Un candidato scelto per ciascuno dei 14 risultati, poi verificato su {report.confirmation.n} partite successive senza cambiare la scelta.</p>
-    <p className="banner"><strong>Conferma ancora insufficiente.</strong> Sono disponibili {report.confirmation.n} delle {report.protocol.freshTargetCases} partite richieste, distribuite su un solo giorno. Nessun nuovo modello attivato per le quote.</p>
+    <p className="banner"><strong>Conferma ancora insufficiente.</strong> Anche le {extension.totalCases} partite dello storico esteso coprono un solo giorno. Servono altri giorni e campioni più grandi. Nessun nuovo modello attivato per le quote.</p>
     <p>I risultati più promettenti riguardano alcuni handicap. Per Over/Under e primo set il miglioramento non supera l’incertezza del campione. Servono altri giorni di verifica e quote registrate prima della partita per valutare il valore economico.</p>
     <details>
-      <summary>Vedi tutti i 14 risultati del campione successivo</summary>
+      <summary>Vedi i 14 risultati del primo campione di {report.confirmation.n} partite</summary>
       <p>Brier più basso indica probabilità migliori. Il riferimento usa le frequenze della competizione note prima della partita. La percentuale di esiti corretti qui sotto descrive il test: non è la probabilità della prossima selezione e non misura il profitto.</p>
       <ul className="competition-list">{report.confirmation.targets.map(t=><li key={t.target}>
         <span><strong>{names[t.target]??t.target}</strong><small>{models[t.selected]??t.selected}</small>

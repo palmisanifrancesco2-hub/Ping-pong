@@ -1,0 +1,43 @@
+# Continuazione dei test oltre i 249 casi
+
+## Due conteggi distinti
+
+Lo storico retrospettivo passa da **249 a 261 partite**, con 12 nuovi casi verificati tramite closing nella finestra aggiuntiva 14:20:32–15:21:36 UTC del 5 novembre 2026. Ventidue candidati controllati: dieci esclusi perché l'inizio effettivo non rientrava nella nuova finestra, nessun errore della fonte. Pesi, scelta per target e snapshot precedente delle caratteristiche invariati. `research/protocol-v8-extension.json` e `research/report-v8-extension.json` conservano metodo e metriche. Estensione decisa dopo l'esame dei primi esiti: aggiornamento descrittivo, senza nuova dichiarazione di significatività o promozione.
+
+La nuova raccolta **prospettica** `forward-markets-v9-20261105` salva invece le probabilità prima di partite future. È separata sia dai 261 casi storici sia dal test originario del vincente partita. Non crea previsioni retroattive nello storico personale, scelte dell'utente o puntate.
+
+## Protocollo fissato prima della raccolta
+
+`research/prospective-markets-v9.json` registra hash, candidati e regole:
+
+- Stessi 14 target e medesimi candidati/pesi scelti sullo storico v8; nessuna nuova selezione dai 249 esiti.
+- Contesto aggiornato causalmente alla registrazione: almeno 30 precedenti per giocatore, solo referti già disponibili, eventi prematch con almeno 10 minuti di anticipo previsto e non oltre 48 ore. Risultati BO5 completi e inizio effettivo controllati dopo l'evento; formati diversi o registrazioni tardive rimangono invalidi, senza eliminare osservazioni sfavorevoli.
+- Nessun filtro su EV, accuratezza o risultato. Ordine di raccolta deterministico per hash dell'evento, massimo 100 nuovi eventi al giorno e 3000 complessivi.
+- Controlli fissi sui primi **500, 1000, 2000 e 3000 eventi registrati**, non sui primi N esiti risolti. Almeno 14 giorni osservati, copertura esiti ≥95%, confronto Brier e Log Loss con frequenze causali della competizione, ECE <0,08.
+- Chiusura unica del controllo almeno sette giorni dopo l'ultimo inizio previsto nel relativo prefisso. Gli irrisolti/invalidi contribuiscono +1 alla differenza Brier prudente, il peggior valore possibile; non vengono scartati. Bootstrap per blocchi di tre giorni di calendario, includendo i giorni vuoti, 20.000 repliche e correzione della famiglia sui 14 target × 4 controlli. Il campione ridotto di giorni e la natura approssimata del bootstrap impongono comunque revisione, anche se passa un controllo preliminare.
+- Esito del controllo salvato una volta con hash del prefisso. Eventuali cambiamenti successivi dei dati ne invalidano la coerenza: nessuna rivalutazione automatica fino a ottenere significatività. Ispezionare le metriche descrittive intermedie non crea un nuovo controllo inferenziale.
+- Arruolamento per 60 giorni, follow-up fino a 70; a campione/tempo esauriti si riporta fallimento o inconcludenza, senza prolungare fino a un risultato favorevole.
+
+L'export `models/market-v8-runtime.json` riproduce i pesi congelati: frequenze gerarchiche, foresta per i due target selezionati e il riferimento per la logistica ridotta a peso zero. I 96 alberi usano input float32 come scikit-learn. Un test confronta le probabilità TypeScript con quelle Python su 22 vettori storici reali, senza esportare nomi, ID o etichette. Hash degli algoritmi delle caratteristiche e dell'artefatto verificati dai test. Nessuna dipendenza Python nel runtime Vercel.
+
+## Persistenza, autorizzazione e aggiornamenti
+
+Osservazioni, controlli, lotti giornalieri e limiti alle richieste sono conservati come record di ricerca con nomi/versioni separati nella tabella esistente `model_versions`, nel campo JSONB `parameters`, sempre `validated=false`. Riutilizzo del registro di esperimenti già usato per i lotti dello studio precedente: **nessuna nuova tabella o migrazione**. La RLS esistente consente lettura ai membri privati; il nuovo endpoint riserva il report e le esecuzioni al proprietario. Nessuna scrittura diretta del client. I record non contengono puntate o note personali.
+
+Prima registrazione per evento immutabile tramite ID deterministico e inserimento senza aggiornare duplicati. Hash canonico indipendente dall'ordine delle chiavi JSONB. Gli esiti sono aggiornati con controllo ottimistico di stato e tentativi, per evitare che una richiesta concorrente degradi un risultato risolto. Controllo dell'ora effettiva anche contro `created_at` del database, non solo il timestamp dichiarato dall'app. Correzioni della fonte rendono l'osservazione invalida senza riscrivere la previsione.
+
+- `GET /api/market-study`: report aggregato privato, conteggi nuovi e metriche descrittive.
+- `POST /api/market-study`: controllo manuale del proprietario; registrazione al massimo una volta al giorno, aggiornamento esiti con tentativi limitati e cooldown.
+- Cron Vercel esistente `15 4 * * *`, stesso endpoint protetto `/api/study-run`: esegue lo studio originario e quello nuovi mercati separatamente; un errore del primo non impedisce il tentativo del secondo. Durata complessiva limitata al budget Hobby di 300 secondi, con deadline per il secondo studio. Nessun nuovo cron o piano.
+- Bootstrap Production versionato nel build, attivo con il flag di raccolta già abilitato. Il lotto giornaliero persistente evita duplicati nei rebuild; dopo l'esecuzione il bootstrap rilegge il report dal database e stampa soltanto conteggi.
+- Blocco di esecuzione distribuito per intervalli di 15 minuti. Al massimo 100 verifiche closing per esecuzione, almeno 750 ms tra richieste, tre tentativi per evento con 12 ore di pausa. Su 429/503 interrompe il lotto e persiste una pausa globale di almeno 15 minuti, rispettando eventuale `Retry-After` più lungo. Nessuna attesa per giorni dentro una funzione: lo stato persiste tra invocazioni.
+
+La pagina **Statistiche modello** mostra raccolta nuova, risolte/in attesa/invalidi, giorni, controlli e aggiornamento manuale. Il report storico da 261 casi resta consultabile se il nuovo endpoint non risponde.
+
+## Cosa non è dimostrato
+
+Passare un controllo statistico non dimostra EV, profitto o prezzi eseguibili: questi target non hanno snapshot di quote operative confrontabili. Le fonti restano referti riportati da MoviOdds, non certificazioni ufficiali indipendenti. Nessuna attivazione automatica dei nuovi mercati o sostituzione del modello del test originario, nessuna garanzia che un candidato diventi affidabile. La programmazione del cron non dimostra l'esecuzione futura: si controllano i lotti realmente salvati.
+
+## Verifiche
+
+243 test Vitest in 34 file e 5 test Python, controllo TypeScript, build Vite e avvio ESM compilato. Test dedicati a parità Python/TS, hash congelati, dati futuri/simultanei, soglia storico, duplicati, login/proprietario, isolamento degli errori del cron, fonte/identità, registrazione effettiva prima dell'inizio, formati, prefissi fissi, irrisolti, finestre chiuse e controlli multipli. Browser locale su nuovo pannello e storico a 393×851/1440×1000, con API prospettica sintetica dichiarata: aggiornamenti, 14 mercati, errore fonte, nessun overflow orizzontale o errore JavaScript. Il bootstrap Production fornisce la verifica separata delle scritture reali, quando il deployment è completato; non è un login remoto con l'account del proprietario.

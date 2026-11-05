@@ -1,5 +1,6 @@
-import{readFile,writeFile,mkdir}from'node:fs/promises';import{createHash}from'node:crypto';import{ResultsFeed}from'../server/results.js';import{verifiedStart}from'../src/domain/research-source.js';import{playerKey,type MatchResult}from'../src/domain/player-model.js';import protocol from'../research/protocol-v8.json'with{type:'json'};
-const dir='.research-data/market-v8-confirmation';await mkdir(dir,{recursive:true});
+import{readFile,writeFile,mkdir}from'node:fs/promises';import{createHash}from'node:crypto';import{ResultsFeed}from'../server/results.js';import{verifiedStart}from'../src/domain/research-source.js';import{playerKey,type MatchResult}from'../src/domain/player-model.js';import originalProtocol from'../research/protocol-v8.json'with{type:'json'};import extensionProtocol from'../research/protocol-v8-extension.json'with{type:'json'};
+const extension=process.argv.includes('--extension'),protocol=extension?extensionProtocol:originalProtocol;
+const dir=extension?'.research-data/market-v8-extension':'.research-data/market-v8-confirmation';await mkdir(dir,{recursive:true});
 const old=JSON.parse(await readFile(protocol.historyInput,'utf8'))as{results:MatchResult[];collectedAt:string};const oldIds=new Set(old.results.map(r=>r.id)),counts=new Map<string,number>();for(const r of old.results)for(const name of[r.home,r.away]){const k=playerKey(r.league,name);counts.set(k,(counts.get(k)??0)+1);}
 const feed=new ResultsFeed(),source=await feed.archive();if(source.source!=='postgres')throw Error('CONFIRMATION_SOURCE_INCOMPLETE');
 const from=Date.parse(protocol.freshStartInclusive),end=Date.parse(protocol.freshCollectionEndExclusive);
