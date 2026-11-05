@@ -2,7 +2,9 @@
 
 ## Aggiornamenti della partita aperta
 
-La partita ispezionata mantiene ID, posizione nella lista e componenti montati anche se sparisce momentaneamente dalle selezioni, il prezzo perde convenienza o il feed va in errore. Le statistiche già caricate non vengono azzerate dal polling. Quota, probabilità ed EV vengono aggiornati sul posto quando i due snapshot sono coerenti. Una quota non più conveniente resta consultabile nel pannello con la dicitura «Fuori selezione» e registrazione disabilitata; non è riproposta tra le nuove opportunità. Se mancano prezzo/stima correnti, vengono indicati come indisponibili, conservando i dati già aperti. Un evento uscito dal feed resta aperto solo se l'utente lo stava consultando; gli altri eventi conclusi rimangono esclusi.
+La partita ispezionata mantiene ID, posizione nella lista e componenti montati anche se sparisce momentaneamente dalle selezioni, il prezzo perde convenienza o il feed va in errore. Le statistiche già caricate non vengono azzerate dal polling. Quota, probabilità ed EV vengono aggiornati sul posto quando i due snapshot sono coerenti e gli EV nominale e prudente sono entrambi strettamente positivi. Su richiesta successiva dell'utente, una quota con EV pari a zero o negativo viene ora nascosta anche nel pannello aperto; restano visibili i dati dei giocatori e il messaggio «Nessuna quota con EV positivo disponibile al momento». Se mancano prezzo/stima correnti, viene mostrato lo stesso stato, conservando i dati già aperti. Un evento uscito dal feed resta aperto solo se l'utente lo stava consultando; gli altri eventi conclusi rimangono esclusi.
+
+Il filtro è condiviso fra Quote migliori, Value Tracker e dettaglio aperto. Ricalcola i margini da probabilità e prezzo correnti, ignorando eventuali campi EV memorizzati non coerenti. Nessuna soglia +50%; margine richiesto >0 anche sul limite prudente, quota minima 1,30 invariata. Margini positivi che arrotonderebbero a zero sono indicati «>0%». Lo storico conserva le registrazioni originali; campioni, protocolli e modelli dei test rimangono invariati.
 
 ## Nuovo confronto storico
 

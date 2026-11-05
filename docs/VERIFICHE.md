@@ -1,5 +1,11 @@
 # Verifiche tecniche
 
+## Solo EV strettamente positivi — 5 novembre 2026
+
+Filtro già presente nelle nuove selezioni esteso al dettaglio aperto: EV nominale e prudente devono entrambi essere >0, ricalcolati dal prezzo corrente. Quote a zero o negative nascoste anche dopo refresh; pannello e statistiche caricati conservati. Valori positivi molto piccoli indicati «>0%» per evitare arrotondamento a zero. Modifica solo alla visualizzazione; nessun cambiamento a modelli, regole di arruolamento, risultati o storico.
+
+**244 test in 34 file**, TypeScript, build e smoke ESM compilato superati. Caso esplicito per EV nominale zero/negativo, EV prudente zero/negativo e campi EV memorizzati incoerenti. Browser Chromium locale 393×851 e 1440×1000 con prezzi/probabilità/statistiche sintetici dichiarati: solo selezione positiva, transizioni positive→zero→negative→positive, conservazione dello stesso DOM e testo delle statistiche, Value Tracker, recupero della quota valida, zero errori JavaScript e nessun overflow orizzontale. Nessuna scrittura personale o sessione reale del proprietario usata nel QA.
+
 ## Continuazione mercati — 5 novembre 2026, 15:32 UTC
 
 Storico esteso da 249 a **261 incontri verificati**, stessi pesi e contesto congelato, aggiornamento descrittivo senza nuova prova indipendente. Avviata raccolta prospettica privata separata sui 14 target: **100 partite future registrate**, 100 in attesa, 0 risolte/errori, confermate dalla rilettura reale del database. Cron giornaliero esistente condiviso con lo studio precedente, controlli fissi 500/1000/2000/3000 e almeno 14 giorni, nessuna attivazione automatica. [Protocollo, persistenza e limiti](CONTINUAZIONE-TEST-MERCATI.md).

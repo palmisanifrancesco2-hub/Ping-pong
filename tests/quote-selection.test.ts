@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { selectedQuotes,keepOpenMatch,openQuote } from '../src/shared/quote-selection';
+import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue } from '../src/shared/quote-selection';
 import type { FeedMatch } from '../src/shared/board';
 import { quoteIdentity } from '../src/shared/board';
 import type { ValueOpportunity } from '../src/domain/value';
 import type { ValueReport } from '../src/shared/value';
+import {positiveEvText} from '../src/shared/format';
 
 const now = Date.parse('2026-11-05T06:00:00Z'), time = new Date(now).toISOString();
 function fixture(id: string, p: number, odds: number, lower = p - .04) {
@@ -45,7 +46,7 @@ describe('probability-ranked selected quotes', () => {
   });
 });
 
-it('keeps the inspected match at its original position and accepts fresh non-value updates only inside that panel',()=>{
+it('keeps the inspected match at its original position while hiding a refreshed quote without positive EV',()=>{
  const a=fixture('a',.6,2),b=fixture('b',.65,2),c=fixture('c',.55,2.3);
  const opened={match:b.m,index:1,selection:'A'};
  const latest={...b.m,quotes:[{...b.m.quotes[0],odds_dec:1.3}]};
@@ -54,7 +55,23 @@ it('keeps the inspected match at its original position and accepts fresh non-val
  const changed={...b.o,odds:1.3,ev:-.155,conservativeEv:-.2};
  const r={...report(),estimates:[changed]};
  expect(selectedQuotes(r,[latest],now)).toEqual([]);
- expect(openQuote(r,latest,'A',now)?.odds).toBe(1.3);
+ expect(openQuote(r,latest,'A',now)).toBeUndefined();
  expect(openQuote(r,undefined,'A',now)).toBeUndefined();
  expect(openQuote(r,latest,'A',now+121000)).toBeUndefined();
+});
+
+it('requires strictly positive nominal and prudent EV in both lists and open panels, regardless of cached margins',()=>{
+ const cases=[fixture('zero',.5,2,.5),fixture('negative',.49,2,.45),fixture('prudent-zero',.6,2,.5),fixture('prudent-negative',.6,2,.49)];
+ for(const {m,o}of cases){
+  const forged={...o,ev:1,conservativeEv:1};
+  expect(hasPositiveValue(forged)).toBe(false);
+  const r={...report(forged),estimates:[forged]};
+  expect(selectedQuotes(r,[m],now)).toEqual([]);
+  expect(openQuote(r,m,'A',now)).toBeUndefined();
+ }
+ const {m,o}=fixture('positive',.6,2,.55),r={...report(o),estimates:[o]};
+ expect(selectedQuotes(r,[m],now)).toHaveLength(1);
+ expect(openQuote(r,m,'A',now)).toEqual(o);
+ expect(positiveEvText(.00001)).toBe('>0%');
+ expect(positiveEvText(.16)).toBe('+16.0%');
 });
