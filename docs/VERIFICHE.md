@@ -1,5 +1,11 @@
 # Verifiche tecniche
 
+## Revisione del vincente e confronto futuro — 5 novembre 2026, 22:18 UTC
+
+Aggiunto replay esplorativo dei quattro modelli congelati sugli stessi 64 casi originari e confronto prospettico separato su nuovi vettori causali comuni, con quote dei due giocatori salvate. Rilettura reale: **16 nuovi incontri nel confronto**, 16 in attesa e zero invalidi. Sul replay nessun modello supera la frequenza di competizione nel Brier; nessuna sostituzione automatica o candidato dichiarato valido. [Risultati e criteri](REVISIONE-VINCENTE.md). Modello operativo, pesi, fonte delle caratteristiche, protocollo e previsioni v9/originali invariati; v9 continua ed è ora a 82 esiti verificati su 100.
+
+250 test in 35 file, parità Python/TS e hash, TypeScript/build/ESM, QA Chromium locale del nuovo componente con aggregati sintetici dichiarati a 393×851/1440×1000 superati. Protocollo di confronto registrato prima della nuova raccolta, controlli corretti su 36 confronti e checkpoint persistenti. Nessuna migrazione o richiesta closing duplicata; log privati compatti senza identificativi o credenziali. Codice `3b05e3f4604f3fa3afe500b87d261ba785b5fd4d`, deployment `dpl_BkCowi6DQnDxuBPWJZBKsxgWCuMz` READY e alias stabile confermato, CI e smoke Node 26.13.0 riusciti, probe protetto `/api/health` 200. Bootstrap e report reale confermano i conteggi descritti; nessun login remoto con l'account del proprietario automatizzato.
+
 ## Conteggi corrette e sbagliate nel nuovo studio — 5 novembre 2026
 
 Aggiunti aggregati descrittivi per ogni mercato dalla probabilità immutabile registrata prima dell'incontro. p>0,5 → esito nominato; p<0,5 → complemento; p=0,5 → senza preferenza. Nessun conteggio per irrisolti/invalidi. Le scelte al 50% restano nei punteggi propri e nei controlli scientifici; nessun cambiamento ai criteri o filtri di arruolamento, modelli, risultati salvati o quote. Report riservato al proprietario e log privati con soli aggregati, senza dati identificativi o credenziali.

@@ -40,3 +40,20 @@ La sezione Statistiche modello mostra separatamente **Diagnosi sugli stessi inco
 ## Verifiche
 
 250 test in 35 file, TypeScript, build Vite e smoke ESM compilato superati. Nuovi test: parità numerica Python/TS, hash degli artefatti, cutoff diagnostico, nessuna modifica degli input originali, causalità e dati futuri, esclusione di risultati già noti, bacino condiviso e identità, quote coerenti/fresche, registrazione prima dell'inizio effettivo, risultati futuri non disponibili, revisione della fonte, controlli multipli, campione fisso e irrisolti. QA Chromium locale a 393×851 e 1440×1000 con aggregati sintetici dichiarati: quattro candidati, diagnosi e raccolta separata, riferimenti, assenza di risultati, zero errori JavaScript e nessun overflow. I dati reali della diagnosi e l'eventuale avvio della nuova coorte vanno confermati dalla rilettura Production.
+
+## Risultati realmente riletti il 5 novembre 2026, 22:18 UTC
+
+Il campione diagnostico coincide ancora con i 64 esiti originari. Nessuna alternativa batte il riferimento della competizione nel Brier (0,250185):
+
+| Candidato | Corrette | Sbagliate | Brier | Log Loss |
+| --- | ---: | ---: | ---: | ---: |
+| Frequenze regolarizzate v9 | 30 | 34 | 0,253744 | 0,700716 |
+| Logistica completa delle quote | 25 | 39 | 0,267114 | 0,727960 |
+| Logistica punti/set | 31 | 33 | 0,252894 | 0,699123 |
+| Logistica contestuale | 28 | 36 | 0,259401 | 0,711993 |
+
+Quarantanove previsioni del candidato v9 avevano probabilità del favorito tra 50% e 55% (22 corrette, 27 sbagliate); le restanti 15 tra 55% e 60% (8 corrette, 7 sbagliate). Nessuna raggiungeva il 60%. Questo evidenzia un segnale debole nel campione e non autorizza a sostituire un modello sulla base di una sola previsione corretta in più. Il replay comprende tutte le osservazioni, non soltanto quote EV positive, e non misura profitto.
+
+La rilettura del nuovo registro parallelo conferma **16 partite future con quattro probabilità e una coppia di quote salvate**, zero esiti già valutabili, 16 in attesa, zero invalidi. Sono osservazioni prospettiche distinte dai 64 casi diagnostici; nessun vincitore del confronto o validazione ancora disponibile. Le probabilità delle osservazioni v9 non sono state cambiate. Nel frattempo v9 è passato a 82 esiti verificati su 100, 18 in attesa, con un ulteriore esito aggiornato nell'ultima esecuzione e zero errori della fonte.
+
+Versione pubblicata `3b05e3f4604f3fa3afe500b87d261ba785b5fd4d`, deployment Production `dpl_BkCowi6DQnDxuBPWJZBKsxgWCuMz` READY e alias https://ping-pong-ping-pong3.vercel.app verificato sullo stesso ID. CI, build, TypeScript e smoke ESM Node 26.13.0 riusciti; fetch protetto `/api/health` = 200. La precedente suite completa di 250 test rimane superata; dopo la sola correzione dei log compatti e dell'avviso UI sono state ripetute build e QA del componente. Nessuna migrazione, credenziale o membership modificata, nessuna puntata o nuova sessione remota del proprietario.
