@@ -77,8 +77,11 @@ export class MarketStudy{
     const extra:{winnerReview?:ReturnType<typeof winnerDiagnostic>;winnerShadow?:Awaited<ReturnType<WinnerShadow['report']>>;winnerReviewError?:string}={};
     try{
       extra.winnerReview=winnerDiagnostic(cases);extra.winnerShadow=await this.shadow.report(owner);
-      const s=extra.winnerShadow;
-      console.info(JSON.stringify({winnerReview:extra.winnerReview,winnerShadowStatus:s.protocol.id,shadow:{captured:s.captured,settled:s.settled,pending:s.pending,invalid:s.invalid,observedDays:s.observedDays,models:s.models,league:s.league,bookmaker:s.bookmaker,checkpoints:s.checkpoints.map(c=>({size:c.size,consistent:c.consistent,passed:c.result.challengers.filter(x=>x.preliminaryPass).map(x=>x.id)})),validated:false}}));
+      const s=extra.winnerShadow,r=extra.winnerReview;
+      const compact=(m:typeof r.models[number])=>({id:m.id,n:m.n,correct:m.correct,wrong:m.wrong,undecided:m.undecided,brier:m.brier,logLoss:m.logLoss,ece:m.ece});
+      console.info(JSON.stringify({winnerReviewStatus:s.protocol.id,cutoff:r.cutoff,expected:r.expected,n:r.n,models:r.models.map(compact),reference:r.reference,validated:false}));
+      console.info(JSON.stringify({winnerReviewSlices:s.protocol.id,leagues:r.leagues.map(g=>({league:g.league,n:g.n,correct:g.correct,wrong:g.wrong,brier:g.brier})),confidence:r.confidence.map(g=>({from:g.from,to:g.to,n:g.n,correct:g.correct,wrong:g.wrong,brier:g.brier}))}));
+      console.info(JSON.stringify({winnerShadowStatus:s.protocol.id,captured:s.captured,settled:s.settled,pending:s.pending,invalid:s.invalid,observedDays:s.observedDays,models:s.models.map(compact),league:s.league,bookmaker:s.bookmaker,checkpoints:s.checkpoints.map(c=>({size:c.size,consistent:c.consistent,passed:c.result.challengers.filter(x=>x.preliminaryPass).length})),validated:false}));
     }catch{extra.winnerReviewError='Confronto dei candidati temporaneamente non disponibile.';console.error('WINNER_REVIEW_UNAVAILABLE');}
     return{...report,...extra};
   }

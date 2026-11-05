@@ -5,9 +5,12 @@ type Shadow=Awaited<ReturnType<WinnerShadow['report']>>;
 const score=(v:number|null)=>v===null?'in attesa':v.toFixed(5);
 
 export function WinnerReview({review,shadow}:{review?:Review;shadow?:Shadow}){
+  const reference=review?.reference.brier;
+  const noBetterCandidate=!!review?.n&&reference!==undefined&&reference!==null&&review.models.every(m=>m.brier!==null&&m.brier>=reference);
   return <section aria-labelledby="winner-review-title">
     <h3 id="winner-review-title">Rivediamo il candidato del vincente</h3>
     <p>Confrontiamo il candidato delle frequenze regolarizzate, il modello completo delle quote e altre due logistiche. Il test già registrato conserva tutte le previsioni originali.</p>
+    {noBetterCandidate&&<p className="banner">Su questo campione nessun candidato supera le frequenze della competizione nel Brier. La scelta di un sostituto richiede la verifica su nuovi dati.</p>}
     {review&&<details><summary>Diagnosi sugli stessi {review.n} incontri già conosciuti</summary>
       <p>Le alternative usano esattamente i dati salvati prima di ogni partita e pesi già addestrati prima degli esiti. Le loro probabilità sono ricostruite ora: questo confronto è esplorativo e serve a preparare la verifica futura.</p>
       {review.n!==review.expected&&<p role="status">Il campione attuale contiene {review.n} dei {review.expected} esiti originari; verificare eventuali revisioni della fonte.</p>}
