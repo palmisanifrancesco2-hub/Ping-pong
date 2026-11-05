@@ -57,7 +57,7 @@ Nell'ambiente Codex con proxy, Node 24 usa `NODE_USE_ENV_PROXY=1 npm run check:f
 | GET | `/api/history` | Token Supabase + appartenenza, JWT del chiamante e RLS | Previsioni reali proprie, intervalli, esiti e riepilogo |
 | GET | `/api/connection` | Token Supabase verificato + appartenenza privata | Diagnostica catalogo The Odds API |
 
-Timeout, schema, identità evento/selezione, errori, dimensione del payload e timestamp sono controllati lato server. In errore il client rimuove la vecchia risposta; nessun fallback a quote inventate. Anteprima senza dati e senza chiamate API.
+Timeout, schema, identità evento/selezione, errori, dimensione del payload e timestamp sono controllati lato server. In errore il client rimuove la vecchia risposta; nessun fallback a quote inventate. Accesso privato obbligatorio; dopo il login vengono caricati automaticamente gli eventi reali in Partite e mercati. Ricerca per giocatore, campionato o ID evento.
 
 ## Stato e limiti
 

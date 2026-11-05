@@ -42,6 +42,13 @@ describe('all-market foreign board', () => {
     expect(filterBoard([{ ...match, quotes: [{ ...q, odds_dec: 0 }] }], f, now)).toHaveLength(1);
     expect(filterBoard([{ ...match, quotes: [{ ...q, odds_dec: 0 }] }], { ...f, includeUnavailable: false }, now)).toEqual([]);
   });
+  it('finds events by player, competition or ID while excluding finished and stale live events', () => {
+    const filters={search:'',competition:'',market:'',state:'',minOdds:1.3,includeUnavailable:true};
+    for(const search of ['  TEST A  ','UNKNOWN LEAGUE','synthetic'])expect(filterBoard([match],{...filters,search},now)).toHaveLength(1);
+    expect(filterBoard([match],{...filters,search:'absent-player'},now)).toEqual([]);
+    expect(filterBoard([match],{...filters,search:match.id},now+61000)).toEqual([]);
+    expect(filterBoard([{...match,in_play:false,kickoff_utc:new Date(now-1).toISOString()}],{...filters,search:match.id},now)).toEqual([]);
+  });
   it('deduplicates concurrent requests, caches for 30 seconds and refreshes thereafter', async () => {
     let clock = now;
     const fetcher = vi.fn(async () => Response.json(payload));

@@ -40,7 +40,7 @@ export function quoteStatus(match: FeedMatch, q: FeedQuote, now: number): string
 export type BoardFilters = { search: string; competition: string; market: string; state: string; minOdds: number; includeUnavailable: boolean };
 export function filterBoard(matches: FeedMatch[], f: BoardFilters, now = Date.now()): FeedMatch[] {
   const text = f.search.trim().toLocaleLowerCase('it');
-  return matches.filter(m => isUpcomingOrLive(m, now) && (!text || `${m.home} ${m.away}`.toLocaleLowerCase('it').includes(text))
+  return matches.filter(m => isUpcomingOrLive(m, now) && (!text || `${m.home} ${m.away} ${m.league} ${m.id}`.toLocaleLowerCase('it').includes(text))
     && (!f.competition || m.league === f.competition)
     && (!f.state || (f.state === 'live' ? m.in_play : !m.in_play)))
     .map(m => ({ ...m, quotes: m.quotes.filter(q => (!f.market || marketName(q) === f.market)

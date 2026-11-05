@@ -1,6 +1,6 @@
 # Flussi delle otto sezioni
 
-Aggiornamento del 5 novembre 2026. La modalità reale usa dati MoviOdds e accesso privato Supabase. La demo non chiama API private o fonti sportive e non contiene quote o pronostici fittizi.
+Aggiornamento del 5 novembre 2026. La modalità reale usa dati MoviOdds e accesso privato Supabase. La demo è stata rimossa dalla navigazione: dopo il login privato si apre direttamente Partite e mercati e viene caricato il feed reale. Ricerca per giocatore, campionato o ID evento.
 
 | Sezione | Comportamento implementato |
 | --- | --- |
