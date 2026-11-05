@@ -8,6 +8,8 @@ Verifiche riuscite: **235 test Vitest in 33 file**, **5 test Python** della rice
 
 Nuovo componente Statistiche modello renderizzato isolatamente in Chromium a 393×851 e 1440×1000, con il report aggregato effettivo: 14 risultati, apertura dei dettagli/EV, zero errori JavaScript/HTTP e nessuno scorrimento orizzontale. È una verifica locale del componente; non certifica un nuovo login reale del proprietario. Nessuna nuova API, migrazione, dipendenza frontend o chiave.
 
+Pubblicato il codice `a424272a5d3f668a94237b64d11d89fc7da92ff1`: deployment Production `dpl_BbHw5Ff2nEe9GdekygmJKLAvEELm` READY, alias https://ping-pong-ping-pong3.vercel.app verificato sullo stesso deployment, GitHub CI superata. Fetch protetto reale `/api/health` = 200, JSON `status=ok`; smoke del server compilato superato anche su Node 26.13.0 durante il build Vercel. Controlli remoti di feed, archivio giocatori, accesso DB/RLS e Google riusciti; bootstrap studio non richiesto. Nessun nuovo login remoto con sessione del proprietario eseguito dall'agente.
+
 Eseguite il 4 novembre 2026 in ambiente Codex.
 
 | Controllo | Risultato | Limiti |
