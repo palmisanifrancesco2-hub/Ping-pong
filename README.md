@@ -139,3 +139,7 @@ Quattro famiglie confrontate su 1804 casi comuni, con target distinti per 14 ris
 Lo storico è ora esteso descrittivamente a **261 casi**, con 12 nuovi incontri verificati e pesi invariati. Aggiunta una raccolta prospettica separata per tutti i 14 target, con probabilità registrate prima degli incontri e controlli fissi a 500/1000/2000/3000 nuove partite e almeno 14 giorni. Usa il cron gratuito esistente e persistenza privata Supabase; nessuna puntata, acquisto, migrazione o attivazione automatica. Conteggi e pulsante in Statistiche modello. [Regole e limiti della continuazione](docs/CONTINUAZIONE-TEST-MERCATI.md).
 
 Il candidato del vincente è ora confrontato con tre alternative già congelate: replay diagnostico sui dati originali e confronto parallelo separato su partite future, con nuove caratteristiche comuni e quote dei due giocatori registrate. Nessuna sostituzione automatica o modifica del test originale. [Revisione del vincente e criteri del confronto](docs/REVISIONE-VINCENTE.md).
+
+## Proiezione dei punteggi e Poisson
+
+Due modelli di proiezione punto→set→partita e un confronto Poisson per i totali sono stati testati sugli stessi 1.804 incontri storici già esaminati. Nessun nuovo candidato dimostra ancora un vantaggio oltre l’incertezza sui migliori precedenti. Risultati aggregati e spiegazione disponibili in Statistiche modello, senza modificare i modelli operativi o i test prospettici. [Metodo, risultati e limiti](docs/PROIEZIONE-E-POISSON.md).
