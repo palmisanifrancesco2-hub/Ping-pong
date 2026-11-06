@@ -143,3 +143,6 @@ Il candidato del vincente è ora confrontato con tre alternative già congelate:
 ## Proiezione dei punteggi e Poisson
 
 Due modelli di proiezione punto→set→partita e un confronto Poisson per i totali sono stati testati sugli stessi 1.804 incontri storici già esaminati. Nessun nuovo candidato dimostra ancora un vantaggio oltre l’incertezza sui migliori precedenti. Risultati aggregati e spiegazione disponibili in Statistiche modello, senza modificare i modelli operativi o i test prospettici. [Metodo, risultati e limiti](docs/PROIEZIONE-E-POISSON.md).
+
+
+Combinazioni della proiezione: 18 miscele a pesi fissi confrontate sugli stessi 1.804 incontri storici. Per il vincente completo + proiezione dà 992 corretti, contro 971 del completo e 996 della proiezione. Piccoli miglioramenti del Brier non dimostrano ancora superiorità rispetto a tutti i componenti o profitto. Risultati in Statistiche modello. [Metodo, diversità e limiti](docs/COMBINAZIONI-PROIEZIONE.md).
