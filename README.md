@@ -152,3 +152,6 @@ Studio v13: pesi della combinazione appresi solo dalle previsioni e dagli esiti 
 
 
 Nuove fonti gratuite scaricate: 10.292 righe WTT e 7.851 Setka, oltre ai 23.596 risultati MoviOdds già disponibili. Audit trova duplicati, incongruenze di date e formato; non equivale a 10.000 test validati. [Fonti, numeri effettivi e condizioni per lo studio](docs/DATI-PER-10000-PARTITE.md).
+
+
+Addestramento WTT eseguito: quattro modelli (logistica/boosting per uomini e donne), 2.284 casi di training, 2.178 di calibrazione e 2.203 di test 2025 distinti. Logistica 1.540 corretti / 663 errati, 69,90%; Elo 69,00%, vantaggio non confermato dagli intervalli per coorte. Date-only con ritardo convenzionale: nessuna validazione sui campionati dell’app o profitto. [Metodo, risultati e artefatti](docs/ADDESTRAMENTO-WTT-V15.md).

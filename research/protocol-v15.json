@@ -1,0 +1,66 @@
+{
+  "version": "wtt-training-v15",
+  "createdAt": "2026-11-07T11:59:00.418590+00:00",
+  "inputs": {
+    "table_tennis_wtt_men_std.csv": "f2cf0fcf65ff398aa9f889042071193c8bdd8ec8ff71dfbd7ddf5f8fb5837545",
+    "table_tennis_wtt_women_std.csv": "d9aec1488bcee66625a0973d6ca6e0e5cc58dd8d22a193c0194b6bf908811d6b"
+  },
+  "trainBefore": "2024-01-01",
+  "calibrationBefore": "2025-01-01",
+  "testBefore": "2026-01-01",
+  "minimumPlayerHistory": 5,
+  "historyLagDays": 7,
+  "lagAssumption": "Date-only source; seven-day delay is conservative convention, not verified outcome availability or kickoff time.",
+  "candidates": [
+    "logistic",
+    "boosted"
+  ],
+  "logisticC": 1,
+  "boosted": {
+    "max_iter": 100,
+    "max_depth": 3,
+    "learning_rate": 0.05,
+    "min_samples_leaf": 30,
+    "l2_regularization": 5
+  },
+  "temperatures": [
+    0.5,
+    0.75,
+    1,
+    1.25,
+    1.5
+  ],
+  "shrinkWeights": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "eloK": 20,
+  "seed": 20261107,
+  "bootstrapReplicates": 10000,
+  "blockDays": 3,
+  "familyComparisons": 12,
+  "features": [
+    "eloDifference/400",
+    "smoothedWinRateDifference",
+    "last10WinRateDifference",
+    "setMarginRateDifference",
+    "pointMarginRateDifference",
+    "smoothedH2H",
+    "logHistorySizeDifference"
+  ],
+  "target": "winner only",
+  "symmetry": "Augment training by player reversal and symmetrize model outputs",
+  "automaticPromotion": false,
+  "limitations": [
+    "External WTT cohorts do not validate current minor-league application.",
+    "Ranking and declared best_of excluded; metadata inconsistent.",
+    "All cohort IDs prefixed by source gender; no joining with MoviOdds.",
+    "No historical executable odds; no ROI or operational EV claim.",
+    "Downloaded rows include training, calibration, cold starts and excluded rows; not 10000 independent test predictions.",
+    "Raw source already audited; performance has not yet been inspected for this protocol.",
+    "No changes to original prospective protocols or operational models."
+  ]
+}
