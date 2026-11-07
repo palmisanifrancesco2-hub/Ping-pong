@@ -146,3 +146,6 @@ Due modelli di proiezione punto→set→partita e un confronto Poisson per i tot
 
 
 Combinazioni della proiezione: 18 miscele a pesi fissi confrontate sugli stessi 1.804 incontri storici. Per il vincente completo + proiezione dà 992 corretti, contro 971 del completo e 996 della proiezione. Piccoli miglioramenti del Brier non dimostrano ancora superiorità rispetto a tutti i componenti o profitto. Risultati in Statistiche modello. [Metodo, diversità e limiti](docs/COMBINAZIONI-PROIEZIONE.md).
+
+
+Studio v13: pesi della combinazione appresi solo dalle previsioni e dagli esiti disponibili nei giorni precedenti. Su 1.291 casi comuni, peso + temperatura dà 724 corretti contro 719 della media fissa, ma Brier peggiore. Sei giorni insufficienti per gli intervalli e nessuna promozione. [Fonti online, metodo e risultati](docs/STUDIO-TEMPORALE-V13.md).
