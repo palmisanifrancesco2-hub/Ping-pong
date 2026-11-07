@@ -1,0 +1,56 @@
+{
+  "id": "winner-challengers-v10-20261105",
+  "createdAt": "2026-11-05T21:56:36.146985+00:00",
+  "diagnosticCutoff": "2026-11-05T20:55:54.694Z",
+  "diagnosticExpectedCases": 64,
+  "candidates": [
+    "current-eb",
+    "full-logistic",
+    "scores-logistic",
+    "context-logistic"
+  ],
+  "challengers": [
+    "full-logistic",
+    "scores-logistic",
+    "context-logistic"
+  ],
+  "hashes": {
+    "models/score-runtime-v1.json": "49d62f11707de2cf6f6a7f4cee82c00408abade5ced71f41ab140715b5bd2061",
+    "models/multi-research-v1.json": "b7b733b142a548cad2bdf0b7fcb76bd63196904c05c5f0196734fcfcbf11345f",
+    "models/winner-context-v8.json": "02f41854067d9ef9a6da9355ef5395b365ebe6851c9e15a25c7ead94bd3f3261",
+    "models/market-v8-runtime.json": "0c219ac9857505179ad23f69261da628f985e1d71143640ddbb6d81312ca37ee",
+    "src/domain/market-context.ts": "b387940d06cf2606654e768b6cf88842eaa7e2b2fe446b375c4ff5555e33894a",
+    "src/domain/score-model.ts": "c61e6c7fa5adde7fa85f3728e2d0e67428e0ec953c0e4acf945d96830950ed9d"
+  },
+  "checkpoints": [
+    500,
+    1000,
+    2000,
+    3000
+  ],
+  "maximumCases": 3000,
+  "maximumPerDay": 100,
+  "minimumDays": 14,
+  "minimumCoverage": 0.95,
+  "maximumECE": 0.08,
+  "familyAlpha": 0.05,
+  "familyComparisons": 36,
+  "bootstrapReplicates": 20000,
+  "blockDays": 3,
+  "settlementGraceDays": 7,
+  "minimumPlayerHistory": 30,
+  "minimumLeadMinutes": 10,
+  "maximumLeadHours": 48,
+  "selection": "Unknown future events from the original v9 enrollment pool only, still pending, absent from the currently available results, with a fresh coherent match-winner pair. Select by deterministic hash before outcomes. All four fixed candidates use one newly captured causal feature vector at the same instant. No EV/accuracy-based inclusion.",
+  "features": "Recompute current causal MarketContext at shadow registration using only results already available. Store feature vector, baseline, four probabilities, source v9 immutable forecast hash and two observed prices. No model retraining and no rewriting v9 forecasts.",
+  "settlement": "Reuse v9 verified closing result only when event/players/source-forecast hash match and shadow database registration precedes verified actual kickoff by more than one minute. Invalid/revised v9 results invalidate the linked shadow observation.",
+  "confirmation": "Fixed chronological registration prefixes. Seal each checkpoint once >=7 days after latest scheduled kickoff. >=14 observed days; >=95% coverage; missing/invalid contribute worst-case +1 in paired Brier differences. Each of 3 challengers must improve Brier beyond a family-adjusted paired 3-calendar-day block interval and log loss versus all three references: saved league frequency, current EB, and fresh no-vig bookmaker probability, with ECE<0.08. 3 challengers * 3 references * 4 looks = 36 family comparisons. No profit claim without a separate price/return validation.",
+  "limits": [
+    "The original 64 outcomes are diagnostic post-hoc replay, not independent selection evidence",
+    "Do not promote a candidate from the highest accuracy or from that replay",
+    "Shadow and original studies may share events; never combine them as independent matches",
+    "Quoted prices are source observations, not certified executable bets; no profit guarantee",
+    "No automatic model replacement, market activation or wagers",
+    "No new closed cases or source labels used to fit candidate weights"
+  ]
+}

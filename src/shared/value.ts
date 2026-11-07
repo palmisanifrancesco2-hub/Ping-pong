@@ -1,0 +1,2 @@
+import type{ValueOpportunity}from'../domain/value.js';
+export type ValueReport={ensemble?:{modelName:string;estimates:ValueOpportunity[];experimental:ValueOpportunity[];opportunities:ValueOpportunity[];modelValidated:boolean};estimates?:ValueOpportunity[];checkedAt:string;status:'blocked'|'ready'|'experimental';modelValidated:boolean;admVerified:boolean;reasons:string[];opportunities:ValueOpportunity[];experimental?:ValueOpportunity[]};

@@ -1,0 +1,3743 @@
+{
+  "version": "market-distributions-v8",
+  "generatedAt": "2026-11-05T14:44:13.201922+00:00",
+  "source": "MoviOdds reported results; kickoff checked against closing",
+  "protocol": {
+    "version": "market-distributions-v8",
+    "createdAt": "2026-11-05T14:20:32Z",
+    "historyInput": ".research-data/3000-data.json",
+    "minimumPlayerHistory": 30,
+    "minimumTraining": 50,
+    "minimumCalibration": 40,
+    "calibrationDays": 2,
+    "foldStarts": [
+      "2026-10-25T00:00:00Z",
+      "2026-10-27T00:00:00Z",
+      "2026-10-29T00:00:00Z",
+      "2026-10-31T00:00:00Z",
+      "2026-11-02T00:00:00Z"
+    ],
+    "historyEndExclusive": "2026-11-05T00:00:00Z",
+    "freshStartInclusive": "2026-11-05T00:00:00Z",
+    "freshCollectionEndExclusive": "2026-11-05T14:20:32Z",
+    "freshMaximumRequests": 800,
+    "freshTargetCases": 500,
+    "freshSelection": "Fixed SHA256(v8:fixture_id) order of complete source-reported BO5 events absent from old snapshot, finished before declared collection end, with >=30 prior old-snapshot matches per player. Verify actual kickoff with closing; no filtering by winner, total or model correctness. Sealed labels not read by model selection.",
+    "targetNames": [
+      "winner",
+      "first-set",
+      "first-set-points-over-19.5",
+      "sets-over-3.5",
+      "sets-over-4.5",
+      "points-over-74.5",
+      "points-over-79.5",
+      "points-over-84.5",
+      "home-set-handicap-minus-1.5",
+      "home-set-handicap-plus-1.5",
+      "home-point-handicap-minus-5.5",
+      "home-point-handicap-plus-5.5",
+      "home-point-handicap-minus-9.5",
+      "home-point-handicap-plus-9.5"
+    ],
+    "candidates": [
+      "hierarchical-eb",
+      "logistic-context",
+      "boosted-context",
+      "joint-score-forest"
+    ],
+    "context": "Original eight causal score features plus causal league frequencies, player last-30 score summaries and target frequencies, shrunken H2H, with all outcomes available strictly before verified kickoff minus one minute. League-only causal reference, not a 50% straw baseline.",
+    "playerPrior": 20,
+    "h2hPrior": 20,
+    "leaguePrior": 50,
+    "logistic": {
+      "C": 0.1,
+      "max_iter": 1000
+    },
+    "boosted": {
+      "max_iter": 80,
+      "max_leaf_nodes": 7,
+      "min_samples_leaf": 40,
+      "l2_regularization": 10,
+      "learning_rate": 0.05,
+      "early_stopping": false
+    },
+    "forest": {
+      "n_estimators": 96,
+      "max_depth": 6,
+      "min_samples_leaf": 30,
+      "max_features": 0.7
+    },
+    "shrinkWeights": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "seed": 20261105,
+    "selection": "Select candidate on pooled historical outer-fold Brier per target; calibration-only shrinkage per fold; freeze final selection manifest and model hashes before opening fresh confirmation labels. New-day confirmation is retrospective temporal holdout, not prospective paper betting.",
+    "checks": "Report Brier, log loss, ECE, discrimination, confidence-selected accuracy with sample counts; paired 3-hour-block bootstrap versus league reference, adjusted for 14 targets. Do not promote on high hit rate alone. Confirmation requires >=500 cases, >=12 observed hours, positive Brier improvement beyond adjusted interval, improved log loss, ECE<0.08; multi-day forward confirmation and executable odds still required for operational reliability.",
+    "limits": [
+      "Old archive has been examined before; historical search remains exploratory",
+      "Only complete reported BO5 scores; no verified serving/rally sequences",
+      "Test lines are declared research thresholds, not claims about current quoted availability",
+      "No ROI or EV backtest without historical executable quotes",
+      "No automatic model promotion or changes to frozen forward-value-v1-20261105"
+    ],
+    "freshFeatureSnapshot": "Use only the old result snapshot collected 2026-11-04T23:59:32.157Z for ALL confirmation features. No fresh confirmation outcomes are used as features, training, calibration or selection inputs. Actual event list/quotes were not prospectively captured; this is retrospective frozen-snapshot temporal confirmation."
+  },
+  "hashes": {
+    "selection": "793f1c676b1cc8c8fd13b78e6a3c1841fb54b6509bb75a93fda05f6d6332e718",
+    "model": "60d146a992bef001a70f46fd1bce414c394007a5ccac90f9cc170647ce3792de",
+    "history": "2380fc423d187688028575f301aea2cc3dfb5b6b458aac46b7370bc9f967e02f",
+    "confirmationFeatures": "4088b07a52bee4132c3c9277452886e756ed1374689d7d91ed4d17812f7f32ed"
+  },
+  "historicalCases": 1804,
+  "historicalFolds": [
+    {
+      "start": 1792886400000,
+      "training": 54,
+      "calibration": 29,
+      "test": 281,
+      "skipped": true
+    },
+    {
+      "start": 1793059200000,
+      "training": 83,
+      "calibration": 271,
+      "test": 309,
+      "weights": {
+        "hierarchical-eb": [
+          1.0,
+          0.75,
+          0.0,
+          1.0,
+          1.0,
+          1.0,
+          0.25,
+          0.5,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.5,
+          1.0
+        ],
+        "logistic-context": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.25,
+          0.0,
+          0.5,
+          0.0,
+          0.25
+        ],
+        "boosted-context": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.25,
+          0.0,
+          0.25,
+          0.0,
+          0.25
+        ],
+        "joint-score-forest": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "start": 1793232000000,
+      "training": 354,
+      "calibration": 305,
+      "test": 449,
+      "weights": {
+        "hierarchical-eb": [
+          1.0,
+          1.0,
+          0.75,
+          1.0,
+          0.5,
+          1.0,
+          0.75,
+          0.5,
+          1.0,
+          0.75,
+          1.0,
+          0.75,
+          0.75,
+          1.0
+        ],
+        "logistic-context": [
+          0.25,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.25,
+          0.25,
+          0.0,
+          0.25,
+          0.5,
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ],
+        "boosted-context": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.75,
+          0.0,
+          0.0,
+          0.0,
+          0.25,
+          0.25,
+          0.25,
+          0.25,
+          0.0
+        ],
+        "joint-score-forest": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      }
+    },
+    {
+      "start": 1793404800000,
+      "training": 669,
+      "calibration": 445,
+      "test": 412,
+      "weights": {
+        "hierarchical-eb": [
+          0.75,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          1.0,
+          0.75,
+          1.0,
+          0.75,
+          1.0,
+          0.75,
+          1.0,
+          1.0
+        ],
+        "logistic-context": [
+          0.5,
+          0.25,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.25,
+          0.25,
+          0.5,
+          0.25,
+          0.5
+        ],
+        "boosted-context": [
+          0.5,
+          0.0,
+          0.0,
+          0.25,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.5,
+          0.25,
+          0.5,
+          0.5,
+          0.75
+        ],
+        "joint-score-forest": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      }
+    },
+    {
+      "start": 1793577600000,
+      "training": 1118,
+      "calibration": 406,
+      "test": 634,
+      "weights": {
+        "hierarchical-eb": [
+          1.0,
+          0.25,
+          0.0,
+          0.0,
+          0.5,
+          0.25,
+          0.75,
+          0.75,
+          1.0,
+          0.5,
+          1.0,
+          0.75,
+          1.0,
+          0.75
+        ],
+        "logistic-context": [
+          0.5,
+          0.25,
+          0.25,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.25,
+          0.75,
+          0.5,
+          0.75,
+          0.5
+        ],
+        "boosted-context": [
+          0.5,
+          0.0,
+          0.0,
+          0.0,
+          0.5,
+          0.0,
+          0.5,
+          0.0,
+          0.5,
+          0.25,
+          0.75,
+          0.5,
+          0.5,
+          0.5
+        ],
+        "joint-score-forest": [
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75,
+          0.75
+        ]
+      }
+    }
+  ],
+  "history": [
+    {
+      "target": "winner",
+      "selected": "hierarchical-eb",
+      "reference": {
+        "n": 1804,
+        "brier": 0.250108442984218,
+        "logLoss": 0.6933643698837861,
+        "ece": 0.009498192658601523,
+        "accuracy": 0.5077605321507761,
+        "calibration": [
+          {
+            "range": [
+              0.4,
+              0.6
+            ],
+            "n": 1804,
+            "probability": 0.49952036560760377,
+            "frequency": 0.49002217294900224
+          }
+        ],
+        "confidence65": {
+          "n": 0,
+          "accuracy": null
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.24795507809863807,
+          "logLoss": 0.6890248416209634,
+          "ece": 0.013614382575435294,
+          "accuracy": 0.5421286031042128,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 27,
+              "probability": 0.38410438657225704,
+              "frequency": 0.2222222222222222
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1745,
+              "probability": 0.5033951517699946,
+              "frequency": 0.49283667621776506
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 32,
+              "probability": 0.6176558715623052,
+              "frequency": 0.5625
+            }
+          ],
+          "confidence65": {
+            "n": 1,
+            "accuracy": 1.0
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.24916206562102902,
+          "logLoss": 0.6914554522648821,
+          "ece": 0.009593323431837674,
+          "accuracy": 0.5315964523281597,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 91,
+              "probability": 0.37552586137827937,
+              "frequency": 0.4175824175824176
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1692,
+              "probability": 0.5002278610162755,
+              "frequency": 0.4923167848699764
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 21,
+              "probability": 0.6145872372894997,
+              "frequency": 0.6190476190476191
+            }
+          ],
+          "confidence65": {
+            "n": 9,
+            "accuracy": 0.8888888888888888
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.25030653503923755,
+          "logLoss": 0.6937896024366571,
+          "ece": 0.006887047352108237,
+          "accuracy": 0.5238359201773836,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 101,
+              "probability": 0.38294230177656097,
+              "frequency": 0.40594059405940597
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1643,
+              "probability": 0.4965938791317958,
+              "frequency": 0.4923919659160073
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 60,
+              "probability": 0.6199610414849235,
+              "frequency": 0.5666666666666667
+            }
+          ],
+          "confidence65": {
+            "n": 5,
+            "accuracy": 0.6
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.2487690249451147,
+          "logLoss": 0.6906518657286908,
+          "ece": 0.010407783948038964,
+          "accuracy": 0.5232815964523282,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 45,
+              "probability": 0.3667757540948026,
+              "frequency": 0.37777777777777777
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1735,
+              "probability": 0.5004905754314608,
+              "frequency": 0.4904899135446686
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 24,
+              "probability": 0.627941549877337,
+              "frequency": 0.6666666666666666
+            }
+          ],
+          "confidence65": {
+            "n": 15,
+            "accuracy": 0.6666666666666666
+          }
+        }
+      }
+    },
+    {
+      "target": "first-set",
+      "selected": "joint-score-forest",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2498834179899676,
+        "logLoss": 0.6929151008516315,
+        "ece": 0.0014672108961266694,
+        "accuracy": 0.5155210643015521,
+        "calibration": [
+          {
+            "range": [
+              0.4,
+              0.6
+            ],
+            "n": 1804,
+            "probability": 0.4848374991444637,
+            "frequency": 0.48337028824833705
+          }
+        ],
+        "confidence65": {
+          "n": 0,
+          "accuracy": null
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.24910000151037182,
+          "logLoss": 0.6913493235357383,
+          "ece": 0.008452931009147064,
+          "accuracy": 0.5332594235033259,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 13,
+              "probability": 0.3883240624048075,
+              "frequency": 0.38461538461538464
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1782,
+              "probability": 0.4919544558120489,
+              "frequency": 0.48428731762065097
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 9,
+              "probability": 0.6153371635741912,
+              "frequency": 0.4444444444444444
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.24934054649486823,
+          "logLoss": 0.6918259670769763,
+          "ece": 0.0016602884565374177,
+          "accuracy": 0.5216186252771619,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1,
+              "probability": 0.3968014165916002,
+              "frequency": 1.0
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1803,
+              "probability": 0.48175709273866607,
+              "frequency": 0.48308374930671105
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.2498834179899676,
+          "logLoss": 0.6929151008516315,
+          "ece": 0.0014672108961266694,
+          "accuracy": 0.5155210643015521,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1804,
+              "probability": 0.4848374991444637,
+              "frequency": 0.48337028824833705
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.24886301923487625,
+          "logLoss": 0.6908835838056518,
+          "ece": 0.0019286655008759316,
+          "accuracy": 0.5360310421286031,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 17,
+              "probability": 0.37961601819362695,
+              "frequency": 0.47058823529411764
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1787,
+              "probability": 0.4845734666328326,
+              "frequency": 0.4834918858421936
+            }
+          ],
+          "confidence65": {
+            "n": 1,
+            "accuracy": 0.0
+          }
+        }
+      }
+    },
+    {
+      "target": "first-set-points-over-19.5",
+      "selected": "logistic-context",
+      "reference": {
+        "n": 1804,
+        "brier": 0.21855199135315279,
+        "logLoss": 0.628945863620494,
+        "ece": 0.021968856700952277,
+        "accuracy": 0.6790465631929047,
+        "calibration": [
+          {
+            "range": [
+              0.2,
+              0.4
+            ],
+            "n": 1804,
+            "probability": 0.34292229350804765,
+            "frequency": 0.32095343680709537
+          }
+        ],
+        "confidence65": {
+          "n": 1559,
+          "accuracy": 0.6786401539448365
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.2187044646922138,
+          "logLoss": 0.6292910340531023,
+          "ece": 0.022036508611997595,
+          "accuracy": 0.6790465631929047,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1791,
+              "probability": 0.3417538727095499,
+              "frequency": 0.31993299832495814
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 13,
+              "probability": 0.40979419128924177,
+              "frequency": 0.46153846153846156
+            }
+          ],
+          "confidence65": {
+            "n": 1334,
+            "accuracy": 0.6799100449775113
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.2184495833843661,
+          "logLoss": 0.6287285124517913,
+          "ece": 0.021058726443908715,
+          "accuracy": 0.6790465631929047,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1804,
+              "probability": 0.3420121632510041,
+              "frequency": 0.32095343680709537
+            }
+          ],
+          "confidence65": {
+            "n": 1486,
+            "accuracy": 0.6870794078061911
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.21855199135315279,
+          "logLoss": 0.628945863620494,
+          "ece": 0.021968856700952277,
+          "accuracy": 0.6790465631929047,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1804,
+              "probability": 0.34292229350804765,
+              "frequency": 0.32095343680709537
+            }
+          ],
+          "confidence65": {
+            "n": 1559,
+            "accuracy": 0.6786401539448365
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.21869744482009235,
+          "logLoss": 0.6292719359669127,
+          "ece": 0.026033558773736587,
+          "accuracy": 0.6790465631929047,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1804,
+              "probability": 0.34698699558083196,
+              "frequency": 0.32095343680709537
+            }
+          ],
+          "confidence65": {
+            "n": 1075,
+            "accuracy": 0.6920930232558139
+          }
+        }
+      }
+    },
+    {
+      "target": "sets-over-3.5",
+      "selected": "hierarchical-eb",
+      "reference": {
+        "n": 1804,
+        "brier": 0.20233372825714555,
+        "logLoss": 0.5946039702934592,
+        "ece": 0.01651016495007329,
+        "accuracy": 0.7189578713968958,
+        "calibration": [
+          {
+            "range": [
+              0.6,
+              0.8
+            ],
+            "n": 1804,
+            "probability": 0.7024477064468225,
+            "frequency": 0.7189578713968958
+          }
+        ],
+        "confidence65": {
+          "n": 1804,
+          "accuracy": 0.7189578713968958
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.2017218256637273,
+          "logLoss": 0.5930396286420558,
+          "ece": 0.014972823439709418,
+          "accuracy": 0.7189578713968958,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 5,
+              "probability": 0.5921334385706004,
+              "frequency": 0.6
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1793,
+              "probability": 0.7039457781426381,
+              "frequency": 0.7189068600111544
+            },
+            {
+              "range": [
+                0.8,
+                1.0
+              ],
+              "n": 6,
+              "probability": 0.808929852026823,
+              "frequency": 0.8333333333333334
+            }
+          ],
+          "confidence65": {
+            "n": 1706,
+            "accuracy": 0.7227432590855803
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.20334302296895115,
+          "logLoss": 0.5970899938207199,
+          "ece": 0.018408161504131885,
+          "accuracy": 0.7189578713968958,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 27,
+              "probability": 0.5570684607645107,
+              "frequency": 0.6666666666666666
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1763,
+              "probability": 0.7045387200754155,
+              "frequency": 0.7203630175836642
+            },
+            {
+              "range": [
+                0.8,
+                1.0
+              ],
+              "n": 14,
+              "probability": 0.8107810919323813,
+              "frequency": 0.6428571428571429
+            }
+          ],
+          "confidence65": {
+            "n": 1719,
+            "accuracy": 0.7190226876090751
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.20225557041879189,
+          "logLoss": 0.5944248656962938,
+          "ece": 0.01824761830956101,
+          "accuracy": 0.7189578713968958,
+          "calibration": [
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1804,
+              "probability": 0.7007102530873348,
+              "frequency": 0.7189578713968958
+            }
+          ],
+          "confidence65": {
+            "n": 1789,
+            "accuracy": 0.7210732252655114
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.20205989549314465,
+          "logLoss": 0.593949235007802,
+          "ece": 0.017178802357041723,
+          "accuracy": 0.7189578713968958,
+          "calibration": [
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1804,
+              "probability": 0.7017790690398541,
+              "frequency": 0.7189578713968958
+            }
+          ],
+          "confidence65": {
+            "n": 1783,
+            "accuracy": 0.7212563095905776
+          }
+        }
+      }
+    },
+    {
+      "target": "sets-over-4.5",
+      "selected": "hierarchical-eb",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2185312613402781,
+        "logLoss": 0.6288647919078407,
+        "ece": 0.004373069530580531,
+        "accuracy": 0.6779379157427938,
+        "calibration": [
+          {
+            "range": [
+              0.2,
+              0.4
+            ],
+            "n": 1804,
+            "probability": 0.3176890147266257,
+            "frequency": 0.3220620842572062
+          }
+        ],
+        "confidence65": {
+          "n": 1804,
+          "accuracy": 0.6779379157427938
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.21805639513777353,
+          "logLoss": 0.6277301608861143,
+          "ece": 0.007124307246622067,
+          "accuracy": 0.6779379157427938,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1801,
+              "probability": 0.3161581017944465,
+              "frequency": 0.3225985563575791
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 3,
+              "probability": 0.41766386823477736,
+              "frequency": 0.0
+            }
+          ],
+          "confidence65": {
+            "n": 1654,
+            "accuracy": 0.6795646916565901
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.2185312613402781,
+          "logLoss": 0.6288647919078407,
+          "ece": 0.004373069530580531,
+          "accuracy": 0.6779379157427938,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1804,
+              "probability": 0.3176890147266257,
+              "frequency": 0.3220620842572062
+            }
+          ],
+          "confidence65": {
+            "n": 1804,
+            "accuracy": 0.6779379157427938
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.21897411976412817,
+          "logLoss": 0.6297842594809194,
+          "ece": 0.002867315360337095,
+          "accuracy": 0.6779379157427938,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1785,
+              "probability": 0.32026419192390326,
+              "frequency": 0.32212885154061627
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 19,
+              "probability": 0.4128536575902845,
+              "frequency": 0.3157894736842105
+            }
+          ],
+          "confidence65": {
+            "n": 1640,
+            "accuracy": 0.675
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.21838587790118094,
+          "logLoss": 0.6285496598543957,
+          "ece": 3.910874555860125e-05,
+          "accuracy": 0.6779379157427938,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1799,
+              "probability": 0.3218216297465339,
+              "frequency": 0.3218454697053919
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 5,
+              "probability": 0.4055328182004283,
+              "frequency": 0.4
+            }
+          ],
+          "confidence65": {
+            "n": 1562,
+            "accuracy": 0.6805377720870679
+          }
+        }
+      }
+    },
+    {
+      "target": "points-over-74.5",
+      "selected": "hierarchical-eb",
+      "reference": {
+        "n": 1804,
+        "brier": 0.24976151725008253,
+        "logLoss": 0.6926705344024628,
+        "ece": 0.00853274025336448,
+        "accuracy": 0.520509977827051,
+        "calibration": [
+          {
+            "range": [
+              0.4,
+              0.6
+            ],
+            "n": 1804,
+            "probability": 0.511422913848631,
+            "frequency": 0.5199556541019955
+          }
+        ],
+        "confidence65": {
+          "n": 0,
+          "accuracy": null
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.2487336525440079,
+          "logLoss": 0.6906135440834447,
+          "ece": 0.00758013603516334,
+          "accuracy": 0.529379157427938,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 4,
+              "probability": 0.37450071743492797,
+              "frequency": 0.5
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1783,
+              "probability": 0.5117518680594078,
+              "frequency": 0.5187885586090858
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 17,
+              "probability": 0.6102265278177391,
+              "frequency": 0.6470588235294118
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.24975735134492794,
+          "logLoss": 0.6926723442908155,
+          "ece": 0.007863892563061293,
+          "accuracy": 0.5182926829268293,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 2,
+              "probability": 0.39575275102843543,
+              "frequency": 0.5
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1794,
+              "probability": 0.5138900903985631,
+              "frequency": 0.5206243032329989
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 8,
+              "probability": 0.6120987326052114,
+              "frequency": 0.375
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.2501051541792667,
+          "logLoss": 0.6933726418881502,
+          "ece": 0.010799446518915191,
+          "accuracy": 0.5199556541019955,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 36,
+              "probability": 0.3718165654103631,
+              "frequency": 0.4166666666666667
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1704,
+              "probability": 0.5104482105367352,
+              "frequency": 0.5193661971830986
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 64,
+              "probability": 0.6354898223358243,
+              "frequency": 0.59375
+            }
+          ],
+          "confidence65": {
+            "n": 25,
+            "accuracy": 0.6
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.24958035482699129,
+          "logLoss": 0.6923084685892558,
+          "ece": 0.006505331938589099,
+          "accuracy": 0.508869179600887,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1803,
+              "probability": 0.5133983408074907,
+              "frequency": 0.5196894065446478
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1,
+              "probability": 0.6071727068795119,
+              "frequency": 1.0
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        }
+      }
+    },
+    {
+      "target": "points-over-79.5",
+      "selected": "hierarchical-eb",
+      "reference": {
+        "n": 1804,
+        "brier": 0.24062993701385535,
+        "logLoss": 0.6742960608956753,
+        "ece": 0.0067076253355841,
+        "accuracy": 0.5975609756097561,
+        "calibration": [
+          {
+            "range": [
+              0.2,
+              0.4
+            ],
+            "n": 979,
+            "probability": 0.3955682389278317,
+            "frequency": 0.39121552604698673
+          },
+          {
+            "range": [
+              0.4,
+              0.6
+            ],
+            "n": 825,
+            "probability": 0.4062554543090346,
+            "frequency": 0.41575757575757577
+          }
+        ],
+        "confidence65": {
+          "n": 9,
+          "accuracy": 0.6666666666666666
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.23901625665270648,
+          "logLoss": 0.6709100296928953,
+          "ece": 0.0077771806080461844,
+          "accuracy": 0.5964523281596452,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 931,
+              "probability": 0.37460301119545475,
+              "frequency": 0.3694951664876477
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 873,
+              "probability": 0.42694773150750637,
+              "frequency": 0.43757159221076747
+            }
+          ],
+          "confidence65": {
+            "n": 124,
+            "accuracy": 0.7016129032258065
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.24129719225167154,
+          "logLoss": 0.6756994696072047,
+          "ece": 0.00623127276842313,
+          "accuracy": 0.5964523281596452,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 835,
+              "probability": 0.3924635617850459,
+              "frequency": 0.3976047904191617
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 969,
+              "probability": 0.4137753252474186,
+              "frequency": 0.4066047471620227
+            }
+          ],
+          "confidence65": {
+            "n": 15,
+            "accuracy": 0.5333333333333333
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.24030384256376858,
+          "logLoss": 0.6735900531275085,
+          "ece": 0.004758824209933727,
+          "accuracy": 0.5975609756097561,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 982,
+              "probability": 0.388862715724894,
+              "frequency": 0.384928716904277
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 822,
+              "probability": 0.4176134646802013,
+              "frequency": 0.4233576642335766
+            }
+          ],
+          "confidence65": {
+            "n": 52,
+            "accuracy": 0.7115384615384616
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.24084529498904209,
+          "logLoss": 0.674741656137114,
+          "ece": 0.017081559955370806,
+          "accuracy": 0.5975609756097561,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 783,
+              "probability": 0.3837262378219155,
+              "frequency": 0.3997445721583653
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 1021,
+              "probability": 0.4224023294554836,
+              "frequency": 0.40450538687561216
+            }
+          ],
+          "confidence65": {
+            "n": 31,
+            "accuracy": 0.6129032258064516
+          }
+        }
+      }
+    },
+    {
+      "target": "points-over-84.5",
+      "selected": "hierarchical-eb",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2200162671345243,
+        "logLoss": 0.6319438596785345,
+        "ece": 0.0011561387676702894,
+        "accuracy": 0.6735033259423503,
+        "calibration": [
+          {
+            "range": [
+              0.2,
+              0.4
+            ],
+            "n": 1804,
+            "probability": 0.32534053528997936,
+            "frequency": 0.32649667405764965
+          }
+        ],
+        "confidence65": {
+          "n": 1804,
+          "accuracy": 0.6735033259423503
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.21930171843211535,
+          "logLoss": 0.6302831587010573,
+          "ece": 0.0034197068576071053,
+          "accuracy": 0.6735033259423503,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1797,
+              "probability": 0.3237179587381333,
+              "frequency": 0.3266555370061213
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 7,
+              "probability": 0.4129032890783931,
+              "frequency": 0.2857142857142857
+            }
+          ],
+          "confidence65": {
+            "n": 1482,
+            "accuracy": 0.684885290148448
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.2200162671345243,
+          "logLoss": 0.6319438596785345,
+          "ece": 0.0011561387676702894,
+          "accuracy": 0.6735033259423503,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1804,
+              "probability": 0.32534053528997936,
+              "frequency": 0.32649667405764965
+            }
+          ],
+          "confidence65": {
+            "n": 1804,
+            "accuracy": 0.6735033259423503
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.2200162671345243,
+          "logLoss": 0.6319438596785345,
+          "ece": 0.0011561387676702894,
+          "accuracy": 0.6735033259423503,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1804,
+              "probability": 0.32534053528997936,
+              "frequency": 0.32649667405764965
+            }
+          ],
+          "confidence65": {
+            "n": 1804,
+            "accuracy": 0.6735033259423503
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.22011554132717526,
+          "logLoss": 0.6322144494952145,
+          "ece": 0.0005733486274179082,
+          "accuracy": 0.6735033259423503,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1799,
+              "probability": 0.32573403466210726,
+              "frequency": 0.3262923846581434
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 5,
+              "probability": 0.4059698561985724,
+              "frequency": 0.4
+            }
+          ],
+          "confidence65": {
+            "n": 1522,
+            "accuracy": 0.6793692509855453
+          }
+        }
+      }
+    },
+    {
+      "target": "home-set-handicap-minus-1.5",
+      "selected": "hierarchical-eb",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22137127652731967,
+        "logLoss": 0.6347934395706673,
+        "ece": 0.010472751401858216,
+        "accuracy": 0.6701773835920177,
+        "calibration": [
+          {
+            "range": [
+              0.2,
+              0.4
+            ],
+            "n": 1804,
+            "probability": 0.3402953678098405,
+            "frequency": 0.32982261640798227
+          }
+        ],
+        "confidence65": {
+          "n": 1804,
+          "accuracy": 0.6701773835920177
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.21850419482603262,
+          "logLoss": 0.6281996280579424,
+          "ece": 0.013384560775053128,
+          "accuracy": 0.6701773835920177,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 1,
+              "probability": 0.17963513609451764,
+              "frequency": 0.0
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1627,
+              "probability": 0.3346207307329051,
+              "frequency": 0.32022126613398894
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 176,
+              "probability": 0.42351240681627683,
+              "frequency": 0.42045454545454547
+            }
+          ],
+          "confidence65": {
+            "n": 1028,
+            "accuracy": 0.708171206225681
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.22051020151157505,
+          "logLoss": 0.6327759079538726,
+          "ece": 0.005300593018086232,
+          "accuracy": 0.6701773835920177,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1720,
+              "probability": 0.33079294771117596,
+              "frequency": 0.32558139534883723
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 84,
+              "probability": 0.42379047311196383,
+              "frequency": 0.4166666666666667
+            }
+          ],
+          "confidence65": {
+            "n": 1313,
+            "accuracy": 0.674028941355674
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.22077606199097377,
+          "logLoss": 0.6334580740293766,
+          "ece": 0.006263969161713476,
+          "accuracy": 0.6701773835920177,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1714,
+              "probability": 0.3314410470363595,
+              "frequency": 0.32555425904317387
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 90,
+              "probability": 0.4245582860823434,
+              "frequency": 0.4111111111111111
+            }
+          ],
+          "confidence65": {
+            "n": 1438,
+            "accuracy": 0.6815020862308763
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.21943964087306256,
+          "logLoss": 0.6304670344102611,
+          "ece": 0.009950321590184342,
+          "accuracy": 0.6701773835920177,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 1,
+              "probability": 0.1925307700873205,
+              "frequency": 0.0
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1755,
+              "probability": 0.33241509472269776,
+              "frequency": 0.3247863247863248
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 48,
+              "probability": 0.42980503874436066,
+              "frequency": 0.5208333333333334
+            }
+          ],
+          "confidence65": {
+            "n": 1322,
+            "accuracy": 0.6822995461422088
+          }
+        }
+      }
+    },
+    {
+      "target": "home-set-handicap-plus-1.5",
+      "selected": "joint-score-forest",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22746704181553298,
+        "logLoss": 0.6474430418789681,
+        "ece": 0.008125341205640754,
+        "accuracy": 0.6518847006651884,
+        "calibration": [
+          {
+            "range": [
+              0.4,
+              0.6
+            ],
+            "n": 7,
+            "probability": 0.5961221829149314,
+            "frequency": 0.8571428571428571
+          },
+          {
+            "range": [
+              0.6,
+              0.8
+            ],
+            "n": 1797,
+            "probability": 0.6582253593852979,
+            "frequency": 0.6510851419031719
+          }
+        ],
+        "confidence65": {
+          "n": 1559,
+          "accuracy": 0.6472097498396407
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.22561791676738677,
+          "logLoss": 0.6434467734480496,
+          "ece": 0.009420956297840417,
+          "accuracy": 0.6518847006651884,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 80,
+              "probability": 0.5796277021923928,
+              "frequency": 0.5
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1724,
+              "probability": 0.6650958172772116,
+              "frequency": 0.6589327146171694
+            }
+          ],
+          "confidence65": {
+            "n": 1164,
+            "accuracy": 0.6743986254295533
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.22664999282568724,
+          "logLoss": 0.645747582626974,
+          "ece": 0.01856391960907619,
+          "accuracy": 0.6518847006651884,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 107,
+              "probability": 0.570433893756847,
+              "frequency": 0.6448598130841121
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1696,
+              "probability": 0.6670603182235741,
+              "frequency": 0.652122641509434
+            },
+            {
+              "range": [
+                0.8,
+                1.0
+              ],
+              "n": 1,
+              "probability": 0.8085621004256058,
+              "frequency": 1.0
+            }
+          ],
+          "confidence65": {
+            "n": 1131,
+            "accuracy": 0.6737400530503979
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.22678877150788052,
+          "logLoss": 0.6460520545372525,
+          "ece": 0.00606857934110101,
+          "accuracy": 0.6518847006651884,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 93,
+              "probability": 0.5738522521847704,
+              "frequency": 0.5591397849462365
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1711,
+              "probability": 0.6625245223133621,
+              "frequency": 0.6569257744009351
+            }
+          ],
+          "confidence65": {
+            "n": 1159,
+            "accuracy": 0.6652286453839517
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.22532636667911388,
+          "logLoss": 0.6427093788585869,
+          "ece": 0.0050978048077428345,
+          "accuracy": 0.6513303769401331,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 140,
+              "probability": 0.5651557591341554,
+              "frequency": 0.5428571428571428
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1664,
+              "probability": 0.6647083134581648,
+              "frequency": 0.6610576923076923
+            }
+          ],
+          "confidence65": {
+            "n": 1153,
+            "accuracy": 0.6660884648742411
+          }
+        }
+      }
+    },
+    {
+      "target": "home-point-handicap-minus-5.5",
+      "selected": "hierarchical-eb",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22361473182567443,
+        "logLoss": 0.6394438914311787,
+        "ece": 0.016553159038757315,
+        "accuracy": 0.6635254988913526,
+        "calibration": [
+          {
+            "range": [
+              0.2,
+              0.4
+            ],
+            "n": 1804,
+            "probability": 0.3530276601474048,
+            "frequency": 0.33647450110864746
+          }
+        ],
+        "confidence65": {
+          "n": 531,
+          "accuracy": 0.672316384180791
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.22000609634811663,
+          "logLoss": 0.6314497037579903,
+          "ece": 0.020347780158317452,
+          "accuracy": 0.6651884700665188,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 1,
+              "probability": 0.19414063306749932,
+              "frequency": 0.0
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1456,
+              "probability": 0.3399824573660466,
+              "frequency": 0.31524725274725274
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 347,
+              "probability": 0.42795042319185395,
+              "frequency": 0.4265129682997118
+            }
+          ],
+          "confidence65": {
+            "n": 829,
+            "accuracy": 0.715319662243667
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.22195667285408546,
+          "logLoss": 0.6355718335596624,
+          "ece": 0.01786330038454784,
+          "accuracy": 0.6607538802660754,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 11,
+              "probability": 0.1901255929080869,
+              "frequency": 0.0
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1542,
+              "probability": 0.3424865075440933,
+              "frequency": 0.33009079118028534
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 250,
+              "probability": 0.43358467269424067,
+              "frequency": 0.392
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1,
+              "probability": 0.6236495651832736,
+              "frequency": 0.0
+            }
+          ],
+          "confidence65": {
+            "n": 752,
+            "accuracy": 0.6981382978723404
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.2233307616715537,
+          "logLoss": 0.63879621107437,
+          "ece": 0.015518812655713523,
+          "accuracy": 0.6635254988913526,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 6,
+              "probability": 0.1913472596717668,
+              "frequency": 0.16666666666666666
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1597,
+              "probability": 0.3423067652773628,
+              "frequency": 0.3312460864120225
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 201,
+              "probability": 0.4337509966414336,
+              "frequency": 0.38308457711442784
+            }
+          ],
+          "confidence65": {
+            "n": 781,
+            "accuracy": 0.677336747759283
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.22169097414016825,
+          "logLoss": 0.6350775668545047,
+          "ece": 0.013354286584218163,
+          "accuracy": 0.6624168514412417,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 1,
+              "probability": 0.19596640347401956,
+              "frequency": 0.0
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1647,
+              "probability": 0.34273327854457636,
+              "frequency": 0.3284760170006072
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 156,
+              "probability": 0.42572728738165594,
+              "frequency": 0.4230769230769231
+            }
+          ],
+          "confidence65": {
+            "n": 856,
+            "accuracy": 0.6810747663551402
+          }
+        }
+      }
+    },
+    {
+      "target": "home-point-handicap-plus-5.5",
+      "selected": "hierarchical-eb",
+      "reference": {
+        "n": 1804,
+        "brier": 0.23121240352679653,
+        "logLoss": 0.6551087739466049,
+        "ece": 0.008830583106911316,
+        "accuracy": 0.6374722838137472,
+        "calibration": [
+          {
+            "range": [
+              0.6,
+              0.8
+            ],
+            "n": 1804,
+            "probability": 0.6463028669206585,
+            "frequency": 0.6374722838137472
+          }
+        ],
+        "confidence65": {
+          "n": 661,
+          "accuracy": 0.6308623298033282
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.22897240228276206,
+          "logLoss": 0.6502972893315455,
+          "ece": 0.012278558303859896,
+          "accuracy": 0.6369179600886918,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 201,
+              "probability": 0.5767391690997451,
+              "frequency": 0.5124378109452736
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1603,
+              "probability": 0.6589057680543446,
+              "frequency": 0.653150343106675
+            }
+          ],
+          "confidence65": {
+            "n": 933,
+            "accuracy": 0.669882100750268
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.22949389713166815,
+          "logLoss": 0.6512459374716333,
+          "ece": 0.015655010431021466,
+          "accuracy": 0.6369179600886918,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 397,
+              "probability": 0.5601137277806296,
+              "frequency": 0.5818639798488665
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1407,
+              "probability": 0.6670979308788008,
+              "frequency": 0.6531627576403696
+            }
+          ],
+          "confidence65": {
+            "n": 901,
+            "accuracy": 0.6692563817980022
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.2297683464273201,
+          "logLoss": 0.6519737251476105,
+          "ece": 0.012948980337370354,
+          "accuracy": 0.6380266075388027,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 339,
+              "probability": 0.564794133742389,
+              "frequency": 0.5988200589970502
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1465,
+              "probability": 0.6544881719230621,
+              "frequency": 0.6464163822525597
+            }
+          ],
+          "confidence65": {
+            "n": 784,
+            "accuracy": 0.6658163265306123
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.2297413456127806,
+          "logLoss": 0.651798720243223,
+          "ece": 0.004736438209047034,
+          "accuracy": 0.6352549889135255,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 253,
+              "probability": 0.563588196194366,
+              "frequency": 0.549407114624506
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1551,
+              "probability": 0.655033346803318,
+              "frequency": 0.6518375241779497
+            }
+          ],
+          "confidence65": {
+            "n": 793,
+            "accuracy": 0.6595208070617906
+          }
+        }
+      }
+    },
+    {
+      "target": "home-point-handicap-minus-9.5",
+      "selected": "hierarchical-eb",
+      "reference": {
+        "n": 1804,
+        "brier": 0.1562219208152689,
+        "logLoss": 0.4918005385563789,
+        "ece": 0.011978835993693846,
+        "accuracy": 0.8065410199556541,
+        "calibration": [
+          {
+            "range": [
+              0.0,
+              0.2
+            ],
+            "n": 531,
+            "probability": 0.18551032493868744,
+            "frequency": 0.1977401129943503
+          },
+          {
+            "range": [
+              0.2,
+              0.4
+            ],
+            "n": 1273,
+            "probability": 0.20354737052244049,
+            "frequency": 0.19167321288295366
+          }
+        ],
+        "confidence65": {
+          "n": 1804,
+          "accuracy": 0.8065410199556541
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.15395322255057745,
+          "logLoss": 0.48456043780644276,
+          "ece": 0.006560741573036388,
+          "accuracy": 0.8065410199556541,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 960,
+              "probability": 0.172261201380632,
+              "frequency": 0.16041666666666668
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 844,
+              "probability": 0.23049191413228562,
+              "frequency": 0.23104265402843602
+            }
+          ],
+          "confidence65": {
+            "n": 1804,
+            "accuracy": 0.8065410199556541
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.156340204710091,
+          "logLoss": 0.4920923065081248,
+          "ece": 0.014512870873726389,
+          "accuracy": 0.8065410199556541,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 1086,
+              "probability": 0.166504553367475,
+              "frequency": 0.1832412523020258
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 718,
+              "probability": 0.22006290252545996,
+              "frequency": 0.20891364902506965
+            }
+          ],
+          "confidence65": {
+            "n": 1803,
+            "accuracy": 0.8064337215751525
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.1562139432259278,
+          "logLoss": 0.4916998443788145,
+          "ece": 0.01000779505166786,
+          "accuracy": 0.8065410199556541,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 996,
+              "probability": 0.17358398345742082,
+              "frequency": 0.1817269076305221
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 808,
+              "probability": 0.22022736360990092,
+              "frequency": 0.2079207920792079
+            }
+          ],
+          "confidence65": {
+            "n": 1804,
+            "accuracy": 0.8065410199556541
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.15506925968944116,
+          "logLoss": 0.48816014866717766,
+          "ece": 0.003127976081784081,
+          "accuracy": 0.8065410199556541,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 1005,
+              "probability": 0.17510997212400617,
+              "frequency": 0.1781094527363184
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 799,
+              "probability": 0.21605555799269674,
+              "frequency": 0.2127659574468085
+            }
+          ],
+          "confidence65": {
+            "n": 1804,
+            "accuracy": 0.8065410199556541
+          }
+        }
+      }
+    },
+    {
+      "target": "home-point-handicap-plus-9.5",
+      "selected": "hierarchical-eb",
+      "reference": {
+        "n": 1804,
+        "brier": 0.16336769611632948,
+        "logLoss": 0.508189241604515,
+        "ece": 0.011587554708537139,
+        "accuracy": 0.7943458980044346,
+        "calibration": [
+          {
+            "range": [
+              0.6,
+              0.8
+            ],
+            "n": 1294,
+            "probability": 0.7946176599264683,
+            "frequency": 0.7998454404945904
+          },
+          {
+            "range": [
+              0.8,
+              1.0
+            ],
+            "n": 510,
+            "probability": 0.8081160796844137,
+            "frequency": 0.7803921568627451
+          }
+        ],
+        "confidence65": {
+          "n": 1804,
+          "accuracy": 0.7943458980044346
+        }
+      },
+      "candidates": {
+        "hierarchical-eb": {
+          "n": 1804,
+          "brier": 0.16150071096808585,
+          "logLoss": 0.5025056243308909,
+          "ece": 0.009770143341524679,
+          "accuracy": 0.7943458980044346,
+          "calibration": [
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 750,
+              "probability": 0.7689207965303625,
+              "frequency": 0.756
+            },
+            {
+              "range": [
+                0.8,
+                1.0
+              ],
+              "n": 1054,
+              "probability": 0.8291600960060139,
+              "frequency": 0.8216318785578748
+            }
+          ],
+          "confidence65": {
+            "n": 1803,
+            "accuracy": 0.7942318358291736
+          }
+        },
+        "logistic-context": {
+          "n": 1804,
+          "brier": 0.1621415567910988,
+          "logLoss": 0.5042484646109975,
+          "ece": 0.00850140333956908,
+          "accuracy": 0.7943458980044346,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 2,
+              "probability": 0.5833475634163852,
+              "frequency": 1.0
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 690,
+              "probability": 0.7641138429566205,
+              "frequency": 0.7463768115942029
+            },
+            {
+              "range": [
+                0.8,
+                1.0
+              ],
+              "n": 1112,
+              "probability": 0.825777585531787,
+              "frequency": 0.8237410071942446
+            }
+          ],
+          "confidence65": {
+            "n": 1792,
+            "accuracy": 0.7963169642857143
+          }
+        },
+        "boosted-context": {
+          "n": 1804,
+          "brier": 0.16410006478907152,
+          "logLoss": 0.5100815915026825,
+          "ece": 0.012662486261340256,
+          "accuracy": 0.7943458980044346,
+          "calibration": [
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 1025,
+              "probability": 0.7693976557479885,
+              "frequency": 0.7824390243902439
+            },
+            {
+              "range": [
+                0.8,
+                1.0
+              ],
+              "n": 779,
+              "probability": 0.8221767937832426,
+              "frequency": 0.810012836970475
+            }
+          ],
+          "confidence65": {
+            "n": 1795,
+            "accuracy": 0.7944289693593315
+          }
+        },
+        "joint-score-forest": {
+          "n": 1804,
+          "brier": 0.1626203673198798,
+          "logLoss": 0.5057991330139151,
+          "ece": 0.009994015690085841,
+          "accuracy": 0.7943458980044346,
+          "calibration": [
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 778,
+              "probability": 0.777746173074475,
+              "frequency": 0.7660668380462725
+            },
+            {
+              "range": [
+                0.8,
+                1.0
+              ],
+              "n": 1026,
+              "probability": 0.8245055376734632,
+              "frequency": 0.8157894736842105
+            }
+          ],
+          "confidence65": {
+            "n": 1804,
+            "accuracy": 0.7943458980044346
+          }
+        }
+      }
+    }
+  ],
+  "finalTraining": 1777,
+  "finalCalibration": 386,
+  "confirmation": {
+    "n": 249,
+    "collectionComplete": false,
+    "from": 1793837040000,
+    "to": 1793885940000,
+    "sealedAt": "2026-11-05T14:40:20.066Z",
+    "selectionFrozenAt": "2026-11-05T14:43:17.679389+00:00",
+    "targets": [
+      {
+        "target": "winner",
+        "selected": "hierarchical-eb",
+        "metrics": {
+          "n": 249,
+          "brier": 0.2460102847271366,
+          "logLoss": 0.6851098854508798,
+          "ece": 0.04724288676861292,
+          "accuracy": 0.5381526104417671,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 2,
+              "probability": 0.3869170039695957,
+              "frequency": 0.0
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 244,
+              "probability": 0.5034411958818393,
+              "frequency": 0.45901639344262296
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 3,
+              "probability": 0.616668999241123,
+              "frequency": 0.6666666666666666
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.25011606478543946,
+          "logLoss": 0.6933792661411629,
+          "ece": 0.04147793677041034,
+          "accuracy": 0.4738955823293173,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 249,
+              "probability": 0.49930926207161513,
+              "frequency": 0.4578313253012048
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.008801322697975388,
+          "upper": 0.004252052521987789,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": false,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "first-set",
+        "selected": "joint-score-forest",
+        "metrics": {
+          "n": 249,
+          "brier": 0.2482112532419682,
+          "logLoss": 0.6895925178392092,
+          "ece": 0.023332816949902444,
+          "accuracy": 0.5783132530120482,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 2,
+              "probability": 0.39505643130935514,
+              "frequency": 1.0
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 247,
+              "probability": 0.48421046268479523,
+              "frequency": 0.46558704453441296
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.24976602440916412,
+          "logLoss": 0.6926809892905319,
+          "ece": 0.01508629219262414,
+          "accuracy": 0.5301204819277109,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 249,
+              "probability": 0.4849658102649133,
+              "frequency": 0.46987951807228917
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.007899749244772191,
+          "upper": 0.004036559020254795,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": false,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "first-set-points-over-19.5",
+        "selected": "logistic-context",
+        "metrics": {
+          "n": 249,
+          "brier": 0.2251651019779708,
+          "logLoss": 0.642666919405604,
+          "ece": 0.00044860516373301795,
+          "accuracy": 0.6586345381526104,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 249,
+              "probability": 0.3418140670111226,
+              "frequency": 0.3413654618473896
+            }
+          ],
+          "confidence65": {
+            "n": 203,
+            "accuracy": 0.6502463054187192
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.2251651019779708,
+          "logLoss": 0.642666919405604,
+          "ece": 0.00044860516373301795,
+          "accuracy": 0.6586345381526104,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 249,
+              "probability": 0.3418140670111226,
+              "frequency": 0.3413654618473896
+            }
+          ],
+          "confidence65": {
+            "n": 203,
+            "accuracy": 0.6502463054187192
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": 0.0,
+          "upper": 0.0,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": false,
+          "logLossImprovement": false,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "sets-over-3.5",
+        "selected": "hierarchical-eb",
+        "metrics": {
+          "n": 249,
+          "brier": 0.23302920861253984,
+          "logLoss": 0.6606688391872422,
+          "ece": 0.06262316097771525,
+          "accuracy": 0.6506024096385542,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 5,
+              "probability": 0.5844374583773185,
+              "frequency": 0.8
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 244,
+              "probability": 0.7070301408825316,
+              "frequency": 0.6475409836065574
+            }
+          ],
+          "confidence65": {
+            "n": 228,
+            "accuracy": 0.6403508771929824
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.23093277014740798,
+          "logLoss": 0.6555132805873154,
+          "ece": 0.05164473891111998,
+          "accuracy": 0.6506024096385542,
+          "calibration": [
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 249,
+              "probability": 0.7022471485496742,
+              "frequency": 0.6506024096385542
+            }
+          ],
+          "confidence65": {
+            "n": 249,
+            "accuracy": 0.6506024096385542
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.0022193385181369135,
+          "upper": 0.007564371290000009,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": false,
+          "logLossImprovement": false,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "sets-over-4.5",
+        "selected": "hierarchical-eb",
+        "metrics": {
+          "n": 249,
+          "brier": 0.2073375270870659,
+          "logLoss": 0.6048960635573615,
+          "ece": 0.023595485691580688,
+          "accuracy": 0.7068273092369478,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 247,
+              "probability": 0.31602615635245834,
+              "frequency": 0.29554655870445345
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 2,
+              "probability": 0.4084076590731919,
+              "frequency": 0.0
+            }
+          ],
+          "confidence65": {
+            "n": 196,
+            "accuracy": 0.7091836734693877
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.20745431817686774,
+          "logLoss": 0.605516385401533,
+          "ece": 0.023992624014420427,
+          "accuracy": 0.7068273092369478,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 249,
+              "probability": 0.3171653147774726,
+              "frequency": 0.2931726907630522
+            }
+          ],
+          "confidence65": {
+            "n": 249,
+            "accuracy": 0.7068273092369478
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.008164768006369474,
+          "upper": 0.005047301088677941,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": false,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "points-over-74.5",
+        "selected": "hierarchical-eb",
+        "metrics": {
+          "n": 249,
+          "brier": 0.24927732597204444,
+          "logLoss": 0.691695831348176,
+          "ece": 0.040079873573118464,
+          "accuracy": 0.4939759036144578,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 1,
+              "probability": 0.3962237907854848,
+              "frequency": 1.0
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 245,
+              "probability": 0.5124862156095367,
+              "frequency": 0.4775510204081633
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 3,
+              "probability": 0.6056631620518341,
+              "frequency": 0.3333333333333333
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.25157740284457214,
+          "logLoss": 0.6963027534786848,
+          "ece": 0.032715579416119744,
+          "accuracy": 0.42971887550200805,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 249,
+              "probability": 0.5106272260024651,
+              "frequency": 0.4779116465863454
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.008114070449504294,
+          "upper": 0.0032609039111333327,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": false,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "points-over-79.5",
+        "selected": "hierarchical-eb",
+        "metrics": {
+          "n": 249,
+          "brier": 0.23200073945337538,
+          "logLoss": 0.6566907689699982,
+          "ece": 0.03722209261146672,
+          "accuracy": 0.6345381526104418,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 115,
+              "probability": 0.37195882449129364,
+              "frequency": 0.2956521739130435
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 134,
+              "probability": 0.4216937593749519,
+              "frequency": 0.4253731343283582
+            }
+          ],
+          "confidence65": {
+            "n": 18,
+            "accuracy": 0.5555555555555556
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.23332661784371572,
+          "logLoss": 0.659497009209225,
+          "ece": 0.0341357435050481,
+          "accuracy": 0.6345381526104418,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 167,
+              "probability": 0.3964973214614078,
+              "frequency": 0.3592814371257485
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 82,
+              "probability": 0.40591155425246184,
+              "frequency": 0.3780487804878049
+            }
+          ],
+          "confidence65": {
+            "n": 0,
+            "accuracy": null
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.004274501086150543,
+          "upper": 0.0003276596339078531,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": false,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "points-over-84.5",
+        "selected": "hierarchical-eb",
+        "metrics": {
+          "n": 249,
+          "brier": 0.20926888620652465,
+          "logLoss": 0.6087844352706256,
+          "ece": 0.02010205119779797,
+          "accuracy": 0.6987951807228916,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 244,
+              "probability": 0.319346605183088,
+              "frequency": 0.30327868852459017
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 5,
+              "probability": 0.4169678167156451,
+              "frequency": 0.2
+            }
+          ],
+          "confidence65": {
+            "n": 191,
+            "accuracy": 0.7120418848167539
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.21076292883133918,
+          "logLoss": 0.6125445106307333,
+          "ece": 0.023820916281962645,
+          "accuracy": 0.6987951807228916,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 249,
+              "probability": 0.3250257355590711,
+              "frequency": 0.30120481927710846
+            }
+          ],
+          "confidence65": {
+            "n": 249,
+            "accuracy": 0.6987951807228916
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.007116899970023722,
+          "upper": 0.0011734400212831668,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": false,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "home-set-handicap-minus-1.5",
+        "selected": "hierarchical-eb",
+        "metrics": {
+          "n": 249,
+          "brier": 0.21403837937442208,
+          "logLoss": 0.6185046769703938,
+          "ece": 0.04690021514237676,
+          "accuracy": 0.6746987951807228,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 227,
+              "probability": 0.3346147295338269,
+              "frequency": 0.29955947136563876
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 22,
+              "probability": 0.4217904560784955,
+              "frequency": 0.5909090909090909
+            }
+          ],
+          "confidence65": {
+            "n": 142,
+            "accuracy": 0.7323943661971831
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.21976568036085875,
+          "logLoss": 0.6314367864197808,
+          "ece": 0.014834222449200463,
+          "accuracy": 0.6746987951807228,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 249,
+              "probability": 0.34013542726847756,
+              "frequency": 0.3253012048192771
+            }
+          ],
+          "confidence65": {
+            "n": 249,
+            "accuracy": 0.6746987951807228
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.009421971616925554,
+          "upper": -0.0004574801915216787,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": true,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "home-set-handicap-plus-1.5",
+        "selected": "joint-score-forest",
+        "metrics": {
+          "n": 249,
+          "brier": 0.23276562054019323,
+          "logLoss": 0.6577188587908469,
+          "ece": 0.03910629287110485,
+          "accuracy": 0.6184738955823293,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 22,
+              "probability": 0.568326352600771,
+              "frequency": 0.36363636363636365
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 227,
+              "probability": 0.6662303399457628,
+              "frequency": 0.6431718061674009
+            }
+          ],
+          "confidence65": {
+            "n": 154,
+            "accuracy": 0.6363636363636364
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.2372208963980352,
+          "logLoss": 0.6675714580739118,
+          "ece": 0.03882684646362078,
+          "accuracy": 0.6184738955823293,
+          "calibration": [
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 249,
+              "probability": 0.6573007420459501,
+              "frequency": 0.6184738955823293
+            }
+          ],
+          "confidence65": {
+            "n": 203,
+            "accuracy": 0.625615763546798
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.008292678935348912,
+          "upper": -6.494670373620859e-05,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": true,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "home-point-handicap-minus-5.5",
+        "selected": "hierarchical-eb",
+        "metrics": {
+          "n": 249,
+          "brier": 0.2249321174604845,
+          "logLoss": 0.6413301610172352,
+          "ece": 0.05797377417300342,
+          "accuracy": 0.6345381526104418,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 210,
+              "probability": 0.34257700982663664,
+              "frequency": 0.3142857142857143
+            },
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 39,
+              "probability": 0.4232231357568166,
+              "frequency": 0.6410256410256411
+            }
+          ],
+          "confidence65": {
+            "n": 120,
+            "accuracy": 0.7166666666666667
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.23233981026818173,
+          "logLoss": 0.6574648865918157,
+          "ece": 0.012399550825954508,
+          "accuracy": 0.6345381526104418,
+          "calibration": [
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 249,
+              "probability": 0.3530622965636037,
+              "frequency": 0.3654618473895582
+            }
+          ],
+          "confidence65": {
+            "n": 82,
+            "accuracy": 0.6341463414634146
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.0119344325185468,
+          "upper": -0.0043968567182313435,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": true,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "home-point-handicap-plus-5.5",
+        "selected": "hierarchical-eb",
+        "metrics": {
+          "n": 249,
+          "brier": 0.22507384968808786,
+          "logLoss": 0.6420103930471288,
+          "ece": 0.011112911983191878,
+          "accuracy": 0.6465863453815262,
+          "calibration": [
+            {
+              "range": [
+                0.4,
+                0.6
+              ],
+              "n": 35,
+              "probability": 0.5724791886325197,
+              "frequency": 0.6
+            },
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 214,
+              "probability": 0.6626349845137989,
+              "frequency": 0.6542056074766355
+            }
+          ],
+          "confidence65": {
+            "n": 133,
+            "accuracy": 0.6917293233082706
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.2296543830235552,
+          "logLoss": 0.6519804661527162,
+          "ece": 0.0017725261873976494,
+          "accuracy": 0.6465863453815262,
+          "calibration": [
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 249,
+              "probability": 0.6448138191941285,
+              "frequency": 0.6465863453815262
+            }
+          ],
+          "confidence65": {
+            "n": 82,
+            "accuracy": 0.6585365853658537
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.01069953626298266,
+          "upper": 0.004312014993424999,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": false,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "home-point-handicap-minus-9.5",
+        "selected": "hierarchical-eb",
+        "metrics": {
+          "n": 249,
+          "brier": 0.1707372300165596,
+          "logLoss": 0.5242463989523418,
+          "ece": 0.020725310022731806,
+          "accuracy": 0.7791164658634538,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 135,
+              "probability": 0.168757988473096,
+              "frequency": 0.1925925925925926
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 114,
+              "probability": 0.2373427136883493,
+              "frequency": 0.2543859649122807
+            }
+          ],
+          "confidence65": {
+            "n": 248,
+            "accuracy": 0.7782258064516129
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.17262516509824932,
+          "logLoss": 0.5296689266367306,
+          "ece": 0.021398750184425115,
+          "accuracy": 0.7791164658634538,
+          "calibration": [
+            {
+              "range": [
+                0.0,
+                0.2
+              ],
+              "n": 82,
+              "probability": 0.18822431524625205,
+              "frequency": 0.21951219512195122
+            },
+            {
+              "range": [
+                0.2,
+                0.4
+              ],
+              "n": 167,
+              "probability": 0.20501387637057172,
+              "frequency": 0.2215568862275449
+            }
+          ],
+          "confidence65": {
+            "n": 249,
+            "accuracy": 0.7791164658634538
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.007628384474219453,
+          "upper": 0.006498361287318161,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": false,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      },
+      {
+        "target": "home-point-handicap-plus-9.5",
+        "selected": "hierarchical-eb",
+        "metrics": {
+          "n": 249,
+          "brier": 0.16145486375653698,
+          "logLoss": 0.5009662584817337,
+          "ece": 0.020474358724179575,
+          "accuracy": 0.7911646586345381,
+          "calibration": [
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 98,
+              "probability": 0.76799444645837,
+              "frequency": 0.7244897959183674
+            },
+            {
+              "range": [
+                0.8,
+                1.0
+              ],
+              "n": 151,
+              "probability": 0.8289095392754937,
+              "frequency": 0.8344370860927153
+            }
+          ],
+          "confidence65": {
+            "n": 249,
+            "accuracy": 0.7911646586345381
+          }
+        },
+        "reference": {
+          "n": 249,
+          "brier": 0.1661377339670566,
+          "logLoss": 0.51517746425896,
+          "ece": 0.041128994754764406,
+          "accuracy": 0.7911646586345381,
+          "calibration": [
+            {
+              "range": [
+                0.6,
+                0.8
+              ],
+              "n": 46,
+              "probability": 0.77632163886454,
+              "frequency": 0.8695652173913043
+            },
+            {
+              "range": [
+                0.8,
+                1.0
+              ],
+              "n": 203,
+              "probability": 0.8027187935059369,
+              "frequency": 0.7733990147783252
+            }
+          ],
+          "confidence65": {
+            "n": 249,
+            "accuracy": 0.7911646586345381
+          }
+        },
+        "pairedBrierDifference": {
+          "lower": -0.00931459963469533,
+          "upper": 0.002418060404748593,
+          "observedHours": 14,
+          "blockHours": 3,
+          "draws": 10000,
+          "familyTargets": 14
+        },
+        "gates": {
+          "cases": false,
+          "hours": true,
+          "brierImprovement": false,
+          "logLossImprovement": true,
+          "calibration": true
+        },
+        "temporalConfirmationPassed": false,
+        "operationallyValidated": false
+      }
+    ]
+  },
+  "limitations": [
+    "Old archive has been examined before; historical search remains exploratory",
+    "Only complete reported BO5 scores; no verified serving/rally sequences",
+    "Test lines are declared research thresholds, not claims about current quoted availability",
+    "No ROI or EV backtest without historical executable quotes",
+    "No automatic model promotion or changes to frozen forward-value-v1-20261105",
+    "Confirmation is retrospective, from one day, with frozen previous-day features; not independent multi-day forward betting evidence.",
+    "Joint score forest uses common CART leaf weights for score indicators at declared lines; it does not implement the MMD-based Distributional Random Forest algorithm.",
+    "Only the historically selected candidate is evaluated per target on confirmation. No re-selection from these outcomes."
+  ]
+}

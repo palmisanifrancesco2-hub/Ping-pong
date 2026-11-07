@@ -1,0 +1,15 @@
+{
+ "version":"common-walk-forward-v4",
+ "candidates":["elo10","elo20","elo40","elo80","form20","elo40-form20","scores:0.001","scores:0.01","scores:0.1","full:0.001","full:0.01","full:0.1","form:0.001","form:0.01","form:0.1"],
+ "foldStarts":["2026-10-25T00:00:00Z","2026-10-27T00:00:00Z","2026-10-29T00:00:00Z","2026-10-31T00:00:00Z","2026-11-02T00:00:00Z"],
+ "endExclusive":"2026-11-03T00:00:00Z",
+ "calibrationDays":2,
+ "minimumTraining":50,
+ "minimumCalibration":40,
+ "minimumPlayerHistory":20,
+ "temperatures":[0.25,0.5,0.75,1,1.25,1.5],
+ "ranking":"Pooled out-of-time Brier on exactly the same events; tie-break log loss then identifier",
+ "secondary":"Equal-day Brier, log loss, hit rate, ECE, fold stability; no retrospective switching of the primary metric",
+ "uncertainty":"10000 deterministic seeded day-cluster bootstrap replicates of paired loss differences; 95% and Bonferroni 1-0.05/15 intervals; diagnostic only after selection",
+ "limitations":["Previously explored archive: exploratory comparison, not independent certification","All models share identical test IDs and chronological availability constraints","No automatic promotion or change of the frozen prospective cohort","No evidence of betting profit without an executable price benchmark"]
+}
