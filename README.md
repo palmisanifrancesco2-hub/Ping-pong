@@ -149,3 +149,6 @@ Combinazioni della proiezione: 18 miscele a pesi fissi confrontate sugli stessi 
 
 
 Studio v13: pesi della combinazione appresi solo dalle previsioni e dagli esiti disponibili nei giorni precedenti. Su 1.291 casi comuni, peso + temperatura dà 724 corretti contro 719 della media fissa, ma Brier peggiore. Sei giorni insufficienti per gli intervalli e nessuna promozione. [Fonti online, metodo e risultati](docs/STUDIO-TEMPORALE-V13.md).
+
+
+Nuove fonti gratuite scaricate: 10.292 righe WTT e 7.851 Setka, oltre ai 23.596 risultati MoviOdds già disponibili. Audit trova duplicati, incongruenze di date e formato; non equivale a 10.000 test validati. [Fonti, numeri effettivi e condizioni per lo studio](docs/DATI-PER-10000-PARTITE.md).

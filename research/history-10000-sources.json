@@ -1,0 +1,83 @@
+{
+  "generatedAt": "2026-11-07T11:48:53.234188+00:00",
+  "purpose": "Feasibility and integrity audit for a 10000-match historical study; not a backtest report",
+  "movioddsExisting": {
+    "rows": 23596,
+    "uniqueIds": 23596,
+    "previouslyVerifiedStarts": 3348,
+    "note": "Only a subset currently has independently cross-checked kickoff times; do not use result availability as kickoff."
+  },
+  "scoreSetka": {
+    "source": "https://data.scorenetwork.org/table_tennis/table_tennis_sept2022.html",
+    "download": "https://data.scorenetwork.org/data/table_tennis-sept2022.csv",
+    "rows": 7851,
+    "uniqueRowsIgnoringIndex": 7847,
+    "sha256": "d400562f49ced084133c8e926025efb6023dd62a8341fd4484864d567a4e392d",
+    "dateMin": "2022-06-10",
+    "dateMax": "2022-07-08",
+    "pageDescriptionPeriod": "September 2022",
+    "descriptionDateMismatch": true,
+    "hasSetScores": true,
+    "hasHistoricalOdds": false,
+    "licenseForRedistributionNotVerified": true
+  },
+  "wtt": {
+    "source": "https://github.com/Li02003121/racket-sports-dataset",
+    "doi": "https://doi.org/10.17605/OSF.IO/PJUW8",
+    "download": "https://osf.io/download/3f6ak/",
+    "declaredDataLicense": "CC BY 4.0",
+    "files": [
+      {
+        "file": "table_tennis_wtt_men_std.csv",
+        "rows": 5442,
+        "sha256": "f2cf0fcf65ff398aa9f889042071193c8bdd8ec8ff71dfbd7ddf5f8fb5837545",
+        "counts": {
+          "passesScoreAndWinnerChecksWithoutTrustingBestOf": 5436,
+          "passesIncludingDeclaredBestOf": 222,
+          "declaredBestOfMismatchAmongOtherwiseCoherentRows": 5214,
+          "winnerMismatch": 2,
+          "illegalOrIncompleteSets": 3,
+          "stoppingRuleMismatch": 1
+        },
+        "dateMin": "2022-02-27",
+        "dateMax": "2025-12-10",
+        "namespace": "Filename/gender must prefix match_id; IDs repeat across men and women",
+        "hasHistoricalOdds": false,
+        "hasKickoffTime": false,
+        "formatAutoCorrected": false
+      },
+      {
+        "file": "table_tennis_wtt_women_std.csv",
+        "rows": 4850,
+        "sha256": "d9aec1488bcee66625a0973d6ca6e0e5cc58dd8d22a193c0194b6bf908811d6b",
+        "counts": {
+          "passesScoreAndWinnerChecksWithoutTrustingBestOf": 4848,
+          "passesIncludingDeclaredBestOf": 221,
+          "declaredBestOfMismatchAmongOtherwiseCoherentRows": 4627,
+          "winnerMismatch": 1,
+          "stoppingRuleMismatch": 1
+        },
+        "dateMin": "2022-02-27",
+        "dateMax": "2025-12-10",
+        "namespace": "Filename/gender must prefix match_id; IDs repeat across men and women",
+        "hasHistoricalOdds": false,
+        "hasKickoffTime": false,
+        "formatAutoCorrected": false
+      }
+    ]
+  },
+  "eloCommercialAlternative": {
+    "source": "https://github.com/lathise2025/table-tennis-elo-dataset",
+    "freeSampleRows": 2000,
+    "fullDatasetNotAcquired": true
+  },
+  "tenThousandRawWttRowsDownloaded": true,
+  "tenThousandIndependentTestMatchesValidated": false,
+  "limitations": [
+    "Training/calibration and warmup consume rows; 10000 downloaded rows do not guarantee 10000 test cases.",
+    "WTT men/women, Setka 2022 and current minor leagues must remain separate cohorts; no blind pooling.",
+    "No verified historical pre-event odds in these CSVs; cannot prove executable EV or ROI.",
+    "Published counts and legal scores do not independently certify results as official.",
+    "No original prospective study or runtime model changed."
+  ]
+}
