@@ -1,12 +1,12 @@
 # Ping Pong Analytics
 
-## Stato corrente — sistema predittivo v16
+## Stato corrente — sistema predittivo v17
 
-Inventario reale, benchmark cronologici su 14 target e 1.804 incontri, confronto separato con quote as-of e motore matematico coerente aggiunti. Statistiche modello mostra i report; le classifiche A probabilità, B valore e combinata richiedono ora **ADM e validazione indipendente**. Il feed corrente bet365.com.au non soddisfa il requisito del sito italiano: nessuna opportunità operativa viene forzata. Eventi, giocatori e ricerca sperimentale restano consultabili.
+Inventario reale, benchmark cronologici su 14 target e 1.804 incontri, confronto separato con quote as-of e motore matematico coerente aggiunti. Statistiche modello mostra i report; le classifiche A probabilità, B valore e combinata accettano **bet365 anche senza requisito ADM**, mantenendo dominio e provenienza. Restano necessarie validazione indipendente del modello ed EV positivo anche prudente: nessuna opportunità operativa viene forzata. Eventi, giocatori e ricerca sperimentale restano consultabili.
 
 [Avanzamento delle dieci fasi](docs/AVANZAMENTO-SISTEMA-PREDITTIVO.md) · [Inventario dati](docs/INVENTARIO-DATI-V16.md) · [Benchmark e quote](docs/BENCHMARK-AVANZATO-V16.md) · [Motore coerente](docs/MOTORE-COERENTE-V16.md) · [Istruzioni operative](docs/OPERATIVITA-SISTEMA-PREDITTIVO.md).
 
-Le sezioni successive conservano la cronologia del progetto; in caso di indicazioni superate vale questo stato corrente e la policy v16. Nessun modello è stato promosso sulla sola base del minimo nello storico. Il retraining automatico non è attivato.
+Le sezioni successive conservano la cronologia del progetto; in caso di indicazioni superate vale questo stato corrente e la policy v17. Nessun modello è stato promosso sulla sola base del minimo nello storico. Il training automatico dei candidati è collegato al cron giornaliero esistente; dati insufficienti o tentativi falliti sono registrati e nessun modello viene promosso automaticamente. [Funzionamento e controlli](docs/ADDESTRAMENTO-CONTINUO-V17.md).
 
 Web app privata React/TypeScript per consultare quote di tennistavolo. **Feed gratuito MoviOdds collegato; modello, previsioni e stake non operativi.**
 

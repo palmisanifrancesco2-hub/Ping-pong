@@ -6,7 +6,7 @@ L’utente può consultare tutto dal browser Android. I comandi seguenti sono is
 
 Accedere con l’account privato esistente. In **Statistiche modello**, aprire il report del sistema: inventario, mercato del benchmark, calibrazione per intervallo e competizione, confronto WTT separato e stato delle versioni. **Aggiorna report** rilegge gli aggregati senza avviare training o scritture. Lo stato del test prospettico rimane nella sezione dedicata e non è ricavato dai risultati storici.
 
-Tutte e tre le classifiche conservano il filtro EV positivo anche prudente già richiesto, oltre ad ADM e validazione indipendente. Nella vista quote, la classifica A ordina per probabilità, B per valore prudente positivo, la combinata usa pesi modificabili. Non va interpretato come scientificamente ottimale alcun peso impostato dall’utente. I prezzi della fonte estera e i modelli non validati non entrano nelle classifiche operative. **Eventi e giocatori** consente comunque di consultare le partite disponibili e le statistiche reali; i dettagli conservano il comportamento persistente durante gli aggiornamenti.
+Tutte e tre le classifiche conservano il filtro EV positivo anche prudente già richiesto, oltre a quote bet365 con provenienza verificabile e validazione indipendente. Nella vista quote, la classifica A ordina per probabilità, B per valore prudente positivo, la combinata usa pesi modificabili. Non va interpretato come scientificamente ottimale alcun peso impostato dall’utente. I prezzi bet365.com.au sono accettati, senza equipararli a quelli di altri domini. I modelli non validati restano esclusi dalle classifiche operative. **Eventi e giocatori** consente comunque di consultare le partite disponibili e le statistiche reali; i dettagli conservano il comportamento persistente durante gli aggiornamenti.
 
 ## Dati e training
 
@@ -23,8 +23,17 @@ Tutte e tre le classifiche conservano il filtro EV positivo anche prudente già 
 - `npm run check`: test applicativi, TypeScript, avvio del server ESM compilato e build Vite.
 - `npm run dev`: frontend e backend locali; per l’utente finale si usa la pubblicazione Vercel protetta e Supabase Auth già esistente.
 - API GET `/api/prediction-system`: solo utenti autorizzati, cache privata/no-store, aggregati senza righe individuali di test. POST non consentito.
-- API GET `/api/value`: include le tre classifiche con policy ADM/validazione; nessun input del browser può promuovere un modello o cambiare la provenienza del prezzo.
+- API GET `/api/value`: include le tre classifiche con policy bet365/validazione; nessun input del browser può promuovere un modello o cambiare la provenienza del prezzo.
 
 ## Monitoraggio
 
-Intervallo di revisione, numero di nuovi esiti e campione minimo di drift sono parametri di `monitorModel`. Gli avvisi confrontano Brier e Log Loss sulla stessa coorte e non sono una prova statistica di peggioramento. In assenza di metriche recenti verificabili lo stato resta non disponibile. La raccolta e il settlement esistenti proseguono sul cron già configurato; nessun nuovo piano a pagamento o addestramento automatico è stato attivato.
+Intervallo di revisione, numero di nuovi esiti e campione minimo di drift sono parametri di `monitorModel`. Gli avvisi confrontano Brier e Log Loss sulla stessa coorte e non sono una prova statistica di peggioramento. In assenza di metriche recenti verificabili lo stato resta non disponibile. La raccolta e il settlement esistenti proseguono sul cron già configurato; il training automatico dei candidati è ora collegato al cron esistente, senza nuovi piani a pagamento.
+
+
+## Addestramento continuo v17
+
+In Statistiche modello, **Addestramento continuo dei candidati** mostra lo stato e l’ultima esecuzione. **Verifica e addestra candidato** usa POST `/api/training`, riservato al proprietario; **Aggiorna stato training** usa GET dello stesso endpoint. Non sono ammessi parametri dal browser per alterare algoritmo, validazione o dataset. Il comando rispetta lo stesso limite di un tentativo per giornata del cron.
+
+Il cron `/api/study-run` continua prima gli studi originali e il settlement, poi il training di candidati. Si usa la configurazione già abilitata `APP_FORWARD_STUDY_ENABLED=1`; `APP_ADAPTIVE_TRAINING_DISABLED=1` è il comando server per sospendere soltanto i nuovi training. Nessuna chiave aggiuntiva. La raccolta resta separata dalla promozione dei candidati e i protocolli v9/v10 restano invariati.
+
+Per fonti, divisione per giorni UTC, copertura, replay retrospettivo e limiti della raccolta, vedere [il contratto v17](ADDESTRAMENTO-CONTINUO-V17.md). L’automazione dipende dalla disponibilità di osservazioni compatibili: al termine dell’arruolamento originario o in assenza di dati recenti il tentativo resta registrato come insufficiente, senza inventare dati o modificare quel protocollo.

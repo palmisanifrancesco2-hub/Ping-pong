@@ -32,6 +32,7 @@ describe('conservative quote comparison', () => {
     const result = bestQuotes([quote, { ...quote, odds: 2.2, bookmaker: 'test-book-2' }, { ...quote, line: 75.5, odds: 3 }], time);
     expect(result).toHaveLength(2); expect(result[0].odds).toBe(2.2);
   });
-  it.each([{ admVerifiedUntil: null }, { admVerifiedUntil: 'bad' }, { updatedAt: 'bad' }, { updatedAt: '2026-01-01T11:00:00Z' }, { updatedAt: '2026-01-01T12:01:00Z' }, { suspended: true }, { suspended: null }, { mode: 'demo' as const }, { settlementRule: '' }, { line: null }, { odds: 1.29 }])('excludes unsafe/incomplete quotes (%j)', changes => expect(bestQuotes([{ ...quote, ...changes }], time)).toEqual([]));
+  it.each([{ admVerifiedUntil: null }, { admVerifiedUntil: 'bad' }, { updatedAt: 'bad' }, { updatedAt: '2026-01-01T11:00:00Z' }, { updatedAt: '2026-01-01T12:01:00Z' }, { suspended: true }, { suspended: null }, { mode: 'demo' as const }, { settlementRule: '' }, { line: null }, { odds: 1.29 }])('excludes unsafe/incomplete quotes (%j)', changes => expect(bestQuotes([{ ...quote, ...changes }], time,1.3,300,{requireAdm:true})).toEqual([]));
+  it('accepts non-ADM prices by default and keeps the optional ADM check explicit',()=>{expect(bestQuotes([{...quote,admVerifiedUntil:null}],time)).toHaveLength(1);expect(bestQuotes([{...quote,admVerifiedUntil:null}],time,1.3,300,{requireAdm:true})).toEqual([]);});
   it('does not impose maximum odds', () => expect(bestQuotes([{ ...quote, odds: 100 }], time)).toHaveLength(1));
 });

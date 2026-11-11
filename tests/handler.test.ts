@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createHandler } from '../server/handler';
 import { authorize } from '../server/auth';
 import { OddsApi } from '../server/provider';
+import {adaptiveTrainingProtocol}from'../server/adaptive-training';
 const servers: Server[] = [];
 afterEach(async () => { await Promise.all(servers.splice(0).map(server => new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())))); });
 async function start(handler: ReturnType<typeof createHandler>) {
@@ -14,6 +15,29 @@ async function start(handler: ReturnType<typeof createHandler>) {
   return `http://127.0.0.1:${address.port}`;
 }
 describe('private HTTP API', () => {
+  it('runs candidate training after original settlement on the same protected cron',async()=>{
+    const calls:string[]=[];const secret='synthetic-only-cron-secret-of-sufficient-length';
+    const study={run:vi.fn(async()=>{calls.push('winner');return{status:'completed'};}),report:vi.fn()};
+    const marketStudy={run:vi.fn(async()=>{calls.push('market');return{status:'completed'};}),report:vi.fn()};
+    const trainer={run:vi.fn(async()=>{calls.push('training');return{status:'disabled',day:'2026-11-11',checkedAt:'2026-11-11T12:00:00Z',reason:'Synthetic QA',automaticPromotion:false as const,operationallyValidated:false as const};}),report:vi.fn()};
+    const base=await start(createHandler({env:{CRON_SECRET:secret},study,marketStudy,trainer}));
+    expect((await fetch(`${base}/api/study-run`)).status).toBe(401);expect(calls).toEqual([]);
+    expect((await fetch(`${base}/api/study-run`,{headers:{Authorization:`Bearer ${secret}`}})).status).toBe(200);expect(calls).toEqual(['winner','market','training']);expect(trainer.run).toHaveBeenCalledWith(undefined,expect.any(Number));
+  });
+  it('protects candidate training, rejects overrides and keeps it distinct from model promotion',async()=>{
+    const trainer={run:vi.fn(async()=>({status:'trained',day:'2026-11-11',checkedAt:'2026-11-11T12:00:00Z',reason:'Synthetic QA',automaticPromotion:false as const,operationallyValidated:false as const})),report:vi.fn(async()=>({protocol:adaptiveTrainingProtocol,enabled:true,scheduled:false,automaticPromotion:false,operationallyValidated:false,lastRun:null,runs:[],reason:'Synthetic QA'}))};
+    const base=await start(createHandler({env:{},trainer,authorize:async t=>t==='member'?'owner':null}));
+    for(const method of ['GET','POST'])expect((await fetch(`${base}/api/training`,{method})).status).toBe(401);
+    expect(trainer.run).not.toHaveBeenCalled();expect(trainer.report).not.toHaveBeenCalled();
+    expect((await fetch(`${base}/api/training`,{headers:{Authorization:'Bearer member'}})).status).toBe(200);
+    const forged=await fetch(`${base}/api/training`,{method:'POST',headers:{Authorization:'Bearer member','Content-Type':'application/json'},body:JSON.stringify({validated:true})});expect(forged.status).toBe(400);expect(trainer.run).not.toHaveBeenCalled();
+    const response=await fetch(`${base}/api/training`,{method:'POST',headers:{Authorization:'Bearer member'}});expect(response.status).toBe(200);expect(await response.json()).toMatchObject({automaticPromotion:false});expect(trainer.run).toHaveBeenCalledWith('owner');
+  });
+  it('returns forbidden for training requested by an unauthorized member',async()=>{
+    const trainer={run:vi.fn(async()=>{throw Error('ADAPTIVE_OWNER_ONLY');}),report:vi.fn(async()=>{throw Error('ADAPTIVE_OWNER_ONLY');})};
+    const base=await start(createHandler({env:{},trainer,authorize:async()=>'other-member'}));
+    for(const method of ['GET','POST'])expect((await fetch(`${base}/api/training`,{method,headers:{Authorization:'Bearer member'}})).status).toBe(403);
+  });
   it('protects the integrated system report and exposes aggregates without individual test rows',async()=>{
     const base=await start(createHandler({env:{},authorize:async t=>t==='member'?'owner':null}));
     expect((await fetch(`${base}/api/prediction-system`)).status).toBe(401);
@@ -44,7 +68,7 @@ describe('private HTTP API', () => {
   });
   it('keeps value estimates private and reports the actual model block',async()=>{
     const base=await start(createHandler({analyses:{analyse:vi.fn(),results:new ResultsFeed(async()=>new Response(JSON.stringify({source:'postgres',results:[]})))},authorize:async t=>t==='member'?'owner':null,feed:{board:async()=>({provider:'MoviOdds',bookmakerSite:'bet365.com.au',checkedAt:new Date().toISOString(),serverTime:new Date().toISOString(),warming:false,matches:[]})}}));expect((await fetch(`${base}/api/value`)).status).toBe(401);
-    const response=await fetch(`${base}/api/value`,{headers:{Authorization:'Bearer member'}});expect(response.status).toBe(200);const report=await response.json();expect(report.status).toBe('blocked');expect(report.rankings.probability).toEqual([]);expect(report.policy).toBe('strict-adm-independent-v16');expect(report.opportunities).toEqual([]);
+    const response=await fetch(`${base}/api/value`,{headers:{Authorization:'Bearer member'}});expect(response.status).toBe(200);const report=await response.json();expect(report.status).toBe('blocked');expect(report.rankings.probability).toEqual([]);expect(report.policy).toBe('bet365-independent-v17');expect(report.opportunities).toEqual([]);
   });
   it('verifies private access independently from having an Auth session',async()=>{
     const denied=await start(createHandler({env:{},authorize:async()=>null}));expect((await fetch(`${denied}/api/access`,{headers:{Authorization:'Bearer registered-outsider'}})).status).toBe(401);

@@ -3,7 +3,7 @@ export type ValueInput={startsAt?:string;marketReadAt?:string;quoteKey?:string;m
 export type ValueOpportunity=ValueInput&{impliedProbability:number;fairOdds:number;ev:number;conservativeEv:number;assessment:'Interessante'|'Ottima'|'Sperimentale';rank:number};
 /** Thresholds are selection policy, never a probability or promise of profit. */
 export function assessValue(input:ValueInput):ValueOpportunity|null{
-  if(!input.admVerified||!input.modelValidated||!input.fresh||input.sampleSize<30||input.validationSize<100)return null;
+  if(!input.modelValidated||!input.fresh||input.sampleSize<30||input.validationSize<100)return null;
   if(![input.odds,input.probability,input.probabilityLower].every(Number.isFinite)||input.odds<1.3||input.probability<=0||input.probability>1||input.probabilityLower<0||input.probabilityLower>input.probability)return null;
   const ev=expectedValue(input.probability,input.odds),conservativeEv=expectedValue(input.probabilityLower,input.odds);
   if(ev<=0||conservativeEv<=0)return null;

@@ -1,3 +1,4 @@
+import{AdaptiveTraining}from'./adaptive-training.js';
 import{predictionSystemReport}from'./prediction-system.js';
 import{strictPredictionPolicy}from'./prediction-policy.js';
 import{ensembleSignals,ensembleValueReport}from'./multi-model.js';
@@ -22,7 +23,7 @@ import { ForecastStore } from './forecast-store.js';
 import modelData from '../models/elo-v1.json' with {type:'json'};
 import {researchReport,scoreResearchReport,forwardStudy,modelComparison}from'./research-report.js';
 
-type Dependencies = { marketStudy?:Pick<MarketStudy,'run'|'report'>; profiles?:Pick<PlayerProfiles,'forEvent'>; study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
+type Dependencies = { trainer?:Pick<AdaptiveTraining,'run'|'report'>; marketStudy?:Pick<MarketStudy,'run'|'report'>; profiles?:Pick<PlayerProfiles,'forEvent'>; study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
 export function createHandler(deps: Dependencies = {}) {
   const env = deps.env ?? process.env;
   const provider = deps.provider ?? new OddsApi(oddsApiKey(env));
@@ -35,6 +36,7 @@ export function createHandler(deps: Dependencies = {}) {
   const bets=deps.bets??new ManualBets(env,now);
   const profiles=deps.profiles??new PlayerProfiles(undefined,now,true);
   const study=deps.study??new ProspectiveStudy(env,now,analyses.results,feed as MoviOddsFeed);
+  const trainer=deps.trainer??new AdaptiveTraining(env,now);
   const marketStudy=deps.marketStudy??new MarketStudy(env,now,analyses.results,feed);
   // Single-flight plus shared cache limits upstream usage per warm server instance.
   let cached: { at: number; value: Awaited<ReturnType<OddsApi['connection']>> } | undefined;
@@ -46,16 +48,17 @@ export function createHandler(deps: Dependencies = {}) {
     const send = (status: number, body: unknown) => { res.statusCode = status; res.end(JSON.stringify(body)); };
     const url = new URL(req.url ?? '/', 'http://localhost');
     const path = url.pathname;
-    const methods = ['/api/study','/api/market-study'].includes(path)?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
+    const methods = ['/api/study','/api/market-study','/api/training'].includes(path)?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
     if (!methods.includes(req.method ?? '')) { res.setHeader('Allow', methods.join(', ')); return send(405, { error: 'Metodo non consentito.' }); }
     if (path === '/api/health') return send(200, { status: 'ok', version: '0.1.0' });
-    if (!['/api/prediction-system','/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run','/api/profiles','/api/market-study'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
+    if (!['/api/training','/api/prediction-system','/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run','/api/profiles','/api/market-study'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
     if(path==='/api/study-run'){
       if(!authorizedStudyCron(req.headers.authorization,env.CRON_SECRET))return send(401,{error:'Esecuzione non autorizzata.'});
-      const deadline=now()+285000;let legacy:unknown,markets:unknown;
+      const deadline=now()+285000;let legacy:unknown,markets:unknown,training:unknown;
       try{legacy=await study.run();}catch{legacy={status:'failed'};console.error(JSON.stringify({apiPath:path,code:'STUDY_FAILED'}));}
       try{markets=await marketStudy.run(undefined,deadline);}catch{markets={status:'failed'};console.error(JSON.stringify({apiPath:path,code:'MARKET_STUDY_FAILED'}));}
-      return send((legacy as {status?:string})?.status==='failed'||(markets as {status?:string})?.status==='failed'?503:200,{winnerStudy:legacy,marketStudy:markets});
+      try{training=await trainer.run(undefined,deadline);}catch{training={status:'failed'};console.error('ADAPTIVE_TRAINING_FAILED');}
+      return send((legacy as {status?:string})?.status==='failed'||(markets as {status?:string})?.status==='failed'||(training as {status?:string})?.status==='failed'?503:200,{winnerStudy:legacy,marketStudy:markets,adaptiveTraining:training});
     }
     const match = /^Bearer ([^\s]+)$/.exec(req.headers.authorization ?? '');
     const userId = match ? await checkAuth(match[1], env) : null;
@@ -64,7 +67,8 @@ export function createHandler(deps: Dependencies = {}) {
       if(path==='/api/market-study'){try{return send(200,req.method==='POST'?await marketStudy.run(userId):await marketStudy.report(userId));}catch(error){if(error instanceof Error&&error.message==='MARKET_STUDY_OWNER_ONLY')return send(403,{error:'Accesso al test riservato al proprietario.'});throw error;}}
       if(path==='/api/study'){try{return send(200,req.method==='POST'?await study.run(userId):await study.report(userId));}catch(error){if(error instanceof Error&&error.message==='STUDY_OWNER_ONLY')return send(403,{error:'Solo il proprietario può aggiornare la raccolta.'});throw error;}}
       if(path==='/api/profiles'){const id=url.searchParams.get('eventId');if(!id||id.length>100)return send(400,{error:'Evento non valido.'});let m=(await feed.board()).matches.find(m=>m.id===id);if(!m){const r=(await analyses.results.archive()).results.find(r=>r.id===id);if(r)m={...r,sport:'table_tennis',in_play:false,quotes:[]};}if(!m)return send(404,{error:'Evento non disponibile per la ricerca dei profili.'});return send(200,await profiles.forEvent(m));}
-      if(path==='/api/prediction-system')return send(200,predictionSystemReport(now()));
+      if(path==='/api/training'){if(req.method==='POST'&&(Number(req.headers['content-length']??0)>0||req.headers['transfer-encoding']))return send(400,{error:'Non sono consentiti parametri di training dal browser.'});try{return send(200,req.method==='POST'?await trainer.run(userId):await trainer.report(userId));}catch(e){if(e instanceof Error&&e.message==='ADAPTIVE_OWNER_ONLY')return send(403,{error:'Training riservato al proprietario.'});throw e;}}
+      if(path==='/api/prediction-system')return send(200,predictionSystemReport(now(),env));
       if(path==='/api/access')return send(200,{authorized:true});
       if(path==='/api/status'){
         const db=await userDatabase(match[1],env).from('manual_bets').select('id').limit(0);

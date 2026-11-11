@@ -18,7 +18,7 @@ export function probabilityOrder(a: ValueOpportunity, b: ValueOpportunity) {
 export function selectedQuotes(report: ValueReport | null, matches: FeedMatch[], now: number, minOdds = 1.3) {
   if (!report || !Number.isFinite(now) || !Number.isFinite(Date.parse(report.checkedAt)) || now - Date.parse(report.checkedAt) > 120000 || Date.parse(report.checkedAt) > now + 60000) return [];
   const events = new Map(matches.map(m => [m.id, m]));
-  const sourceRows=report.policy==='strict-adm-independent-v16'?(report.rankings?.value??[]):[...report.opportunities,...(report.experimental??[])];
+  const sourceRows=(report.policy==='strict-adm-independent-v16'||report.policy==='bet365-independent-v17')?(report.rankings?.value??[]):[...report.opportunities,...(report.experimental??[])];
   const rows = sourceRows.filter(o => {
     const m = events.get(o.eventId);
     if (!m || m.in_play || !isUpcomingOrLive(m, now) || !o.fresh || o.sampleSize < 30) return false;
@@ -41,7 +41,7 @@ export function keepOpenMatch(rows:FeedMatch[],opened:OpenMatch|null,current:Fee
 }
 export function openQuote(report:ValueReport|null,m:FeedMatch|undefined,selection:string|null,now:number){
   if(!report||!m||!selection||m.in_play||!isUpcomingOrLive(m,now)||!Number.isFinite(Date.parse(report.checkedAt))||now-Date.parse(report.checkedAt)>120000)return undefined;
-  const sourceRows=report.policy==='strict-adm-independent-v16'?(report.rankings?.value??[]):[...(report.estimates??[]),...report.opportunities,...(report.experimental??[])];
+  const sourceRows=(report.policy==='strict-adm-independent-v16'||report.policy==='bet365-independent-v17')?(report.rankings?.value??[]):[...(report.estimates??[]),...report.opportunities,...(report.experimental??[])];
   return sourceRows.find(o=>{
     if(o.eventId!==m.id||o.selection!==selection||!hasPositiveValue(o))return false;
     const q=m.quotes.find(q=>quoteIdentity(q)===o.quoteKey);

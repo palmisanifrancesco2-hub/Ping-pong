@@ -1,3 +1,4 @@
+import{AdaptiveTraining}from'../server/adaptive-training.js';
 import {MarketStudy} from '../server/market-study.js';
 import {ProspectiveStudy} from '../server/prospective-study.js';
 // Explicit versioned bootstrap: production only, same already enabled free cron.
@@ -8,6 +9,7 @@ if(process.env.VERCEL_ENV!=='production'||process.env.APP_FORWARD_STUDY_ENABLED!
   try{
     const service=new MarketStudy(process.env),owner=await new ProspectiveStudy(process.env).ownerId();
     const result=await service.run(owner),report=await service.report(owner);
+    const training=await new AdaptiveTraining(process.env).run(owner);console.info(JSON.stringify({adaptiveTrainingBootstrap:training}));
     console.info(JSON.stringify({marketStudyBootstrap:result,persisted:{captured:report.captured,settled:report.settled,pending:report.pending,observedDays:report.observedDays,scheduled:report.scheduled,operationallyValidated:false}}));
   }
   catch{console.error('MARKET_STUDY_BOOTSTRAP_FAILED');process.exitCode=1;}

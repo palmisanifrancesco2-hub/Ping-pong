@@ -58,3 +58,10 @@ Studio v10 separato: **426 registrati**, **347 valutati**, **75 in attesa**, **4
 | Bookmaker no-vig | 192 | 124 | 31 | **0,233314** | **0,658033** |
 
 Il mercato resta migliore in Brier/Log Loss dei quattro candidati. La sua accuracy sui soli decisi è 192/316, non 192/347; Brier e Log Loss usano tutti i 347 casi. Non si confronta direttamente il tasso v9 sui 603 con quello v10 sui 347: sono coorti diverse. Non è stato raggiunto alcun checkpoint valido con durata minima richiesta; nessun modello validato o promosso. Questi dati nuovi sono separati dai 1.804 incontri del benchmark storico v16 e dagli 88 del sottoinsieme quote. I nuovi modelli v16 non vengono presentati come già valutati su questa coorte futura originale.
+
+
+## Aggiornamento v17 — bet365 e training candidati
+
+L’ultima istruzione dell’utente rimuove ADM come requisito obbligatorio. Le quote bet365.com.au sono ammesse nelle classifiche senza cambiare il loro dominio; rimangono freschezza, confrontabilità, EV positivo anche prudente e validazione indipendente dei modelli. I riferimenti v16 ad ADM sopra descrivono lo stato precedente, non il filtro corrente.
+
+Il training già eseguito nei precedenti studi e la raccolta prospettica non erano stati disattivati. Mancava l’esecuzione periodica automatica dei nuovi addestramenti. Questa versione collega un servizio di training candidati al cron esistente e al bootstrap Production, con comando manuale riservato al proprietario. Applica claim atomico giornaliero, controlli sulle osservazioni originali, finestre cronologiche distinte e persistenza privata. Non avvia servizi a pagamento, non cambia gli studi congelati e non promuove automaticamente un modello. [Contratto, minimi e limitazioni](ADDESTRAMENTO-CONTINUO-V17.md).
