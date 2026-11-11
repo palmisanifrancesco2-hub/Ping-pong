@@ -6,7 +6,7 @@ L’utente può consultare tutto dal browser Android. I comandi seguenti sono is
 
 Accedere con l’account privato esistente. In **Statistiche modello**, aprire il report del sistema: inventario, mercato del benchmark, calibrazione per intervallo e competizione, confronto WTT separato e stato delle versioni. **Aggiorna report** rilegge gli aggregati senza avviare training o scritture. Lo stato del test prospettico rimane nella sezione dedicata e non è ricavato dai risultati storici.
 
-Nella vista quote, la classifica A ordina per probabilità, B per valore prudente positivo, la combinata usa pesi modificabili. Non va interpretato come scientificamente ottimale alcun peso impostato dall’utente. I prezzi della fonte estera e i modelli non validati non entrano nelle classifiche operative. **Eventi e giocatori** consente comunque di consultare le partite disponibili e le statistiche reali; i dettagli conservano il comportamento persistente durante gli aggiornamenti.
+Tutte e tre le classifiche conservano il filtro EV positivo anche prudente già richiesto, oltre ad ADM e validazione indipendente. Nella vista quote, la classifica A ordina per probabilità, B per valore prudente positivo, la combinata usa pesi modificabili. Non va interpretato come scientificamente ottimale alcun peso impostato dall’utente. I prezzi della fonte estera e i modelli non validati non entrano nelle classifiche operative. **Eventi e giocatori** consente comunque di consultare le partite disponibili e le statistiche reali; i dettagli conservano il comportamento persistente durante gli aggiornamenti.
 
 ## Dati e training
 

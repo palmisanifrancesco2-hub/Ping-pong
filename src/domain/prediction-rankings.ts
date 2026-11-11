@@ -17,6 +17,7 @@ export function rankPredictions(rows:EvidenceCandidate[],now:number,weights:Rank
   const age=now-Date.parse(r.quoteAt),start=Date.parse(r.startsAt??''),expiry=Date.parse(r.admVerifiedUntil??'');
   if(!r.modelValidated||r.independentValidation!==true||r.competitionVerified!==true||!r.admVerified||!r.bookmakerSite||!Number.isFinite(expiry)||expiry<=now||!r.fresh||age<0||age>120000||!Number.isFinite(age)||!Number.isFinite(start)||start<=now)return false;
   if(![r.probability,r.probabilityLower,r.odds].every(Number.isFinite)||r.odds<1.3||r.probability<=0||r.probability>=1||r.probabilityLower<0||r.probabilityLower>r.probability)return false;
+  if(r.probability*r.odds<=1||r.probabilityLower*r.odds<=1)return false;
   const key=JSON.stringify([r.eventId,r.market,r.selection,r.bookmakerSite]);if(seen.has(key))return false;seen.add(key);return true;
  }).map(r=>({...r,ev:r.probability*r.odds-1,conservativeEv:r.probabilityLower*r.odds-1,impliedProbability:1/r.odds}));
  const probability=[...eligible].sort((a,b)=>b.probability-a.probability||b.probabilityLower-a.probabilityLower||Math.abs(a.odds-2)-Math.abs(b.odds-2)||a.id.localeCompare(b.id));

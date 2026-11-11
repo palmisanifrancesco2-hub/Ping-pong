@@ -14,6 +14,6 @@ export function predictionSystemReport(now:number){
  wtt:{n:wtt.totalTestCases,metrics:wtt.aggregate,scope:'WTT separato dai campionati attuali; date della fonte con ritardo convenzionale, non validazione operativa.'},
  lifecycle:{activeVersion:runtime.version,activeName:runtime.name,validationScope:'Esplorativo; nessuna promozione indipendente',rollback:'Artefatti precedenti conservati in Git; ripristino di un commit verificato.',monitor:monitorModel({now,trainedAt:runtime.generatedAt,newResults:0},defaultRetrainingPolicy),newResultCountAvailable:false,recentDriftMetricsAvailable:false,trainingExecution:'Python offline; raccolta e valutazione prospettica usano il cron esistente. Nessun job di training avviato da questa richiesta.'},
  markets:{structuralEngineImplemented:true,bestOfSupported:[1,3,5,7,9],pointProbabilitySourceVerified:false,prematchFormatVerified:false,operationalMarkets:[],reason:'Il motore coerente richiede probabilità del punto e regole verificate prima dell’evento. Coerenza matematica non equivale a validazione predittiva.'},
- rankingPolicy:{minimumOdds:1.3,maximumOdds:null,admOnly:true,independentValidationRequired:true,observedBookmakerSite:'bet365.com.au',italianPricesVerified:false},
+ rankingPolicy:{positiveEvOnly:true,positiveConservativeEvRequired:true,minimumOdds:1.3,maximumOdds:null,admOnly:true,independentValidationRequired:true,observedBookmakerSite:'bet365.com.au',italianPricesVerified:false},
  };
 }
