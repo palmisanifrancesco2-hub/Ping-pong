@@ -45,3 +45,19 @@ Il riepilogo e il log compatto `adaptiveTrainingRun` contengono soltanto stato, 
 `tests/adaptive-training.test.ts` copre training reale dei due candidati, invarianza della famiglia/temperatura quando si cambiano soltanto gli esiti di test, separazione delle giornate e degli esiti tardivi, cap per giornate intere, rifiuto di input corrotti o futuri, hash dei forecast, registrazione prematch, controllo owner, claim unico, deadline, fallimenti persistiti, conteggio dei dati mancanti, salvataggio privato dei pesi e assenza dei pesi dai report/risposte. I dati di questi test software sono sintetici e non dichiarano prestazioni sportive reali.
 
 Questo documento descrive il servizio e il contratto di integrazione. L’effettiva invocazione da cron, bootstrap e API, e i risultati registrati in produzione, vanno verificati dal relativo rilascio: la sola presenza del file non significa che un candidato sia già stato addestrato in produzione.
+
+
+## Prima esecuzione Production verificata — 11 novembre 2026
+
+Alle 11:18:38 UTC il bootstrap Production ha completato e salvato privatamente il primo training `adaptive-candidates-v17`: 607 osservazioni settled eleggibili su 700 registrate, con 90 pending e tre non valide. Divisione temporale effettiva: **362 training, 87 calibrazione e 96 test**. La copertura del giorno di test è 96/100; 21 esiti tardivi per il training, nove per la calibrazione e 32 casi fuori finestra non entrano nei rispettivi blocchi.
+
+La calibrazione ha selezionato la famiglia full e temperatura 0,5. Sul medesimo test di 96 incontri:
+
+| Modello | Corretti | Errati | Accuracy | Brier | Log Loss |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Nuovo candidato | 46 | 50 | 47,92% | 0,251049 | 0,695271 |
+| Riferimento congelato | 54 | 42 | 56,25% | 0,248510 | 0,690487 |
+
+Il candidato non migliora il riferimento e **non è stato promosso**. È un replay esplorativo su partite storicamente successive al fitting, non una nuova validazione prospettica delle probabilità del candidato. I 96 incontri appartengono alla raccolta già esistente: non vanno sommati a essa come partite nuove. Artefatto con pesi, temperatura e hash salvato in Supabase; report pubblico al browser limitato agli aggregati privati autenticati.
+
+L’esecuzione automatica è collegata al cron esistente, al massimo un tentativo al giorno UTC con campioni sufficienti. In Statistiche modello sono disponibili stato e comando manuale owner-only. L’automazione del training non autorizza la sostituzione automatica del modello.

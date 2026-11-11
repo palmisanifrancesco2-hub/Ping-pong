@@ -200,3 +200,12 @@ Fotografia al 6 novembre 2026, 11:07:35 UTC del test v9: 200 registrati, 137 val
 
 
 Release finale v16 `1c3be9f12a312a8b383937dded26cb45ec18e839`: Production `dpl_5srpJAgVandVp9WVq84dkyzav5xy` READY, alias stabile verificato, health HTTP protetto 200. Server ESM cloud Node26.13.0 e CI push/PR con test Python superati. Nessuna voce trovata nella ricerca level:error degli ultimi dieci minuti. Policy finale conserva EV positivo anche prudente, ADM e validazione indipendente in tutte le classifiche. Report completo della raccolta prospettica aggiornato alle 10:29:45 UTC nel documento di avanzamento: v9 700/603 valutati/94 pending/3 invalidi; v10 426/347 valutati/75 pending/4 invalidi. Mercato Brier0,233314, migliore candidato0,243939; nessuna promozione. [Dettagli e limiti](AVANZAMENTO-SISTEMA-PREDITTIVO.md).
+
+
+## Rilascio v17 verificato — 11 novembre 2026
+
+Commit applicativo `4acf8c2ad955962a5e5e34fe05a9b1d3318a6c97`, deployment Production `dpl_GUmdNURermsaYEpiLDhS6AsAxFqi` READY. Alias https://ping-pong-ping-pong3.vercel.app collegato al deployment; health HTTP 200 verificato alle 11:21 UTC, nessuna voce nella ricerca runtime level:error degli ultimi dieci minuti. CI push/PR superata sullo stesso SHA: 38 file di test applicativi e 28 test Python, TypeScript, build Vite e avvio server ESM compilato. Avvio cloud verificato anche con Node 26.13.0.
+
+ADM non è più obbligatorio: bet365 è ammesso con dominio originale e provenienza verificata. Rimangono i controlli statistici, temporali e di EV positivo. QA browser locale con handler reale e autenticazione/stato training sintetici isolati: Android 393×851 e desktop 1440×1000, nessun overflow o errore JavaScript; pulsante training, autorizzazione, report e recupero errori verificati. Questo non certifica il percorso autenticato del proprietario in produzione; nessun suo JWT è stato usato.
+
+Prima esecuzione reale del training salvata in Production: **362 training / 87 calibrazione / 96 test**, candidato full con temperatura 0,5; 46 corretti e 50 errati, Brier 0,251049 contro 0,248510 del riferimento sulle stesse 96 partite. Nessuna promozione automatica o dimostrazione di vantaggio. Raccolta esistente alle 11:18 UTC: 700 registrati, 607 settled, 90 pending, tre invalidi, sette giorni. Nessuna nuova migrazione, chiave, spesa o modifica dei protocolli congelati. [Risultati e limiti del training](ADDESTRAMENTO-CONTINUO-V17.md).
