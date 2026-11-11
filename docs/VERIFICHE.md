@@ -209,3 +209,8 @@ Commit applicativo `4acf8c2ad955962a5e5e34fe05a9b1d3318a6c97`, deployment Produc
 ADM non è più obbligatorio: bet365 è ammesso con dominio originale e provenienza verificata. Rimangono i controlli statistici, temporali e di EV positivo. QA browser locale con handler reale e autenticazione/stato training sintetici isolati: Android 393×851 e desktop 1440×1000, nessun overflow o errore JavaScript; pulsante training, autorizzazione, report e recupero errori verificati. Questo non certifica il percorso autenticato del proprietario in produzione; nessun suo JWT è stato usato.
 
 Prima esecuzione reale del training salvata in Production: **362 training / 87 calibrazione / 96 test**, candidato full con temperatura 0,5; 46 corretti e 50 errati, Brier 0,251049 contro 0,248510 del riferimento sulle stesse 96 partite. Nessuna promozione automatica o dimostrazione di vantaggio. Raccolta esistente alle 11:18 UTC: 700 registrati, 607 settled, 90 pending, tre invalidi, sette giorni. Nessuna nuova migrazione, chiave, spesa o modifica dei protocolli congelati. [Risultati e limiti del training](ADDESTRAMENTO-CONTINUO-V17.md).
+
+
+## Benchmark probabilistico v18
+
+Addestrati realmente CatBoost, NGBoost e normalizing flow su quattro finestre cronologiche; 1.804 ID di test comuni al v16 e 12 artefatti privati salvati con hash. Risultati grezzi e calibrati registrati, nessuna promozione o ROI. 277 test app/38 file, build, TypeScript, server ESM e 31 test Python nell’ambiente opzionale passati. CI leggera salta esplicitamente i tre nuovi test opzionali. Nessuna modifica UI o accesso alle credenziali del proprietario. [Risultati e limiti](CONFRONTO-PROBABILISTICO-V18.md).
