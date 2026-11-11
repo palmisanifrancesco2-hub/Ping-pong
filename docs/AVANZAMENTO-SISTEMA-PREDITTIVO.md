@@ -36,3 +36,25 @@ Nessuna credenziale deve essere pubblicata o incollata in chat. Nessun acquisto,
 264 test applicativi in 37 file e 28 test Python passati. TypeScript, build Vite e avvio Node ESM compilato riusciti: health 200 e nuovi/precedenti endpoint anonimi 401 senza chiamate esterne. Chromium con vero handler locale, report aggregati reali e identità QA sintetica isolata: 14 mercati, tre classifiche, modifica pesi, rifiuto dei prezzi esteri, errore 503 e recupero, Android 393×851 e desktop 1440×1000, zero errori JavaScript o overflow. Il board vuoto è una fixture QA; nessuna sessione del proprietario o scrittura remota è stata usata. Non certifica il login del telefono in produzione. La CI aggiunge i controlli Python con dipendenze fissate; nessun dataset privato è necessario ai test unitari.
 
 Confronto quote as-of concluso: 153 osservazioni compatibili, 29 training / 35 calibrazione / 88 test su tre giorni. Il modello combinato coincide con il mercato dopo la calibrazione: nessun incremento sportivo dimostrato. Il supplemento per fasce quota/competizione/giorno è descrittivo, non una nuova selezione dei parametri. Nessuna nuova validazione o promozione.
+
+## Pubblicazione verificata — 11 novembre 2026
+
+Commit applicativo finale `1c3be9f12a312a8b383937dded26cb45ec18e839`, deployment Production `dpl_5srpJAgVandVp9WVq84dkyzav5xy` READY. Alias https://ping-pong-ping-pong3.vercel.app assegnato al deployment finale, health protetto HTTP 200, avvio server ESM anche su Node 26.13.0. CI GitHub push/PR superata, inclusi i test Python aggiunti. Ricerca nei log Production level:error degli ultimi dieci minuti senza risultati; non equivale a monitoraggio continuo o verifica del login reale del proprietario. Nessuna protezione rimossa.
+
+La versione iniziale `d4c9994` è stata seguita dalla policy finale che conserva EV positivo anche prudente in tutte le classifiche, oltre a ADM e validazione indipendente. I dati grezzi e gli artefatti binari non sono stati pubblicati. Nessuna nuova migrazione, spesa, credenziale o scommessa.
+
+### Fotografia prospettica verificata alle 10:29:45 UTC
+
+Studio v9 originale: **700 incontri registrati**, **603 valutati**, **94 in attesa**, **3 non validi**, sette giorni osservati. Sul vincente del candidato v9: **307 corretti e 296 errati (50,91%)**. I non validi rimangono nel registro e nei controlli conservativi; non sono eliminati per migliorare le prestazioni.
+
+Studio v10 separato: **426 registrati**, **347 valutati**, **75 in attesa**, **4 non validi**, sette giorni. Sui medesimi 347 incontri:
+
+| Modello/riferimento | Corretti | Errati | Non decisi | Brier | Log Loss |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Gerarchico corrente | 184 | 163 | 0 | 0,245350 | 0,683713 |
+| Completo | 196 | 151 | 0 | 0,245489 | 0,684316 |
+| Punti/set | 189 | 158 | 0 | 0,243939 | 0,680737 |
+| Contesto | 188 | 159 | 0 | 0,245739 | 0,684548 |
+| Bookmaker no-vig | 192 | 124 | 31 | **0,233314** | **0,658033** |
+
+Il mercato resta migliore in Brier/Log Loss dei quattro candidati. La sua accuracy sui soli decisi è 192/316, non 192/347; Brier e Log Loss usano tutti i 347 casi. Non si confronta direttamente il tasso v9 sui 603 con quello v10 sui 347: sono coorti diverse. Non è stato raggiunto alcun checkpoint valido con durata minima richiesta; nessun modello validato o promosso. Questi dati nuovi sono separati dai 1.804 incontri del benchmark storico v16 e dagli 88 del sottoinsieme quote. I nuovi modelli v16 non vengono presentati come già valutati su questa coorte futura originale.
