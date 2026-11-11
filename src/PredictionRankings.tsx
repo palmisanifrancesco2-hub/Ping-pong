@@ -1,0 +1,12 @@
+import{useState}from'react';
+import{combinedOrder,type PredictionRankings as Rankings}from'./domain/prediction-rankings';
+import{dateTime}from'./shared/format';
+export function PredictionRankings({report,checkedAt}:{report?:Rankings;checkedAt?:string}){
+ const[mode,setMode]=useState<'probability'|'value'|'combined'>('probability'),[probabilityWeight,setWeight]=useState(50);
+ const rows=report?(mode==='combined'?combinedOrder(report.probability,{probability:probabilityWeight,value:100-probabilityWeight}):report[mode]):[];
+ return<section className="panel" aria-labelledby="rankings-title"><h2 id="rankings-title">Classifiche dei pronostici verificati</h2><p>Quota minima 1,30, nessun massimo. Solo competizioni validate e quote ADM verificate; probabilità ed EV rimangono distinti.</p>
+ <div className="quote-tabs" role="group" aria-label="Ordina pronostici verificati">{([['probability','A · Probabilità'],['value','B · Valore atteso'],['combined','Combinata']] as const).map(([key,label])=><button key={key} className={mode===key?'primary':'secondary'} aria-pressed={mode===key} onClick={()=>setMode(key)}>{label}</button>)}</div>
+ {mode==='combined'&&<label>Peso della probabilità: {probabilityWeight}% · EV: {100-probabilityWeight}%<input aria-label="Peso probabilità" type="range" min="0" max="100" step="5" value={probabilityWeight} onChange={e=>setWeight(Number(e.target.value))}/><small>Pesi di ordinamento configurabili, non soglie scientifiche. Punteggio: probabilità prudente e EV trasformato con EV/(1+|EV|).</small></label>}
+ {!rows.length?<p role="status">{report?'Nessun pronostico con affidabilità adeguatamente dimostrata.':'Verifica dei pronostici in corso…'}</p>:<ul className="competition-list">{rows.map(r=><li key={r.id}><span><strong>{r.match} · {r.selection}</strong><small>{r.competition} · {r.market} · {dateTime(r.startsAt)}</small><small>Probabilità {(r.probability*100).toFixed(1)}% · quota {r.odds.toFixed(2)} · implicita {(100/r.odds).toFixed(1)}% · EV {((r.probability*r.odds-1)*100).toFixed(1)}%</small><small>Limite prudente {(r.probabilityLower*100).toFixed(1)}% · {r.bookmakerSite} · modello {r.modelVersion} · quota {dateTime(r.quoteAt)}</small></span></li>)}</ul>}
+ <p className="fine">A ordina per probabilità stimata, poi limite prudente; può includere prezzi senza EV positivo. B richiede EV positivo anche nella stima prudente e ordina per quest’ultimo. La vicinanza a quota 2 è soltanto uno spareggio nella classifica A. {checkedAt&&`Verifica: ${dateTime(checkedAt)}.`}</p></section>;
+}

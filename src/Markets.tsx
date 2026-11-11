@@ -1,3 +1,4 @@
+import{PredictionRankings}from'./PredictionRankings';
 import { useMemo, useRef, useState } from 'react';
 import { isFreshLive, isUpcomingOrLive, type Board, type FeedMatch } from './shared/board';
 import { SaveChoice } from './Choices';
@@ -61,10 +62,10 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
     setManualBusy(true);
     try { await Promise.all([refreshBoard(), values.refresh()]); } finally { setManualBusy(false); }
   }
-  return <section className="panel quote-workspace">
+  return <><PredictionRankings report={values.report?.rankings} checkedAt={values.report?.checkedAt}/><section className="panel quote-workspace">
     <span className="eyebrow">SELEZIONE STATISTICA</span>
     <h2 ref={heading} tabIndex={-1}>Quote selezionate</h2>
-    <p>Solo EV maggiore di zero, anche nella stima prudente. EV pari a zero o negativi sono esclusi. Ordine per probabilità stimata decrescente.</p>
+    <p>Classifiche operative con filtro ADM e validazione indipendente. Gli eventi e le statistiche restano consultabili.</p><p className="banner">{values.report?.policy==='strict-adm-independent-v16'?'Fonte corrente bet365.com.au: nessuna equivalenza verificata con quote italiane ADM. Nessuna opportunità operativa attivata.':'Verifica della fonte e dei modelli in corso.'}</p>
     <div className="selection-notice"><span className="badge">Stime sperimentali</span><span>Solo vincente prematch</span></div>
     {!tracker && <div className="quote-tabs" role="group" aria-label="Vista partite"><button className={mode === 'value' ? 'primary' : 'secondary'} aria-pressed={mode === 'value'} onClick={() => { setMode('value'); changed(); }}>Quote migliori ({eligible.length})</button><button className={mode === 'events' ? 'primary' : 'secondary'} aria-pressed={mode === 'events'} onClick={() => { setMode('events'); changed(); }}>Eventi e giocatori</button></div>}
     <label className="model-choice">Modello per le quote<select aria-label="Modello per le quote" value={modelChoice} onChange={e=>{setModelChoice(e.target.value as 'study'|'ensemble');setOpened(null);changed();}}><option value="study">Modello del test in corso</option><option value="ensemble">Ensemble di tre modelli · sperimentale</option></select></label><div className="quote-search"><label>Cerca eventi<input type="search" value={search} placeholder="Giocatore, campionato o ID evento" onChange={e => { setSearch(e.target.value); changed(); }}/></label></div><details className="quote-filter-details"><summary>Filtri per campionato, stato e quota</summary><div className="filters quote-filters"><label>Campionato<select aria-label="Campionato" value={competition} onChange={e => { setCompetition(e.target.value); changed(); }}><option value="">Tutti ({competitions.length})</option>{competitions.map(c => <option key={c}>{c}</option>)}</select></label><label>Stato<select aria-label="Stato" value={state} onChange={e => { setState(e.target.value); changed(); }}><option value="">Live e da iniziare</option><option value="prematch">Da iniziare</option><option value="live">Live confermate</option></select></label><label>Quota minima<input type="number" min="1.3" step="0.01" value={minOdds} onChange={e => { setMinOdds(e.target.value); changed(); }}/></label></div></details>
@@ -77,7 +78,7 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
     </>}
     {shown && matches.length > 0 && <div className="quote-dock" role="group" aria-label="Comandi rapidi quote"><button className="primary" disabled={busy} onClick={refresh}>{busy ? 'Aggiornamento…' : openEvent ? '↻ Aggiorna quota' : '↻ Aggiorna quote'}</button><button className="secondary" onClick={openEvent ? closeEvent : closeList}>{openEvent ? '✕ Chiudi quote' : '✕ Chiudi lista'}</button></div>}
     <details className="selection-method"><summary>Come scegliamo e ordiniamo le quote</summary><p>Probabilità implicita = 1 ÷ quota. EV = probabilità stimata × quota − 1. Per comparire serve anche EV positivo sul limite prudente euristico, almeno 30 precedenti per giocatore e una coppia coerente di quote fresche. Una selezione per partita, ordinata per probabilità decrescente; a parità, EV prudente e vicinanza a quota 2. Minimo 1,30, nessun massimo.</p><p>Percentuali sperimentali, non garanzie. Il test statistico prosegue separatamente.</p></details>
-  </section>;
+  </section></>;
 }
 function SelectedMatch({ match: m, quote, current,retained,token, now, open, onToggle, onClose, onRefresh, busy }: { match: FeedMatch; quote?: ValueOpportunity;current:boolean;retained:boolean; token?: string; now: number; open: boolean; onToggle: () => void; onClose: () => void; onRefresh: () => void; busy: boolean }) {
   const live = current&&isFreshLive(m, now);

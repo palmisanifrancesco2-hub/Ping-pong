@@ -1,0 +1,964 @@
+{
+  "version": "real-data-inventory-v16",
+  "generatedAt": "2026-11-11T10:15:53.303525+00:00",
+  "scope": "Local files and source-code/migration inspection only; no remote secrets, user sessions or DB credentials read.",
+  "moviodds": [
+    {
+      "source": "MoviOdds collected snapshot",
+      "localFile": ".research-data/3000-data.json",
+      "sha256": "2380fc423d187688028575f301aea2cc3dfb5b6b458aac46b7370bc9f967e02f",
+      "rows": 23596,
+      "uniqueMatchIds": 23596,
+      "duplicateRowsById": 0,
+      "conflictingMatchIds": 0,
+      "playersWithinCompetitionByNormalizedName": 1903,
+      "competitions": {
+        "TT Cup": 3971,
+        "TT Elite Series": 3393,
+        "Setka Cup": 9627,
+        "WTT Feeder Vila Nova de Gaia Women": 10,
+        "Czech Liga Pro": 5790,
+        "WTT Champions Frankfurt Women": 8,
+        "WTT Champions Frankfurt": 7,
+        "WTT Feeder Vila Nova de Gaia": 12,
+        "Setka Cup Women": 235,
+        "Challenger Series TT": 149,
+        "Australian Champs": 2,
+        "WTT Champions Montpellier Women": 17,
+        "WTT Feeder Chennai": 8,
+        "WTT Feeder Chennai MD": 3,
+        "WTT Feeder Chennai WD": 2,
+        "WTT Feeder Chennai XD": 5,
+        "WTT Feeder Chennai Women": 10,
+        "WTT Champions Montpellier": 15,
+        "Austria Bundesliga Women": 1,
+        "Czech Extraleague": 11,
+        "Austria Bundesliga MD": 1,
+        "Poland Superliga": 2,
+        "Slovenia Open MD": 1,
+        "European Champs WD": 21,
+        "European Champs MD": 18,
+        "European Champs Women": 84,
+        "European Champs": 81,
+        "European Champs XD": 23,
+        "European Championship MD": 2,
+        "European Championship WD": 4,
+        "WTT China Smash Women": 25,
+        "WTT China Smash": 25,
+        "WTT China Smash WD": 12,
+        "WTT China Smash MD": 12,
+        "WTT China Smash XD": 9
+      },
+      "finishedRange": {
+        "from": "2026-10-05T12:42:25.998473Z",
+        "to": "2026-11-04T20:08:13.911073Z"
+      },
+      "informationAvailabilityRange": {
+        "from": "2026-10-05T12:44:27.464Z",
+        "to": "2026-11-04T20:10:14.286Z"
+      },
+      "counts": {
+        "completeCoherentScore": 23596,
+        "withIndividualSetPoints": 23596,
+        "inferredBO5": 23596
+      },
+      "missingFields": {
+        "id": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "home": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "away": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "league": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "finishedAt": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "availableAt": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "sets": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "homeWon": {
+          "missing": 0,
+          "percent": 0.0
+        }
+      },
+      "timestampMeaning": "finishedAt is source-reported finish; availableAt is max(finishedAt, source updated_at). Neither is kickoff or proof of first publication.",
+      "historicalOddsEmbeddedRows": 0,
+      "reconstructibleLabels": [
+        "winner",
+        "exact_match_set_score",
+        "number_of_sets",
+        "match_set_handicap",
+        "match_total_points",
+        "match_point_handicap",
+        "set_winner_if_set_played",
+        "set_total_points",
+        "set_point_handicap",
+        "wins_at_least_one_set",
+        "straight_sets",
+        "comeback_after_losing_first_set"
+      ],
+      "liveRallySequenceAvailable": false,
+      "regulationBeforeEventVerified": false,
+      "snapshotCollectedAt": "2026-11-04T23:59:32.157Z",
+      "previousVerifiedStartRows": 3348
+    },
+    {
+      "source": "MoviOdds forward capture archive",
+      "localFile": ".research-data/forward-v3.json.archive.json",
+      "sha256": "63a79a40026de1068aaa6a7bebccd5db86f2d4adf2a1a1dbc32b6a6fc96940bf",
+      "rows": 23670,
+      "uniqueMatchIds": 23670,
+      "duplicateRowsById": 0,
+      "conflictingMatchIds": 0,
+      "playersWithinCompetitionByNormalizedName": 1909,
+      "competitions": {
+        "Czech Liga Pro": 5810,
+        "Setka Cup": 9645,
+        "TT Cup": 3993,
+        "TT Elite Series": 3403,
+        "Challenger Series TT": 149,
+        "WTT China Smash Women": 25,
+        "WTT China Smash MD": 12,
+        "WTT China Smash XD": 9,
+        "WTT China Smash": 25,
+        "WTT China Smash WD": 12,
+        "Setka Cup Women": 235,
+        "European Champs XD": 23,
+        "European Champs Women": 84,
+        "European Champs": 81,
+        "European Champs WD": 21,
+        "European Champs MD": 18,
+        "European Championship WD": 4,
+        "European Championship MD": 2,
+        "Poland Superliga": 2,
+        "Slovenia Open MD": 1,
+        "Czech Extraleague": 11,
+        "Austria Bundesliga MD": 1,
+        "WTT Champions Montpellier Women": 17,
+        "WTT Champions Montpellier": 15,
+        "Australian Champs": 2,
+        "WTT Feeder Chennai XD": 5,
+        "WTT Feeder Chennai WD": 2,
+        "WTT Feeder Chennai MD": 3,
+        "WTT Feeder Chennai Women": 10,
+        "WTT Feeder Chennai": 8,
+        "Austria Bundesliga Women": 1,
+        "WTT Champions Frankfurt Women": 9,
+        "WTT Champions Frankfurt": 7,
+        "WTT Feeder Vila Nova de Gaia": 12,
+        "WTT Feeder Vila Nova de Gaia Women": 13
+      },
+      "finishedRange": {
+        "from": "2026-10-05T12:42:25.998473Z",
+        "to": "2026-11-04T22:12:50.182613Z"
+      },
+      "informationAvailabilityRange": {
+        "from": "2026-10-05T12:44:27.464Z",
+        "to": "2026-11-04T22:14:51.180Z"
+      },
+      "counts": {
+        "completeCoherentScore": 23670,
+        "withIndividualSetPoints": 23670,
+        "inferredBO5": 23670
+      },
+      "missingFields": {
+        "id": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "home": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "away": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "league": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "finishedAt": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "availableAt": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "sets": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "homeWon": {
+          "missing": 0,
+          "percent": 0.0
+        }
+      },
+      "timestampMeaning": "finishedAt is source-reported finish; availableAt is max(finishedAt, source updated_at). Neither is kickoff or proof of first publication.",
+      "historicalOddsEmbeddedRows": 0,
+      "reconstructibleLabels": [
+        "winner",
+        "exact_match_set_score",
+        "number_of_sets",
+        "match_set_handicap",
+        "match_total_points",
+        "match_point_handicap",
+        "set_winner_if_set_played",
+        "set_total_points",
+        "set_point_handicap",
+        "wins_at_least_one_set",
+        "straight_sets",
+        "comeback_after_losing_first_set"
+      ],
+      "liveRallySequenceAvailable": false,
+      "regulationBeforeEventVerified": false
+    }
+  ],
+  "overlap": {
+    "movioddsSnapshotCommonIds": 23596,
+    "movioddsDistinctUnionIds": 23670,
+    "forwardSnapshotAdditionalIds": 74,
+    "wttRawIdsCollideAcrossGenderFiles": 21,
+    "doNotSumAllReportsAsNewMatches": true
+  },
+  "wtt": [
+    {
+      "source": "RSMD WTT / Li02003121 / OSF pjuw8",
+      "cohort": "men",
+      "localFile": ".research-data/table_tennis_wtt_men_std.csv",
+      "sha256": "f2cf0fcf65ff398aa9f889042071193c8bdd8ec8ff71dfbd7ddf5f8fb5837545",
+      "rows": 5442,
+      "uniqueNamesWithinCohort": 752,
+      "uniqueNamespacedIds": 5442,
+      "competitions": {
+        "WTT Contender Muscat 2022": 158,
+        "Singapore Smash 2022": 108,
+        "WTT Contender Doha 2022": 119,
+        "WTT Star Contender Doha 2022": 103,
+        "WTT Contender Lima 2022": 78,
+        "WTT Star Contender European Summer Series 2022": 84,
+        "WTT Champions European Summer Series 2022": 31,
+        "WTT Contender Tunis 2022": 80,
+        "WTT Contender Almaty 2022": 68,
+        "WTT Champions Macao 2022 Presented by Galaxy Enter": 31,
+        "WTT Cup Finals Xinxiang 2022 Presented by China Co": 14,
+        "WTT Contender Nova Gorica 2022 Presented by I Feel": 119,
+        "WTT Contender Durban 2023": 52,
+        "WTT Contender Doha 2023": 107,
+        "WTT Contender Amman 2023": 85,
+        "WTT Star Contender Goa 2023": 83,
+        "Singapore Smash 2023": 119,
+        "WTT Champions Xinxiang 2023 Presented by Industria": 31,
+        "WTT Champions Macao 2023 Presented by Galaxy Enter": 31,
+        "WTT Star Contender Bangkok 2023": 101,
+        "WTT Contender Lagos 2023": 77,
+        "WTT Contender Tunis 2023 Presented by KIA": 85,
+        "WTT Contender Zagreb 2023": 113,
+        "WTT Star Contender Ljubljana 2023 Presented by I F": 103,
+        "WTT Contender Lima 2023": 64,
+        "WTT Contender Rio de Janeiro 2023": 86,
+        "WTT Contender Almaty 2023": 74,
+        "WTT Star Contender Lanzhou 2023 Presented by Huanc": 58,
+        "WTT Contender Muscat 2023": 68,
+        "WTT Contender Antalya 2023": 58,
+        "WTT Champions Frankfurt 2023": 31,
+        "WTT Contender Taiyuan 2023": 40,
+        "WTT Finals Men Doha 2023": 15,
+        "WTT Star Contender Doha 2024": 103,
+        "WTT Contender Doha 2024": 88,
+        "WTT Star Contender Goa 2024 Presented by Parimatch": 76,
+        "Singapore Smash 2024": 119,
+        "WTT Champions Incheon 2024 Presented by Shinhan Ba": 31,
+        "Saudi Smash 2024": 119,
+        "WTT Contender Rio de Janeiro 2024": 65,
+        "WTT Contender Taiyuan 2024": 42,
+        "WTT Contender Mendoza 2024": 56,
+        "WTT Champions Chongqing 2024 Presented by Changan": 30,
+        "WTT Contender Zagreb 2024": 88,
+        "WTT Star Contender Ljubljana 2024 Presented by I F": 97,
+        "WTT Contender Lagos 2024": 54,
+        "WTT Contender Tunis 2024 Presented by KIA": 61,
+        "WTT Star Contender Bangkok 2024": 64,
+        "WTT Contender Lima 2024": 27,
+        "WTT Contender Almaty 2024": 54,
+        "WTT Champions Macao 2024 Presented by Galaxy Enter": 31,
+        "China Smash 2024 Presented by Zhonghui Life Insura": 119,
+        "WTT Champions Montpellier 2024": 31,
+        "WTT Contender Muscat 2024": 39,
+        "WTT Champions Frankfurt 2024": 31,
+        "WTT Finals Fukuoka 2024": 15,
+        "WTT Star Contender Doha 2025": 25,
+        "WTT Contender Muscat 2025": 34,
+        "Singapore Smash 2025": 119,
+        "WTT Champions Chongqing 2025 Presented by AITO": 31,
+        "WTT Star Contender Chennai 2025 Presented by India": 77,
+        "WTT Champions Incheon 2025": 13,
+        "WTT Contender Taiyuan 2025": 55,
+        "WTT Contender Tunis 2025 Presented By Tunisie Tele": 87,
+        "WTT Contender Skopje 2025": 29,
+        "WTT Star Contender Ljubljana 2025": 97,
+        "WTT Contender Zagreb 2025": 89,
+        "United States Smash 2025": 119,
+        "WTT Contender Buenos Aires 2025": 61,
+        "WTT Contender Lagos 2025": 87,
+        "WTT Star Contender Foz do Iguaçu 2025": 59,
+        "WTT Champions Yokohama 2025": 31,
+        "Europe Smash - Sweden 2025": 119,
+        "WTT Contender Almaty 2025": 68,
+        "WTT Champions Macao 2025": 31,
+        "China Smash 2025": 119,
+        "WTT Star Contender London 2025": 24,
+        "WTT Champions Montpellier 2025": 31,
+        "WTT Champions Frankfurt 2025": 31,
+        "WTT Star Contender Muscat 2025": 77,
+        "WTT Finals Hong Kong 2025": 15
+      },
+      "dateRange": {
+        "from": "2022-02-27",
+        "to": "2025-12-10"
+      },
+      "counts": {
+        "coherentCompleteScoreWithoutTrustingBestOf": 5436,
+        "coherentIncludingDeclaredBestOf": 222,
+        "parsedIndividualSetPoints": 5442,
+        "bestOfContradictsCompletedScore": 5214,
+        "inconsistentScoreOrWinner": 6
+      },
+      "missingFields": {
+        "sport": {
+          "missing": 5442,
+          "percent": 100.0
+        },
+        "gender": {
+          "missing": 5442,
+          "percent": 100.0
+        },
+        "dataset_id": {
+          "missing": 5442,
+          "percent": 100.0
+        },
+        "match_id": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "event_date": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "event_name": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "event_tier": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "surface": {
+          "missing": 5442,
+          "percent": 100.0
+        },
+        "round": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "best_of": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "player1_name": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "player1_country": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "player1_rank": {
+          "missing": 5442,
+          "percent": 100.0
+        },
+        "player1_rank_points": {
+          "missing": 5442,
+          "percent": 100.0
+        },
+        "player2_name": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "player2_country": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "player2_rank": {
+          "missing": 5442,
+          "percent": 100.0
+        },
+        "player2_rank_points": {
+          "missing": 5442,
+          "percent": 100.0
+        },
+        "winner": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "score": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "rank_diff": {
+          "missing": 5442,
+          "percent": 100.0
+        },
+        "higher_rank_won": {
+          "missing": 5442,
+          "percent": 100.0
+        },
+        "a_id_raw": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "x_id_raw": {
+          "missing": 0,
+          "percent": 0.0
+        }
+      },
+      "historicalOddsRows": 0,
+      "verifiedKickoffTimes": 0,
+      "firstPublicationTimestamps": 0,
+      "declaredDataLicense": "CC BY 4.0",
+      "sourceUrl": "https://doi.org/10.17605/OSF.IO/PJUW8",
+      "reconstructibleLabels": [
+        "winner",
+        "score-derived-set-and-point-labels-with-format-metadata-conflict"
+      ],
+      "operationalMarketsApproved": [],
+      "limitations": [
+        "Source dates may identify event rather than match; first availability unverified.",
+        "Seven-day history lag in v15 is a convention, not verified publication timing.",
+        "Do not use unverified rankings or best_of as prematch features.",
+        "WTT cohorts differ from current minor-league application; performance does not transfer automatically."
+      ]
+    },
+    {
+      "source": "RSMD WTT / Li02003121 / OSF pjuw8",
+      "cohort": "women",
+      "localFile": ".research-data/table_tennis_wtt_women_std.csv",
+      "sha256": "d9aec1488bcee66625a0973d6ca6e0e5cc58dd8d22a193c0194b6bf908811d6b",
+      "rows": 4850,
+      "uniqueNamesWithinCohort": 624,
+      "uniqueNamespacedIds": 4850,
+      "competitions": {
+        "WTT Contender Muscat 2022": 117,
+        "Singapore Smash 2022": 102,
+        "WTT Contender Doha 2022": 101,
+        "WTT Star Contender Doha 2022": 97,
+        "WTT Contender Lima 2022": 44,
+        "WTT Star Contender European Summer Series 2022": 83,
+        "WTT Champions European Summer Series 2022": 31,
+        "WTT Contender Tunis 2022": 67,
+        "WTT Contender Almaty 2022": 50,
+        "WTT Champions Macao 2022 Presented by Galaxy Enter": 31,
+        "WTT Cup Finals Xinxiang 2022 Presented by China Co": 15,
+        "WTT Contender Nova Gorica 2022 Presented by I Feel": 101,
+        "WTT Contender Durban 2023": 48,
+        "WTT Contender Doha 2023": 71,
+        "WTT Contender Amman 2023": 70,
+        "WTT Star Contender Goa 2023": 74,
+        "Singapore Smash 2023": 118,
+        "WTT Champions Xinxiang 2023 Presented by Industria": 31,
+        "WTT Champions Macao 2023 Presented by Galaxy Enter": 31,
+        "WTT Star Contender Bangkok 2023": 93,
+        "WTT Contender Lagos 2023": 58,
+        "WTT Contender Tunis 2023 Presented by KIA": 67,
+        "WTT Contender Zagreb 2023": 82,
+        "WTT Star Contender Ljubljana 2023 Presented by I F": 103,
+        "WTT Contender Lima 2023": 56,
+        "WTT Contender Rio de Janeiro 2023": 68,
+        "WTT Contender Almaty 2023": 57,
+        "WTT Star Contender Lanzhou 2023 Presented by Huanc": 46,
+        "WTT Contender Muscat 2023": 55,
+        "WTT Contender Antalya 2023": 51,
+        "WTT Champions Frankfurt 2023": 31,
+        "WTT Contender Taiyuan 2023": 26,
+        "WTT Finals Women Nagoya 2023": 15,
+        "WTT Star Contender Doha 2024": 83,
+        "WTT Contender Doha 2024": 61,
+        "WTT Star Contender Goa 2024 Presented by Parimatch": 74,
+        "Singapore Smash 2024": 118,
+        "WTT Champions Incheon 2024 Presented by Shinhan Ba": 31,
+        "Saudi Smash 2024": 119,
+        "WTT Contender Rio de Janeiro 2024": 62,
+        "WTT Contender Taiyuan 2024": 35,
+        "WTT Contender Mendoza 2024": 52,
+        "WTT Champions Chongqing 2024 Presented by Changan": 31,
+        "WTT Contender Zagreb 2024": 83,
+        "WTT Star Contender Ljubljana 2024 Presented by I F": 89,
+        "WTT Contender Lagos 2024": 34,
+        "WTT Contender Tunis 2024 Presented by KIA": 51,
+        "WTT Star Contender Bangkok 2024": 61,
+        "WTT Contender Lima 2024": 26,
+        "WTT Contender Almaty 2024": 59,
+        "WTT Champions Macao 2024 Presented by Galaxy Enter": 31,
+        "China Smash 2024 Presented by Zhonghui Life Insura": 117,
+        "WTT Champions Montpellier 2024": 31,
+        "WTT Contender Muscat 2024": 33,
+        "WTT Champions Frankfurt 2024": 31,
+        "WTT Finals Fukuoka 2024": 15,
+        "WTT Star Contender Doha 2025": 25,
+        "WTT Contender Muscat 2025": 33,
+        "Singapore Smash 2025": 119,
+        "WTT Champions Chongqing 2025 Presented by AITO": 31,
+        "WTT Star Contender Chennai 2025 Presented by India": 74,
+        "WTT Champions Incheon 2025": 13,
+        "WTT Contender Taiyuan 2025": 52,
+        "WTT Contender Tunis 2025 Presented By Tunisie Tele": 81,
+        "WTT Contender Skopje 2025": 30,
+        "WTT Star Contender Ljubljana 2025": 100,
+        "WTT Contender Zagreb 2025": 75,
+        "United States Smash 2025": 115,
+        "WTT Contender Buenos Aires 2025": 47,
+        "WTT Contender Lagos 2025": 72,
+        "WTT Star Contender Foz do Iguaçu 2025": 42,
+        "WTT Champions Yokohama 2025": 31,
+        "Europe Smash - Sweden 2025": 119,
+        "WTT Contender Almaty 2025": 69,
+        "WTT Champions Macao 2025": 31,
+        "China Smash 2025": 118,
+        "WTT Star Contender London 2025": 25,
+        "WTT Champions Montpellier 2025": 31,
+        "WTT Champions Frankfurt 2025": 31,
+        "WTT Star Contender Muscat 2025": 54,
+        "WTT Finals Hong Kong 2025": 15
+      },
+      "dateRange": {
+        "from": "2022-02-27",
+        "to": "2025-12-10"
+      },
+      "counts": {
+        "coherentCompleteScoreWithoutTrustingBestOf": 4848,
+        "coherentIncludingDeclaredBestOf": 221,
+        "parsedIndividualSetPoints": 4850,
+        "bestOfContradictsCompletedScore": 4627,
+        "inconsistentScoreOrWinner": 2
+      },
+      "missingFields": {
+        "sport": {
+          "missing": 4850,
+          "percent": 100.0
+        },
+        "gender": {
+          "missing": 4850,
+          "percent": 100.0
+        },
+        "dataset_id": {
+          "missing": 4850,
+          "percent": 100.0
+        },
+        "match_id": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "event_date": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "event_name": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "event_tier": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "surface": {
+          "missing": 4850,
+          "percent": 100.0
+        },
+        "round": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "best_of": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "player1_name": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "player1_country": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "player1_rank": {
+          "missing": 4850,
+          "percent": 100.0
+        },
+        "player1_rank_points": {
+          "missing": 4850,
+          "percent": 100.0
+        },
+        "player2_name": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "player2_country": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "player2_rank": {
+          "missing": 4850,
+          "percent": 100.0
+        },
+        "player2_rank_points": {
+          "missing": 4850,
+          "percent": 100.0
+        },
+        "winner": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "score": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "rank_diff": {
+          "missing": 4850,
+          "percent": 100.0
+        },
+        "higher_rank_won": {
+          "missing": 4850,
+          "percent": 100.0
+        },
+        "china_match": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "a_china": {
+          "missing": 0,
+          "percent": 0.0
+        },
+        "x_china": {
+          "missing": 0,
+          "percent": 0.0
+        }
+      },
+      "historicalOddsRows": 0,
+      "verifiedKickoffTimes": 0,
+      "firstPublicationTimestamps": 0,
+      "declaredDataLicense": "CC BY 4.0",
+      "sourceUrl": "https://doi.org/10.17605/OSF.IO/PJUW8",
+      "reconstructibleLabels": [
+        "winner",
+        "score-derived-set-and-point-labels-with-format-metadata-conflict"
+      ],
+      "operationalMarketsApproved": [],
+      "limitations": [
+        "Source dates may identify event rather than match; first availability unverified.",
+        "Seven-day history lag in v15 is a convention, not verified publication timing.",
+        "Do not use unverified rankings or best_of as prematch features.",
+        "WTT cohorts differ from current minor-league application; performance does not transfer automatically."
+      ]
+    }
+  ],
+  "setka": {
+    "source": "Gavin Cassidy / SCORE Sports Data Repository",
+    "sourceUrl": "https://data.scorenetwork.org/table_tennis/table_tennis_sept2022.html",
+    "localFile": ".research-data/setka-september-2022.csv",
+    "sha256": "d400562f49ced084133c8e926025efb6023dd62a8341fd4484864d567a4e392d",
+    "rows": 7851,
+    "uniqueRowsIgnoringIndex": 7847,
+    "duplicateRowsIgnoringIndex": 4,
+    "playersByNormalizedName": 565,
+    "competitions": {
+      "Setka Cup as described by publisher": 7851
+    },
+    "dateRange": {
+      "from": "2022-06-10",
+      "to": "2022-07-08"
+    },
+    "counts": {
+      "withIndividualSetPoints": 7851,
+      "coherentScoreAndWinner": 7848,
+      "inconsistentScoreOrWinner": 3
+    },
+    "missingFields": {
+      "X": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "Date": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "Time": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "Player1": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "Player2": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "Sets_P1": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "Sets_P2": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "P1_G1": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "P2_G1": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "P1_G2": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "P2_G2": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "P1_G3": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "P2_G3": {
+        "missing": 0,
+        "percent": 0.0
+      },
+      "P1_G4": {
+        "missing": 2403,
+        "percent": 30.6076
+      },
+      "P2_G4": {
+        "missing": 2403,
+        "percent": 30.6076
+      },
+      "P1_G5": {
+        "missing": 5333,
+        "percent": 67.9277
+      },
+      "P2_G5": {
+        "missing": 5333,
+        "percent": 67.9277
+      },
+      "HomeWinner": {
+        "missing": 0,
+        "percent": 0.0
+      }
+    },
+    "historicalOddsRows": 0,
+    "verifiedKickoffTimes": 0,
+    "firstPublicationTimestamps": 0,
+    "timeOfDayRows": 7851,
+    "timezoneVerified": false,
+    "descriptionPeriod": "September 2022",
+    "descriptionContradictsCsvDates": true,
+    "redistributionLicenseVerified": false,
+    "reconstructibleLabels": [
+      "winner",
+      "BO5 exact result/sets/points/set-by-set targets where score checks pass"
+    ],
+    "operationalMarketsApproved": []
+  },
+  "historicalClosingCache": {
+    "counts": {
+      "cacheEntries": 3887
+    },
+    "snapshotMatchesWithCachedClosingPayload": 3887,
+    "strictKickoffGuardsRevalidated": 3845,
+    "previousManifestStartRows": 3348,
+    "manifestIds": 3348,
+    "manifestIdsMissingOrFailingRevalidation": 0,
+    "strictFreshTwoSidedWinnerQuotePairsBeforeGuard": 269,
+    "historicalOddsForAll23596Matches": false,
+    "strictQuoteRule": "Same as src/domain/research-source.ts: known nonestimated actual kickoff; exact player pair and match; unsuspended prices >1; timestamp <= kickoff-1m and no older than 5m.",
+    "bookmakerSite": "bet365.com.au",
+    "admAuthorizationVerifiedForThisSite": false,
+    "scope": "This is historical cache coverage; presence does not prove executable historical prices or recorded predictions."
+  },
+  "qualifiedFeatureOddsSubset": {
+    "featureRows": 2168,
+    "qualifyingRows": 153,
+    "rejected": {
+      "noStrictAsOfPair": 2015
+    },
+    "privateFile": ".research-data/v16-qualified-market-baselines.json",
+    "privateFileSha256": "bb32f84e69f322898bcadd1d8151da83a5dde6a50bd39e7f9532ba45935e315b",
+    "quoteRowsDoNotCertifyExecutability": true
+  },
+  "featureDatasets": [
+    {
+      "file": ".research-data/market-v8-features.json",
+      "sha256": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4",
+      "rows": 2168,
+      "uniqueIds": 2168,
+      "featureCount": 63,
+      "targets": 14,
+      "invalidCausalOrderWhereOutcomeAvailabilityPresent": 0,
+      "outcomeAvailabilityAbsentRows": 0,
+      "alreadyInspectedHistoricalArchive": true
+    },
+    {
+      "file": ".research-data/market-v8-confirmation-features.json",
+      "sha256": "4088b07a52bee4132c3c9277452886e756ed1374689d7d91ed4d17812f7f32ed",
+      "rows": 249,
+      "uniqueIds": 249,
+      "featureCount": 63,
+      "targets": 14,
+      "invalidCausalOrderWhereOutcomeAvailabilityPresent": 0,
+      "outcomeAvailabilityAbsentRows": 0,
+      "alreadyInspectedHistoricalArchive": true
+    },
+    {
+      "file": ".research-data/market-v8-extension-features.json",
+      "sha256": "314cc396ac6ea352395d1aa78d9a189fd8e531a621069b6a8aea50d7475129f6",
+      "rows": 12,
+      "uniqueIds": 12,
+      "featureCount": 63,
+      "targets": 14,
+      "invalidCausalOrderWhereOutcomeAvailabilityPresent": 0,
+      "outcomeAvailabilityAbsentRows": 12,
+      "alreadyInspectedHistoricalArchive": true
+    }
+  ],
+  "recordedForwardManifest": {
+    "file": ".research-data/forward-v3.json",
+    "rows": 304,
+    "observedAt": "2026-11-04T22:17:32.010Z",
+    "source": "MoviOdds",
+    "bookmakerSite": "bet365.com.au",
+    "counts": {
+      "recordedBeforeScheduledStart": 304,
+      "twoSidedQuotePairTimestampedByObservation": 304
+    },
+    "resultsNotReScoredHere": true,
+    "productionValidated": false,
+    "notAnAdditionalIndependentHistoricalDataset": true
+  },
+  "database": {
+    "schemaTables": [
+      "private.owner_emails",
+      "public.authorized_users",
+      "public.bookmakers",
+      "public.competitions",
+      "public.events",
+      "public.manual_bets",
+      "public.markets",
+      "public.model_versions",
+      "public.personal_choices",
+      "public.players",
+      "public.prediction_outcomes",
+      "public.predictions",
+      "public.profiles",
+      "public.quotes",
+      "public.results",
+      "public.validation_metrics"
+    ],
+    "schemaDefined": true,
+    "remoteRowCountsVerifiedInThisAudit": false,
+    "remoteCounts": null,
+    "quoteFields": [
+      "source_updated_at",
+      "received_at",
+      "decimal_odds",
+      "suspended",
+      "source",
+      "mode"
+    ],
+    "resultFields": [
+      "available_at",
+      "recorded_at",
+      "score",
+      "source",
+      "status"
+    ],
+    "forecastIntegrityFields": [
+      "features_available_at",
+      "predicted_at",
+      "model_id",
+      "evidence"
+    ],
+    "privateProspectiveLedger": "model_versions.parameters stores original v9/v10 cases, forecasts, outcomes and checkpoints behind RLS and owner authorization. Not exported to workspace by this audit.",
+    "access": "Supabase Auth + authorized_users/private membership + RLS; schema presence is not evidence of complete live data."
+  },
+  "apiIntegrations": {
+    "activeOddsAndResults": "MoviOdds public bet365.com.au board/results/closing integration",
+    "theOddsApi": {
+      "implemented": "server/provider.ts V4 sports/events/markets/odds; server/env.ts private key selection",
+      "catalogPingPongCoverageReverifiedNow": false,
+      "configuredKeyPresenceRead": false,
+      "runtimeCallsMadeByInventory": 0,
+      "operationalCoverageProvenByThisAudit": false,
+      "note": "Dormant diagnostic preserved; main board does not use this provider. A configured credential is not evidence of table-tennis coverage."
+    }
+  },
+  "marketReadiness": {
+    "reconstructibleTargetsVersusPrediction": "Complete score sequences permit many retrospective labels; prediction requires known prematch format, causal features, timestamps and market-specific validation.",
+    "supportedResearch14Targets": [
+      "winner",
+      "first-set winner",
+      "first-set total points 19.5",
+      "total sets 3.5",
+      "total sets 4.5",
+      "total points 74.5",
+      "total points 79.5",
+      "total points 84.5",
+      "home set handicap -1.5",
+      "home set handicap +1.5",
+      "home point handicap -5.5",
+      "home point handicap +5.5",
+      "home point handicap -9.5",
+      "home point handicap +9.5"
+    ],
+    "furtherLabelsFeasible": [
+      "exact match result",
+      "all played-set winners",
+      "all played-set points/handicaps",
+      "wins at least a set",
+      "straight sets",
+      "comeback after losing first set"
+    ],
+    "unsupportedWithoutAdditionalData": [
+      "point-by-point live model",
+      "server/receiver conditioned model",
+      "within-rally stroke model",
+      "unplayed-set unconditional winner without explicit conditional semantics",
+      "ADM operational comparison without site-specific verified authorization"
+    ],
+    "noMarketNewlyValidatedByThisInventory": true
+  },
+  "blockingRequirements": [
+    "Verified prematch format by competition/event, especially inconsistent WTT best_of.",
+    "Historical publication/kickoff evidence for dates-only CSV; arbitrary lag is not verification.",
+    "Full timestamped historical odds/pairs aligned to forecast instant for odds-input benchmark and executable ROI.",
+    "Source-site-specific ADM verification; bet365.com.au is not interchangeable with an Italian site.",
+    "Remote prospective counts and outcomes require authorized server report; not guessed from repository code.",
+    "A new untouched future test cohort is required after repeated inspection of historical reports."
+  ]
+}

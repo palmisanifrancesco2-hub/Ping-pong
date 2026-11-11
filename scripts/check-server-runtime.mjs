@@ -16,7 +16,7 @@ try {
     let externalCalls=0;
     globalThis.fetch=async()=>{externalCalls++;throw Error('UNEXPECTED_EXTERNAL_CALL');};
     const {default:handler}=await import(${JSON.stringify(entry)});
-    for(const [url,status] of [['/api/health',200],['/api/access',401],['/api/board',401],['/api/study-run',401],['/api/market-study',401]]){
+    for(const [url,status] of [['/api/health',200],['/api/access',401],['/api/board',401],['/api/study-run',401],['/api/market-study',401],['/api/prediction-system',401]]){
       const headers={};let body='';
       const res={statusCode:0,setHeader(k,v){headers[k]=v;},end(v){body=v;}};
       await handler({url,method:'GET',headers:{}},res);

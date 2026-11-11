@@ -1,3 +1,5 @@
+import{predictionSystemReport}from'./prediction-system.js';
+import{strictPredictionPolicy}from'./prediction-policy.js';
 import{ensembleSignals,ensembleValueReport}from'./multi-model.js';
 import{PlayerProfiles}from'./player-profiles.js';
 import{ProspectiveStudy}from'./prospective-study.js';
@@ -47,7 +49,7 @@ export function createHandler(deps: Dependencies = {}) {
     const methods = ['/api/study','/api/market-study'].includes(path)?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
     if (!methods.includes(req.method ?? '')) { res.setHeader('Allow', methods.join(', ')); return send(405, { error: 'Metodo non consentito.' }); }
     if (path === '/api/health') return send(200, { status: 'ok', version: '0.1.0' });
-    if (!['/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run','/api/profiles','/api/market-study'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
+    if (!['/api/prediction-system','/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run','/api/profiles','/api/market-study'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
     if(path==='/api/study-run'){
       if(!authorizedStudyCron(req.headers.authorization,env.CRON_SECRET))return send(401,{error:'Esecuzione non autorizzata.'});
       const deadline=now()+285000;let legacy:unknown,markets:unknown;
@@ -62,6 +64,7 @@ export function createHandler(deps: Dependencies = {}) {
       if(path==='/api/market-study'){try{return send(200,req.method==='POST'?await marketStudy.run(userId):await marketStudy.report(userId));}catch(error){if(error instanceof Error&&error.message==='MARKET_STUDY_OWNER_ONLY')return send(403,{error:'Accesso al test riservato al proprietario.'});throw error;}}
       if(path==='/api/study'){try{return send(200,req.method==='POST'?await study.run(userId):await study.report(userId));}catch(error){if(error instanceof Error&&error.message==='STUDY_OWNER_ONLY')return send(403,{error:'Solo il proprietario può aggiornare la raccolta.'});throw error;}}
       if(path==='/api/profiles'){const id=url.searchParams.get('eventId');if(!id||id.length>100)return send(400,{error:'Evento non valido.'});let m=(await feed.board()).matches.find(m=>m.id===id);if(!m){const r=(await analyses.results.archive()).results.find(r=>r.id===id);if(r)m={...r,sport:'table_tennis',in_play:false,quotes:[]};}if(!m)return send(404,{error:'Evento non disponibile per la ricerca dei profili.'});return send(200,await profiles.forEvent(m));}
+      if(path==='/api/prediction-system')return send(200,predictionSystemReport(now()));
       if(path==='/api/access')return send(200,{authorized:true});
       if(path==='/api/status'){
         const db=await userDatabase(match[1],env).from('manual_bets').select('id').limit(0);
@@ -85,7 +88,7 @@ export function createHandler(deps: Dependencies = {}) {
         return send(200,await forecasts.record(userId,m,f));
       }
 
-      if(path==='/api/value'){const[board,archive]=await Promise.all([feed.board(url.searchParams.get('refresh')==='1'),analyses.results.archive()]);return send(200,{...scoreValueReport(board,archive,now()),ensemble:ensembleValueReport(board,archive,now())});}
+      if(path==='/api/value'){const[board,archive]=await Promise.all([feed.board(url.searchParams.get('refresh')==='1'),analyses.results.archive()]);return send(200,{...strictPredictionPolicy(scoreValueReport(board,archive,now()),board,now()),ensemble:ensembleValueReport(board,archive,now())});}
       if(path==='/api/model')return send(200,{comparison:modelComparison,research:researchReport,scoreResearch:scoreResearchReport,forwardStudy,version:runtimeModel.version,validated:false,generatedAt:runtimeModel.generatedAt,trainingCutoff:runtimeModel.calibrationCutoff,validation:runtimeModel.validation,calibration:{temperature:runtimeModel.temperature},leagues:{},source:'MoviOdds; validazione preliminare su risultati riportati'});
       if(path==='/api/settle')return send(200,await forecasts.settle(userId,()=>analyses.results.archive()));
       if(path==='/api/analysis'){

@@ -14,6 +14,13 @@ async function start(handler: ReturnType<typeof createHandler>) {
   return `http://127.0.0.1:${address.port}`;
 }
 describe('private HTTP API', () => {
+  it('protects the integrated system report and exposes aggregates without individual test rows',async()=>{
+    const base=await start(createHandler({env:{},authorize:async t=>t==='member'?'owner':null}));
+    expect((await fetch(`${base}/api/prediction-system`)).status).toBe(401);
+    const response=await fetch(`${base}/api/prediction-system`,{headers:{Authorization:'Bearer member'}});expect(response.status).toBe(200);
+    const body=await response.json();expect(body.version).toBe('prediction-system-v16');expect(body.benchmark.n).toBe(1804);expect(body.datasets.length).toBeGreaterThan(3);expect(body.benchmark.predictions).toBeUndefined();expect(body.lifecycle.monitor.automaticPromotion).toBe(false);expect(body.rankingPolicy.italianPricesVerified).toBe(false);
+    expect((await fetch(`${base}/api/prediction-system`,{method:'POST',headers:{Authorization:'Bearer member'}})).status).toBe(405);
+  });
   it('forwards an authenticated manual refresh to the board and value source',async()=>{
     const board={provider:'MoviOdds' as const,bookmakerSite:'bet365.com.au' as const,checkedAt:new Date().toISOString(),serverTime:new Date().toISOString(),warming:false,matches:[]};
     const feed={board:vi.fn(async()=>board)},analyses={analyse:vi.fn(),results:new ResultsFeed(async()=>new Response(JSON.stringify({source:'postgres',results:[]})))};
@@ -37,7 +44,7 @@ describe('private HTTP API', () => {
   });
   it('keeps value estimates private and reports the actual model block',async()=>{
     const base=await start(createHandler({analyses:{analyse:vi.fn(),results:new ResultsFeed(async()=>new Response(JSON.stringify({source:'postgres',results:[]})))},authorize:async t=>t==='member'?'owner':null,feed:{board:async()=>({provider:'MoviOdds',bookmakerSite:'bet365.com.au',checkedAt:new Date().toISOString(),serverTime:new Date().toISOString(),warming:false,matches:[]})}}));expect((await fetch(`${base}/api/value`)).status).toBe(401);
-    const response=await fetch(`${base}/api/value`,{headers:{Authorization:'Bearer member'}});expect(response.status).toBe(200);const report=await response.json();expect(report.status).toBe('experimental');expect(report.opportunities).toEqual([]);
+    const response=await fetch(`${base}/api/value`,{headers:{Authorization:'Bearer member'}});expect(response.status).toBe(200);const report=await response.json();expect(report.status).toBe('blocked');expect(report.rankings.probability).toEqual([]);expect(report.policy).toBe('strict-adm-independent-v16');expect(report.opportunities).toEqual([]);
   });
   it('verifies private access independently from having an Auth session',async()=>{
     const denied=await start(createHandler({env:{},authorize:async()=>null}));expect((await fetch(`${denied}/api/access`,{headers:{Authorization:'Bearer registered-outsider'}})).status).toBe(401);

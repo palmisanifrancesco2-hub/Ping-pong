@@ -190,3 +190,10 @@ Chromium locale con report aggregati reali e componente isolato: quattro righe d
 Release combinazioni `4f39d64113f42069f432391755905154957e4746`: deployment Production `dpl_F61xwBQ4QzEx6bhkwDmx8usaGxJY` READY, alias stabile https://ping-pong-ping-pong3.vercel.app assegnato e health protetto HTTP 200. CI GitHub push/PR superata. Avvio ESM del server compilato riuscito anche nel build Vercel Node 26.13.0. Nessun nuovo modello operativo, migrazione, credenziale o modifica dei protocolli prospettici.
 
 Fotografia al 6 novembre 2026, 11:07:35 UTC del test v9: 200 registrati, 137 valutati, 60 in attesa e tre non validi ai controlli; due giorni osservati. Sul vincente del candidato in prova: 73 corretti e 64 errati (53,28%). I casi non validi restano nel registro e nei controlli conservativi previsti dal protocollo; non sono eliminati dal campione registrato. Il log aggregato non specifica la causa individuale dei tre casi. Studio v10 separato: 87 registrati, 54 valutati, 29 in attesa e quattro non validi. Nessun checkpoint raggiunto o modello validato. Le 1.804 partite storiche delle combinazioni restano un campione distinto.
+
+
+## Sistema predittivo v16 — 11 novembre 2026
+
+264 test applicativi / 37 file e 28 Python passati. Build, TypeScript e server ESM compilato passati. QA browser con handler reale locale e account sintetico isolato: nuovi report autentici aggregati, 14 mercati, classifiche A/B/combinata, pesi configurabili, blocco prezzi esteri e modelli non validati, endpoint anonimo 401, errore 503/recupero, Android 393×851 e desktop 1440×1000 senza errori JS o overflow. Nessun accesso al JWT del proprietario, dato inventato in produzione o scrittura privata da QA.
+
+18 artefatti privati addestrati nel nuovo benchmark e confronto odds, hash negli aggregati. Nessun vincitore operativo o ROI dichiarato. Il filtro ADM è reintrodotto secondo l’ultima specifica e non altera i protocolli prospettici già congelati. Nuovo endpoint GET privato /api/prediction-system. Raccolta/settlement originali invariati, nessuna migrazione o nuova credenziale. [Avanzamento e blocchi](AVANZAMENTO-SISTEMA-PREDITTIVO.md).
