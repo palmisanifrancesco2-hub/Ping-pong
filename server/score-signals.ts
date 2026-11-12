@@ -1,4 +1,5 @@
 import{createHash}from'node:crypto';
+import{asOfWindow,withinWindow}from'./as-of-window.js';
 import artifact from'../models/score-runtime-v1.json'with{type:'json'};
 import{ScoreFeatures,predictScore}from'../src/domain/score-model.js';
 import{isUpcomingOrLive,quoteStatus,quoteIdentity,type FeedMatch,type Board}from'../src/shared/board.js';
@@ -8,8 +9,15 @@ import type{ValueReport}from'../src/shared/value.js';
 import type{ValueOpportunity}from'../src/domain/value.js';
 export const runtimeModel=artifact;
 export const runtimeVersion=`${artifact.version}-${createHash('sha256').update(JSON.stringify({data:artifact.datasetHash,model:artifact.model,temperature:artifact.temperature,cutoff:artifact.calibrationCutoff})).digest('hex').slice(0,16)}`;
-let cached:{archive:ResultsArchive;engine:ScoreFeatures;finished:Set<string>;latestAt:string}|undefined;
-function engineFor(archive:ResultsArchive,now:number){if(cached?.archive===archive)return cached;const engine=new ScoreFeatures();for(const r of [...archive.results].sort((a,b)=>Date.parse(a.availableAt)-Date.parse(b.availableAt)||a.id.localeCompare(b.id)))if(Date.parse(r.availableAt)<now)engine.update(r);cached={archive,engine,finished:new Set(archive.results.map(r=>r.id)),latestAt:new Date(Math.max(0,...archive.results.filter(r=>Date.parse(r.availableAt)<now).map(r=>Date.parse(r.availableAt)))).toISOString()};return cached;}
+let cached:{archive:ResultsArchive;engine:ScoreFeatures;finished:Set<string>;latestAt:string;validAfter:number;validThrough:number}|undefined;
+function engineFor(archive:ResultsArchive,now:number){
+ if(cached?.archive===archive&&withinWindow(cached,now))return cached;
+ const window=asOfWindow(archive.results,now);
+ const engine=new ScoreFeatures();
+ for(const r of window.eligible)engine.update(r);
+ cached={archive,engine,finished:new Set(archive.results.map(r=>r.id)),latestAt:new Date(Number.isFinite(window.validAfter)?window.validAfter:0).toISOString(),validAfter:window.validAfter,validThrough:window.validThrough};
+ return cached;
+}
 export type ScoreArtifact=typeof artifact;
 export function scoreModelVersion(model:ScoreArtifact){return `${model.version}-${createHash('sha256').update(JSON.stringify({data:model.datasetHash,model:model.model,temperature:model.temperature,cutoff:model.calibrationCutoff})).digest('hex').slice(0,16)}`;}
 export function scoreSignals(m:FeedMatch,archive:ResultsArchive,now:number,model:ScoreArtifact=artifact):Forecast[]{

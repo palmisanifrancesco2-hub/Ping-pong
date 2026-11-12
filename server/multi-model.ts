@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { asOfWindow, withinWindow } from './as-of-window.js';
 import artifact from '../models/multi-research-v1.json' with { type: 'json' };
 import { ScoreFeatures, predictScore } from '../src/domain/score-model.js';
 import { DailyGlicko } from '../src/domain/glicko2.js';
@@ -11,12 +12,12 @@ import type { ValueOpportunity } from '../src/domain/value.js';
 
 export const multiModelVersion = `${artifact.version}-${createHash('sha256').update(JSON.stringify({full:artifact.full,scores:artifact.scores,temperatures:artifact.temperatures,cutoff:artifact.calibrationCutoff,glicko:{tau:.5,period:'UTC-day',symmetricRD:true}})).digest('hex').slice(0,16)}`;
 export const multiModelReport = artifact;
-let cached: { archive: ResultsArchive; scores: ScoreFeatures; glicko: DailyGlicko } | undefined;
+let cached: { archive: ResultsArchive; scores: ScoreFeatures; glicko: DailyGlicko; validAfter:number; validThrough:number } | undefined;
 function engine(archive: ResultsArchive, now: number) {
-  if (cached?.archive === archive) return cached;
-  const past = archive.results.filter(r => Date.parse(r.availableAt) < now).sort((a,b)=>Date.parse(a.availableAt)-Date.parse(b.availableAt)||a.id.localeCompare(b.id));
-  const scores = new ScoreFeatures(); for (const r of past) scores.update(r);
-  cached = { archive, scores, glicko: new DailyGlicko(past) }; return cached;
+  if (cached?.archive === archive && withinWindow(cached,now)) return cached;
+  const window = asOfWindow(archive.results,now);
+  const scores = new ScoreFeatures(); for (const r of window.eligible) scores.update(r);
+  cached = { archive, scores, glicko: new DailyGlicko(window.eligible), validAfter:window.validAfter, validThrough:window.validThrough }; return cached;
 }
 export function ensembleSignals(m: FeedMatch, archive: ResultsArchive, now: number): Forecast[] {
   const original = scoreSignals(m, archive, now);
