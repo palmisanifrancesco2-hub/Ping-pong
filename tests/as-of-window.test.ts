@@ -3,10 +3,11 @@ import {asOfWindow,withinWindow} from '../server/as-of-window';
 import {scoreSignals} from '../server/score-signals';
 import {ensembleSignals} from '../server/multi-model';
 import model from '../models/score-runtime-v1.json';
+import ensembleModel from '../models/multi-research-v1.json';
 import type {MatchResult} from '../src/domain/player-model';
 import type {ResultsArchive} from '../server/results';
 import type {FeedMatch} from '../src/shared/board';
-const time=Date.parse(model.generatedAt)+60000;
+const time=Math.max(Date.parse(model.generatedAt),Date.parse(ensembleModel.generatedAt))+60000;
 const iso=(n:number)=>new Date(n).toISOString();
 const result=(id:string,at:number,homeWon:boolean):MatchResult=>({
  id,home:'A',away:'B',league:'AsOfTest',availableAt:iso(at),finishedAt:iso(at-1000),homeWon,
