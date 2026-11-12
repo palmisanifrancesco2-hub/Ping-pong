@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, type FormEvent } from 'react';
 import { createClient, type Session } from '@supabase/supabase-js';
 import { FeedStatus, Markets } from './Markets';
+import { MarketSimulator } from './MarketSimulator';
 import { useBoard } from './useBoard';
 import { PredictionHistory } from './History';
 import type { HistoryPeriod } from './shared/history';
@@ -21,7 +22,7 @@ const auth = (() => {
   if (!url || !key) return null;
   try { return createClient(url, key, { auth: { flowType: 'pkce', detectSessionInUrl: true } }); } catch { return null; }
 })();
-const sections = ['Dashboard', 'Partite e mercati', 'Value Tracker', 'Statistiche modello', 'Storico pronostici', 'Le mie scelte', 'Smart Stake', 'Collegamenti'] as const;
+const sections = ['Dashboard', 'Partite e mercati', 'Value Tracker', 'Simulatore mercati', 'Statistiche modello', 'Storico pronostici', 'Le mie scelte', 'Smart Stake', 'Collegamenti'] as const;
 type Section = typeof sections[number];
 export function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -64,9 +65,9 @@ export function App() {
       <p role="status">{notice}</p><p className="fine">Dopo l’accesso gli eventi reali vengono caricati automaticamente.</p>
     </section></main>;
   if (session && access.status !== 'allowed') return <main className="login-shell access-shell"><section className="intro"><Brand/><h1>Il tuo spazio<br/><em>resta privato.</em></h1></section><section className="login-card"><span className="eyebrow">VERIFICA ACCESSO</span><h2>{access.status === 'checking' ? 'Verifica del tuo account…' : access.status === 'denied' ? 'Account non abilitato' : 'Verifica non disponibile'}</h2><p role="status">{access.status === 'checking' ? 'Attendi la verifica dell’accesso privato.' : access.status === 'denied' ? 'La registrazione o l’accesso Google non concedono automaticamente l’accesso ai dati. Usa l’account autorizzato dal proprietario.' : 'Non possiamo verificare l’abilitazione in questo momento. Nessun dato privato è stato caricato.'}</p>{access.status !== 'checking' && <button className="primary" onClick={access.retry}>Riprova verifica</button>}<button className="text-button" onClick={async () => { await auth?.auth.signOut(); setSession(null); setNotice(''); }}>Esci o usa un altro account →</button></section></main>;
-  return <div className="app-shell"><aside><Brand/><span className="eyebrow workspace">WORKSPACE PRIVATO</span><nav aria-label="Navigazione principale">{sections.map((name, i) => <button key={name} className={section === name ? 'nav-item active' : 'nav-item'} onClick={() => { setSection(name); setNotice(''); }}><span aria-hidden="true">{['◫','≋','↗','◷','▤','☆','◎','⚙'][i]}</span>{name}</button>)}</nav><div className="sidebar-bottom"><span className="status-dot"/> Sessione autenticata<small>Pronostici soggetti a verifica</small><button className="text-button" onClick={async () => { if (session) await auth?.auth.signOut(); setNotice(''); }}>Esci dallo spazio ↗</button></div></aside>
+  return <div className="app-shell"><aside><Brand/><span className="eyebrow workspace">WORKSPACE PRIVATO</span><nav aria-label="Navigazione principale">{sections.map((name, i) => <button key={name} className={section === name ? 'nav-item active' : 'nav-item'} onClick={() => { setSection(name); setNotice(''); }}><span aria-hidden="true">{['◫','≋','↗','◇','◷','▤','☆','◎','⚙'][i]}</span>{name}</button>)}</nav><div className="sidebar-bottom"><span className="status-dot"/> Sessione autenticata<small>Pronostici soggetti a verifica</small><button className="text-button" onClick={async () => { if (session) await auth?.auth.signOut(); setNotice(''); }}>Esci dallo spazio ↗</button></div></aside>
     <main className="workspace-main"><header><div><span className="eyebrow">ANALISI / {section.toUpperCase()}</span><h1>{section}</h1></div><div className="header-actions"><span className="badge">DATI REALI</span><button className="text-button" onClick={async () => { if (session) await auth?.auth.signOut(); setNotice(''); }}>Esci ↗</button></div></header>
-      {!['Partite e mercati','Value Tracker'].includes(section)&&<div className="banner">MoviOdds · Quote bet365 estere. Solo live confermati e partite da iniziare. Pronostici soggetti a dati e validazione; scelte personali separate.</div>}
+      {!['Partite e mercati','Value Tracker','Simulatore mercati'].includes(section)&&<div className="banner">MoviOdds · Quote bet365 estere. Solo live confermati e partite da iniziare. Pronostici soggetti a dati e validazione; scelte personali separate.</div>}
       {notice && <p className="error" role="alert">{notice}</p>}
       {section === 'Dashboard' && <><section className="hero-panel"><div><span className="eyebrow">PRIMA LA QUALITÀ DEL DATO</span><h2>Ogni opportunità<br/>parte da una verifica.</h2><p>Apri una partita per confrontare i giocatori e verificare se il modello può registrare un pronostico.</p><button className="primary" onClick={() => setSection('Partite e mercati')}>Esplora partite e quote ↗</button></div><div className="hero-mark" aria-hidden="true">◎<span>ANALYTICS</span></div></section><FeedStatus {...feed} disabled={false}/><div className="metrics">{[
         ['Partite nel feed', feed.board ? String(feed.board.matches.length) : '—'],
@@ -77,6 +78,7 @@ export function App() {
       {section === 'Collegamenti' && <><FeedStatus {...feed} disabled={false}/><ConnectionHealth token={session?.access_token} demo={false}/></>}
       {section === 'Partite e mercati' && <><FeedStatus {...feed} compact/><Markets board={feed.board} now={feed.now} token={session.access_token} refreshBoard={feed.refresh} boardLoading={feed.loading}/></>}
       {section === 'Value Tracker' && <ValueTracker token={session?.access_token} demo={false} onMarkets={()=>setSection('Partite e mercati')}/>}
+      {section === 'Simulatore mercati' && <MarketSimulator/>}
       {section === 'Le mie scelte' && <PersonalChoices key={`${session.user.id}-${period}`} token={session?.access_token} demo={false} period={period} onPeriod={setPeriod} onBet={openBet}/>}
       {section === 'Storico pronostici' && <PredictionHistory key={`${session.user.id}-${period}`} token={session?.access_token} demo={false} period={period} onPeriod={setPeriod} onBet={openBet}/>}
       {section === 'Statistiche modello' && <ModelStats token={session?.access_token} demo={false} period={period} onPeriod={setPeriod}/>}
