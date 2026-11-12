@@ -1,0 +1,75 @@
+{
+  "version": "score-projection-v11",
+  "createdAt": "2026-11-05T23:48:39.606481+00:00",
+  "historyInput": ".research-data/3000-data.json",
+  "minimumPlayerHistory": 30,
+  "minimumTraining": 50,
+  "minimumCalibration": 40,
+  "calibrationDays": 2,
+  "foldStarts": [
+    "2026-10-25T00:00:00Z",
+    "2026-10-27T00:00:00Z",
+    "2026-10-29T00:00:00Z",
+    "2026-10-31T00:00:00Z",
+    "2026-11-02T00:00:00Z"
+  ],
+  "historyEndExclusive": "2026-11-05T00:00:00Z",
+  "targets": [
+    "winner",
+    "first-set",
+    "first-set-points-over-19.5",
+    "sets-over-3.5",
+    "sets-over-4.5",
+    "points-over-74.5",
+    "points-over-79.5",
+    "points-over-84.5",
+    "home-set-handicap-minus-1.5",
+    "home-set-handicap-plus-1.5",
+    "home-point-handicap-minus-5.5",
+    "home-point-handicap-plus-5.5",
+    "home-point-handicap-minus-9.5",
+    "home-point-handicap-plus-9.5"
+  ],
+  "candidates": [
+    "rally-iid-logit",
+    "rally-beta-binomial",
+    "poisson-total-points"
+  ],
+  "regularization": 1.0,
+  "kappaBounds": [
+    20,
+    5000
+  ],
+  "initialKappa": 200,
+  "optimizerMaxIterations": 1000,
+  "projectionGridIntervals": 4096,
+  "quadratureNodes": 21,
+  "quadratureCheckNodes": 41,
+  "temperatures": [
+    0.5,
+    1,
+    1.5
+  ],
+  "shrinkWeights": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "poissonAlpha": 1.0,
+  "pointTotalCap": 86,
+  "bootstrapReplicates": 10000,
+  "familyComparisons": 31,
+  "fit": "Fit signed eight causal score features to observed home/away point counts. IID binomial and match-latent Beta-binomial likelihood use complete stopped-score counts; scoring-path factors independent of fitted parameters omitted. Penalized mean negative log likelihood, not fabricated probabilities. All parameters fit strictly before calibration cutoff.",
+  "calibration": "Choose rally-logit temperature and one shared shrink-to-causal-league weight on prior calibration only, pooled 14-target Brier. Shared mixture preserves cross-market coherence. Poisson benchmark uses only three declared match-total thresholds, no winner/set probability borrowed.",
+  "projection": "Exact IID set endpoint kernels to 11/win-by-two with analytic infinite deuce tail. Saturated total-point convolution at 86 preserves exact probabilities for the declared totals <=84.5. Point-margin convolution and stopped BO5 set-score paths share the same process. Beta-binomial integrates point probability uncertainty by Gauss-Jacobi quadrature. Prediction grid interpolation is deterministic, not Monte Carlo forecasts.",
+  "scope": "Exploratory replay of previously inspected archive. Same 1804 outer-fold cases when eligible. Report proper probability scores and paired 3-day-block uncertainty with multiplicity correction; no independent validation or automatic model promotion. New 64-case diagnostic and prospective v9/v10 cohorts are not used for fitting, calibration, or model selection in this experiment.",
+  "limitations": [
+    "Only BO5 complete reported set scores; no point-by-point sequence, first server, serve/receive probabilities or verified live state",
+    "IID conditionally on a latent match point probability; no claim to capture tactical changes or true momentum",
+    "Poisson count benchmark does not represent a complete legal score process and is limited to match totals",
+    "No ROI or executable price backtest; no new operational opportunities or random forecasts from an unvalidated projection"
+  ],
+  "poissonFeatures": "Absolute eight signed causal strength features plus mean of players last-30 total-point and total-set context (x39/x47 and x38/x46). Standardized on training only. Poisson total prediction conditioned on complete BO5 T>=33; approximate count benchmark, not a full score model."
+}

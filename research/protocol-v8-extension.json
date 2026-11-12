@@ -1,0 +1,11 @@
+{
+  "historyInput": ".research-data/3000-data.json",
+  "minimumPlayerHistory": 30,
+  "freshMaximumRequests": 800,
+  "freshTargetCases": 500,
+  "version": "market-distributions-v8-supplement-1",
+  "createdAt": "2026-11-05T15:21:36.861460+00:00",
+  "freshStartInclusive": "2026-11-05T14:20:32Z",
+  "freshCollectionEndExclusive": "2026-11-05T15:21:36.861467+00:00",
+  "limits": "Descriptive extension after inspecting 249 cases. Same frozen weights and old covariate snapshot. No formal significance claim or model promotion from this extension. Future prospective study remains separate."
+}

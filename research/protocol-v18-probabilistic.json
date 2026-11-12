@@ -1,0 +1,90 @@
+{
+  "version": "probabilistic-benchmark-v18",
+  "createdAt": "2026-11-11T14:36:50.702093+00:00",
+  "input": ".research-data/market-v8-features.json",
+  "inputHash": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4",
+  "results": ".research-data/3000-data.json",
+  "resultsHash": "2380fc423d187688028575f301aea2cc3dfb5b6b458aac46b7370bc9f967e02f",
+  "foldStarts": [
+    "2026-10-25T00:00:00Z",
+    "2026-10-27T00:00:00Z",
+    "2026-10-29T00:00:00Z",
+    "2026-10-31T00:00:00Z",
+    "2026-11-02T00:00:00Z"
+  ],
+  "endExclusive": "2026-11-05T00:00:00Z",
+  "tuningDays": 1,
+  "calibrationDays": 1,
+  "minimumTraining": 50,
+  "minimumTuning": 30,
+  "minimumCalibration": 30,
+  "models": [
+    "catboost",
+    "ngboost",
+    "conditional-normalizing-flow"
+  ],
+  "parameterGrid": {},
+  "fixed": {
+    "catboost": {
+      "iterations": 150,
+      "depth": 4,
+      "learning_rate": 0.04,
+      "l2_leaf_reg": 5,
+      "thread_count": 2
+    },
+    "ngboost": {
+      "n_estimators": 80,
+      "learning_rate": 0.03,
+      "minibatch_frac": 1,
+      "verbose": false
+    },
+    "conditional-normalizing-flow": {
+      "transforms": 3,
+      "hidden_features": 24,
+      "epochs": 100,
+      "learning_rate": 0.001,
+      "samples": 2048,
+      "targets": [
+        5,
+        6,
+        7,
+        10,
+        11,
+        12,
+        13
+      ],
+      "continuous": [
+        "totalPoints",
+        "pointDifference"
+      ],
+      "jitter": "independent uniform(-0.5,0.5) training only",
+      "integration": "threshold at half-integer directly in dequantized distribution; no rounding"
+    }
+  },
+  "shrinkWeights": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "seed": 20261107,
+  "bootstrapReplicates": 10000,
+  "blockDays": 3,
+  "familyComparisons": 42,
+  "selection": "Fixed model configurations. Fit on refit window only; no test-selected hyperparameters/epochs. Per-target shrinkage weights selected on calibration day only. All raw and calibrated outcomes reported; no automatic winner or promotion.",
+  "forestSemantics": "Multioutput classification trained once per configuration; all heads share tree partitions. Calibration per head may break cross-market coherence; experimental only.",
+  "btSemantics": "Winner only; regularized player strength by competition, fitted to all BO5 source-reported past results available before cutoff, no future players; unseen player strength=0.",
+  "independentValidation": false,
+  "automaticPromotion": false,
+  "limitations": [
+    "Entire historical archive and source outcomes already inspected by earlier research; temporal separation is not new independent validation.",
+    "No historical executable as-of odds in this feature archive; odds-enhanced benchmark/ROI cannot be computed.",
+    "Source-reported results and closing times, not independently certified official records.",
+    "Per-head calibration/direct models do not ensure one coherent joint distribution across every market.",
+    "No promotion or modification of original prospective protocols.",
+    "New model choices made after earlier historical benchmarks were inspected; this is exploratory, not independent validation.",
+    "Flow models final total and point difference continuously; it does not encode legal match paths or score parity, and covers point markets only. Monte Carlo error and cross-market coherence limitations apply.",
+    "Frozen candidate settings are a bounded first comparison, not exhaustive tuning."
+  ]
+}
