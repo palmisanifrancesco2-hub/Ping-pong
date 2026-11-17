@@ -69,3 +69,12 @@ Preparato [scripts/audit-study-readonly.ts](../scripts/audit-study-readonly.ts),
 1. Ripristinare l’accesso legittimo MoviOdds con chiave gratuita privata, senza inviarla in chat; adattare tutti i connettori all’header documentato e verificare limiti/copertura dell’account. La sola aggiunta della variabile non cambia il codice attuale.
 2. Ottenere il report privato corrente attraverso il pannello owner o una diagnostica autorizzata, per verificare successi/fallimenti dei training e aggiornamento degli esiti.
 3. Raccogliere quote disponibili al momento esatto della previsione e nuovi risultati mai usati per scegliere i modelli, rispettando budget gratuito e controlli di integrità. Nessun vantaggio operativo è dimostrato finché questi confronti non passano.
+
+
+## Esito dopo autorizzazione esplicita del proprietario
+
+Il proprietario ha autorizzato la verifica in sola lettura. Il tentativo con il solo script preparato e arresto intenzionale prima del rilascio è stato comunque rifiutato dalla revisione automatica: secondo il revisore, creare una build con credenziali di produzione e riepiloghi nei log eccede il controllo autorizzato. Nessuna build avviata e nessun nuovo tentativo di esecuzione alternativa con credenziali.
+
+Controllo alternativo sui normali endpoint già pubblicati, senza cambiamenti: `/api/health` HTTP 200; GET `/api/training` e `/api/market-study` HTTP 401 senza la sessione Supabase del proprietario. L’accesso Vercel non sostituisce il login Google dell’app. Il deployment servito dall’alias stabile resta `dpl_CQsjZ7dcQ9dhK3SM2FrpGMTF5PMv` (commit applicativo `7abd3a0`). Nessun nuovo conteggio privato o risultato di training è stato ottenuto; i dati del 12 novembre restano l’ultimo snapshot verificato.
+
+Per leggere il dato corrente senza questo metodo di esecuzione serve il normale pannello del proprietario: Statistiche modello → Addestramento continuo dei candidati → Aggiorna stato training. Data/stato, conteggi Training/Calibrazione/Test e Brier sono visibili senza condividere password, token o chiavi. Non serve premere “Verifica e addestra candidato” per la sola lettura.
