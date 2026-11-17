@@ -104,3 +104,8 @@ Completata una verifica retrospettiva sui 249 incontri di conferma già disponib
 ## Studio v21 — rete neurale e distribuzione coerente dei set
 
 Completati protocollo temporale, fitting reale di 24 modelli (tuning/refit), otto artefatti privati, distribuzioni coerenti sui sei esiti BO5 e confronto di cinque mercati derivati. Stessi 1.804 casi principali/9 giorni e 249 di controllo, già esaminati: nessuna nuova validazione indipendente. Vincente principale: CatBoost 953 corretti/851 errati, MLP 903/901; nessuno supera il migliore Brier binario precedente. Pool risultato esatto 362/1.804 contro 343 del riferimento, senza miglioramento robusto del Brier. Sul controllo CatBoost 138/249 sul vincente e 60/249 sul risultato esatto. Nessun nuovo modello operativo, ROI, costo o cambiamento del cron. [Report, test e limiti](STUDIO-COERENTE-V21.md).
+
+
+## Quote dei pronostici corretti/sbagliati — v22
+
+Calcolate medie, mediane, estremi e differenze delle quote del lato realmente previsto dai modelli, con esiti corretti/sbagliati separati. Solo vincente, 88 incontri as-of principali e 28 del controllo, senza sovrapposizioni; non 116 nuove partite. Politiche complete, quota≥1,30 ed EV nominale positivo riportate separatamente, nessun massimo. Esempio principale filtrato: CatBoost coerente 21 corretti/quota media2,394, 13 errati/media2,438; rete23/media2,452 contro18/media2,646. Nessun ROI verificato, fitting, chiamata provider o modifica dell’app. [Tutte le tabelle e limiti](QUOTE-CORRETTI-SBAGLIATI-V22.md).
