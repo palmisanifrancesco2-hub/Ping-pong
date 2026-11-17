@@ -99,3 +99,8 @@ Commit 82d1360, Production dpl_E1BYD5HUxc9Ymn6KaNwHtN47Q34n READY, alias e healt
 ## Test aggiuntivo v20 — modelli congelati, 249 casi distinti
 
 Completata una verifica retrospettiva sui 249 incontri di conferma già disponibili, nessun overlap con i 2.168 ID principali. Sette artefatti verificati con hash, nessun fitting o ricalibrazione, due pool a pesi fissi e 14 mercati. Vincente: Random Forest 144/105 (57,83%); CatBoost e NGBoost 141/108 (56,63%); pool 139/110. NGBoost ha Brier più basso (0,241101), senza nuovo vincitore operativo. Una sola giornata già esaminata in studi precedenti: nessuna validazione indipendente. Solo 28 coppie quote valide, niente ROI. Totali punti dei nuovi candidati coincidono con il riferimento dopo shrinkage congelato a zero. 33 test Python passati, nessun nuovo costo, runtime o cron cambiato. [Rapporto e limiti](TEST-CONGELATI-V20.md).
+
+
+## Studio v21 — rete neurale e distribuzione coerente dei set
+
+Completati protocollo temporale, fitting reale di 24 modelli (tuning/refit), otto artefatti privati, distribuzioni coerenti sui sei esiti BO5 e confronto di cinque mercati derivati. Stessi 1.804 casi principali/9 giorni e 249 di controllo, già esaminati: nessuna nuova validazione indipendente. Vincente principale: CatBoost 953 corretti/851 errati, MLP 903/901; nessuno supera il migliore Brier binario precedente. Pool risultato esatto 362/1.804 contro 343 del riferimento, senza miglioramento robusto del Brier. Sul controllo CatBoost 138/249 sul vincente e 60/249 sul risultato esatto. Nessun nuovo modello operativo, ROI, costo o cambiamento del cron. [Report, test e limiti](STUDIO-COERENTE-V21.md).

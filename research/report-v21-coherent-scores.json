@@ -1,0 +1,6023 @@
+{
+  "version": "coherent-score-benchmark-v21",
+  "generatedAt": "2026-11-17T20:08:38.282040+00:00",
+  "protocol": {
+    "version": "coherent-score-benchmark-v21",
+    "createdAt": "2026-11-17T20:06:33.836647+00:00",
+    "input": ".research-data/market-v8-features.json",
+    "inputHash": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4",
+    "results": ".research-data/3000-data.json",
+    "resultsHash": "2380fc423d187688028575f301aea2cc3dfb5b6b458aac46b7370bc9f967e02f",
+    "foldStarts": [
+      "2026-10-25T00:00:00Z",
+      "2026-10-27T00:00:00Z",
+      "2026-10-29T00:00:00Z",
+      "2026-10-31T00:00:00Z",
+      "2026-11-02T00:00:00Z"
+    ],
+    "endExclusive": "2026-11-05T00:00:00Z",
+    "tuningDays": 1,
+    "calibrationDays": 1,
+    "minimumTraining": 50,
+    "minimumTuning": 30,
+    "minimumCalibration": 30,
+    "models": [
+      "categorical-catboost",
+      "categorical-mlp"
+    ],
+    "parameterGrid": {
+      "categorical-catboost": [
+        {
+          "depth": 3
+        },
+        {
+          "depth": 4
+        }
+      ],
+      "categorical-mlp": [
+        {
+          "hidden": 16,
+          "weightDecay": 0.01
+        },
+        {
+          "hidden": 32,
+          "weightDecay": 0.05
+        }
+      ]
+    },
+    "fixed": {
+      "categorical-catboost": {
+        "iterations": 120,
+        "learning_rate": 0.035,
+        "l2_leaf_reg": 8,
+        "thread_count": 2,
+        "classes_count": 6
+      },
+      "categorical-mlp": {
+        "epochs": 120,
+        "learningRate": 0.003,
+        "dropout": 0.1
+      }
+    },
+    "shrinkWeights": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "seed": 20261117,
+    "bootstrapReplicates": 10000,
+    "blockDays": 3,
+    "familyComparisons": 24,
+    "selection": "Configuration from tuning day multiclass log loss; refit before calibration; temperature and distribution-wide shrink from calibration multiclass log loss only. Per-fold selector from calibration only; fixed 50/50 pool. No test or transfer outcome selects model/configuration.",
+    "independentValidation": false,
+    "automaticPromotion": false,
+    "limitations": [
+      "All historical outcomes already inspected in prior studies, including the 249 transfer cases. Exploratory temporal benchmark, not new independent validation.",
+      "Only BO5 exact-score, winner, total sets and set handicaps. No points totals/handicaps or individual-set winners can be inferred from the final match set score alone.",
+      "Joint calibration preserves probability coherence but may underperform independently calibrated binary heads.",
+      "Main source reports results and availability; not independently certified official scores or first publication.",
+      "Transfer features use frozen previous-day history and cover one day.",
+      "No historical executable odds for these markets; no ROI or new operational opportunities.",
+      "Multiple earlier research iterations are not fully corrected by the current experiment family adjustment."
+    ],
+    "exactScores": [
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "derivedTargets": [
+      "winner",
+      "sets-over-3.5",
+      "sets-over-4.5",
+      "home-set-handicap-minus-1.5",
+      "home-set-handicap-plus-1.5"
+    ],
+    "originalTargetIndices": [
+      0,
+      3,
+      4,
+      8,
+      9
+    ],
+    "temperatures": [
+      0.75,
+      1,
+      1.25
+    ],
+    "baselinePrior": 50,
+    "confirmationFeatures": ".research-data/market-v8-confirmation-features.json",
+    "confirmationFeaturesHash": "4088b07a52bee4132c3c9277452886e756ed1374689d7d91ed4d17812f7f32ed",
+    "confirmationResults": ".research-data/market-v8-confirmation/sealed.json",
+    "confirmationResultsHash": "6b0bcda64999a17916a8961f9dd76114cdf3e7c431e42e5c8854af6f54ea1f96"
+  },
+  "n": 1804,
+  "observedDays": 9,
+  "folds": [
+    {
+      "start": 1792886400000,
+      "end": 1793059200000,
+      "train": 54,
+      "tuning": 18,
+      "refit": 72,
+      "calibration": 11,
+      "test": 281,
+      "skipped": true
+    },
+    {
+      "start": 1793059200000,
+      "end": 1793232000000,
+      "train": 83,
+      "tuning": 93,
+      "refit": 176,
+      "calibration": 174,
+      "test": 309,
+      "models": {
+        "categorical-catboost": {
+          "tuningLogLoss": [
+            1.8279748489558731,
+            1.8247076108958602
+          ],
+          "selectedParameters": {
+            "depth": 4
+          },
+          "calibration": {
+            "temperature": 1,
+            "weight": 0.5
+          },
+          "seconds": 1.321738282997103
+        },
+        "categorical-mlp": {
+          "tuningLogLoss": [
+            2.8005253383094537,
+            3.4354790984244006
+          ],
+          "selectedParameters": {
+            "hidden": 16,
+            "weightDecay": 0.01
+          },
+          "calibration": {
+            "temperature": 0.75,
+            "weight": 0
+          },
+          "seconds": 1.3336674439997296
+        }
+      },
+      "selectedFamily": "categorical-catboost"
+    },
+    {
+      "start": 1793232000000,
+      "end": 1793404800000,
+      "train": 354,
+      "tuning": 152,
+      "refit": 516,
+      "calibration": 148,
+      "test": 449,
+      "models": {
+        "categorical-catboost": {
+          "tuningLogLoss": [
+            1.792468113505815,
+            1.7817678421762362
+          ],
+          "selectedParameters": {
+            "depth": 4
+          },
+          "calibration": {
+            "temperature": 1.25,
+            "weight": 1
+          },
+          "seconds": 2.8466032549986267
+        },
+        "categorical-mlp": {
+          "tuningLogLoss": [
+            2.034990090740466,
+            2.1704122135560304
+          ],
+          "selectedParameters": {
+            "hidden": 16,
+            "weightDecay": 0.01
+          },
+          "calibration": {
+            "temperature": 0.75,
+            "weight": 0
+          },
+          "seconds": 0.26453737300107605
+        }
+      },
+      "selectedFamily": "categorical-catboost"
+    },
+    {
+      "start": 1793404800000,
+      "end": 1793577600000,
+      "train": 669,
+      "tuning": 199,
+      "refit": 872,
+      "calibration": 241,
+      "test": 412,
+      "models": {
+        "categorical-catboost": {
+          "tuningLogLoss": [
+            1.7730796266094524,
+            1.7723976779300816
+          ],
+          "selectedParameters": {
+            "depth": 4
+          },
+          "calibration": {
+            "temperature": 0.75,
+            "weight": 0.5
+          },
+          "seconds": 1.9157151370018255
+        },
+        "categorical-mlp": {
+          "tuningLogLoss": [
+            1.9154270319181979,
+            1.9650045641370903
+          ],
+          "selectedParameters": {
+            "hidden": 16,
+            "weightDecay": 0.01
+          },
+          "calibration": {
+            "temperature": 1,
+            "weight": 0.25
+          },
+          "seconds": 0.2916875640003127
+        }
+      },
+      "selectedFamily": "categorical-mlp"
+    },
+    {
+      "start": 1793577600000,
+      "end": 1793836800000,
+      "train": 1118,
+      "tuning": 177,
+      "refit": 1299,
+      "calibration": 226,
+      "test": 634,
+      "models": {
+        "categorical-catboost": {
+          "tuningLogLoss": [
+            1.7729575443815584,
+            1.7695710376272833
+          ],
+          "selectedParameters": {
+            "depth": 4
+          },
+          "calibration": {
+            "temperature": 0.75,
+            "weight": 0.25
+          },
+          "seconds": 1.8582273350002652
+        },
+        "categorical-mlp": {
+          "tuningLogLoss": [
+            1.9040782727898526,
+            1.878690165211565
+          ],
+          "selectedParameters": {
+            "hidden": 32,
+            "weightDecay": 0.05
+          },
+          "calibration": {
+            "temperature": 0.75,
+            "weight": 0
+          },
+          "seconds": 0.3614742340032535
+        }
+      },
+      "selectedFamily": "categorical-catboost"
+    }
+  ],
+  "jointReference": {
+    "n": 1804,
+    "correct": 343,
+    "wrong": 1461,
+    "undecided": 0,
+    "accuracy": 0.1901330376940133,
+    "brier": 0.8303526933972214,
+    "logLoss": 1.7829417220607227
+  },
+  "joint": [
+    {
+      "name": "categorical-catboost",
+      "metrics": {
+        "n": 1804,
+        "correct": 343,
+        "wrong": 1461,
+        "undecided": 0,
+        "accuracy": 0.1901330376940133,
+        "brier": 0.8304951901664074,
+        "logLoss": 1.7830422772328218
+      },
+      "rawMetrics": {
+        "n": 1804,
+        "correct": 342,
+        "wrong": 1462,
+        "undecided": 0,
+        "accuracy": 0.18957871396895787,
+        "brier": 0.8321218445897999,
+        "logLoss": 1.7872420680248524
+      },
+      "pairedBrierDifference": {
+        "lower": -0.0017981851831906535,
+        "upper": 0.0031697458775783362,
+        "days": 9,
+        "blockDays": 3,
+        "familyComparisons": 24
+      }
+    },
+    {
+      "name": "categorical-mlp",
+      "metrics": {
+        "n": 1804,
+        "correct": 340,
+        "wrong": 1464,
+        "undecided": 0,
+        "accuracy": 0.188470066518847,
+        "brier": 0.8312142380036709,
+        "logLoss": 1.7851126806149573
+      },
+      "rawMetrics": {
+        "n": 1804,
+        "correct": 295,
+        "wrong": 1509,
+        "undecided": 0,
+        "accuracy": 0.16352549889135254,
+        "brier": 0.9212735735325476,
+        "logLoss": 2.072459255548521
+      },
+      "pairedBrierDifference": {
+        "lower": 0.0,
+        "upper": 0.002365641506902634,
+        "days": 9,
+        "blockDays": 3,
+        "familyComparisons": 24
+      }
+    },
+    {
+      "name": "calibration-selector",
+      "metrics": {
+        "n": 1804,
+        "correct": 336,
+        "wrong": 1468,
+        "undecided": 0,
+        "accuracy": 0.18625277161862527,
+        "brier": 0.8315783496272132,
+        "logLoss": 1.7858977265962996
+      },
+      "rawMetrics": null,
+      "pairedBrierDifference": {
+        "lower": -0.0017981851831906535,
+        "upper": 0.0031697458775783362,
+        "days": 9,
+        "blockDays": 3,
+        "familyComparisons": 24
+      }
+    },
+    {
+      "name": "fixed-pool",
+      "metrics": {
+        "n": 1804,
+        "correct": 362,
+        "wrong": 1442,
+        "undecided": 0,
+        "accuracy": 0.2006651884700665,
+        "brier": 0.8303914954994568,
+        "logLoss": 1.782768895674238
+      },
+      "rawMetrics": null,
+      "pairedBrierDifference": {
+        "lower": -0.0010059391994293161,
+        "upper": 0.000961077575930337,
+        "days": 9,
+        "blockDays": 3,
+        "familyComparisons": 24
+      }
+    }
+  ],
+  "markets": [
+    {
+      "target": "winner",
+      "reference": {
+        "n": 1804,
+        "correct": 900,
+        "wrong": 904,
+        "undecided": 0,
+        "accuracy": 0.49889135254988914,
+        "coverage": 1.0,
+        "brier": 0.2500654805273398,
+        "logLoss": 0.6932783426316835,
+        "ece": 0.01022342295959094,
+        "calibration": [
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 1198,
+            "probability": 0.49287081326885473,
+            "frequency": 0.493322203672788
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 606,
+            "probability": 0.5130400813782013,
+            "frequency": 0.4834983498349835
+          }
+        ]
+      },
+      "candidates": [
+        {
+          "name": "categorical-catboost",
+          "metrics": {
+            "n": 1804,
+            "correct": 953,
+            "wrong": 851,
+            "undecided": 0,
+            "accuracy": 0.5282705099778271,
+            "coverage": 1.0,
+            "brier": 0.24861243957001466,
+            "logLoss": 0.6903588934530498,
+            "ece": 0.010106183483672104,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 947,
+                "probability": 0.4786606288271273,
+                "frequency": 0.4635691657866948
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 856,
+                "probability": 0.5228482936885844,
+                "frequency": 0.5186915887850467
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1,
+                "probability": 0.6181998921733363,
+                "frequency": 1.0
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0027435011754990382,
+            "upper": -0.0006942793961602963,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 184,
+              "wrong": 191,
+              "undecided": 0,
+              "accuracy": 0.49066666666666664,
+              "coverage": 1.0,
+              "brier": 0.25149005257083545,
+              "logLoss": 0.6961336031586729,
+              "ece": 0.025927828462799986,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 147,
+                  "probability": 0.48670493123801495,
+                  "frequency": 0.5102040816326531
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 228,
+                  "probability": 0.5187217568663955,
+                  "frequency": 0.49122807017543857
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 479,
+              "wrong": 419,
+              "undecided": 0,
+              "accuracy": 0.5334075723830735,
+              "coverage": 1.0,
+              "brier": 0.24856377514011194,
+              "logLoss": 0.6902646038251977,
+              "ece": 0.011864460257082371,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 448,
+                  "probability": 0.4793346810154004,
+                  "frequency": 0.4575892857142857
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 449,
+                  "probability": 0.5245669222898306,
+                  "frequency": 0.5233853006681515
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 1,
+                  "probability": 0.6181998921733363,
+                  "frequency": 1.0
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 5,
+              "wrong": 5,
+              "undecided": 0,
+              "accuracy": 0.5,
+              "coverage": 1.0,
+              "brier": 0.23795752040802687,
+              "logLoss": 0.6688512317657743,
+              "ece": 0.04610728408279139,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 8,
+                  "probability": 0.45135680648854115,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 2,
+                  "probability": 0.5359636463681215,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 156,
+              "wrong": 130,
+              "undecided": 0,
+              "accuracy": 0.5454545454545454,
+              "coverage": 1.0,
+              "brier": 0.24670802475315953,
+              "logLoss": 0.6865307000634191,
+              "ece": 0.021725497087010923,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 193,
+                  "probability": 0.47621309839164133,
+                  "frequency": 0.44559585492227977
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 93,
+                  "probability": 0.523608987340878,
+                  "frequency": 0.5268817204301075
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 129,
+              "wrong": 106,
+              "undecided": 0,
+              "accuracy": 0.548936170212766,
+              "coverage": 1.0,
+              "brier": 0.24697757834442025,
+              "logLoss": 0.687078450357347,
+              "ece": 0.023372780691866466,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 151,
+                  "probability": 0.47340444417819105,
+                  "frequency": 0.45695364238410596
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 84,
+                  "probability": 0.5237079477180742,
+                  "frequency": 0.5595238095238095
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "categorical-mlp",
+          "metrics": {
+            "n": 1804,
+            "correct": 903,
+            "wrong": 901,
+            "undecided": 0,
+            "accuracy": 0.5005543237250555,
+            "coverage": 1.0,
+            "brier": 0.24989789647528368,
+            "logLoss": 0.6929429956510239,
+            "ece": 0.013193322442628668,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 1145,
+                "probability": 0.48702555657249075,
+                "frequency": 0.49170305676855897
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 659,
+                "probability": 0.5150910712625251,
+                "frequency": 0.48710166919575115
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.00046015468783747713,
+            "upper": 0.0,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 193,
+              "wrong": 182,
+              "undecided": 0,
+              "accuracy": 0.5146666666666667,
+              "coverage": 1.0,
+              "brier": 0.25067570142608797,
+              "logLoss": 0.6945109504533654,
+              "ece": 0.01682861051468394,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 54,
+                  "probability": 0.47736607822298577,
+                  "frequency": 0.4444444444444444
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 321,
+                  "probability": 0.5219095349500474,
+                  "frequency": 0.5077881619937694
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 423,
+              "wrong": 475,
+              "undecided": 0,
+              "accuracy": 0.4710467706013363,
+              "coverage": 1.0,
+              "brier": 0.25037209456747295,
+              "logLoss": 0.6938911952789265,
+              "ece": 0.035131130298954656,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 590,
+                  "probability": 0.49470117373012357,
+                  "frequency": 0.5152542372881356
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 308,
+                  "probability": 0.5078618425624487,
+                  "frequency": 0.4448051948051948
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 5,
+              "wrong": 5,
+              "undecided": 0,
+              "accuracy": 0.5,
+              "coverage": 1.0,
+              "brier": 0.24579585942408322,
+              "logLoss": 0.6846430077668891,
+              "ece": 0.03694638132761896,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 8,
+                  "probability": 0.4554121331892852,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 2,
+                  "probability": 0.5063804393952356,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 156,
+              "wrong": 130,
+              "undecided": 0,
+              "accuracy": 0.5454545454545454,
+              "coverage": 1.0,
+              "brier": 0.24942154125606622,
+              "logLoss": 0.691999522683903,
+              "ece": 0.027540405095442068,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 271,
+                  "probability": 0.4822193719723331,
+                  "frequency": 0.4612546125461255
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 15,
+                  "probability": 0.5203262631470557,
+                  "frequency": 0.6666666666666666
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 126,
+              "wrong": 109,
+              "undecided": 0,
+              "accuracy": 0.5361702127659574,
+              "coverage": 1.0,
+              "brier": 0.24759896549600968,
+              "logLoss": 0.6883190247178472,
+              "ece": 0.015570180474554945,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 222,
+                  "probability": 0.47598222829131204,
+                  "frequency": 0.4774774774774775
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 13,
+                  "probability": 0.5133040698314091,
+                  "frequency": 0.7692307692307693
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "calibration-selector",
+          "metrics": {
+            "n": 1804,
+            "correct": 936,
+            "wrong": 868,
+            "undecided": 0,
+            "accuracy": 0.5188470066518847,
+            "coverage": 1.0,
+            "brier": 0.2492713890258014,
+            "logLoss": 0.6916810018376064,
+            "ece": 0.009738152919193986,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 942,
+                "probability": 0.4763800780762981,
+                "frequency": 0.4723991507430998
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 861,
+                "probability": 0.5243156727183815,
+                "frequency": 0.5087108013937283
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1,
+                "probability": 0.6181998921733363,
+                "frequency": 1.0
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0015020598618914684,
+            "upper": -0.0005269909436532367,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 189,
+              "wrong": 186,
+              "undecided": 0,
+              "accuracy": 0.504,
+              "coverage": 1.0,
+              "brier": 0.25138456940462267,
+              "logLoss": 0.6959310668157883,
+              "ece": 0.015747434356229308,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 144,
+                  "probability": 0.48428129168574086,
+                  "frequency": 0.4930555555555556
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 231,
+                  "probability": 0.5222588479927821,
+                  "frequency": 0.5021645021645021
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 462,
+              "wrong": 436,
+              "undecided": 0,
+              "accuracy": 0.5144766146993318,
+              "coverage": 1.0,
+              "brier": 0.2492700032859413,
+              "logLoss": 0.6916774039874999,
+              "ece": 0.012639305856926448,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 431,
+                  "probability": 0.47785152538501374,
+                  "frequency": 0.4756380510440835
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 466,
+                  "probability": 0.5257817362891681,
+                  "frequency": 0.5042918454935622
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 1,
+                  "probability": 0.6181998921733363,
+                  "frequency": 1.0
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 6,
+              "wrong": 4,
+              "undecided": 0,
+              "accuracy": 0.6,
+              "coverage": 1.0,
+              "brier": 0.23536065039597812,
+              "logLoss": 0.6636836479189054,
+              "ece": 0.05217500906137733,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 7,
+                  "probability": 0.4403742266920511,
+                  "frequency": 0.42857142857142855
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 3,
+                  "probability": 0.5202898320768615,
+                  "frequency": 0.6666666666666666
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 152,
+              "wrong": 134,
+              "undecided": 0,
+              "accuracy": 0.5314685314685315,
+              "coverage": 1.0,
+              "brier": 0.2486116144755601,
+              "logLoss": 0.69035979060354,
+              "ece": 0.01578866584787639,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 199,
+                  "probability": 0.4715277319572402,
+                  "frequency": 0.457286432160804
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 87,
+                  "probability": 0.525075169804619,
+                  "frequency": 0.5057471264367817
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 127,
+              "wrong": 108,
+              "undecided": 0,
+              "accuracy": 0.5404255319148936,
+              "coverage": 1.0,
+              "brier": 0.24729949396198722,
+              "logLoss": 0.6877120505810433,
+              "ece": 0.015342893249536542,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 161,
+                  "probability": 0.4729371543965843,
+                  "frequency": 0.4658385093167702
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 74,
+                  "probability": 0.5207743505974187,
+                  "frequency": 0.5540540540540541
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "fixed-pool",
+          "metrics": {
+            "n": 1804,
+            "correct": 947,
+            "wrong": 857,
+            "undecided": 0,
+            "accuracy": 0.5249445676274944,
+            "coverage": 1.0,
+            "brier": 0.24904963116299156,
+            "logLoss": 0.6912414814387172,
+            "ece": 0.008991791307883157,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 915,
+                "probability": 0.4827867803456939,
+                "frequency": 0.46557377049180326
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 889,
+                "probability": 0.5146554696252966,
+                "frequency": 0.515185601799775
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0018721899173491817,
+            "upper": -0.00041717209175308847,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 187,
+              "wrong": 188,
+              "undecided": 0,
+              "accuracy": 0.49866666666666665,
+              "coverage": 1.0,
+              "brier": 0.25092289834545106,
+              "logLoss": 0.6949984896056828,
+              "ece": 0.017191549609820247,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 62,
+                  "probability": 0.48480343626277284,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 313,
+                  "probability": 0.5159892784408131,
+                  "frequency": 0.4984025559105431
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 468,
+              "wrong": 430,
+              "undecided": 0,
+              "accuracy": 0.5211581291759465,
+              "coverage": 1.0,
+              "brier": 0.2492499877753328,
+              "logLoss": 0.691645372753866,
+              "ece": 0.00956894493608792,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 435,
+                  "probability": 0.48648405847548515,
+                  "frequency": 0.4689655172413793
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 463,
+                  "probability": 0.5139791514379501,
+                  "frequency": 0.5118790496760259
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 6,
+              "wrong": 4,
+              "undecided": 0,
+              "accuracy": 0.6,
+              "coverage": 1.0,
+              "brier": 0.24165808035273145,
+              "logLoss": 0.6763312344157537,
+              "ece": 0.06121664178858331,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 7,
+                  "probability": 0.4486847330257497,
+                  "frequency": 0.42857142857142855
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 3,
+                  "probability": 0.5095422377648049,
+                  "frequency": 0.6666666666666666
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 161,
+              "wrong": 125,
+              "undecided": 0,
+              "accuracy": 0.5629370629370629,
+              "coverage": 1.0,
+              "brier": 0.24787155678052103,
+              "logLoss": 0.6888802608681573,
+              "ece": 0.04463277057298473,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 216,
+                  "probability": 0.47988547723581454,
+                  "frequency": 0.4398148148148148
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 70,
+                  "probability": 0.5127184385580329,
+                  "frequency": 0.5714285714285714
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 125,
+              "wrong": 110,
+              "undecided": 0,
+              "accuracy": 0.5319148936170213,
+              "coverage": 1.0,
+              "brier": 0.24704303265313807,
+              "logLoss": 0.6872110094803944,
+              "ece": 0.011245385107571402,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 195,
+                  "probability": 0.478335740087517,
+                  "frequency": 0.47692307692307695
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 40,
+                  "probability": 0.5158200954196632,
+                  "frequency": 0.575
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "previousIndependentHeads": [
+        {
+          "name": "hierarchical-eb",
+          "metrics": {
+            "n": 1804,
+            "correct": 977,
+            "wrong": 827,
+            "undecided": 0,
+            "accuracy": 0.5415742793791575,
+            "coverage": 1.0,
+            "brier": 0.24792232361641903,
+            "logLoss": 0.6889574570967416,
+            "ece": 0.013322724806430966,
+            "calibration": [
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 23,
+                "probability": 0.38537856002766907,
+                "frequency": 0.13043478260869565
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 822,
+                "probability": 0.4671922248826214,
+                "frequency": 0.4537712895377129
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 931,
+                "probability": 0.5348700014922942,
+                "frequency": 0.527389903329753
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 28,
+                "probability": 0.6133753009758705,
+                "frequency": 0.6071428571428571
+              }
+            ]
+          }
+        },
+        {
+          "name": "logistic",
+          "metrics": {
+            "n": 1804,
+            "correct": 977,
+            "wrong": 827,
+            "undecided": 0,
+            "accuracy": 0.5415742793791575,
+            "coverage": 1.0,
+            "brier": 0.24847425926922997,
+            "logLoss": 0.6901700089125153,
+            "ece": 0.01741273348764784,
+            "calibration": [
+              {
+                "from": 0.1,
+                "to": 0.2,
+                "n": 1,
+                "probability": 0.1993414026463804,
+                "frequency": 0.0
+              },
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 8,
+                "probability": 0.28303006526655206,
+                "frequency": 0.375
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 159,
+                "probability": 0.36822760319600123,
+                "frequency": 0.4339622641509434
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 745,
+                "probability": 0.45828190286045445,
+                "frequency": 0.45369127516778524
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 793,
+                "probability": 0.5415391242248003,
+                "frequency": 0.5245901639344263
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 98,
+                "probability": 0.6241338377353237,
+                "frequency": 0.5918367346938775
+              }
+            ]
+          }
+        },
+        {
+          "name": "hist-gradient-boosting",
+          "metrics": {
+            "n": 1804,
+            "correct": 966,
+            "wrong": 838,
+            "undecided": 0,
+            "accuracy": 0.5354767184035477,
+            "coverage": 1.0,
+            "brier": 0.2491344738708726,
+            "logLoss": 0.6914736834486945,
+            "ece": 0.016976855980494147,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 7,
+                "probability": 0.2906264655669238,
+                "frequency": 0.2857142857142857
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 185,
+                "probability": 0.364494770532847,
+                "frequency": 0.42162162162162165
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 846,
+                "probability": 0.4602207206964016,
+                "frequency": 0.47044917257683216
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 675,
+                "probability": 0.533149712659162,
+                "frequency": 0.522962962962963
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 91,
+                "probability": 0.63180295761144,
+                "frequency": 0.5824175824175825
+              }
+            ]
+          }
+        },
+        {
+          "name": "random-forest",
+          "metrics": {
+            "n": 1804,
+            "correct": 964,
+            "wrong": 840,
+            "undecided": 0,
+            "accuracy": 0.5343680709534369,
+            "coverage": 1.0,
+            "brier": 0.24818500855924724,
+            "logLoss": 0.6894859961410222,
+            "ece": 0.007996723269474355,
+            "calibration": [
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 75,
+                "probability": 0.36616292420456786,
+                "frequency": 0.37333333333333335
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 881,
+                "probability": 0.46600725301127255,
+                "frequency": 0.46538024971623154
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 775,
+                "probability": 0.5329823088045686,
+                "frequency": 0.5238709677419355
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 71,
+                "probability": 0.6319016106706222,
+                "frequency": 0.5492957746478874
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 2,
+                "probability": 0.7048072546941796,
+                "frequency": 0.5
+              }
+            ]
+          }
+        },
+        {
+          "name": "bradley-terry-winner",
+          "metrics": {
+            "n": 1804,
+            "correct": 965,
+            "wrong": 839,
+            "undecided": 0,
+            "accuracy": 0.5349223946784922,
+            "coverage": 1.0,
+            "brier": 0.24736485644812206,
+            "logLoss": 0.6880111121088652,
+            "ece": 0.026682968291262717,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 11,
+                "probability": 0.25633556356191756,
+                "frequency": 0.2727272727272727
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 114,
+                "probability": 0.3686762301239139,
+                "frequency": 0.3508771929824561
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 696,
+                "probability": 0.459192923686304,
+                "frequency": 0.4698275862068966
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 814,
+                "probability": 0.5437555916798517,
+                "frequency": 0.5085995085995086
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 149,
+                "probability": 0.6353370024160198,
+                "frequency": 0.5906040268456376
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 16,
+                "probability": 0.7457882029895214,
+                "frequency": 0.625
+              },
+              {
+                "from": 0.8,
+                "to": 0.9,
+                "n": 4,
+                "probability": 0.8275186032354797,
+                "frequency": 0.5
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "target": "sets-over-3.5",
+      "reference": {
+        "n": 1804,
+        "correct": 1297,
+        "wrong": 507,
+        "undecided": 0,
+        "accuracy": 0.7189578713968958,
+        "coverage": 1.0,
+        "brier": 0.20234772116155028,
+        "logLoss": 0.5946372736969188,
+        "ece": 0.017178574587601896,
+        "calibration": [
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 620,
+            "probability": 0.6939729953535486,
+            "frequency": 0.714516129032258
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 1184,
+            "probability": 0.7058670560175389,
+            "frequency": 0.7212837837837838
+          }
+        ]
+      },
+      "candidates": [
+        {
+          "name": "categorical-catboost",
+          "metrics": {
+            "n": 1804,
+            "correct": 1297,
+            "wrong": 507,
+            "undecided": 0,
+            "accuracy": 0.7189578713968958,
+            "coverage": 1.0,
+            "brier": 0.20309339769579607,
+            "logLoss": 0.5963235901078575,
+            "ece": 0.019717977757908112,
+            "calibration": [
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 801,
+                "probability": 0.6796762261443166,
+                "frequency": 0.7203495630461922
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 1003,
+                "probability": 0.7148635204218706,
+                "frequency": 0.7178464606181456
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.000525976673969201,
+            "upper": 0.0027271831166927724,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 280,
+              "wrong": 95,
+              "undecided": 0,
+              "accuracy": 0.7466666666666667,
+              "coverage": 1.0,
+              "brier": 0.191621558201091,
+              "logLoss": 0.5719172965332076,
+              "ece": 0.04490756156527941,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 152,
+                  "probability": 0.680848799982603,
+                  "frequency": 0.743421052631579
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 223,
+                  "probability": 0.7160118691285408,
+                  "frequency": 0.7488789237668162
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 653,
+              "wrong": 245,
+              "undecided": 0,
+              "accuracy": 0.7271714922048997,
+              "coverage": 1.0,
+              "brier": 0.1999778596346382,
+              "logLoss": 0.5897520957831911,
+              "ece": 0.028653458944610515,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 386,
+                  "probability": 0.6794173353878733,
+                  "frequency": 0.727979274611399
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 512,
+                  "probability": 0.7129181687656654,
+                  "frequency": 0.7265625
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.20520801786779405,
+              "logLoss": 0.5995735340044437,
+              "ece": 0.10276802344952514,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 8,
+                  "probability": 0.6815184909109979,
+                  "frequency": 0.625
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 2,
+                  "probability": 0.712233846396366,
+                  "frequency": 1.0
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 201,
+              "wrong": 85,
+              "undecided": 0,
+              "accuracy": 0.7027972027972028,
+              "coverage": 1.0,
+              "brier": 0.20984065919366585,
+              "logLoss": 0.6107662598423211,
+              "ece": 0.038977046231049764,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 97,
+                  "probability": 0.6817470336766249,
+                  "frequency": 0.7319587628865979
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 189,
+                  "probability": 0.7210417856545653,
+                  "frequency": 0.6878306878306878
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 156,
+              "wrong": 79,
+              "undecided": 0,
+              "accuracy": 0.6638297872340425,
+              "coverage": 1.0,
+              "brier": 0.2250033125865342,
+              "logLoss": 0.6426659688781632,
+              "ece": 0.02432738071722429,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 158,
+                  "probability": 0.6778160625987479,
+                  "frequency": 0.6772151898734177
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 77,
+                  "probability": 0.7093765789343575,
+                  "frequency": 0.6363636363636364
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "categorical-mlp",
+          "metrics": {
+            "n": 1804,
+            "correct": 1297,
+            "wrong": 507,
+            "undecided": 0,
+            "accuracy": 0.7189578713968958,
+            "coverage": 1.0,
+            "brier": 0.20275357900667226,
+            "logLoss": 0.5955956343102323,
+            "ece": 0.01703549616086372,
+            "calibration": [
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 1,
+                "probability": 0.580771530722422,
+                "frequency": 1.0
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 637,
+                "probability": 0.6872285816094906,
+                "frequency": 0.7189952904238619
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 1166,
+                "probability": 0.7100536765950548,
+                "frequency": 0.7186963979416809
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.00022204784794622144,
+            "upper": 0.001256247332792855,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 280,
+              "wrong": 95,
+              "undecided": 0,
+              "accuracy": 0.7466666666666667,
+              "coverage": 1.0,
+              "brier": 0.1920960209721719,
+              "logLoss": 0.5730334899928227,
+              "ece": 0.049398153645801086,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 1,
+                  "probability": 0.580771530722422,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 312,
+                  "probability": 0.6924745937103085,
+                  "frequency": 0.75
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 62,
+                  "probability": 0.7283411675082917,
+                  "frequency": 0.7258064516129032
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 653,
+              "wrong": 245,
+              "undecided": 0,
+              "accuracy": 0.7271714922048997,
+              "coverage": 1.0,
+              "brier": 0.19899074253841753,
+              "logLoss": 0.5875196313517405,
+              "ece": 0.02389541651028374,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 69,
+                  "probability": 0.6683155066657935,
+                  "frequency": 0.7246376811594203
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 829,
+                  "probability": 0.7061859421155916,
+                  "frequency": 0.7273823884197829
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.2028703520856021,
+              "logLoss": 0.5942344581091522,
+              "ece": 0.08495956282148662,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 8,
+                  "probability": 0.6589952202252733,
+                  "frequency": 0.625
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 2,
+                  "probability": 0.7111830667936603,
+                  "frequency": 1.0
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 201,
+              "wrong": 85,
+              "undecided": 0,
+              "accuracy": 0.7027972027972028,
+              "coverage": 1.0,
+              "brier": 0.21094268862862556,
+              "logLoss": 0.6134247938841499,
+              "ece": 0.03824549040968659,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 34,
+                  "probability": 0.673094599533156,
+                  "frequency": 0.7941176470588235
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 252,
+                  "probability": 0.7175532803226098,
+                  "frequency": 0.6904761904761905
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 156,
+              "wrong": 79,
+              "undecided": 0,
+              "accuracy": 0.6638297872340425,
+              "coverage": 1.0,
+              "brier": 0.22416786976736322,
+              "logLoss": 0.6408191530320401,
+              "ece": 0.027800344159018362,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 214,
+                  "probability": 0.688979369821308,
+                  "frequency": 0.6635514018691588
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 21,
+                  "probability": 0.7186426540766375,
+                  "frequency": 0.6666666666666666
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "calibration-selector",
+          "metrics": {
+            "n": 1804,
+            "correct": 1297,
+            "wrong": 507,
+            "undecided": 0,
+            "accuracy": 0.7189578713968958,
+            "coverage": 1.0,
+            "brier": 0.20349947282356642,
+            "logLoss": 0.5972799799479438,
+            "ece": 0.024780806720974508,
+            "calibration": [
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 1,
+                "probability": 0.580771530722422,
+                "frequency": 1.0
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 891,
+                "probability": 0.6772326040991371,
+                "frequency": 0.7239057239057239
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 912,
+                "probability": 0.7167758740215916,
+                "frequency": 0.7138157894736842
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.000525976673969201,
+            "upper": 0.0027271831166927724,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 280,
+              "wrong": 95,
+              "undecided": 0,
+              "accuracy": 0.7466666666666667,
+              "coverage": 1.0,
+              "brier": 0.19230983038331348,
+              "logLoss": 0.5734594907190502,
+              "ece": 0.0493457486339238,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 1,
+                  "probability": 0.580771530722422,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 185,
+                  "probability": 0.678005847909628,
+                  "frequency": 0.745945945945946
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 189,
+                  "probability": 0.7168438670279099,
+                  "frequency": 0.746031746031746
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 653,
+              "wrong": 245,
+              "undecided": 0,
+              "accuracy": 0.7271714922048997,
+              "coverage": 1.0,
+              "brier": 0.1999440169401824,
+              "logLoss": 0.5896851010899506,
+              "ece": 0.029481909076897576,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 406,
+                  "probability": 0.6764998228218215,
+                  "frequency": 0.7339901477832512
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 492,
+                  "probability": 0.7151754422424521,
+                  "frequency": 0.7215447154471545
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.20303280561730555,
+              "logLoss": 0.59447466347259,
+              "ece": 0.16269197688508416,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 7,
+                  "probability": 0.6788589092940047,
+                  "frequency": 0.5714285714285714
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 3,
+                  "probability": 0.7083641987357305,
+                  "frequency": 1.0
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 201,
+              "wrong": 85,
+              "undecided": 0,
+              "accuracy": 0.7027972027972028,
+              "coverage": 1.0,
+              "brier": 0.21142460314957875,
+              "logLoss": 0.6145384897631627,
+              "ece": 0.05649854395851908,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 124,
+                  "probability": 0.6789350471187132,
+                  "frequency": 0.7419354838709677
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 162,
+                  "probability": 0.7243612926843018,
+                  "frequency": 0.6728395061728395
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 156,
+              "wrong": 79,
+              "undecided": 0,
+              "accuracy": 0.6638297872340425,
+              "coverage": 1.0,
+              "brier": 0.22531647153504222,
+              "logLoss": 0.6434289332794934,
+              "ece": 0.022393398981608977,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 169,
+                  "probability": 0.6768300716900125,
+                  "frequency": 0.6686390532544378
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 66,
+                  "probability": 0.7102752521979695,
+                  "frequency": 0.6515151515151515
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "fixed-pool",
+          "metrics": {
+            "n": 1804,
+            "correct": 1297,
+            "wrong": 507,
+            "undecided": 0,
+            "accuracy": 0.7189578713968958,
+            "coverage": 1.0,
+            "brier": 0.20279658739283926,
+            "logLoss": 0.5956943416755623,
+            "ece": 0.0183767369593859,
+            "calibration": [
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 835,
+                "probability": 0.6873047964685381,
+                "frequency": 0.7221556886227545
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 969,
+                "probability": 0.7120215288689767,
+                "frequency": 0.7162022703818369
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0002914436617207429,
+            "upper": 0.0011811253731799328,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 280,
+              "wrong": 95,
+              "undecided": 0,
+              "accuracy": 0.7466666666666667,
+              "coverage": 1.0,
+              "brier": 0.19173117523101205,
+              "logLoss": 0.5722248797281397,
+              "ece": 0.04673378457750264,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 172,
+                  "probability": 0.6864501393874344,
+                  "frequency": 0.7383720930232558
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 203,
+                  "probability": 0.7113566837871812,
+                  "frequency": 0.7536945812807881
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 653,
+              "wrong": 245,
+              "undecided": 0,
+              "accuracy": 0.7271714922048997,
+              "coverage": 1.0,
+              "brier": 0.19936560380394824,
+              "logLoss": 0.5883855802451545,
+              "ece": 0.026274437727447135,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 372,
+                  "probability": 0.6876884348803455,
+                  "frequency": 0.7365591397849462
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 526,
+                  "probability": 0.7102385116830113,
+                  "frequency": 0.720532319391635
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.20380181417405013,
+              "logLoss": 0.5964619896002458,
+              "ece": 0.09478937582706856,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 8,
+                  "probability": 0.6708353447503623,
+                  "frequency": 0.625
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 2,
+                  "probability": 0.7093944998661065,
+                  "frequency": 1.0
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 201,
+              "wrong": 85,
+              "undecided": 0,
+              "accuracy": 0.7027972027972028,
+              "coverage": 1.0,
+              "brier": 0.2102218399570477,
+              "logLoss": 0.611719644138086,
+              "ece": 0.05333441127425006,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 83,
+                  "probability": 0.6915895166623476,
+                  "frequency": 0.7710843373493976
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 203,
+                  "probability": 0.7175151305783761,
+                  "frequency": 0.6748768472906403
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 156,
+              "wrong": 79,
+              "undecided": 0,
+              "accuracy": 0.6638297872340425,
+              "coverage": 1.0,
+              "brier": 0.22448543131766327,
+              "logLoss": 0.6415386098085876,
+              "ece": 0.0260638624381214,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 200,
+                  "probability": 0.6862068533006219,
+                  "frequency": 0.665
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 35,
+                  "probability": 0.7109610575095472,
+                  "frequency": 0.6571428571428571
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "previousIndependentHeads": [
+        {
+          "name": "hierarchical-eb",
+          "metrics": {
+            "n": 1804,
+            "correct": 1297,
+            "wrong": 507,
+            "undecided": 0,
+            "accuracy": 0.7189578713968958,
+            "coverage": 1.0,
+            "brier": 0.2017218256637273,
+            "logLoss": 0.5930396286420558,
+            "ece": 0.014972823439709413,
+            "calibration": [
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 5,
+                "probability": 0.5921334385706004,
+                "frequency": 0.6
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 681,
+                "probability": 0.6771922299205292,
+                "frequency": 0.6960352422907489
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 1112,
+                "probability": 0.7203299205340556,
+                "frequency": 0.7329136690647482
+              },
+              {
+                "from": 0.8,
+                "to": 0.9,
+                "n": 6,
+                "probability": 0.808929852026823,
+                "frequency": 0.8333333333333334
+              }
+            ]
+          }
+        },
+        {
+          "name": "logistic",
+          "metrics": {
+            "n": 1804,
+            "correct": 1296,
+            "wrong": 508,
+            "undecided": 0,
+            "accuracy": 0.7184035476718403,
+            "coverage": 1.0,
+            "brier": 0.20307341564273637,
+            "logLoss": 0.5963407019162754,
+            "ece": 0.020794859103879605,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 3,
+                "probability": 0.47478450383844767,
+                "frequency": 0.6666666666666666
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 29,
+                "probability": 0.5793028957127352,
+                "frequency": 0.6551724137931034
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 707,
+                "probability": 0.6795777053352404,
+                "frequency": 0.7142857142857143
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 1048,
+                "probability": 0.7181143504140255,
+                "frequency": 0.7251908396946565
+              },
+              {
+                "from": 0.8,
+                "to": 0.9,
+                "n": 17,
+                "probability": 0.8107847186174807,
+                "frequency": 0.6470588235294118
+              }
+            ]
+          }
+        },
+        {
+          "name": "hist-gradient-boosting",
+          "metrics": {
+            "n": 1804,
+            "correct": 1296,
+            "wrong": 508,
+            "undecided": 0,
+            "accuracy": 0.7184035476718403,
+            "coverage": 1.0,
+            "brier": 0.20340597473922292,
+            "logLoss": 0.5972619561040476,
+            "ece": 0.018548906724996563,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 1,
+                "probability": 0.49947762674799456,
+                "frequency": 1.0
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 29,
+                "probability": 0.5726026048883559,
+                "frequency": 0.6896551724137931
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 624,
+                "probability": 0.6816386318631417,
+                "frequency": 0.6971153846153846
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 1127,
+                "probability": 0.7185327266518647,
+                "frequency": 0.7329192546583851
+              },
+              {
+                "from": 0.8,
+                "to": 0.9,
+                "n": 23,
+                "probability": 0.8128726138980885,
+                "frequency": 0.6521739130434783
+              }
+            ]
+          }
+        },
+        {
+          "name": "random-forest",
+          "metrics": {
+            "n": 1804,
+            "correct": 1297,
+            "wrong": 507,
+            "undecided": 0,
+            "accuracy": 0.7189578713968958,
+            "coverage": 1.0,
+            "brier": 0.20237801575031417,
+            "logLoss": 0.5946951205537249,
+            "ece": 0.01452372908950716,
+            "calibration": [
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 641,
+                "probability": 0.686141716211336,
+                "frequency": 0.7098283931357254
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 1163,
+                "probability": 0.7145162103448518,
+                "frequency": 0.7239896818572656
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "target": "sets-over-4.5",
+      "reference": {
+        "n": 1804,
+        "correct": 1223,
+        "wrong": 581,
+        "undecided": 0,
+        "accuracy": 0.6779379157427938,
+        "coverage": 1.0,
+        "brier": 0.21854453282409964,
+        "logLoss": 0.6288940657200136,
+        "ece": 0.0046395724225734725,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 10,
+            "probability": 0.2770824402502721,
+            "frequency": 0.4
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 1794,
+            "probability": 0.31764737288025346,
+            "frequency": 0.3216276477146042
+          }
+        ]
+      },
+      "candidates": [
+        {
+          "name": "categorical-catboost",
+          "metrics": {
+            "n": 1804,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0,
+            "accuracy": 0.6779379157427938,
+            "coverage": 1.0,
+            "brier": 0.21872254284167597,
+            "logLoss": 0.6293257180998811,
+            "ece": 0.009997611420291605,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 233,
+                "probability": 0.2897966914466252,
+                "frequency": 0.33476394849785407
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1571,
+                "probability": 0.32498938262843396,
+                "frequency": 0.32017823042647997
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0005328937030636538,
+            "upper": 0.0006593739447508447,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 244,
+              "wrong": 131,
+              "undecided": 0,
+              "accuracy": 0.6506666666666666,
+              "coverage": 1.0,
+              "brier": 0.22832933395151822,
+              "logLoss": 0.649381739570422,
+              "ece": 0.023092722379736745,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 22,
+                  "probability": 0.2948233227951635,
+                  "frequency": 0.2727272727272727
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 353,
+                  "probability": 0.33095281079062977,
+                  "frequency": 0.35410764872521244
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 618,
+              "wrong": 280,
+              "undecided": 0,
+              "accuracy": 0.688195991091314,
+              "coverage": 1.0,
+              "brier": 0.21434856855290257,
+              "logLoss": 0.6200232612507148,
+              "ece": 0.019345750827560272,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 103,
+                  "probability": 0.29114954558673223,
+                  "frequency": 0.34951456310679613
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 795,
+                  "probability": 0.3212086634447579,
+                  "frequency": 0.3069182389937107
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 6,
+              "wrong": 4,
+              "undecided": 0,
+              "accuracy": 0.6,
+              "coverage": 1.0,
+              "brier": 0.24910470214770317,
+              "logLoss": 0.694106644001525,
+              "ece": 0.10947010149241235,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 7,
+                  "probability": 0.2803048086968391,
+                  "frequency": 0.2857142857142857
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 3,
+                  "probability": 0.3143884413993342,
+                  "frequency": 0.6666666666666666
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 198,
+              "wrong": 88,
+              "undecided": 0,
+              "accuracy": 0.6923076923076923,
+              "coverage": 1.0,
+              "brier": 0.21501408069978775,
+              "logLoss": 0.6217594161259477,
+              "ece": 0.027247190942450105,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 7,
+                  "probability": 0.2956751695477506,
+                  "frequency": 0.2857142857142857
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 279,
+                  "probability": 0.335924625170991,
+                  "frequency": 0.30824372759856633
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 157,
+              "wrong": 78,
+              "undecided": 0,
+              "accuracy": 0.6680851063829787,
+              "coverage": 1.0,
+              "brier": 0.2233271420954949,
+              "logLoss": 0.6393204045025493,
+              "ece": 0.030973584352702265,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 94,
+                  "probability": 0.2874069464087715,
+                  "frequency": 0.3404255319148936
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 141,
+                  "probability": 0.30996421783468403,
+                  "frequency": 0.3262411347517731
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "categorical-mlp",
+          "metrics": {
+            "n": 1804,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0,
+            "accuracy": 0.6779379157427938,
+            "coverage": 1.0,
+            "brier": 0.21875561795321458,
+            "logLoss": 0.629398951702685,
+            "ece": 0.005398981139998362,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 120,
+                "probability": 0.28762806584524064,
+                "frequency": 0.325
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1683,
+                "probability": 0.3191592802065889,
+                "frequency": 0.32204396910279265
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 1,
+                "probability": 0.4001984656750152,
+                "frequency": 0.0
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.00011719939694285923,
+            "upper": 0.0007347121691600365,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 244,
+              "wrong": 131,
+              "undecided": 0,
+              "accuracy": 0.6506666666666666,
+              "coverage": 1.0,
+              "brier": 0.22793777442962565,
+              "logLoss": 0.6485214118803778,
+              "ece": 0.02823430371491483,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 26,
+                  "probability": 0.288717361425831,
+                  "frequency": 0.3076923076923077
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 348,
+                  "probability": 0.32559104360778834,
+                  "frequency": 0.35344827586206895
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 1,
+                  "probability": 0.4001984656750152,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 618,
+              "wrong": 280,
+              "undecided": 0,
+              "accuracy": 0.688195991091314,
+              "coverage": 1.0,
+              "brier": 0.21474584489887819,
+              "logLoss": 0.620892631425966,
+              "ece": 0.0026193022715832624,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 42,
+                  "probability": 0.28790965059555745,
+                  "frequency": 0.2857142857142857
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 856,
+                  "probability": 0.315724215087463,
+                  "frequency": 0.3130841121495327
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 6,
+              "wrong": 4,
+              "undecided": 0,
+              "accuracy": 0.6,
+              "coverage": 1.0,
+              "brier": 0.25462852804085856,
+              "logLoss": 0.7069373342777958,
+              "ece": 0.10746912944209722,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 6,
+                  "probability": 0.27451708474566133,
+                  "frequency": 0.3333333333333333
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 4,
+                  "probability": 0.31955154927626495,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 198,
+              "wrong": 88,
+              "undecided": 0,
+              "accuracy": 0.6923076923076923,
+              "coverage": 1.0,
+              "brier": 0.21461929137717106,
+              "logLoss": 0.620968063403747,
+              "ece": 0.047770151329093645,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 22,
+                  "probability": 0.29298776329758597,
+                  "frequency": 0.45454545454545453
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 264,
+                  "probability": 0.33374240179040787,
+                  "frequency": 0.29545454545454547
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 157,
+              "wrong": 78,
+              "undecided": 0,
+              "accuracy": 0.6680851063829787,
+              "coverage": 1.0,
+              "brier": 0.22293318316177577,
+              "logLoss": 0.6383504549775972,
+              "ece": 0.02971517061335907,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 24,
+                  "probability": 0.28431991159679154,
+                  "frequency": 0.2916666666666667
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 211,
+                  "probability": 0.30423344562814036,
+                  "frequency": 0.33649289099526064
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "calibration-selector",
+          "metrics": {
+            "n": 1804,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0,
+            "accuracy": 0.6779379157427938,
+            "coverage": 1.0,
+            "brier": 0.21869618167641522,
+            "logLoss": 0.629283544963931,
+            "ece": 0.010253417918196395,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 285,
+                "probability": 0.2892209367118432,
+                "frequency": 0.3298245614035088
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1518,
+                "probability": 0.3251152400669477,
+                "frequency": 0.3208168642951252
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 1,
+                "probability": 0.4001984656750152,
+                "frequency": 0.0
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0006236409092657843,
+            "upper": 0.0005869910800166989,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 244,
+              "wrong": 131,
+              "undecided": 0,
+              "accuracy": 0.6506666666666666,
+              "coverage": 1.0,
+              "brier": 0.2278044979070814,
+              "logLoss": 0.648226216061326,
+              "ece": 0.03265694003644143,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 36,
+                  "probability": 0.2901659237382842,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 338,
+                  "probability": 0.3301769799011471,
+                  "frequency": 0.3609467455621302
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 1,
+                  "probability": 0.4001984656750152,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 618,
+              "wrong": 280,
+              "undecided": 0,
+              "accuracy": 0.688195991091314,
+              "coverage": 1.0,
+              "brier": 0.21437389438570217,
+              "logLoss": 0.620069647395469,
+              "ece": 0.021521652488062072,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 121,
+                  "probability": 0.2899120827898155,
+                  "frequency": 0.34710743801652894
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 777,
+                  "probability": 0.32227259453262214,
+                  "frequency": 0.3063063063063063
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 6,
+              "wrong": 4,
+              "undecided": 0,
+              "accuracy": 0.6,
+              "coverage": 1.0,
+              "brier": 0.2515607306023348,
+              "logLoss": 0.6998548369451373,
+              "ece": 0.12104064834337618,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 4,
+                  "probability": 0.28140114008195416,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 6,
+                  "probability": 0.31919967948234246,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 198,
+              "wrong": 88,
+              "undecided": 0,
+              "accuracy": 0.6923076923076923,
+              "coverage": 1.0,
+              "brier": 0.21518180498337852,
+              "logLoss": 0.6222002000171775,
+              "ece": 0.03823666728703881,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 27,
+                  "probability": 0.2935195726194612,
+                  "frequency": 0.37037037037037035
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 259,
+                  "probability": 0.3353695571614616,
+                  "frequency": 0.30115830115830117
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 157,
+              "wrong": 78,
+              "undecided": 0,
+              "accuracy": 0.6680851063829787,
+              "coverage": 1.0,
+              "brier": 0.22355686952964862,
+              "logLoss": 0.6398822772614424,
+              "ece": 0.03150895935678708,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 97,
+                  "probability": 0.28713400690387747,
+                  "frequency": 0.32989690721649484
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 138,
+                  "probability": 0.30973475276434,
+                  "frequency": 0.3333333333333333
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "fixed-pool",
+          "metrics": {
+            "n": 1804,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0,
+            "accuracy": 0.6779379157427938,
+            "coverage": 1.0,
+            "brier": 0.2186689562703056,
+            "logLoss": 0.629193274622527,
+            "ece": 0.005854609044375799,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 153,
+                "probability": 0.2925133247369585,
+                "frequency": 0.3464052287581699
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1651,
+                "probability": 0.32120911774730987,
+                "frequency": 0.3198061780738946
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0002866264308868524,
+            "upper": 0.0005014502667544023,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 244,
+              "wrong": 131,
+              "undecided": 0,
+              "accuracy": 0.6506666666666666,
+              "coverage": 1.0,
+              "brier": 0.22804807145287315,
+              "logLoss": 0.6487353335722278,
+              "ece": 0.02393190678471619,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 14,
+                  "probability": 0.2941771149532138,
+                  "frequency": 0.2857142857142857
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 361,
+                  "probability": 0.32726873840741394,
+                  "frequency": 0.3518005540166205
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 618,
+              "wrong": 280,
+              "undecided": 0,
+              "accuracy": 0.688195991091314,
+              "coverage": 1.0,
+              "brier": 0.21448343906907483,
+              "logLoss": 0.6203116861740884,
+              "ece": 0.00428809803669141,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 55,
+                  "probability": 0.29427840535749666,
+                  "frequency": 0.2909090909090909
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 843,
+                  "probability": 0.3175153021853933,
+                  "frequency": 0.31316725978647686
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 6,
+              "wrong": 4,
+              "undecided": 0,
+              "accuracy": 0.6,
+              "coverage": 1.0,
+              "brier": 0.25160793976523094,
+              "logLoss": 0.6999159921983197,
+              "ece": 0.10846961546725475,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 6,
+                  "probability": 0.2833902344715808,
+                  "frequency": 0.3333333333333333
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 4,
+                  "probability": 0.3037406096244919,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 198,
+              "wrong": 88,
+              "undecided": 0,
+              "accuracy": 0.6923076923076923,
+              "coverage": 1.0,
+              "brier": 0.21473342375238733,
+              "logLoss": 0.6211665318782296,
+              "ece": 0.04481976978927468,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 4,
+                  "probability": 0.29434457220563826,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 282,
+                  "probability": 0.3333185547821103,
+                  "frequency": 0.2978723404255319
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 157,
+              "wrong": 78,
+              "undecided": 0,
+              "accuracy": 0.6680851063829787,
+              "coverage": 1.0,
+              "brier": 0.22308426996570055,
+              "logLoss": 0.6387073834296392,
+              "ece": 0.030344377483030677,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 74,
+                  "probability": 0.29152739304182834,
+                  "frequency": 0.36486486486486486
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 161,
+                  "probability": 0.3061866099775931,
+                  "frequency": 0.3167701863354037
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "previousIndependentHeads": [
+        {
+          "name": "hierarchical-eb",
+          "metrics": {
+            "n": 1804,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0,
+            "accuracy": 0.6779379157427938,
+            "coverage": 1.0,
+            "brier": 0.21815455320196633,
+            "logLoss": 0.627969280879648,
+            "ece": 0.008497796401447733,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 465,
+                "probability": 0.2818120782929308,
+                "frequency": 0.3032258064516129
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1334,
+                "probability": 0.3273535495398118,
+                "frequency": 0.32983508245877063
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 5,
+                "probability": 0.4124552401066838,
+                "frequency": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "name": "logistic",
+          "metrics": {
+            "n": 1804,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0,
+            "accuracy": 0.6779379157427938,
+            "coverage": 1.0,
+            "brier": 0.2185312613402781,
+            "logLoss": 0.6288647919078407,
+            "ece": 0.0043730695305805095,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 10,
+                "probability": 0.27234348913077727,
+                "frequency": 0.4
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1794,
+                "probability": 0.31794177685369285,
+                "frequency": 0.3216276477146042
+              }
+            ]
+          }
+        },
+        {
+          "name": "hist-gradient-boosting",
+          "metrics": {
+            "n": 1804,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0,
+            "accuracy": 0.6779379157427938,
+            "coverage": 1.0,
+            "brier": 0.21927820750545932,
+            "logLoss": 0.6306055099261799,
+            "ece": 0.008177934180539564,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 122,
+                "probability": 0.28141668678998577,
+                "frequency": 0.36885245901639346
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1676,
+                "probability": 0.3207934250112201,
+                "frequency": 0.3192124105011933
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 6,
+                "probability": 0.40600812187778934,
+                "frequency": 0.16666666666666666
+              }
+            ]
+          }
+        },
+        {
+          "name": "random-forest",
+          "metrics": {
+            "n": 1804,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0,
+            "accuracy": 0.6779379157427938,
+            "coverage": 1.0,
+            "brier": 0.21877194835938224,
+            "logLoss": 0.6294622213846446,
+            "ece": 0.013856471514223838,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 156,
+                "probability": 0.28604385728463855,
+                "frequency": 0.391025641025641
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1648,
+                "probability": 0.3207645123471259,
+                "frequency": 0.3155339805825243
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-set-handicap-minus-1.5",
+      "reference": {
+        "n": 1804,
+        "correct": 1209,
+        "wrong": 595,
+        "undecided": 0,
+        "accuracy": 0.6701773835920177,
+        "coverage": 1.0,
+        "brier": 0.22145498848939152,
+        "logLoss": 0.6349781979483606,
+        "ece": 0.011136778716467788,
+        "calibration": [
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 1804,
+            "probability": 0.34095939512445006,
+            "frequency": 0.32982261640798227
+          }
+        ]
+      },
+      "candidates": [
+        {
+          "name": "categorical-catboost",
+          "metrics": {
+            "n": 1804,
+            "correct": 1209,
+            "wrong": 595,
+            "undecided": 0,
+            "accuracy": 0.6701773835920177,
+            "coverage": 1.0,
+            "brier": 0.22025002522100806,
+            "logLoss": 0.6322785519151223,
+            "ece": 0.010502395865244108,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 43,
+                "probability": 0.2935645785400503,
+                "frequency": 0.23255813953488372
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1728,
+                "probability": 0.3373552500048681,
+                "frequency": 0.3292824074074074
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 33,
+                "probability": 0.4129341437798155,
+                "frequency": 0.48484848484848486
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.002364635892179215,
+            "upper": -0.00015479947911944817,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 259,
+              "wrong": 116,
+              "undecided": 0,
+              "accuracy": 0.6906666666666667,
+              "coverage": 1.0,
+              "brier": 0.21457041205133653,
+              "logLoss": 0.6205889009755886,
+              "ece": 0.02371754958622011,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 6,
+                  "probability": 0.291416173077945,
+                  "frequency": 0.3333333333333333
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 369,
+                  "probability": 0.3323647103883475,
+                  "frequency": 0.3089430894308943
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 601,
+              "wrong": 297,
+              "undecided": 0,
+              "accuracy": 0.6692650334075724,
+              "coverage": 1.0,
+              "brier": 0.2202399360621193,
+              "logLoss": 0.6322386460062468,
+              "ece": 0.01756888882923243,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 5,
+                  "probability": 0.29479798613183816,
+                  "frequency": 0.2
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 869,
+                  "probability": 0.3419833070446368,
+                  "frequency": 0.32681242807825084
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 24,
+                  "probability": 0.4116925659915783,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.21441911675688657,
+              "logLoss": 0.6203854067194163,
+              "ece": 0.03222018000391617,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.2961083595865683,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 9,
+                  "probability": 0.3362326044947326,
+                  "frequency": 0.3333333333333333
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 189,
+              "wrong": 97,
+              "undecided": 0,
+              "accuracy": 0.6608391608391608,
+              "coverage": 1.0,
+              "brier": 0.2236760662303878,
+              "logLoss": 0.6393871614642244,
+              "ece": 0.021830698414811958,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 23,
+                  "probability": 0.292797632990314,
+                  "frequency": 0.2608695652173913
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 263,
+                  "probability": 0.3250599460537681,
+                  "frequency": 0.34600760456273766
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 153,
+              "wrong": 82,
+              "undecided": 0,
+              "accuracy": 0.6510638297872341,
+              "coverage": 1.0,
+              "brier": 0.2254303501540614,
+              "logLoss": 0.6429395039551611,
+              "ece": 0.017094425651347913,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 8,
+                  "probability": 0.2962919987164395,
+                  "frequency": 0.125
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 218,
+                  "probability": 0.34223367339783817,
+                  "frequency": 0.3532110091743119
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 9,
+                  "probability": 0.41624501788178153,
+                  "frequency": 0.4444444444444444
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "categorical-mlp",
+          "metrics": {
+            "n": 1804,
+            "correct": 1209,
+            "wrong": 595,
+            "undecided": 0,
+            "accuracy": 0.6701773835920177,
+            "coverage": 1.0,
+            "brier": 0.2212727076533231,
+            "logLoss": 0.6345744187498771,
+            "ece": 0.010247752330575713,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 29,
+                "probability": 0.2898110791206742,
+                "frequency": 0.27586206896551724
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1772,
+                "probability": 0.33990372433731825,
+                "frequency": 0.3301354401805869
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 3,
+                "probability": 0.40899187195631503,
+                "frequency": 0.6666666666666666
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0005422691654170917,
+            "upper": 1.7655153861633415e-05,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 259,
+              "wrong": 116,
+              "undecided": 0,
+              "accuracy": 0.6906666666666667,
+              "coverage": 1.0,
+              "brier": 0.2146670181664742,
+              "logLoss": 0.6208821649134707,
+              "ece": 0.037175746569164995,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 2,
+                  "probability": 0.298439762152288,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 372,
+                  "probability": 0.34341510534031877,
+                  "frequency": 0.30913978494623656
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 1,
+                  "probability": 0.40639374746628454,
+                  "frequency": 1.0
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 601,
+              "wrong": 297,
+              "undecided": 0,
+              "accuracy": 0.6692650334075724,
+              "coverage": 1.0,
+              "brier": 0.22170544155987895,
+              "logLoss": 0.6354841361298519,
+              "ece": 0.015230168396737617,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.29891728712444243,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 895,
+                  "probability": 0.3454730232419537,
+                  "frequency": 0.3307262569832402
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 2,
+                  "probability": 0.4102909342013302,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.21275265542456584,
+              "logLoss": 0.6171998261905707,
+              "ece": 0.10804672640092121,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 2,
+                  "probability": 0.29676952604869455,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 8,
+                  "probability": 0.33425078951332515,
+                  "frequency": 0.25
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 189,
+              "wrong": 97,
+              "undecided": 0,
+              "accuracy": 0.6608391608391608,
+              "coverage": 1.0,
+              "brier": 0.22436469021814542,
+              "logLoss": 0.6410406489879075,
+              "ece": 0.01555524338288337,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 22,
+                  "probability": 0.2876808400044651,
+                  "frequency": 0.3181818181818182
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 264,
+                  "probability": 0.32659932542574666,
+                  "frequency": 0.3409090909090909
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 153,
+              "wrong": 82,
+              "undecided": 0,
+              "accuracy": 0.6510638297872341,
+              "coverage": 1.0,
+              "brier": 0.226759652411747,
+              "logLoss": 0.6458172828305215,
+              "ece": 0.026050258050203695,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 2,
+                  "probability": 0.2931034754374565,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 233,
+                  "probability": 0.32817337471706887,
+                  "frequency": 0.351931330472103
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "calibration-selector",
+          "metrics": {
+            "n": 1804,
+            "correct": 1209,
+            "wrong": 595,
+            "undecided": 0,
+            "accuracy": 0.6701773835920177,
+            "coverage": 1.0,
+            "brier": 0.22063090608959884,
+            "logLoss": 0.6331232071091598,
+            "ece": 0.009871084675089,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 52,
+                "probability": 0.29162249813460733,
+                "frequency": 0.25
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1719,
+                "probability": 0.3381410805385313,
+                "frequency": 0.3298429319371728
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 33,
+                "probability": 0.4127712301477069,
+                "frequency": 0.45454545454545453
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0019375679155299234,
+            "upper": -0.00015479947911944817,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 259,
+              "wrong": 116,
+              "undecided": 0,
+              "accuracy": 0.6906666666666667,
+              "coverage": 1.0,
+              "brier": 0.21414932258123176,
+              "logLoss": 0.6196746891708909,
+              "ece": 0.028746881437983353,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 5,
+                  "probability": 0.29318779472237655,
+                  "frequency": 0.2
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 369,
+                  "probability": 0.3352860035585316,
+                  "frequency": 0.3089430894308943
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 1,
+                  "probability": 0.40639374746628454,
+                  "frequency": 1.0
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 601,
+              "wrong": 297,
+              "undecided": 0,
+              "accuracy": 0.6692650334075724,
+              "coverage": 1.0,
+              "brier": 0.22083038602738161,
+              "logLoss": 0.6335499929288246,
+              "ece": 0.017219076327553588,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 6,
+                  "probability": 0.2954845362972722,
+                  "frequency": 0.16666666666666666
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 867,
+                  "probability": 0.34253703673977726,
+                  "frequency": 0.3275663206459054
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 25,
+                  "probability": 0.4115915011610962,
+                  "frequency": 0.48
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.21383121745973482,
+              "logLoss": 0.6193925155056555,
+              "ece": 0.10705607098975715,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 2,
+                  "probability": 0.29676952604869455,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 8,
+                  "probability": 0.3330124702493701,
+                  "frequency": 0.25
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 189,
+              "wrong": 97,
+              "undecided": 0,
+              "accuracy": 0.6608391608391608,
+              "coverage": 1.0,
+              "brier": 0.22390284451433914,
+              "logLoss": 0.6399501445262863,
+              "ece": 0.017209792124367563,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 30,
+                  "probability": 0.2891203611891708,
+                  "frequency": 0.3
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 256,
+                  "probability": 0.32579839303420216,
+                  "frequency": 0.34375
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 153,
+              "wrong": 82,
+              "undecided": 0,
+              "accuracy": 0.6510638297872341,
+              "coverage": 1.0,
+              "brier": 0.22651892025271234,
+              "logLoss": 0.645228498068856,
+              "ece": 0.030160681879627938,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 9,
+                  "probability": 0.2953748693146172,
+                  "frequency": 0.1111111111111111
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 219,
+                  "probability": 0.34016384886072887,
+                  "frequency": 0.3607305936073059
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 7,
+                  "probability": 0.4178956169115197,
+                  "frequency": 0.2857142857142857
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "fixed-pool",
+          "metrics": {
+            "n": 1804,
+            "correct": 1209,
+            "wrong": 595,
+            "undecided": 0,
+            "accuracy": 0.6701773835920177,
+            "coverage": 1.0,
+            "brier": 0.2206402296356201,
+            "logLoss": 0.6331639211618453,
+            "ece": 0.008631062102678623,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 20,
+                "probability": 0.29201217679775426,
+                "frequency": 0.25
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1784,
+                "probability": 0.33897432314869796,
+                "frequency": 0.3307174887892377
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0015892797306688504,
+            "upper": -0.0002245184057535962,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 259,
+              "wrong": 116,
+              "undecided": 0,
+              "accuracy": 0.6906666666666667,
+              "coverage": 1.0,
+              "brier": 0.2145091212742127,
+              "logLoss": 0.6205006146656686,
+              "ece": 0.028193023506849657,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 375,
+                  "probability": 0.337526356840183,
+                  "frequency": 0.30933333333333335
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 601,
+              "wrong": 297,
+              "undecided": 0,
+              "accuracy": 0.6692650334075724,
+              "coverage": 1.0,
+              "brier": 0.220856379344518,
+              "logLoss": 0.6336112793745874,
+              "ece": 0.013839621544166014,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 898,
+                  "probability": 0.34457458813659364,
+                  "frequency": 0.3307349665924276
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.21348559696869568,
+              "logLoss": 0.6186208825479872,
+              "ece": 0.029888965908057445,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.2968816216010749,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 9,
+                  "probability": 0.33311021805783336,
+                  "frequency": 0.3333333333333333
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 189,
+              "wrong": 97,
+              "undecided": 0,
+              "accuracy": 0.6608391608391608,
+              "coverage": 1.0,
+              "brier": 0.22393943802388072,
+              "logLoss": 0.6400422090982277,
+              "ece": 0.017862092533611918,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 18,
+                  "probability": 0.29157539850888314,
+                  "frequency": 0.2777777777777778
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 268,
+                  "probability": 0.32514850264383166,
+                  "frequency": 0.34328358208955223
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 153,
+              "wrong": 82,
+              "undecided": 0,
+              "accuracy": 0.6510638297872341,
+              "coverage": 1.0,
+              "brier": 0.22588719101674457,
+              "logLoss": 0.6439096756186828,
+              "ece": 0.01575730585835795,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.29500474119411335,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 234,
+                  "probability": 0.3358634096772649,
+                  "frequency": 0.3504273504273504
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "previousIndependentHeads": [
+        {
+          "name": "hierarchical-eb",
+          "metrics": {
+            "n": 1804,
+            "correct": 1209,
+            "wrong": 595,
+            "undecided": 0,
+            "accuracy": 0.6701773835920177,
+            "coverage": 1.0,
+            "brier": 0.21866292311158936,
+            "logLoss": 0.6286582890155139,
+            "ece": 0.016647776262401378,
+            "calibration": [
+              {
+                "from": 0.1,
+                "to": 0.2,
+                "n": 1,
+                "probability": 0.17963513609451764,
+                "frequency": 0.0
+              },
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 257,
+                "probability": 0.28139468020190567,
+                "frequency": 0.24124513618677043
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1412,
+                "probability": 0.3464465404555029,
+                "frequency": 0.334985835694051
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 134,
+                "probability": 0.4227462290580766,
+                "frequency": 0.44776119402985076
+              }
+            ]
+          }
+        },
+        {
+          "name": "logistic",
+          "metrics": {
+            "n": 1804,
+            "correct": 1208,
+            "wrong": 596,
+            "undecided": 0,
+            "accuracy": 0.6696230598669624,
+            "coverage": 1.0,
+            "brier": 0.22045795158755935,
+            "logLoss": 0.6328569161347252,
+            "ece": 0.02244662342208473,
+            "calibration": [
+              {
+                "from": 0.1,
+                "to": 0.2,
+                "n": 27,
+                "probability": 0.17361403647056517,
+                "frequency": 0.2222222222222222
+              },
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 401,
+                "probability": 0.26712734012836276,
+                "frequency": 0.30673316708229426
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1219,
+                "probability": 0.3446338036106843,
+                "frequency": 0.33305988515176377
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 144,
+                "probability": 0.4308488659828746,
+                "frequency": 0.375
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 12,
+                "probability": 0.5412544853825381,
+                "frequency": 0.5
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1,
+                "probability": 0.6534539020710604,
+                "frequency": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "name": "hist-gradient-boosting",
+          "metrics": {
+            "n": 1804,
+            "correct": 1209,
+            "wrong": 595,
+            "undecided": 0,
+            "accuracy": 0.6701773835920177,
+            "coverage": 1.0,
+            "brier": 0.21954338734769346,
+            "logLoss": 0.6307835843069295,
+            "ece": 0.009785737779744274,
+            "calibration": [
+              {
+                "from": 0.1,
+                "to": 0.2,
+                "n": 20,
+                "probability": 0.18149993547380378,
+                "frequency": 0.2
+              },
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 344,
+                "probability": 0.2647402055615167,
+                "frequency": 0.2819767441860465
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1316,
+                "probability": 0.3421122580219198,
+                "frequency": 0.3351063829787234
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 110,
+                "probability": 0.4320579017553036,
+                "frequency": 0.41818181818181815
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 13,
+                "probability": 0.5380754428910073,
+                "frequency": 0.5384615384615384
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1,
+                "probability": 0.6029803849497308,
+                "frequency": 0.0
+              }
+            ]
+          }
+        },
+        {
+          "name": "random-forest",
+          "metrics": {
+            "n": 1804,
+            "correct": 1212,
+            "wrong": 592,
+            "undecided": 0,
+            "accuracy": 0.6718403547671841,
+            "coverage": 1.0,
+            "brier": 0.21914012607153083,
+            "logLoss": 0.6298178980932303,
+            "ece": 0.00850629757794759,
+            "calibration": [
+              {
+                "from": 0.1,
+                "to": 0.2,
+                "n": 1,
+                "probability": 0.19091972219307937,
+                "frequency": 0.0
+              },
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 320,
+                "probability": 0.2745262027929513,
+                "frequency": 0.28125
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 1416,
+                "probability": 0.33960192811258266,
+                "frequency": 0.3333333333333333
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 64,
+                "probability": 0.42716400815136674,
+                "frequency": 0.46875
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 3,
+                "probability": 0.5116692278536042,
+                "frequency": 1.0
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-set-handicap-plus-1.5",
+      "reference": {
+        "n": 1804,
+        "correct": 1176,
+        "wrong": 628,
+        "undecided": 0,
+        "accuracy": 0.6518847006651884,
+        "coverage": 1.0,
+        "brier": 0.2273961070633565,
+        "logLoss": 0.6472905106880801,
+        "ece": 0.0064972062938944974,
+        "calibration": [
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 1804,
+            "probability": 0.6583819069590829,
+            "frequency": 0.6518847006651884
+          }
+        ]
+      },
+      "candidates": [
+        {
+          "name": "categorical-catboost",
+          "metrics": {
+            "n": 1804,
+            "correct": 1176,
+            "wrong": 628,
+            "undecided": 0,
+            "accuracy": 0.6518847006651884,
+            "coverage": 1.0,
+            "brier": 0.22588130010389543,
+            "logLoss": 0.6439771884735425,
+            "ece": 0.008738074513687714,
+            "calibration": [
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 24,
+                "probability": 0.5907938565212815,
+                "frequency": 0.625
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1690,
+                "probability": 0.6559302991921284,
+                "frequency": 0.6479289940828402
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 90,
+                "probability": 0.7175518517277074,
+                "frequency": 0.7333333333333333
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.002236444988277056,
+            "upper": -0.0010714689216976881,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 247,
+              "wrong": 128,
+              "undecided": 0,
+              "accuracy": 0.6586666666666666,
+              "coverage": 1.0,
+              "brier": 0.22565237926723178,
+              "logLoss": 0.6437784998118212,
+              "ece": 0.006819393860690162,
+              "calibration": [
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 365,
+                  "probability": 0.6592613742193323,
+                  "frequency": 0.6547945205479452
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 10,
+                  "probability": 0.7073128892297483,
+                  "frequency": 0.8
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 577,
+              "wrong": 321,
+              "undecided": 0,
+              "accuracy": 0.6425389755011136,
+              "coverage": 1.0,
+              "brier": 0.22802397080882084,
+              "logLoss": 0.6483267707812954,
+              "ece": 0.018805563441272113,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 2,
+                  "probability": 0.5962069277906787,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 835,
+                  "probability": 0.6572025061511507,
+                  "frequency": 0.6383233532934132
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 61,
+                  "probability": 0.7201785160404941,
+                  "frequency": 0.7049180327868853
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.2043989806065321,
+              "logLoss": 0.5985612607358435,
+              "ece": 0.07724992148849621,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 3,
+                  "probability": 0.5792272822503842,
+                  "frequency": 0.6666666666666666
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 6,
+                  "probability": 0.6308463075042621,
+                  "frequency": 0.6666666666666666
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7047410933383125,
+                  "frequency": 1.0
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 185,
+              "wrong": 101,
+              "undecided": 0,
+              "accuracy": 0.6468531468531469,
+              "coverage": 1.0,
+              "brier": 0.2272156899311289,
+              "logLoss": 0.6466597283939267,
+              "ece": 0.018239097952478155,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 5,
+                  "probability": 0.5916439758833105,
+                  "frequency": 0.8
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 274,
+                  "probability": 0.6573616605745761,
+                  "frequency": 0.6423357664233577
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 7,
+                  "probability": 0.7060704433726508,
+                  "frequency": 0.7142857142857143
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 160,
+              "wrong": 75,
+              "undecided": 0,
+              "accuracy": 0.6808510638297872,
+              "coverage": 1.0,
+              "brier": 0.2173490223384088,
+              "logLoss": 0.6263411722860119,
+              "ece": 0.03887993328090267,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 14,
+                  "probability": 0.5921954981972638,
+                  "frequency": 0.5714285714285714
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 210,
+                  "probability": 0.6439311360284304,
+                  "frequency": 0.680952380952381
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 11,
+                  "probability": 0.7207649170708346,
+                  "frequency": 0.8181818181818182
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "categorical-mlp",
+          "metrics": {
+            "n": 1804,
+            "correct": 1176,
+            "wrong": 628,
+            "undecided": 0,
+            "accuracy": 0.6518847006651884,
+            "coverage": 1.0,
+            "brier": 0.22793171697274162,
+            "logLoss": 0.6484329325694487,
+            "ece": 0.0157164073821611,
+            "calibration": [
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 37,
+                "probability": 0.5847785656492879,
+                "frequency": 0.8378378378378378
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1740,
+                "probability": 0.6569982558357207,
+                "frequency": 0.646551724137931
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 27,
+                "probability": 0.7106577521374703,
+                "frequency": 0.7407407407407407
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": 0.0,
+            "upper": 0.0014706853524060677,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 247,
+              "wrong": 128,
+              "undecided": 0,
+              "accuracy": 0.6586666666666666,
+              "coverage": 1.0,
+              "brier": 0.22567701725587377,
+              "logLoss": 0.643798035105635,
+              "ece": 0.015763502952228753,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 6,
+                  "probability": 0.5879093241283829,
+                  "frequency": 0.8333333333333334
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 360,
+                  "probability": 0.6668402981815482,
+                  "frequency": 0.6555555555555556
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 9,
+                  "probability": 0.7084735784998579,
+                  "frequency": 0.6666666666666666
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 577,
+              "wrong": 321,
+              "undecided": 0,
+              "accuracy": 0.6425389755011136,
+              "coverage": 1.0,
+              "brier": 0.23019788351081433,
+              "logLoss": 0.653086289908779,
+              "ece": 0.024648974396884356,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 5,
+                  "probability": 0.591221518612946,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 875,
+                  "probability": 0.6593170099459198,
+                  "frequency": 0.6377142857142857
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 18,
+                  "probability": 0.7117498389562762,
+                  "frequency": 0.7777777777777778
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.21727267181641366,
+              "logLoss": 0.6263616098506286,
+              "ece": 0.08071459262169817,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 1,
+                  "probability": 0.5639934489955489,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 9,
+                  "probability": 0.6254289583097188,
+                  "frequency": 0.6666666666666666
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 185,
+              "wrong": 101,
+              "undecided": 0,
+              "accuracy": 0.6468531468531469,
+              "coverage": 1.0,
+              "brier": 0.23150175050875094,
+              "logLoss": 0.6558634936326738,
+              "ece": 0.048375756225549904,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 19,
+                  "probability": 0.5860383941369128,
+                  "frequency": 0.8947368421052632
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 267,
+                  "probability": 0.6590644036296203,
+                  "frequency": 0.6292134831460674
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 160,
+              "wrong": 75,
+              "undecided": 0,
+              "accuracy": 0.6808510638297872,
+              "coverage": 1.0,
+              "brier": 0.2189787625170003,
+              "logLoss": 0.6299433343622874,
+              "ece": 0.054644692516471985,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 6,
+                  "probability": 0.5757534089319548,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 229,
+                  "probability": 0.6314978939398289,
+                  "frequency": 0.6855895196506551
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "calibration-selector",
+          "metrics": {
+            "n": 1804,
+            "correct": 1176,
+            "wrong": 628,
+            "undecided": 0,
+            "accuracy": 0.6518847006651884,
+            "coverage": 1.0,
+            "brier": 0.22658842927842796,
+            "logLoss": 0.6454781827687053,
+            "ece": 0.01893669571394999,
+            "calibration": [
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 47,
+                "probability": 0.5867444873473963,
+                "frequency": 0.7659574468085106
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1646,
+                "probability": 0.6557002542107387,
+                "frequency": 0.6421628189550426
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 111,
+                "probability": 0.7166110671854279,
+                "frequency": 0.7477477477477478
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.002236444988277056,
+            "upper": 0.000861350822024514,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 247,
+              "wrong": 128,
+              "undecided": 0,
+              "accuracy": 0.6586666666666666,
+              "coverage": 1.0,
+              "brier": 0.2256966319349984,
+              "logLoss": 0.6438334082031063,
+              "ece": 0.017296956521546603,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 6,
+                  "probability": 0.5879093241283829,
+                  "frequency": 0.8333333333333334
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 351,
+                  "probability": 0.6602923328441557,
+                  "frequency": 0.6495726495726496
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 18,
+                  "probability": 0.7082663437749088,
+                  "frequency": 0.7777777777777778
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 577,
+              "wrong": 321,
+              "undecided": 0,
+              "accuracy": 0.6425389755011136,
+              "coverage": 1.0,
+              "brier": 0.22849522312488602,
+              "logLoss": 0.6493302839659622,
+              "ece": 0.027776176741188235,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 5,
+                  "probability": 0.591221518612946,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 816,
+                  "probability": 0.6571510295852941,
+                  "frequency": 0.6311274509803921
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 77,
+                  "probability": 0.7186509848694581,
+                  "frequency": 0.7402597402597403
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.20987846011167832,
+              "logLoss": 0.609999042989474,
+              "ece": 0.07609723666464989,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 1,
+                  "probability": 0.5639934489955489,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 8,
+                  "probability": 0.628713363622545,
+                  "frequency": 0.625
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7047410933383125,
+                  "frequency": 1.0
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 185,
+              "wrong": 101,
+              "undecided": 0,
+              "accuracy": 0.6468531468531469,
+              "coverage": 1.0,
+              "brier": 0.22950906418251021,
+              "logLoss": 0.6514961552661525,
+              "ece": 0.04380740300991684,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 20,
+                  "probability": 0.5862459937480384,
+                  "frequency": 0.85
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 259,
+                  "probability": 0.6571286881830329,
+                  "frequency": 0.6293436293436293
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 7,
+                  "probability": 0.7060704433726508,
+                  "frequency": 0.7142857142857143
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 160,
+              "wrong": 75,
+              "undecided": 0,
+              "accuracy": 0.6808510638297872,
+              "coverage": 1.0,
+              "brier": 0.21788171114552013,
+              "logLoss": 0.6275686289409822,
+              "ece": 0.04652811699236457,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 15,
+                  "probability": 0.5869676029024186,
+                  "frequency": 0.5333333333333333
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 212,
+                  "probability": 0.6417864731726018,
+                  "frequency": 0.6886792452830188
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 8,
+                  "probability": 0.7264592797173758,
+                  "frequency": 0.75
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "fixed-pool",
+          "metrics": {
+            "n": 1804,
+            "correct": 1176,
+            "wrong": 628,
+            "undecided": 0,
+            "accuracy": 0.6518847006651884,
+            "coverage": 1.0,
+            "brier": 0.22674602701805358,
+            "logLoss": 0.6458488423176594,
+            "ece": 0.010472649043984428,
+            "calibration": [
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 16,
+                "probability": 0.5858927888577397,
+                "frequency": 0.875
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1777,
+                "probability": 0.6575836442584388,
+                "frequency": 0.6499718626899268
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 11,
+                "probability": 0.703709786347802,
+                "frequency": 0.6363636363636364
+              }
+            ]
+          },
+          "pairedBrierDifference": {
+            "lower": -0.001385366965322076,
+            "upper": 6.288435372747661e-05,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 24
+          },
+          "perCompetition": {
+            "Czech Liga Pro": {
+              "n": 375,
+              "correct": 247,
+              "wrong": 128,
+              "undecided": 0,
+              "accuracy": 0.6586666666666666,
+              "coverage": 1.0,
+              "brier": 0.22555101851723466,
+              "logLoss": 0.6435422295901586,
+              "ece": 0.0070267507666432584,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 1,
+                  "probability": 0.5999232259994361,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 374,
+                  "probability": 0.6637298255708306,
+                  "frequency": 0.6577540106951871
+                }
+              ]
+            },
+            "Setka Cup": {
+              "n": 898,
+              "correct": 577,
+              "wrong": 321,
+              "undecided": 0,
+              "accuracy": 0.6425389755011136,
+              "coverage": 1.0,
+              "brier": 0.22894204179663494,
+              "logLoss": 0.6503194738645459,
+              "ece": 0.019936366931465572,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 2,
+                  "probability": 0.5939586697885041,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 885,
+                  "probability": 0.6602824488070138,
+                  "frequency": 0.6418079096045197
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 11,
+                  "probability": 0.703709786347802,
+                  "frequency": 0.6363636363636364
+                }
+              ]
+            },
+            "Setka Cup Women": {
+              "n": 10,
+              "correct": 7,
+              "wrong": 3,
+              "undecided": 0,
+              "accuracy": 0.7,
+              "coverage": 1.0,
+              "brier": 0.21047608688768077,
+              "logLoss": 0.611860801553348,
+              "ece": 0.07898225705509712,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 1,
+                  "probability": 0.5700356651319728,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 9,
+                  "probability": 0.6266824182574506,
+                  "frequency": 0.6666666666666666
+                }
+              ]
+            },
+            "TT Cup": {
+              "n": 286,
+              "correct": 185,
+              "wrong": 101,
+              "undecided": 0,
+              "accuracy": 0.6468531468531469,
+              "coverage": 1.0,
+              "brier": 0.22922648324210815,
+              "logLoss": 0.6509722030915625,
+              "ece": 0.029123965457550707,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 7,
+                  "probability": 0.5879937498732105,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 279,
+                  "probability": 0.6575104314335913,
+                  "frequency": 0.6379928315412187
+                }
+              ]
+            },
+            "TT Elite Series": {
+              "n": 235,
+              "correct": 160,
+              "wrong": 75,
+              "undecided": 0,
+              "accuracy": 0.6808510638297872,
+              "coverage": 1.0,
+              "brier": 0.21793494547705425,
+              "logLoss": 0.6276571481475138,
+              "ece": 0.04359100469292809,
+              "calibration": [
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 5,
+                  "probability": 0.5800904283805887,
+                  "frequency": 0.6
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 230,
+                  "probability": 0.638502877196778,
+                  "frequency": 0.6826086956521739
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "previousIndependentHeads": [
+        {
+          "name": "hierarchical-eb",
+          "metrics": {
+            "n": 1804,
+            "correct": 1176,
+            "wrong": 628,
+            "undecided": 0,
+            "accuracy": 0.6518847006651884,
+            "coverage": 1.0,
+            "brier": 0.22567084647431496,
+            "logLoss": 0.6435694216221792,
+            "ece": 0.00971283350356521,
+            "calibration": [
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 96,
+                "probability": 0.5764787846704048,
+                "frequency": 0.5104166666666666
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1454,
+                "probability": 0.6571246934713818,
+                "frequency": 0.655433287482806
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 254,
+                "probability": 0.7193727716719828,
+                "frequency": 0.6850393700787402
+              }
+            ]
+          }
+        },
+        {
+          "name": "logistic",
+          "metrics": {
+            "n": 1804,
+            "correct": 1174,
+            "wrong": 630,
+            "undecided": 0,
+            "accuracy": 0.6507760532150776,
+            "coverage": 1.0,
+            "brier": 0.22712347791949172,
+            "logLoss": 0.646702131997185,
+            "ece": 0.017829994750202128,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 10,
+                "probability": 0.4866552385998353,
+                "frequency": 0.6
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 138,
+                "probability": 0.572570260454966,
+                "frequency": 0.6231884057971014
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1391,
+                "probability": 0.6581431359431057,
+                "frequency": 0.6441409058231489
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 265,
+                "probability": 0.7266771953256164,
+                "frequency": 0.7094339622641509
+              }
+            ]
+          }
+        },
+        {
+          "name": "hist-gradient-boosting",
+          "metrics": {
+            "n": 1804,
+            "correct": 1178,
+            "wrong": 626,
+            "undecided": 0,
+            "accuracy": 0.6529933481152993,
+            "coverage": 1.0,
+            "brier": 0.22710646149063346,
+            "logLoss": 0.6468933099407425,
+            "ece": 0.015591282467294257,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 26,
+                "probability": 0.4733560345595931,
+                "frequency": 0.46153846153846156
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 164,
+                "probability": 0.5634803113942856,
+                "frequency": 0.6036585365853658
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1379,
+                "probability": 0.6552196901794554,
+                "frequency": 0.659173313995649
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 233,
+                "probability": 0.7303460061655489,
+                "frequency": 0.6652360515021459
+              },
+              {
+                "from": 0.8,
+                "to": 0.9,
+                "n": 2,
+                "probability": 0.8037605310041354,
+                "frequency": 0.5
+              }
+            ]
+          }
+        },
+        {
+          "name": "random-forest",
+          "metrics": {
+            "n": 1804,
+            "correct": 1171,
+            "wrong": 633,
+            "undecided": 0,
+            "accuracy": 0.6491130820399114,
+            "coverage": 1.0,
+            "brier": 0.22615387445339016,
+            "logLoss": 0.6447051291696478,
+            "ece": 0.011243445702573579,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 11,
+                "probability": 0.4909196211619985,
+                "frequency": 0.7272727272727273
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 172,
+                "probability": 0.5712503467260509,
+                "frequency": 0.5406976744186046
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1394,
+                "probability": 0.6549852173860045,
+                "frequency": 0.6571018651362984
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 222,
+                "probability": 0.7322605861980435,
+                "frequency": 0.6936936936936937
+              },
+              {
+                "from": 0.8,
+                "to": 0.9,
+                "n": 5,
+                "probability": 0.8168449713062949,
+                "frequency": 1.0
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "transfer": {
+    "n": 249,
+    "observedDays": 1,
+    "jointReference": {
+      "n": 249,
+      "correct": 41,
+      "wrong": 208,
+      "undecided": 0,
+      "accuracy": 0.1646586345381526,
+      "brier": 0.8346964856215396,
+      "logLoss": 1.7957180281297624
+    },
+    "joint": {
+      "categorical-catboost": {
+        "n": 249,
+        "correct": 60,
+        "wrong": 189,
+        "undecided": 0,
+        "accuracy": 0.24096385542168675,
+        "brier": 0.8325863073617831,
+        "logLoss": 1.7899139507764663
+      },
+      "categorical-mlp": {
+        "n": 249,
+        "correct": 41,
+        "wrong": 208,
+        "undecided": 0,
+        "accuracy": 0.1646586345381526,
+        "brier": 0.8346964856215396,
+        "logLoss": 1.7957180281297624
+      },
+      "calibration-selector": {
+        "n": 249,
+        "correct": 60,
+        "wrong": 189,
+        "undecided": 0,
+        "accuracy": 0.24096385542168675,
+        "brier": 0.8325863073617831,
+        "logLoss": 1.7899139507764663
+      },
+      "fixed-pool": {
+        "n": 249,
+        "correct": 52,
+        "wrong": 197,
+        "undecided": 0,
+        "accuracy": 0.20883534136546184,
+        "brier": 0.833536755811191,
+        "logLoss": 1.7924940502966258
+      }
+    },
+    "targets": [
+      {
+        "target": "winner",
+        "reference": {
+          "n": 249,
+          "correct": 133,
+          "wrong": 116,
+          "undecided": 0,
+          "accuracy": 0.5341365461847389,
+          "coverage": 1.0,
+          "brier": 0.24993050633005526,
+          "logLoss": 0.6930080141579346,
+          "ece": 0.039604532576930064,
+          "calibration": [
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 203,
+              "probability": 0.4925822542813874,
+              "frequency": 0.45320197044334976
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 46,
+              "probability": 0.5188550215768248,
+              "frequency": 0.4782608695652174
+            }
+          ]
+        },
+        "models": {
+          "categorical-catboost": {
+            "n": 249,
+            "correct": 138,
+            "wrong": 111,
+            "undecided": 0,
+            "accuracy": 0.5542168674698795,
+            "coverage": 1.0,
+            "brier": 0.2466871827091318,
+            "logLoss": 0.686510854823042,
+            "ece": 0.040525612157272094,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 156,
+                "probability": 0.4829785166147728,
+                "frequency": 0.4230769230769231
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 93,
+                "probability": 0.5081050662875678,
+                "frequency": 0.5161290322580645
+              }
+            ]
+          },
+          "categorical-mlp": {
+            "n": 249,
+            "correct": 133,
+            "wrong": 116,
+            "undecided": 0,
+            "accuracy": 0.5341365461847389,
+            "coverage": 1.0,
+            "brier": 0.24993050633005526,
+            "logLoss": 0.6930080141579346,
+            "ece": 0.039604532576930064,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 203,
+                "probability": 0.4925822542813874,
+                "frequency": 0.45320197044334976
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 46,
+                "probability": 0.5188550215768248,
+                "frequency": 0.4782608695652174
+              }
+            ]
+          },
+          "calibration-selector": {
+            "n": 249,
+            "correct": 138,
+            "wrong": 111,
+            "undecided": 0,
+            "accuracy": 0.5542168674698795,
+            "coverage": 1.0,
+            "brier": 0.2466871827091318,
+            "logLoss": 0.686510854823042,
+            "ece": 0.040525612157272094,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 156,
+                "probability": 0.4829785166147728,
+                "frequency": 0.4230769230769231
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 93,
+                "probability": 0.5081050662875678,
+                "frequency": 0.5161290322580645
+              }
+            ]
+          },
+          "fixed-pool": {
+            "n": 249,
+            "correct": 135,
+            "wrong": 114,
+            "undecided": 0,
+            "accuracy": 0.5421686746987951,
+            "coverage": 1.0,
+            "brier": 0.24824339721583552,
+            "logLoss": 0.6896305877764735,
+            "ece": 0.03706816941426497,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 163,
+                "probability": 0.487390080382511,
+                "frequency": 0.43558282208588955
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 86,
+                "probability": 0.509132454439566,
+                "frequency": 0.5
+              }
+            ]
+          }
+        }
+      },
+      {
+        "target": "sets-over-3.5",
+        "reference": {
+          "n": 249,
+          "correct": 162,
+          "wrong": 87,
+          "undecided": 0,
+          "accuracy": 0.6506024096385542,
+          "coverage": 1.0,
+          "brier": 0.23072705403825078,
+          "logLoss": 0.655031547988646,
+          "ece": 0.06114694745927788,
+          "calibration": [
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 92,
+              "probability": 0.6945171143222442,
+              "frequency": 0.7065217391304348
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 157,
+              "probability": 0.7077781174204245,
+              "frequency": 0.6178343949044586
+            }
+          ]
+        },
+        "models": {
+          "categorical-catboost": {
+            "n": 249,
+            "correct": 162,
+            "wrong": 87,
+            "undecided": 0,
+            "accuracy": 0.6506024096385542,
+            "coverage": 1.0,
+            "brier": 0.23145720678836146,
+            "logLoss": 0.6568150862065593,
+            "ece": 0.06857868395625956,
+            "calibration": [
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 26,
+                "probability": 0.6922908890270721,
+                "frequency": 0.7307692307692307
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 223,
+                "probability": 0.7133437462771861,
+                "frequency": 0.6412556053811659
+              }
+            ]
+          },
+          "categorical-mlp": {
+            "n": 249,
+            "correct": 162,
+            "wrong": 87,
+            "undecided": 0,
+            "accuracy": 0.6506024096385542,
+            "coverage": 1.0,
+            "brier": 0.23072705403825078,
+            "logLoss": 0.655031547988646,
+            "ece": 0.06114694745927788,
+            "calibration": [
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 92,
+                "probability": 0.6945171143222442,
+                "frequency": 0.7065217391304348
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 157,
+                "probability": 0.7077781174204245,
+                "frequency": 0.6178343949044586
+              }
+            ]
+          },
+          "calibration-selector": {
+            "n": 249,
+            "correct": 162,
+            "wrong": 87,
+            "undecided": 0,
+            "accuracy": 0.6506024096385542,
+            "coverage": 1.0,
+            "brier": 0.23145720678836146,
+            "logLoss": 0.6568150862065593,
+            "ece": 0.06857868395625956,
+            "calibration": [
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 26,
+                "probability": 0.6922908890270721,
+                "frequency": 0.7307692307692307
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 223,
+                "probability": 0.7133437462771861,
+                "frequency": 0.6412556053811659
+              }
+            ]
+          },
+          "fixed-pool": {
+            "n": 249,
+            "correct": 162,
+            "wrong": 87,
+            "undecided": 0,
+            "accuracy": 0.6506024096385542,
+            "coverage": 1.0,
+            "brier": 0.23106189599337795,
+            "logLoss": 0.6558458500417141,
+            "ece": 0.07196112951371075,
+            "calibration": [
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 39,
+                "probability": 0.6939443268547534,
+                "frequency": 0.7435897435897436
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 210,
+                "probability": 0.7094388095059493,
+                "frequency": 0.6333333333333333
+              }
+            ]
+          }
+        }
+      },
+      {
+        "target": "sets-over-4.5",
+        "reference": {
+          "n": 249,
+          "correct": 176,
+          "wrong": 73,
+          "undecided": 0,
+          "accuracy": 0.7068273092369478,
+          "coverage": 1.0,
+          "brier": 0.20742639367765564,
+          "logLoss": 0.6054520295682295,
+          "ece": 0.024744584394385427,
+          "calibration": [
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 249,
+              "probability": 0.3179172751574376,
+              "frequency": 0.2931726907630522
+            }
+          ]
+        },
+        "models": {
+          "categorical-catboost": {
+            "n": 249,
+            "correct": 176,
+            "wrong": 73,
+            "undecided": 0,
+            "accuracy": 0.7068273092369478,
+            "coverage": 1.0,
+            "brier": 0.20754340972120983,
+            "logLoss": 0.6057352234414054,
+            "ece": 0.029822164762156926,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 3,
+                "probability": 0.2990023285701788,
+                "frequency": 0.0
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 246,
+                "probability": 0.32328744731734366,
+                "frequency": 0.2967479674796748
+              }
+            ]
+          },
+          "categorical-mlp": {
+            "n": 249,
+            "correct": 176,
+            "wrong": 73,
+            "undecided": 0,
+            "accuracy": 0.7068273092369478,
+            "coverage": 1.0,
+            "brier": 0.20742639367765564,
+            "logLoss": 0.6054520295682295,
+            "ece": 0.024744584394385427,
+            "calibration": [
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 249,
+                "probability": 0.3179172751574376,
+                "frequency": 0.2931726907630522
+              }
+            ]
+          },
+          "calibration-selector": {
+            "n": 249,
+            "correct": 176,
+            "wrong": 73,
+            "undecided": 0,
+            "accuracy": 0.7068273092369478,
+            "coverage": 1.0,
+            "brier": 0.20754340972120983,
+            "logLoss": 0.6057352234414054,
+            "ece": 0.029822164762156926,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 3,
+                "probability": 0.2990023285701788,
+                "frequency": 0.0
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 246,
+                "probability": 0.32328744731734366,
+                "frequency": 0.2967479674796748
+              }
+            ]
+          },
+          "fixed-pool": {
+            "n": 249,
+            "correct": 176,
+            "wrong": 73,
+            "undecided": 0,
+            "accuracy": 0.7068273092369478,
+            "coverage": 1.0,
+            "brier": 0.20746637504590407,
+            "logLoss": 0.605554021539126,
+            "ece": 0.027283374578271236,
+            "calibration": [
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 249,
+                "probability": 0.3204560653413234,
+                "frequency": 0.2931726907630522
+              }
+            ]
+          }
+        }
+      },
+      {
+        "target": "home-set-handicap-minus-1.5",
+        "reference": {
+          "n": 249,
+          "correct": 168,
+          "wrong": 81,
+          "undecided": 0,
+          "accuracy": 0.6746987951807228,
+          "coverage": 1.0,
+          "brier": 0.2196446082720052,
+          "logLoss": 0.6311679355025115,
+          "ece": 0.01305837581956626,
+          "calibration": [
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 249,
+              "probability": 0.33835958063884336,
+              "frequency": 0.3253012048192771
+            }
+          ]
+        },
+        "models": {
+          "categorical-catboost": {
+            "n": 249,
+            "correct": 168,
+            "wrong": 81,
+            "undecided": 0,
+            "accuracy": 0.6746987951807228,
+            "coverage": 1.0,
+            "brier": 0.217335394757368,
+            "logLoss": 0.6259258357320885,
+            "ece": 0.005460506784101493,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 1,
+                "probability": 0.2965687372758347,
+                "frequency": 0.0
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 248,
+                "probability": 0.3308995864998606,
+                "frequency": 0.32661290322580644
+              }
+            ]
+          },
+          "categorical-mlp": {
+            "n": 249,
+            "correct": 168,
+            "wrong": 81,
+            "undecided": 0,
+            "accuracy": 0.6746987951807228,
+            "coverage": 1.0,
+            "brier": 0.2196446082720052,
+            "logLoss": 0.6311679355025115,
+            "ece": 0.01305837581956626,
+            "calibration": [
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 249,
+                "probability": 0.33835958063884336,
+                "frequency": 0.3253012048192771
+              }
+            ]
+          },
+          "calibration-selector": {
+            "n": 249,
+            "correct": 168,
+            "wrong": 81,
+            "undecided": 0,
+            "accuracy": 0.6746987951807228,
+            "coverage": 1.0,
+            "brier": 0.217335394757368,
+            "logLoss": 0.6259258357320885,
+            "ece": 0.005460506784101493,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 1,
+                "probability": 0.2965687372758347,
+                "frequency": 0.0
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 248,
+                "probability": 0.3308995864998606,
+                "frequency": 0.32661290322580644
+              }
+            ]
+          },
+          "fixed-pool": {
+            "n": 249,
+            "correct": 168,
+            "wrong": 81,
+            "undecided": 0,
+            "accuracy": 0.6746987951807228,
+            "coverage": 1.0,
+            "brier": 0.21843041396704657,
+            "logLoss": 0.6284291260365112,
+            "ece": 0.00925944130183387,
+            "calibration": [
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 249,
+                "probability": 0.33456064612111097,
+                "frequency": 0.3253012048192771
+              }
+            ]
+          }
+        }
+      },
+      {
+        "target": "home-set-handicap-plus-1.5",
+        "reference": {
+          "n": 249,
+          "correct": 154,
+          "wrong": 95,
+          "undecided": 0,
+          "accuracy": 0.6184738955823293,
+          "coverage": 1.0,
+          "brier": 0.23714183877661724,
+          "logLoss": 0.6673939238519108,
+          "ece": 0.037802960213951686,
+          "calibration": [
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 249,
+              "probability": 0.656276855796281,
+              "frequency": 0.6184738955823293
+            }
+          ]
+        },
+        "models": {
+          "categorical-catboost": {
+            "n": 249,
+            "correct": 154,
+            "wrong": 95,
+            "undecided": 0,
+            "accuracy": 0.6184738955823293,
+            "coverage": 1.0,
+            "brier": 0.23456303977524307,
+            "logLoss": 0.6617069779921882,
+            "ece": 0.03528267154625838,
+            "calibration": [
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 1,
+                "probability": 0.5961842869977729,
+                "frequency": 0.0
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 248,
+                "probability": 0.6539887134194378,
+                "frequency": 0.6209677419354839
+              }
+            ]
+          },
+          "categorical-mlp": {
+            "n": 249,
+            "correct": 154,
+            "wrong": 95,
+            "undecided": 0,
+            "accuracy": 0.6184738955823293,
+            "coverage": 1.0,
+            "brier": 0.23714183877661724,
+            "logLoss": 0.6673939238519108,
+            "ece": 0.037802960213951686,
+            "calibration": [
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 249,
+                "probability": 0.656276855796281,
+                "frequency": 0.6184738955823293
+              }
+            ]
+          },
+          "calibration-selector": {
+            "n": 249,
+            "correct": 154,
+            "wrong": 95,
+            "undecided": 0,
+            "accuracy": 0.6184738955823293,
+            "coverage": 1.0,
+            "brier": 0.23456303977524307,
+            "logLoss": 0.6617069779921882,
+            "ece": 0.03528267154625838,
+            "calibration": [
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 1,
+                "probability": 0.5961842869977729,
+                "frequency": 0.0
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 248,
+                "probability": 0.6539887134194378,
+                "frequency": 0.6209677419354839
+              }
+            ]
+          },
+          "fixed-pool": {
+            "n": 249,
+            "correct": 154,
+            "wrong": 95,
+            "undecided": 0,
+            "accuracy": 0.6184738955823293,
+            "coverage": 1.0,
+            "brier": 0.2357971065427536,
+            "logLoss": 0.6644226499597009,
+            "ece": 0.036542815880104995,
+            "calibration": [
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 249,
+                "probability": 0.6550167114624343,
+                "frequency": 0.6184738955823293
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "file": "coherent-v21-fold-1-categorical-catboost.joblib",
+      "sha256": "69d3c79f8337abd2e1dda405e03b40095163b597ce5d2a40e879e436578d5bc7",
+      "bytes": 133841
+    },
+    {
+      "file": "coherent-v21-fold-1-categorical-mlp.joblib",
+      "sha256": "f46d8ee4acce274e5937ef60006d7bbd8d70f0bdb022890e3722292814ef5ba9",
+      "bytes": 13840
+    },
+    {
+      "file": "coherent-v21-fold-2-categorical-catboost.joblib",
+      "sha256": "0e2e1398a911696faaa655d957ca61c7e60a6a84dc739d94b54cc5df53f44b9f",
+      "bytes": 134299
+    },
+    {
+      "file": "coherent-v21-fold-2-categorical-mlp.joblib",
+      "sha256": "0d6d08bc9c55ae709197ac74519f713531d07f531d0b97f4b08566160f0cb737",
+      "bytes": 14096
+    },
+    {
+      "file": "coherent-v21-fold-3-categorical-catboost.joblib",
+      "sha256": "1d45c4bcaaf27c1d91a90b6c33b1707bb637cda60fdd141d6f92bc4b3e4455d6",
+      "bytes": 134459
+    },
+    {
+      "file": "coherent-v21-fold-3-categorical-mlp.joblib",
+      "sha256": "2b0e5a3f911f6ec6f3c11a0d9bc67aac6001eb82a5137c873662069e744218aa",
+      "bytes": 14224
+    },
+    {
+      "file": "coherent-v21-fold-4-categorical-catboost.joblib",
+      "sha256": "c3e2964353df2e9651bdade533c6f59b9de8bc73f6fa03fd656722ed33a9a8fa",
+      "bytes": 135195
+    },
+    {
+      "file": "coherent-v21-fold-4-categorical-mlp.joblib",
+      "sha256": "76e82417aaafc61b8d97f9f6ec4f8663e2ba32dfb0d9a9bfd143e1b35117dc21",
+      "bytes": 19504
+    }
+  ],
+  "sourceCodeHash": "72e3ad74776046b462b78127ce38cf1b85dc4bcd7b801097625ddf832eb17237",
+  "seconds": 10.808295128001191,
+  "fittedModels": 24,
+  "independentValidation": false,
+  "operationallyValidated": false,
+  "automaticPromotion": false,
+  "roi": null
+}
