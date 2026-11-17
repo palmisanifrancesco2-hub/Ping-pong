@@ -1,5 +1,7 @@
 import {z} from 'zod';
 import type{MatchResult}from '../src/domain/player-model.js';
+import {movioddsRequest} from './moviodds-request.js';
+import type {Env} from './auth.js';
 const time=z.iso.datetime({offset:true});
 const raw=z.object({fixture_id:z.string(),sport:z.literal('table_tennis'),home:z.string().min(1),away:z.string().min(1),league:z.string().min(1),status:z.string(),final_score:z.string(),finished_at:time,updated_at:time.optional(),periods:z.array(z.object({name:z.string(),score:z.string()})).optional()});
 export function parseResult(input:unknown,now:number):MatchResult|null{
@@ -16,11 +18,11 @@ export function parseResult(input:unknown,now:number):MatchResult|null{
 export type ResultsArchive={results:MatchResult[];checkedAt:string;source:string;rejected:number;from:string|null;to:string|null};
 export class ResultsFeed{
  private cached?:{at:number;data:ResultsArchive};private pending?:Promise<ResultsArchive>;private failedAt?:number;
- constructor(private fetcher:typeof fetch=fetch,private now=Date.now){}
+ constructor(private fetcher:typeof fetch=fetch,private now=Date.now,private env:Env=process.env){}
  async archive(){if(this.cached&&this.now()-this.cached.at<300_000)return this.cached.data;if(this.failedAt&&this.now()-this.failedAt<30_000)throw new Error('RESULTS_COOLDOWN');if(this.pending)return this.pending;this.pending=this.read();try{return await this.pending;}finally{this.pending=undefined;}}
  private async read():Promise<ResultsArchive>{
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),60_000);
-  try{const response=await this.fetcher('https://moviodds.com/results?sport=table_tennis',{signal:controller.signal,redirect:'error',headers:{Accept:'application/json'},cache:'no-store'});if(!response.ok||!response.body)throw new Error('results');
+  try{const response=await movioddsRequest('https://moviodds.com/results?sport=table_tennis',{signal:controller.signal,redirect:'error',headers:{Accept:'application/json'},cache:'no-store'},this.fetcher,this.env);if(!response.ok||!response.body)throw new Error('results');
    const reader=response.body.getReader(),chunks:Uint8Array[]=[];let bytes=0;try{for(;;){const c=await reader.read();if(c.done)break;bytes+=c.value.byteLength;if(bytes>20_000_000)throw new Error('results_size');chunks.push(c.value);}}finally{await reader.cancel().catch(()=>{});}
    const payload=z.object({source:z.enum(['postgres','memory']),results:z.array(z.unknown()).max(100_000)}).parse(JSON.parse(Buffer.concat(chunks).toString('utf8')));
    const byId=new Map<string,MatchResult>();const conflicts=new Set<string>();let rejected=0;

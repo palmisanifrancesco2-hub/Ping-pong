@@ -11,6 +11,7 @@ import {predictMarkets,marketRuntimeVersion} from '../src/domain/market-runtime.
 import {marketStudyProtocol as protocol,marketCheckpoint,marketDescriptive,type MarketStudyCase} from '../src/domain/market-validation.js';
 import {playerKey,type MatchResult} from '../src/domain/player-model.js';
 import {verifiedStart} from '../src/domain/research-source.js';
+import {movioddsRequest} from './moviodds-request.js';
 import type {Board} from '../src/shared/board.js';
 import type {Env} from './auth.js';
 
@@ -51,7 +52,7 @@ export function settleMarketCase(c:MarketStudyCase,r:MatchResult,payload:unknown
 type Stored={id:string;created_at:string;parameters:{studyId:string;userId:string;case:MarketStudyCase}};
 export class MarketStudy{
   private store:ForecastStore;private owner:ProspectiveStudy;private pending?:Promise<unknown>;private shadow:WinnerShadow;
-  constructor(private env:Env,private now=Date.now,private results=new ResultsFeed(),private feed:Pick<MoviOddsFeed,'board'>=new MoviOddsFeed()){
+  constructor(private env:Env,private now=Date.now,private results=new ResultsFeed(fetch,now,env),private feed:Pick<MoviOddsFeed,'board'>=new MoviOddsFeed(fetch,now,env)){
     this.store=new ForecastStore(env,now);this.owner=new ProspectiveStudy(env,now,results,feed as MoviOddsFeed);
     this.shadow=new WinnerShadow(env,now);
   }
@@ -144,7 +145,9 @@ export class MarketStudy{
         const slot=Math.max(this.now(),next);next=slot+750;await new Promise(resolve=>setTimeout(resolve,Math.max(0,slot-this.now())));attempted++;
         let payload:unknown=null;
         try{
-          const response=await fetch(`https://moviodds.com/closing?fi=${encodeURIComponent(r.id)}`,{signal:AbortSignal.timeout(6000),redirect:'error'});
+          const response=await movioddsRequest(`https://moviodds.com/closing?fi=${encodeURIComponent(r.id)}`,{signal:AbortSignal.timeout(6000)},fetch,this.env);
+          // Plan/auth denials must not consume every pending event's attempts.
+          if(response.status===401||response.status===403){sourceErrors++;console.warn('MOVIODDS_CLOSING_ACCESS_DENIED');break;}
           if(response.status===429||response.status===503){
             sourceErrors++;const retry=response.headers.get('retry-after'),numeric=Number(retry),until=retry&&Number.isFinite(numeric)?this.now()+numeric*1000:Date.parse(retry??'');
             const saved=await saveMeta(cooldownId,`Market cooldown ${protocol.id}`,`${protocol.id}:cooldown`,{until:Math.max(this.now()+15*60000,Number.isFinite(until)?until:0)});if(saved.error)throw Error('MARKET_STUDY_COOLDOWN_FAILED');break;

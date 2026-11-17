@@ -84,3 +84,8 @@ Completate analisi input, protocollo temporale, installazione isolata, training 
 ## Audit del 17 novembre 2026 — fonte ora autenticata
 
 Verificati entrambi gli endpoint MoviOdds: HTTP 401 / API key required. Documentazione corrente richiede X-API-Key; connettori del commit di produzione 7abd3a0 non lo inviano. Piano gratuito pubblicizzato limitato; nessuna garanzia di tutti i mercati o polling continuativo a 30 secondi. Ricontrollati 23.596 risultati principali, unione non duplicata 23.670, 2.168 feature row e 153 coppie quote allineate senza errori osservati. WTT e Setka mantengono i limiti già documentati. Nessun nuovo training o modello promosso. Lettura privata corrente bloccata dalla revisione automatica della diagnostica con credenziali di produzione; nessuna build avviata. Ultimo snapshot verificato resta 12 novembre (800/730/67/3), non dato attuale. [Rapporto, dati mancanti e azioni necessarie](VERIFICA-DATI-2026-11-17.md).
+
+
+## Ripristino autenticazione MoviOdds
+
+Dopo la conferma del salvataggio della chiave privata in Vercel, implementato header X-API-Key server-side per board, risultati, discovery e closing, senza esposizione al browser. Blocco di domini estranei/redirect e stop dei cicli su 401/403 closing senza consumare tentativi individuali. 287 test/41 file, TypeScript, build e smoke ESM passati. Nessuno script di audit privato eseguito; nessun modello o protocollo modificato. Connessione reale e copertura del piano da confermare nel normale rilascio. [Dettagli](VERIFICA-DATI-2026-11-17.md).

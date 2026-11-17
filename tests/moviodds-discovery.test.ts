@@ -20,10 +20,13 @@ describe('MoviOdds discovery using synthetic fixtures', () => {
     expect(() => moviOddsReport({ ...payload, matches: [{ ...match, sport: 'tennis' }] }, now)).toThrow();
     expect(() => moviOddsReport({ ...payload, matches: [{ ...match, id: 'other' }] }, now)).toThrow();
   });
-  it('makes one public request without credentials or retry', async () => {
+  it('makes one request without invented credentials or retry when the server key is absent', async () => {
     const fetcher = vi.fn().mockResolvedValue(Response.json({ server_time: new Date().toISOString(), matches: [] }));
-    expect(await checkMoviOdds(fetcher)).toMatchObject({ reportedMatches: 0 });
-    expect(fetcher).toHaveBeenCalledExactlyOnceWith(MOVIODDS_URL, expect.objectContaining({ redirect: 'error', cache: 'no-store', headers: { Accept: 'application/json' } }));
+    expect(await checkMoviOdds(fetcher, {})).toMatchObject({ reportedMatches: 0 });
+    expect(fetcher).toHaveBeenCalledExactlyOnceWith(MOVIODDS_URL, expect.objectContaining({ redirect: 'error', cache: 'no-store' }));
+    const headers = new Headers(fetcher.mock.calls[0][1].headers);
+    expect(headers.get('Accept')).toBe('application/json');
+    expect(headers.has('X-API-Key')).toBe(false);
   });
   it('sanitizes provider errors and rate limits', async () => {
     const fetcher = vi.fn().mockResolvedValue(new Response('upstream details', { status: 429 }));

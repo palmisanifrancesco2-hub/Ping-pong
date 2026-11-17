@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { COMPETITIONS } from '../src/shared/contracts.js';
+import {movioddsRequest} from './moviodds-request.js';
+import type {Env} from './auth.js';
 
 export const MOVIODDS_URL = 'https://moviodds.com/odds?sport=table_tennis';
 const timestamp = z.iso.datetime({ offset: true });
@@ -41,13 +43,13 @@ export function moviOddsReport(payload: unknown, checkedAt: string) {
   };
 }
 
-export async function checkMoviOdds(fetcher: typeof fetch = fetch) {
+export async function checkMoviOdds(fetcher: typeof fetch = fetch, env: Env = process.env) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15_000);
   try {
-    const response = await fetcher(MOVIODDS_URL, {
+    const response = await movioddsRequest(MOVIODDS_URL, {
       signal: controller.signal, redirect: 'error', cache: 'no-store', headers: { Accept: 'application/json' },
-    });
+    }, fetcher, env);
     if (!response.ok) throw new Error('upstream_error');
     return moviOddsReport(await response.json(), new Date().toISOString());
   } catch {

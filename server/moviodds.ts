@@ -2,6 +2,8 @@ import { z } from 'zod';
 import type { Board } from '../src/shared/board.js';
 import { isUpcomingOrLive, quoteIdentity } from '../src/shared/board.js';
 import { MOVIODDS_URL } from './moviodds-discovery.js';
+import {movioddsRequest} from './moviodds-request.js';
+import type {Env} from './auth.js';
 
 const text = z.string().max(500);
 const time = z.iso.datetime({ offset: true });
@@ -44,7 +46,7 @@ export class MoviOddsFeed {
   private cached?: { at: number; board: Board };
   private pending?: Promise<Board>;
   private failedAt?: number;
-  constructor(private fetcher: typeof fetch = fetch, private now: () => number = Date.now) {}
+  constructor(private fetcher: typeof fetch = fetch, private now: () => number = Date.now, private env: Env = process.env) {}
   async board(force = false): Promise<Board> {
     const board = await this.rawBoard(force);
     return { ...board, matches: board.matches.filter(m => isUpcomingOrLive(m, this.now())) };
@@ -60,9 +62,9 @@ export class MoviOddsFeed {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 15_000);
     try {
-      const response = await this.fetcher(MOVIODDS_URL, {
+      const response = await movioddsRequest(MOVIODDS_URL, {
         signal: controller.signal, redirect: 'error', cache: 'no-store', headers: { Accept: 'application/json' },
-      });
+      }, this.fetcher, this.env);
       if (!response.ok || !response.body) throw new Error('upstream');
       // Bound the decompressed payload below the Vercel response size limit.
       const reader = response.body.getReader();
