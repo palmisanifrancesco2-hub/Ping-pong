@@ -89,3 +89,8 @@ Verificati entrambi gli endpoint MoviOdds: HTTP 401 / API key required. Document
 ## Ripristino autenticazione MoviOdds
 
 Dopo la conferma del salvataggio della chiave privata in Vercel, implementato header X-API-Key server-side per board, risultati, discovery e closing, senza esposizione al browser. Blocco di domini estranei/redirect e stop dei cicli su 401/403 closing senza consumare tentativi individuali. 287 test/41 file, TypeScript, build e smoke ESM passati. Nessuno script di audit privato eseguito; nessun modello o protocollo modificato. Connessione reale e copertura del piano da confermare nel normale rilascio. [Dettagli](VERIFICA-DATI-2026-11-17.md).
+
+
+## Collegamento ripristinato e rilascio verificato
+
+Commit 82d1360, Production dpl_E1BYD5HUxc9Ymn6KaNwHtN47Q34n READY, alias e health 200. Chiave accettata nei controlli normali: 454 eventi live/futuri, 3.130 voci quota; archivio 33.934 risultati accettati e 1.329 righe rifiutate. Raccolta originale ripresa con 100 catture e 97 esiti aggiornati, zero errori di fonte. v9 attuale 1.200/1.057 settled/140 pending/3 invalidi, 12 giorni; vincente 562 corretti e 495 errati. Training oggi già tentato, nessun nuovo fitting o promozione. v10 separato su 748 esiti mantiene Brier bookmaker 0,229301 migliore del completo 0,242154. [Rilascio, dati e limiti](VERIFICA-DATI-2026-11-17.md).

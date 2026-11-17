@@ -87,3 +87,31 @@ Il proprietario ha confermato di avere salvato `MOVIODDS_API_KEY` su Vercel Prod
 Sui closing, un rifiuto 401/403 ferma il ciclo senza consumare i tentativi dei singoli eventi successivi. Questo evita di trasformare la mancanza di accesso del piano in cento errori di partita; non autorizza un closing non disponibile e non modifica le regole degli studi congelati. Timeout, cache, cooldown e limiti di dimensione esistenti restano attivi. Il piano Free può non includere closing e mercati secondari: autenticazione riuscita non significa copertura completa o validazione statistica.
 
 Sei nuovi test di autenticazione usano esclusivamente chiavi sintetiche. Controllano inoltro degli header, assenza della chiave negli URL, origine e redirect, input non validi, comportamento senza chiave, i tre client e gli errori di accesso. Il test discovery precedente è aggiornato per verificare gli header normalizzati e l’assenza di credenziali inventate, invece di presumere che l’API resti pubblica per sempre. Suite finale: 287 test in 41 file, TypeScript, build Vite e avvio server ESM compilato passati localmente. Nessuna libreria ML, nuovo modello, migrazione o accesso privato mediante lo script audit è introdotto da questo cambiamento. La verifica effettiva di connessione verrà registrata dopo il rilascio normale, tramite i controlli feed/risultati già previsti dal progetto.
+
+
+### Connessione autenticata effettivamente verificata
+
+Nel normale build Production del commit `82d13602a6c32437f14619ff7e22e8e107223804`, i controlli del 17 novembre alle 19:44:39–40 UTC hanno restituito successo: feed MoviOdds non in warming, 454 eventi live/futuri, nove competizioni correnti, 43 nomi/gruppi di mercato e 3.130 voci quota. Archivio Postgres: 33.934 risultati accettati, 1.329 record rifiutati dal parser/controlli, intervallo 5 ottobre–17 novembre 2026, ultimo risultato alle 19:40:52 UTC. Il numero di rifiuti non ne identifica singolarmente la causa e non significa automaticamente altrettanti risultati sportivi sbagliati.
+
+I dati sono aggregati reali dei controlli già previsti dal build; nessuna chiave è stata estratta o pubblicata e lo script di audit privato non è stato eseguito. L’API autenticata è raggiungibile; ciò non dimostra accesso futuro illimitato, closing inclusi nel piano o riuscita di ogni training. CI GitHub push/PR del commit entrambe concluse con successo (run 44161727367 e 44161712541). Asset client controllati: nessuna presenza dei marcatori MOVIODDS_API_KEY, X-API-Key o della chiave sintetica di test. Compilato cloud Node26.13.1 avviato correttamente. Stato finale del deployment e raccolta sono documentati soltanto quando verificati.
+
+
+### Rilascio concluso e dati aggiornati — 17 novembre, 19:47 UTC
+
+Deployment Production `dpl_E1BYD5HUxc9Ymn6KaNwHtN47Q34n` READY sul commit `82d13602a6c32437f14619ff7e22e8e107223804`, alias https://ping-pong-ping-pong3.vercel.app verificato e health HTTP 200. È il normale rilascio del connettore richiesto dopo l’inserimento della chiave, non la diagnostica privata precedentemente rifiutata. Nessuno script audit privato eseguito, nuova migrazione o modello promosso.
+
+Il bootstrap originale ha acquisito **100 nuovi incontri** e aggiornato **97 esiti** su 97 tentativi, con **zero errori di fonte**. Stato v9 verificato alle 19:46:31 UTC: **1.200 registrati, 1.057 settled, 140 pending, tre invalidi, 12 giorni osservati**. Sul vincente del candidato v9: **562 corretti, 495 errati (53,17%)**. Gli altri 14 target sono nel report aggregato; i risultati di più mercati sullo stesso incontro non sono nuove partite indipendenti.
+
+Il training del giorno era già stato tentato: `daily_already_attempted`. Questo non modifica né riscrive l’esito `insufficient_data` mostrato al mattino nello screenshot. Il cron resta programmato e riproverà nel prossimo giorno UTC; l’addestramento riuscirà soltanto quando le finestre recenti di calibrazione e test avranno i minimi richiesti. Non viene abbassata la soglia o riutilizzato il test storico per far partire forzatamente il training. Le risposte di closing usate dai 97 esiti erano accessibili durante questa esecuzione; ciò non certifica che il piano conservi tale accesso in futuro.
+
+Confronto v10 separato: 880 registrati, 748 settled, 128 pending, quattro invalidi, 12 giorni. Sugli stessi 748 casi:
+
+| Modello | Corretti | Errati | Brier | Log Loss |
+| --- | ---: | ---: | ---: | ---: |
+| Gerarchico corrente | 405 | 343 | 0,243767 | 0,680530 |
+| Completo logistica | 414 | 334 | 0,242154 | 0,677146 |
+| Punti/set logistica | 420 | 328 | 0,242479 | 0,677792 |
+| Contesto logistica | 417 | 331 | 0,243504 | 0,680007 |
+| Bookmaker no-vig | 425 | 260 | **0,229301** | **0,649518** |
+
+Il bookmaker ha anche 63 casi a probabilità esattamente 50%, senza selezione preferita: accuracy sui soli 685 decisi 62,04%, Brier/Log Loss su tutti i 748. Non si confronta questa accuracy con il v9 da 1.057 casi, né si sommano le coorti. Il mercato continua a fare meglio nelle metriche probabilistiche; nessun vantaggio indipendente dimostrato e nessun ROI inventato. Conteggi, metriche e riferimenti temporali salvati in [restored-source-20261117.json](../research/restored-source-20261117.json).
