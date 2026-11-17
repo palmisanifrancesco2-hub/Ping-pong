@@ -94,3 +94,8 @@ Dopo la conferma del salvataggio della chiave privata in Vercel, implementato he
 ## Collegamento ripristinato e rilascio verificato
 
 Commit 82d1360, Production dpl_E1BYD5HUxc9Ymn6KaNwHtN47Q34n READY, alias e health 200. Chiave accettata nei controlli normali: 454 eventi live/futuri, 3.130 voci quota; archivio 33.934 risultati accettati e 1.329 righe rifiutate. Raccolta originale ripresa con 100 catture e 97 esiti aggiornati, zero errori di fonte. v9 attuale 1.200/1.057 settled/140 pending/3 invalidi, 12 giorni; vincente 562 corretti e 495 errati. Training oggi già tentato, nessun nuovo fitting o promozione. v10 separato su 748 esiti mantiene Brier bookmaker 0,229301 migliore del completo 0,242154. [Rilascio, dati e limiti](VERIFICA-DATI-2026-11-17.md).
+
+
+## Test aggiuntivo v20 — modelli congelati, 249 casi distinti
+
+Completata una verifica retrospettiva sui 249 incontri di conferma già disponibili, nessun overlap con i 2.168 ID principali. Sette artefatti verificati con hash, nessun fitting o ricalibrazione, due pool a pesi fissi e 14 mercati. Vincente: Random Forest 144/105 (57,83%); CatBoost e NGBoost 141/108 (56,63%); pool 139/110. NGBoost ha Brier più basso (0,241101), senza nuovo vincitore operativo. Una sola giornata già esaminata in studi precedenti: nessuna validazione indipendente. Solo 28 coppie quote valide, niente ROI. Totali punti dei nuovi candidati coincidono con il riferimento dopo shrinkage congelato a zero. 33 test Python passati, nessun nuovo costo, runtime o cron cambiato. [Rapporto e limiti](TEST-CONGELATI-V20.md).
