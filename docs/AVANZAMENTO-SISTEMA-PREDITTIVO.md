@@ -79,3 +79,8 @@ Prima esecuzione reale del training salvata in Production: **362 training / 87 c
 ## Benchmark v18 — CatBoost, NGBoost e normalizing flow
 
 Completate analisi input, protocollo temporale, installazione isolata, training reale e valutazione: 1.804 incontri comuni su nove giorni, 14 mercati per i due classificatori, sette mercati punti per il flow e 12 artefatti privati. CatBoost 946 corretti/858 errati sul vincente, NGBoost 936/868; gerarchico precedente 977/827. Nessun nuovo modello supera il migliore Brier precedente sul vincente; miglioramenti locali rispetto alla frequenza di competizione non superano tutti i modelli già studiati. Nessuna validazione indipendente, ROI o promozione. Training giornaliero e app invariati. [Protocollo, risultati completi, limiti e riproduzione](CONFRONTO-PROBABILISTICO-V18.md).
+
+
+## Audit del 17 novembre 2026 — fonte ora autenticata
+
+Verificati entrambi gli endpoint MoviOdds: HTTP 401 / API key required. Documentazione corrente richiede X-API-Key; connettori del commit di produzione 7abd3a0 non lo inviano. Piano gratuito pubblicizzato limitato; nessuna garanzia di tutti i mercati o polling continuativo a 30 secondi. Ricontrollati 23.596 risultati principali, unione non duplicata 23.670, 2.168 feature row e 153 coppie quote allineate senza errori osservati. WTT e Setka mantengono i limiti già documentati. Nessun nuovo training o modello promosso. Lettura privata corrente bloccata dalla revisione automatica della diagnostica con credenziali di produzione; nessuna build avviata. Ultimo snapshot verificato resta 12 novembre (800/730/67/3), non dato attuale. [Rapporto, dati mancanti e azioni necessarie](VERIFICA-DATI-2026-11-17.md).
