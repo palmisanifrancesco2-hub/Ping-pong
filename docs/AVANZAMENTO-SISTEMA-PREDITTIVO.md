@@ -109,3 +109,8 @@ Completati protocollo temporale, fitting reale di 24 modelli (tuning/refit), ott
 ## Quote dei pronostici corretti/sbagliati — v22
 
 Calcolate medie, mediane, estremi e differenze delle quote del lato realmente previsto dai modelli, con esiti corretti/sbagliati separati. Solo vincente, 88 incontri as-of principali e 28 del controllo, senza sovrapposizioni; non 116 nuove partite. Politiche complete, quota≥1,30 ed EV nominale positivo riportate separatamente, nessun massimo. Esempio principale filtrato: CatBoost coerente 21 corretti/quota media2,394, 13 errati/media2,438; rete23/media2,452 contro18/media2,646. Nessun ROI verificato, fitting, chiamata provider o modifica dell’app. [Tutte le tabelle e limiti](QUOTE-CORRETTI-SBAGLIATI-V22.md).
+
+
+## v23 — quote dei pronostici prospettici nell’app
+
+Usato il ledger v10 che già salva prezzi originali e quattro previsioni contemporanee: nuovo aggregatore owner-only con medie, mediane, differenza corretti/sbagliati, periodi fino a un anno e filtri min1,30/EV positivo, senza massimo. Contatori per dati mancanti, invalidi, duplicati e pareggi; nessun prezzo ricostruito o modello nuovo. Nuova sezione richiudibile e ricaricamento senza perdita di apertura/filtri. 293 test in42 file, TypeScript, build, smoke ESM e QA Android/desktop passati; nessun cambio ai protocolli congelati o nuove richieste provider. [Dettagli e limiti](QUOTE-PROSPETTICHE-V23.md).
