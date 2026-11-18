@@ -31,3 +31,25 @@ Chromium locale: componente integrato nella raccolta prospettica con report e au
 Revisione React: fetch esistente riutilizzato, nessuna nuova cascata di richieste, import dei tipi eliminati dal bundle, solo quattro schede, chiavi stabili, label del select e stato accessibile dei pulsanti. Nessuna nuova libreria o componente pesante. La sezione è chiusa inizialmente per mantenere leggibile la pagina da telefono.
 
 Il rilascio normale e gli aggregati effettivamente osservati verranno aggiunti qui dopo la verifica; la sola implementazione non prova la riuscita del cron del 18 novembre.
+
+
+## Rilascio e aggregati verificati — 18 novembre 2026
+
+Commit applicativo `c735d474598761638aee4183713d56084bed2c7c`, deployment Production `dpl_ACXuqPsNw6BWrWZY43oeimFBc8nn` READY, alias https://ping-pong-ping-pong3.vercel.app e health HTTP 200 verificati. CI push/PR concluse con successo sul commit (run 44247502203 / 44247493395). Ricerca runtime error/fatal degli ultimi dieci minuti senza voci; è una verifica limitata, non monitoraggio continuo. Il normale build ha usato i controlli già previsti: nessuno script di audit privato o nuova migrazione.
+
+Snapshot alle 05:55:53 UTC: studio v9 **1.300 registrati, 1.109 settled, 185 pending, sei invalidi, 13 giorni osservati**. Vincente: 589 corretti e 520 errati (53,11%). Nel run del build un esito aggiornato su un tentativo, zero errori di fonte e zero nuove catture: i 100 incontri del 18 novembre erano già presenti. Non si attribuiscono le precedenti catture a una specifica esecuzione senza il suo log.
+
+Confronto v10 distinto: **980 registrati, 800 settled, 173 pending, sette invalidi, 13 giorni**. Tutti gli 800 esiti hanno prezzi originali utilizzabili nel nuovo riepilogo; zero duplicati o quote mancanti nei controlli. I dati non vengono sommati a v9.
+
+Filtro sull’intero periodo, quota almeno 1,30 ed EV nominale positivo, lato più probabile del modello:
+
+| Modello | Corrette | Media quote corrette | Sbagliate | Media quote sbagliate | Saldo teorico unità |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Frequenze regolarizzate | 118 | 2,140 | 164 | 2,307 | −29,476 |
+| Logistica completa | 136 | 1,946 | 158 | 2,110 | −29,391 |
+| Logistica punti/set | 132 | 2,082 | 170 | 2,229 | −27,182 |
+| Logistica contestuale | 105 | 2,097 | 140 | 2,251 | −24,797 |
+
+I quattro saldi ipotetici sono negativi. Questi dati non dimostrano un vantaggio operativo dall’EV nominale. Sono riepiloghi descrittivi dei prezzi del confronto prospettico, non un nuovo esperimento indipendente della strategia finanziaria e non puntate reali; prezzi eseguibili e ROI restano non certificati. Il filtro non altera gli 800 casi del confronto base: sui medesimi 800, Brier completo 0,242000 contro bookmaker 0,230163; il mercato rimane migliore in questa metrica. Il bookmaker ha 451 corretti, 276 errati e 73 senza preferenza: accuracy sui soli 727 decisi, Brier su tutti gli 800.
+
+Il training giornaliero era già stato tentato (`daily_already_attempted`): questo messaggio non prova un fitting riuscito oggi. Non è stato forzato un secondo training, modificato un checkpoint o promosso un modello. Aggregati originali salvati in [prospective-prices-20261118.json](../research/prospective-prices-20261118.json). Nessuna credenziale o dato individuale incluso. Le informazioni precedenti sullo snapshot del 17 novembre restano un archivio, non lo stato attuale.

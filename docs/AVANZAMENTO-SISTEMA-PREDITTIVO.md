@@ -114,3 +114,8 @@ Calcolate medie, mediane, estremi e differenze delle quote del lato realmente pr
 ## v23 — quote dei pronostici prospettici nell’app
 
 Usato il ledger v10 che già salva prezzi originali e quattro previsioni contemporanee: nuovo aggregatore owner-only con medie, mediane, differenza corretti/sbagliati, periodi fino a un anno e filtri min1,30/EV positivo, senza massimo. Contatori per dati mancanti, invalidi, duplicati e pareggi; nessun prezzo ricostruito o modello nuovo. Nuova sezione richiudibile e ricaricamento senza perdita di apertura/filtri. 293 test in42 file, TypeScript, build, smoke ESM e QA Android/desktop passati; nessun cambio ai protocolli congelati o nuove richieste provider. [Dettagli e limiti](QUOTE-PROSPETTICHE-V23.md).
+
+
+## v23 pubblicata e dati del 18 novembre verificati
+
+Production dpl_ACXuqPsNw6BWrWZY43oeimFBc8nn READY (c735d47), alias e health200. Sezione quote corretti/sbagliati utilizzabile nell’app; CI entrambe superate. v9 1.300 registrati/1.109 settled/185 pending/6 invalidi, 13giorni. v10 distinto980/800/173/7: 800 esiti con quote utilizzabili, nessun duplicato/mancante. Filtro quota≥1,30/EV>0: completo136 corretti/media1,946 e158 sbagliati/media2,110; saldo ipotetico−29,391unità. Tutti e quattro i saldi filtrati negativi; nessun vantaggio dimostrato, nuovo modello o ROI verificato. [Dettagli e aggregati](QUOTE-PROSPETTICHE-V23.md).
