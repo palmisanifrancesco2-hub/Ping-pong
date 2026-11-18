@@ -1,0 +1,791 @@
+{
+  "protocol": {
+    "source": "https://data.scorenetwork.org/table_tennis/table_tennis_sept2022.html",
+    "sha256": "d400562f49ced084133c8e926025efb6023dd62a8341fd4484864d567a4e392d",
+    "trainingThrough": "2022-06-23",
+    "calibrationFrom": "2022-06-25",
+    "calibrationThrough": "2022-06-29",
+    "testFrom": "2022-07-01",
+    "testThrough": "2022-07-08",
+    "historyLagCalendarDays": 2,
+    "markets": [
+      "winner",
+      "sets-over-3.5"
+    ],
+    "logisticC": 0.1,
+    "eloK": 16,
+    "seed": 25,
+    "blockDays": 2,
+    "bootstrapReplicates": 10000,
+    "familyComparisons": 4,
+    "description": "Setka SCORE 2022 only. Fixed parameters. Fit through June 23, probability calibration June 25\u201329, holdout July 1\u20138. The intervening days contribute only to eligible player history. At prediction date D, use source dates at most D\u22122. Update Elo in simultaneous daily batches. Date/availability assumption, retrospective; no odds."
+  },
+  "counts": {
+    "raw": 7851,
+    "valid": 7843,
+    "invalid": 4,
+    "duplicates": 4
+  },
+  "train": 3928,
+  "calibration": 1298,
+  "test": 2077,
+  "historyOnly": 540,
+  "testDays": 8,
+  "sklearn": "1.8.0",
+  "markets": {
+    "winner": {
+      "reference": {
+        "n": 2077,
+        "correct": 1163,
+        "wrong": 903,
+        "undecided": 11,
+        "accuracy": 0.5629235237173281,
+        "coverage": 0.994703899855561,
+        "brier": 0.2435555545795718,
+        "logLoss": 0.6799270600073625,
+        "ece": 0.01892181332849102,
+        "calibration": [
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 3,
+            "probability": 0.1524779623610177,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 42,
+            "probability": 0.2715789403216704,
+            "frequency": 0.21428571428571427
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 223,
+            "probability": 0.3621896320757903,
+            "frequency": 0.43946188340807174
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 742,
+            "probability": 0.4564937697030355,
+            "frequency": 0.44878706199460916
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 772,
+            "probability": 0.541677621802746,
+            "frequency": 0.5323834196891192
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 252,
+            "probability": 0.638161213711069,
+            "frequency": 0.6190476190476191
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 40,
+            "probability": 0.7238112934026313,
+            "frequency": 0.7
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 3,
+            "probability": 0.8475220376389823,
+            "frequency": 1.0
+          }
+        ]
+      },
+      "models": {
+        "logistic": {
+          "raw": {
+            "n": 2077,
+            "correct": 1207,
+            "wrong": 870,
+            "undecided": 0,
+            "accuracy": 0.581126624939817,
+            "coverage": 1.0,
+            "brier": 0.23736622956461817,
+            "logLoss": 0.6669547527835014,
+            "ece": 0.023926952343194273,
+            "calibration": [
+              {
+                "from": 0.0,
+                "to": 0.1,
+                "n": 7,
+                "probability": 0.07877305765096129,
+                "frequency": 0.14285714285714285
+              },
+              {
+                "from": 0.1,
+                "to": 0.2,
+                "n": 22,
+                "probability": 0.16250595322112873,
+                "frequency": 0.13636363636363635
+              },
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 80,
+                "probability": 0.26306816477859857,
+                "frequency": 0.3375
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 279,
+                "probability": 0.3585220833719577,
+                "frequency": 0.3906810035842294
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 584,
+                "probability": 0.4524115924582973,
+                "frequency": 0.4486301369863014
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 685,
+                "probability": 0.5465476181635779,
+                "frequency": 0.5226277372262774
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 329,
+                "probability": 0.6417909027801821,
+                "frequency": 0.6200607902735562
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 87,
+                "probability": 0.7323215715793416,
+                "frequency": 0.8160919540229885
+              },
+              {
+                "from": 0.8,
+                "to": 0.9,
+                "n": 4,
+                "probability": 0.8212609581007945,
+                "frequency": 1.0
+              }
+            ]
+          },
+          "calibrated": {
+            "n": 2077,
+            "correct": 1209,
+            "wrong": 868,
+            "undecided": 0,
+            "accuracy": 0.582089552238806,
+            "coverage": 1.0,
+            "brier": 0.237461093553959,
+            "logLoss": 0.6672586984964609,
+            "ece": 0.01773079834647892,
+            "calibration": [
+              {
+                "from": 0.0,
+                "to": 0.1,
+                "n": 1,
+                "probability": 0.0855258628005106,
+                "frequency": 0.0
+              },
+              {
+                "from": 0.1,
+                "to": 0.2,
+                "n": 16,
+                "probability": 0.14861062145187492,
+                "frequency": 0.125
+              },
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 65,
+                "probability": 0.2656524509829171,
+                "frequency": 0.3384615384615385
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 271,
+                "probability": 0.36048052408861897,
+                "frequency": 0.36900369003690037
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 717,
+                "probability": 0.45342453481771644,
+                "frequency": 0.45467224546722457
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 720,
+                "probability": 0.5433272614442478,
+                "frequency": 0.5319444444444444
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 259,
+                "probability": 0.6386709006869946,
+                "frequency": 0.7027027027027027
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 28,
+                "probability": 0.726902492718307,
+                "frequency": 0.8571428571428571
+              }
+            ]
+          },
+          "deltaBrier": -0.006094461025612774,
+          "pairedBlockInterval": {
+            "lower": -0.008897976696796322,
+            "upper": -0.0029212054411257822,
+            "days": 8,
+            "blockDays": 2,
+            "familyComparisons": 4
+          },
+          "daily": [
+            {
+              "date": "2022-07-01",
+              "n": 247,
+              "deltaBrier": -0.006464140314409133
+            },
+            {
+              "date": "2022-07-02",
+              "n": 232,
+              "deltaBrier": -0.0036105889517179246
+            },
+            {
+              "date": "2022-07-03",
+              "n": 242,
+              "deltaBrier": -0.003747205426144193
+            },
+            {
+              "date": "2022-07-04",
+              "n": 302,
+              "deltaBrier": -0.010180491460880674
+            },
+            {
+              "date": "2022-07-05",
+              "n": 297,
+              "deltaBrier": -0.008558143714174456
+            },
+            {
+              "date": "2022-07-06",
+              "n": 294,
+              "deltaBrier": 0.002166173203746506
+            },
+            {
+              "date": "2022-07-07",
+              "n": 307,
+              "deltaBrier": -0.007211785167801509
+            },
+            {
+              "date": "2022-07-08",
+              "n": 156,
+              "deltaBrier": -0.013613027651947785
+            }
+          ]
+        },
+        "gradientBoosting": {
+          "raw": {
+            "n": 2077,
+            "correct": 1182,
+            "wrong": 895,
+            "undecided": 0,
+            "accuracy": 0.5690900337024555,
+            "coverage": 1.0,
+            "brier": 0.24984296905520223,
+            "logLoss": 0.6964557919370505,
+            "ece": 0.0704817059839805,
+            "calibration": [
+              {
+                "from": 0.0,
+                "to": 0.1,
+                "n": 23,
+                "probability": 0.07285397962791404,
+                "frequency": 0.13043478260869565
+              },
+              {
+                "from": 0.1,
+                "to": 0.2,
+                "n": 124,
+                "probability": 0.15425915765735185,
+                "frequency": 0.31451612903225806
+              },
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 173,
+                "probability": 0.25296923558121787,
+                "frequency": 0.36416184971098264
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 347,
+                "probability": 0.3561477926211482,
+                "frequency": 0.48703170028818443
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 448,
+                "probability": 0.4542347483792049,
+                "frequency": 0.4732142857142857
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 427,
+                "probability": 0.5493296095460208,
+                "frequency": 0.5269320843091335
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 320,
+                "probability": 0.6461608437328932,
+                "frequency": 0.596875
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 172,
+                "probability": 0.745182418627675,
+                "frequency": 0.6453488372093024
+              },
+              {
+                "from": 0.8,
+                "to": 0.9,
+                "n": 43,
+                "probability": 0.8263214000934259,
+                "frequency": 0.6046511627906976
+              }
+            ]
+          },
+          "calibrated": {
+            "n": 2077,
+            "correct": 1180,
+            "wrong": 897,
+            "undecided": 0,
+            "accuracy": 0.5681271064034665,
+            "coverage": 1.0,
+            "brier": 0.2425591877256958,
+            "logLoss": 0.6779899717161438,
+            "ece": 0.022416776712736737,
+            "calibration": [
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 18,
+                "probability": 0.28330596044033013,
+                "frequency": 0.16666666666666666
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 186,
+                "probability": 0.36325724994700415,
+                "frequency": 0.2956989247311828
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 903,
+                "probability": 0.4613549363003026,
+                "frequency": 0.4706533776301218
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 864,
+                "probability": 0.5401857352805837,
+                "frequency": 0.5671296296296297
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 106,
+                "probability": 0.6205823375860093,
+                "frequency": 0.6226415094339622
+              }
+            ]
+          },
+          "deltaBrier": -0.0009963668538760175,
+          "pairedBlockInterval": {
+            "lower": -0.002671040540523984,
+            "upper": 0.0013012330625076622,
+            "days": 8,
+            "blockDays": 2,
+            "familyComparisons": 4
+          },
+          "daily": [
+            {
+              "date": "2022-07-01",
+              "n": 247,
+              "deltaBrier": 0.000841997182520938
+            },
+            {
+              "date": "2022-07-02",
+              "n": 232,
+              "deltaBrier": 0.0016543571938818886
+            },
+            {
+              "date": "2022-07-03",
+              "n": 242,
+              "deltaBrier": 0.001353276835874936
+            },
+            {
+              "date": "2022-07-04",
+              "n": 302,
+              "deltaBrier": -0.002142121612437556
+            },
+            {
+              "date": "2022-07-05",
+              "n": 297,
+              "deltaBrier": -0.001020899493261335
+            },
+            {
+              "date": "2022-07-06",
+              "n": 294,
+              "deltaBrier": -0.0019223752014172362
+            },
+            {
+              "date": "2022-07-07",
+              "n": 307,
+              "deltaBrier": -0.0031376935507468236
+            },
+            {
+              "date": "2022-07-08",
+              "n": 156,
+              "deltaBrier": -0.003270211648043545
+            }
+          ]
+        }
+      }
+    },
+    "sets-over-3.5": {
+      "reference": {
+        "n": 2077,
+        "correct": 1465,
+        "wrong": 612,
+        "undecided": 0,
+        "accuracy": 0.7053442465093885,
+        "coverage": 1.0,
+        "brier": 0.2079805412886049,
+        "logLoss": 0.6066156490251471,
+        "ece": 0.012116140603074865,
+        "calibration": [
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 2077,
+            "probability": 0.6932281059063137,
+            "frequency": 0.7053442465093885
+          }
+        ]
+      },
+      "models": {
+        "logistic": {
+          "raw": {
+            "n": 2077,
+            "correct": 1465,
+            "wrong": 612,
+            "undecided": 0,
+            "accuracy": 0.7053442465093885,
+            "coverage": 1.0,
+            "brier": 0.2097803791726783,
+            "logLoss": 0.6107583128866477,
+            "ece": 0.030207272337999847,
+            "calibration": [
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 2,
+                "probability": 0.4751151868628546,
+                "frequency": 0.5
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 50,
+                "probability": 0.5788379081974862,
+                "frequency": 0.72
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1050,
+                "probability": 0.6676337883031973,
+                "frequency": 0.7038095238095238
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 974,
+                "probability": 0.7243032694982325,
+                "frequency": 0.7063655030800822
+              },
+              {
+                "from": 0.8,
+                "to": 0.9,
+                "n": 1,
+                "probability": 0.8232763432955493,
+                "frequency": 1.0
+              }
+            ]
+          },
+          "calibrated": {
+            "n": 2077,
+            "correct": 1465,
+            "wrong": 612,
+            "undecided": 0,
+            "accuracy": 0.7053442465093885,
+            "coverage": 1.0,
+            "brier": 0.20820979004812504,
+            "logLoss": 0.6071482095335091,
+            "ece": 0.017042241972831,
+            "calibration": [
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1776,
+                "probability": 0.6849798400344257,
+                "frequency": 0.7043918918918919
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 301,
+                "probability": 0.7079038788082723,
+                "frequency": 0.7109634551495017
+              }
+            ]
+          },
+          "deltaBrier": 0.00022924875952007152,
+          "pairedBlockInterval": {
+            "lower": -0.0005199271229107149,
+            "upper": 0.0011465210851872713,
+            "days": 8,
+            "blockDays": 2,
+            "familyComparisons": 4
+          },
+          "daily": [
+            {
+              "date": "2022-07-01",
+              "n": 247,
+              "deltaBrier": 0.0007600800789750712
+            },
+            {
+              "date": "2022-07-02",
+              "n": 232,
+              "deltaBrier": 0.0018903417535356952
+            },
+            {
+              "date": "2022-07-03",
+              "n": 242,
+              "deltaBrier": 0.00032721715723558673
+            },
+            {
+              "date": "2022-07-04",
+              "n": 302,
+              "deltaBrier": 0.0006933894558730993
+            },
+            {
+              "date": "2022-07-05",
+              "n": 297,
+              "deltaBrier": -0.0005024215096576486
+            },
+            {
+              "date": "2022-07-06",
+              "n": 294,
+              "deltaBrier": -0.0006745808567912463
+            },
+            {
+              "date": "2022-07-07",
+              "n": 307,
+              "deltaBrier": -0.00032809908392337014
+            },
+            {
+              "date": "2022-07-08",
+              "n": 156,
+              "deltaBrier": 6.11078109025592e-05
+            }
+          ]
+        },
+        "gradientBoosting": {
+          "raw": {
+            "n": 2077,
+            "correct": 1385,
+            "wrong": 692,
+            "undecided": 0,
+            "accuracy": 0.6668271545498314,
+            "coverage": 1.0,
+            "brier": 0.22360186898162462,
+            "logLoss": 0.6433127220490501,
+            "ece": 0.09221917299907119,
+            "calibration": [
+              {
+                "from": 0.1,
+                "to": 0.2,
+                "n": 1,
+                "probability": 0.18110415025227133,
+                "frequency": 0.0
+              },
+              {
+                "from": 0.2,
+                "to": 0.3,
+                "n": 4,
+                "probability": 0.2683119687963775,
+                "frequency": 0.75
+              },
+              {
+                "from": 0.3,
+                "to": 0.4,
+                "n": 48,
+                "probability": 0.3568027735720049,
+                "frequency": 0.7083333333333334
+              },
+              {
+                "from": 0.4,
+                "to": 0.5,
+                "n": 159,
+                "probability": 0.4591310137984808,
+                "frequency": 0.6855345911949685
+              },
+              {
+                "from": 0.5,
+                "to": 0.6,
+                "n": 388,
+                "probability": 0.550764903556397,
+                "frequency": 0.7190721649484536
+              },
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 553,
+                "probability": 0.6519488281393909,
+                "frequency": 0.6817359855334539
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 640,
+                "probability": 0.7472028611472428,
+                "frequency": 0.70625
+              },
+              {
+                "from": 0.8,
+                "to": 0.9,
+                "n": 264,
+                "probability": 0.838030418492443,
+                "frequency": 0.7689393939393939
+              },
+              {
+                "from": 0.9,
+                "to": 1.0,
+                "n": 20,
+                "probability": 0.9167176647071835,
+                "frequency": 0.4
+              }
+            ]
+          },
+          "calibrated": {
+            "n": 2077,
+            "correct": 1465,
+            "wrong": 612,
+            "undecided": 0,
+            "accuracy": 0.7053442465093885,
+            "coverage": 1.0,
+            "brier": 0.20827710215556683,
+            "logLoss": 0.607301494204961,
+            "ece": 0.02001014059916603,
+            "calibration": [
+              {
+                "from": 0.6,
+                "to": 0.7,
+                "n": 1811,
+                "probability": 0.6822394669645283,
+                "frequency": 0.6996134732192159
+              },
+              {
+                "from": 0.7,
+                "to": 0.8,
+                "n": 266,
+                "probability": 0.7064032454991402,
+                "frequency": 0.7443609022556391
+              }
+            ]
+          },
+          "deltaBrier": 0.000296560866961846,
+          "pairedBlockInterval": {
+            "lower": -0.0002823798189147219,
+            "upper": 0.0009741948918064588,
+            "days": 8,
+            "blockDays": 2,
+            "familyComparisons": 4
+          },
+          "daily": [
+            {
+              "date": "2022-07-01",
+              "n": 247,
+              "deltaBrier": 0.000510752808600353
+            },
+            {
+              "date": "2022-07-02",
+              "n": 232,
+              "deltaBrier": -0.0004725010444262804
+            },
+            {
+              "date": "2022-07-03",
+              "n": 242,
+              "deltaBrier": 0.0007399122717362199
+            },
+            {
+              "date": "2022-07-04",
+              "n": 302,
+              "deltaBrier": 0.0002983823599616964
+            },
+            {
+              "date": "2022-07-05",
+              "n": 297,
+              "deltaBrier": -0.0005229213754826927
+            },
+            {
+              "date": "2022-07-06",
+              "n": 294,
+              "deltaBrier": -0.00039295292578310205
+            },
+            {
+              "date": "2022-07-07",
+              "n": 307,
+              "deltaBrier": 0.001203577757034824
+            },
+            {
+              "date": "2022-07-08",
+              "n": 156,
+              "deltaBrier": 0.0014845411159145323
+            }
+          ]
+        }
+      }
+    }
+  },
+  "oddsAvailable": false,
+  "operationallyValidated": false
+}
