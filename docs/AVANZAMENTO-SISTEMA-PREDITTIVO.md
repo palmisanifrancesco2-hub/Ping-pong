@@ -119,3 +119,7 @@ Usato il ledger v10 che già salva prezzi originali e quattro previsioni contemp
 ## v23 pubblicata e dati del 18 novembre verificati
 
 Production dpl_ACXuqPsNw6BWrWZY43oeimFBc8nn READY (c735d47), alias e health200. Sezione quote corretti/sbagliati utilizzabile nell’app; CI entrambe superate. v9 1.300 registrati/1.109 settled/185 pending/6 invalidi, 13giorni. v10 distinto980/800/173/7: 800 esiti con quote utilizzabili, nessun duplicato/mancante. Filtro quota≥1,30/EV>0: completo136 corretti/media1,946 e158 sbagliati/media2,110; saldo ipotetico−29,391unità. Tutti e quattro i saldi filtrati negativi; nessun vantaggio dimostrato, nuovo modello o ROI verificato. [Dettagli e aggregati](QUOTE-PROSPETTICHE-V23.md).
+
+## Combinazioni tra bookmaker e modelli sportivi
+
+Confrontate quattro famiglie con cinque pesi fissi su 88 e 28 incontri storici con prezzi prematch. Le miscele migliorano i punteggi probabilistici medi sui due campioni, con risultati variabili per giorno. Con peso sportivo del 10% o 25% nessuna selezione supera il filtro EV. Con quattro soli giorni già studiati, il miglioramento resta esplorativo. [Risultati e limiti](STUDIO-BOOKMAKER-V24.md).

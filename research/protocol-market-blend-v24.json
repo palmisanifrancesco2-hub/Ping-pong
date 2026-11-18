@@ -1,0 +1,13 @@
+{
+  "sportWeights": [0, 0.10, 0.25, 0.50, 1],
+  "models": {
+    "CatBoost coerente": ["v21/categorical-catboost", "v21/categorical-catboost"],
+    "Rete neurale coerente": ["v21/categorical-mlp", "v21/categorical-mlp"],
+    "NGBoost": ["v18/ngboost", "v20/ngboost"],
+    "Random Forest": ["v16/random-forest", "v20/random-forest"]
+  },
+  "minimumOdds": 1.30,
+  "selection": "Most likely side of blended probability; strictly positive nominal EV at recorded odds",
+  "design": "Exploratory replay on the inspected v22 cohorts. Linear blend with normalized bookmaker probability; fixed weights recorded before this run. No fit, no selection on these outcomes; all configurations reported. The later cohort uses the final frozen fold of each family.",
+  "prospectiveValidation": false
+}

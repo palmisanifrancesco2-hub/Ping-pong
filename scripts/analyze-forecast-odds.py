@@ -31,16 +31,13 @@ def join(ids, truth, predictions, prices):
         price = prices[event]
         if int(y) != price['y']:
             raise ValueError('Quote/outcome mismatch')
-        out.append({'p': float(p), 'y': int(y), 'homeOdds': price['homeOdds'], 'awayOdds': price['awayOdds']})
+        out.append({'p': float(p), 'y': int(y), 'homeOdds': price['homeOdds'], 'awayOdds': price['awayOdds'], 'at': price['at']})
     if len(out) != len(prices):
         raise ValueError('Incomplete comparison cohort')
     return out
 
 
-def main():
-    output = ROOT/'research/report-v22-odds-outcomes.json'
-    if output.exists():
-        raise RuntimeError('Do not overwrite inspected analysis')
+def load_cohorts():
     protocol = json.loads((ROOT/'research/protocol-v22-odds-outcomes.json').read_text())
     for file, expected in protocol['inputHashes'].items():
         if sha(ROOT/file) != expected:
@@ -96,9 +93,17 @@ def main():
     for name, values in coherent['transferPredictions'].items():
         add(transfer_models, 'v21/'+name, coherent['transferIds'], (np.asarray(coherent['transferY']) < 3).astype(int),
             np.asarray(values)[:, :3].sum(axis=1), transfer_prices)
+    return [('v16-asof-test-88', main_prices, main_models),
+            ('v20-transfer-qualified-28', transfer_prices, transfer_models)]
+
+
+def main():
+    output = ROOT/'research/report-v22-odds-outcomes.json'
+    if output.exists():
+        raise RuntimeError('Do not overwrite inspected analysis')
+    protocol = json.loads((ROOT/'research/protocol-v22-odds-outcomes.json').read_text())
     cohorts = []
-    for name, prices, models in [('v16-asof-test-88', main_prices, main_models),
-                                  ('v20-transfer-qualified-28', transfer_prices, transfer_models)]:
+    for name, prices, models in load_cohorts():
         market_rows = [{'y': v['y'], 'p': (1/v['homeOdds'])/(1/v['homeOdds']+1/v['awayOdds']),
                         'homeOdds': v['homeOdds'], 'awayOdds': v['awayOdds']} for v in prices.values()]
         models['bookmaker-reference'] = market_rows
@@ -114,7 +119,7 @@ def main():
                         'to': datetime.fromtimestamp(max(v['at'] for v in prices.values())/1000, timezone.utc).isoformat(),
                         'models': summaries})
     report = {'version': protocol['version'], 'generatedAt': datetime.now(timezone.utc).isoformat(),
-              'protocol': protocol, 'cohorts': cohorts, 'uniqueQuoteCases': len(main_prices)+len(transfer_prices),
+              'protocol': protocol, 'cohorts': cohorts, 'uniqueQuoteCases': sum(c['availableQuoteCases'] for c in cohorts),
               'realBetsPlaced': False, 'newModelTraining': False, 'independentValidation': False,
               'operationallyValidated': False, 'automaticPromotion': False, 'verifiedHistoricalROI': None}
     with output.open('x') as f:
