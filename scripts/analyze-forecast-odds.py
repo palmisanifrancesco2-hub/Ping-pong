@@ -37,7 +37,7 @@ def join(ids, truth, predictions, prices):
     return out
 
 
-def load_cohorts():
+def load_cohorts(*, all_matched=False):
     protocol = json.loads((ROOT/'research/protocol-v22-odds-outcomes.json').read_text())
     for file, expected in protocol['inputHashes'].items():
         if sha(ROOT/file) != expected:
@@ -47,9 +47,11 @@ def load_cohorts():
     spec.loader.exec_module(inv)
     main_results = {r['id']: r for r in inv.load(DATA/'3000-data.json')['results']}
     odds = load_audit('v16-odds-audit.json', 'report-v16-odds.json')
+    advanced = load_audit('advanced-v16-audit.json', 'report-v16-benchmark.json')
     qualified = {r['id']: r for r in inv.load(DATA/'v16-qualified-market-baselines.json')['rows']}
     main_prices = {}
-    for event in odds['ids']:
+    main_ids = [event for event in advanced['ids'] if event in qualified] if all_matched else odds['ids']
+    for event in main_ids:
         q, r = qualified[event], main_results[event]
         payload = inv.load(DATA/'3000-data.json.cache'/(event+'.json'))
         if inv.strict_start(payload, r) != q['at'] or not inv.strict_pair(payload, r, q['at']):
@@ -72,7 +74,6 @@ def load_cohorts():
         transfer_prices[event] = {'homeOdds': home, 'awayOdds': away, 'y': int(r['homeWon']), 'at': row['at']}
     if set(main_prices) & set(transfer_prices):
         raise ValueError('Overlapping comparison cohorts')
-    advanced = load_audit('advanced-v16-audit.json', 'report-v16-benchmark.json')
     probabilistic = load_audit('probabilistic-v18-audit.json', 'report-v18-probabilistic.json')
     coherent = load_audit('coherent-v21-audit.json', 'report-v21-coherent-scores.json')
     main_models, transfer_models = {}, {}
@@ -82,8 +83,9 @@ def load_cohorts():
     for name, values in probabilistic['predictions'].items():
         if name != 'conditional-normalizing-flow':
             add(main_models, 'v18/'+name, probabilistic['ids'], np.asarray(probabilistic['y'])[:, 0], np.asarray(values)[:, 0], main_prices)
-    for name, values in odds['predictions'].items():
-        add(main_models, 'v16-odds/'+name, odds['ids'], odds['y'], np.asarray(values).reshape(-1), main_prices)
+    if not all_matched:
+        for name, values in odds['predictions'].items():
+            add(main_models, 'v16-odds/'+name, odds['ids'], odds['y'], np.asarray(values).reshape(-1), main_prices)
     for name, values in transfer['predictions'].items():
         if name not in ['conditional-normalizing-flow', 'point-pool']:
             add(transfer_models, 'v20/'+name, transfer['ids'], np.asarray(transfer['y'])[:, 0], np.asarray(values)[:, 0], transfer_prices)
@@ -93,7 +95,7 @@ def load_cohorts():
     for name, values in coherent['transferPredictions'].items():
         add(transfer_models, 'v21/'+name, coherent['transferIds'], (np.asarray(coherent['transferY']) < 3).astype(int),
             np.asarray(values)[:, :3].sum(axis=1), transfer_prices)
-    return [('v16-asof-test-88', main_prices, main_models),
+    return [('v16-matched-test' if all_matched else 'v16-asof-test-88', main_prices, main_models),
             ('v20-transfer-qualified-28', transfer_prices, transfer_models)]
 
 
