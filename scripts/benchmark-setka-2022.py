@@ -94,7 +94,7 @@ def build_features(matches, protocol):
             rows.append({'day':day, 'at':(day-date(1970,1,1).toordinal())*86400000,
                          'x':[diff, *list(a-b), float(a[3]+b[3]), h2h if home < away else -h2h,
                               len(pair), min(len(history[home]), len(history[away]))],
-                         'y':[won, int(length > 3.5)]})
+                         'y':[won, int(length > 3.5)], 'scoreClass':(0 if won else 3)+length-3})
     return rows
 
 
