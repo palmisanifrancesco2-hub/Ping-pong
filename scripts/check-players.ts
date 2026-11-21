@@ -89,3 +89,5 @@ if (process.env.VERCEL_ENV==='production') {
   }));
   console.info(JSON.stringify({individualOddsCoverage:coverage}));
 }
+
+if (process.env.VERCEL_ENV==='production') await import('./train-individual-sports.js');
