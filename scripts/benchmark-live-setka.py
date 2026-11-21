@@ -30,37 +30,8 @@ def live_states(sets):
         away += 1-win
 
 
-def main():
-    root = ROOT/'research'
-    protocol = json.loads((root/'protocol-live-setka-v28.json').read_text())
-    archive = json.loads((root/protocol['archive']).read_text())
-    path = ROOT/'.research-data/setka-september-2022.csv'
-    if hashlib.sha256(path.read_bytes()).hexdigest() != archive['sha256']:
-        raise ValueError('Unexpected dataset hash')
-    histories = defaultdict(list)
-    matches, counts = setka.read_matches(path, set_history=histories)
-    rows = setka.build_features(matches, archive)
-    sequences = [seq for day in sorted(histories) for seq in histories[day]]
-    if len(rows) != len(sequences):
-        raise ValueError('Unaligned set histories')
-    boundary = lambda key: date.fromisoformat(archive[key]).toordinal()
-    groups = defaultdict(lambda: defaultdict(list))
-    for row, sets in zip(rows, sequences):
-        if len(sets) != row['scoreClass']%3+3 or int(sum(sets)==3) != row['y'][0]:
-            raise ValueError('Mismatched match outcome')
-        day = row['day']
-        if day <= boundary('trainingThrough'):
-            block = 'train'
-        elif boundary('calibrationFrom') <= day <= boundary('calibrationThrough'):
-            block = 'cal'
-        elif boundary('testFrom') <= day <= boundary('testThrough'):
-            block = 'test'
-        else:
-            continue
-        for stage, state in enumerate(live_states(sets)):
-            groups[stage][block].append((row['x'], state, row['y'][0], day))
-    report = {'protocol':protocol, 'sourceCounts':counts, 'stages':[],
-              'oddsAvailable':False, 'operationallyValidated':False}
+def fit_stages(groups, protocol):
+    stages = []
     fitted_stages = {}
     for stage, block in sorted(groups.items()):
         train, cal, test = [block[key] for key in ('train','cal','test')]
@@ -96,11 +67,46 @@ def main():
         pre_model, pre_calibration = fitted_stages[0]['models']['logistic']
         pre_features = np.asarray([features+[0,0] for features,_,_,_ in test])
         pre_logits = logit(np.clip(pre_model.predict_proba(pre_features)[:,1], 1e-6, 1-1e-6)).reshape(-1,1)
-        report['stages'].append({'completedSets':stage, 'train':len(train), 'calibration':len(cal),
+        stages.append({'completedSets':stage, 'train':len(train), 'calibration':len(cal),
                                  'test':len(test), 'selectedOnCalibration':selected,
                                  'calibrationMetrics':calibration_metrics,
                                  'prematchLogisticOnSameMatches':metrics(y(test), pre_calibration.predict_proba(pre_logits)[:,1]),
                                  'testMetrics':{k:metrics(y(test), p) for k,p in test_scores.items()}})
+    return stages, fitted_stages
+
+
+def main():
+    root = ROOT/'research'
+    protocol = json.loads((root/'protocol-live-setka-v28.json').read_text())
+    archive = json.loads((root/protocol['archive']).read_text())
+    path = ROOT/'.research-data/setka-september-2022.csv'
+    if hashlib.sha256(path.read_bytes()).hexdigest() != archive['sha256']:
+        raise ValueError('Unexpected dataset hash')
+    histories = defaultdict(list)
+    matches, counts = setka.read_matches(path, set_history=histories)
+    rows = setka.build_features(matches, archive)
+    sequences = [seq for day in sorted(histories) for seq in histories[day]]
+    if len(rows) != len(sequences):
+        raise ValueError('Unaligned set histories')
+    boundary = lambda key: date.fromisoformat(archive[key]).toordinal()
+    groups = defaultdict(lambda: defaultdict(list))
+    for row, sets in zip(rows, sequences):
+        if len(sets) != row['scoreClass']%3+3 or int(sum(sets)==3) != row['y'][0]:
+            raise ValueError('Mismatched match outcome')
+        day = row['day']
+        if day <= boundary('trainingThrough'):
+            block = 'train'
+        elif boundary('calibrationFrom') <= day <= boundary('calibrationThrough'):
+            block = 'cal'
+        elif boundary('testFrom') <= day <= boundary('testThrough'):
+            block = 'test'
+        else:
+            continue
+        for stage, state in enumerate(live_states(sets)):
+            groups[stage][block].append((row['x'], state, row['y'][0], day))
+    report = {'protocol':protocol, 'sourceCounts':counts, 'stages':[],
+              'oddsAvailable':False, 'operationallyValidated':False}
+    report['stages'], fitted_stages = fit_stages(groups, protocol)
     artifact = ROOT/'.research-data/live-setka-v28.joblib'
     with artifact.open('xb') as file:
         artifact.chmod(0o600)

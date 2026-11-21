@@ -139,3 +139,7 @@ Confronto cronologico su 2.077 incontri Setka. CatBoost ha indovinato 1.210 vinc
 ## Replay live del vincente
 
 Sui reali punteggi Setka storici, dopo due set la logistica ha indovinato 1.519 vincitori su 2.077, CatBoost 1.504 e il solo punteggio 1.476. Sul 2–2 il vantaggio non emerge. I modelli sono salvati per ricerca e il replay è privo di quote live abbinate. [Studio e prerequisiti del test live](STUDIO-LIVE-SETKA-V28.md).
+
+## Addestramento live esteso a MoviOdds e Setka
+
+Con 21.089 incontri di training e 5.355 incontri MoviOdds di test, dopo due set la logistica estesa indovina 3.902 vincitori e passa da 0,16192 a 0,16157 di Brier rispetto alla versione MoviOdds. CatBoost esteso ne indovina 3.892. Nessuna quota live abbinata nel replay. [Studio](STUDIO-LIVE-ESTESO-V29.md).
