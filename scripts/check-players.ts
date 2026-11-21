@@ -6,6 +6,7 @@ import {selectedQuotes} from '../src/shared/quote-selection.js';
 import {liveWinnerEstimates} from '../server/live-winner.js';
 import {marketEstimateReport} from '../server/market-estimates.js';
 import {otherBookmakerMarkets} from '../src/shared/additional-markets.js';
+import {startsInNextTwoHours} from '../src/shared/board.js';
 import model from'../models/elo-v1.json' with{type:'json'};
 try {
   const archive=await new ResultsFeed().archive();
@@ -17,6 +18,7 @@ try {
       const score = scoreValueReport(board, archive, now);
       const ensemble = ensembleValueReport(board, archive, now);
       const live = board.matches.filter(match=>match.in_play);
+      const soon = board.matches.filter(match=>startsInNextTwoHours(match,now));
       console.info(JSON.stringify({
         winnerDisplayVerification:'success',
         scoreEstimates:Object.keys(score.winnerEstimates ?? {}).length,
@@ -28,6 +30,8 @@ try {
         liveWithScoreAndSeenAt:live.filter(match=>match.score&&match.last_live_seen).length,
         liveWithCorrectScoreMarket:live.filter(match=>match.quotes.some(q=>q.group_id==='920064')).length,
         liveEstimates:Object.keys(liveWinnerEstimates(live,now)).length,
+        upcomingWithinTwoHours:soon.length,
+        valueWithinTwoHours:selectedQuotes(score,soon,now).length,
       }));
       const markets = board.matches.map(match=>otherBookmakerMarkets(match,now));
       const estimateCounts = board.matches.map(match=>Object.keys(marketEstimateReport(match,archive,now).estimates).length);

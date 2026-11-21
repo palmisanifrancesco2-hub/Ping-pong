@@ -21,6 +21,10 @@ export function isFreshLive(match: FeedMatch, now: number): boolean {
 export function isUpcomingOrLive(match: FeedMatch, now: number): boolean {
   return isFreshLive(match, now) || (!match.in_play && Number.isFinite(Date.parse(match.kickoff_utc ?? '')) && Date.parse(match.kickoff_utc!) > now);
 }
+export function startsInNextTwoHours(match: FeedMatch, now: number): boolean {
+  const lead = Date.parse(match.kickoff_utc ?? '') - now;
+  return !match.in_play && lead > 0 && lead <= 2 * 60 * 60 * 1000;
+}
 // Preserve provider identity including changing game period and sub-market.
 export function marketIdentity(q: FeedQuote): string {
   return JSON.stringify([q.group_id, q.market_key ?? '', q.period ?? '', q.market_id ?? '', q.phase ?? 'prematch']);

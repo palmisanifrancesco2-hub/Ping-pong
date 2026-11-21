@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { filterBoard, marketIdentity, quoteIdentity, quoteStatus, type FeedMatch } from '../src/shared/board';
+import { filterBoard, marketIdentity, quoteIdentity, quoteStatus, startsInNextTwoHours, type FeedMatch } from '../src/shared/board';
 import { MoviOddsFeed, parseBoard } from '../server/moviodds';
 const time = '2026-11-04T12:00:00Z'; const now = Date.parse(time);
 const q = { fixture_id: 'synthetic', group_id: '238', group_name: 'Game 2', market_id: 'winner', market_key: '238|2', period: '2', sel_id: 'a', side: 'Test A', line: 'Over', handicap: '74.5', odds_dec: 2, ts: time, phase: 'inplay' as const };
@@ -7,6 +7,15 @@ const match: FeedMatch = { id: 'synthetic', sport: 'table_tennis', home: 'Test A
   polled_at: time, group_status: { '238': { polled_at: time } }, quotes: [q] };
 const payload = { server_time: time, matches: [match] };
 describe('all-market foreign board', () => {
+  it('uses an absolute two-hour prematch window, also when local midnight falls inside it', () => {
+    const clock=Date.parse('2026-11-21T23:30:00+01:00');
+    const scheduled={...match,in_play:false};
+    expect(startsInNextTwoHours({...scheduled,kickoff_utc:'2026-11-22T01:30:00+01:00'},clock)).toBe(true);
+    expect(startsInNextTwoHours({...scheduled,kickoff_utc:'2026-11-22T01:30:01+01:00'},clock)).toBe(false);
+    expect(startsInNextTwoHours({...scheduled,kickoff_utc:'2026-11-21T22:30:00Z'},clock)).toBe(false);
+    expect(startsInNextTwoHours({...match,kickoff_utc:'2026-11-21T23:00:00Z'},clock)).toBe(false);
+    expect(startsInNextTwoHours(scheduled,clock)).toBe(false);
+  });
   it('preserves unknown competitions, selections, period, line and all documented fields', () => {
     expect(parseBoard(payload, time).matches[0]).toEqual(match);
   });
