@@ -4,5 +4,9 @@ export function fairOddsText(probability: number) {
   return probability > 0 && probability <= 1 && Number.isFinite(price)
     ? price.toLocaleString('it-IT', {minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
 }
+export function bookmakerOddsText(odds: number | undefined) {
+  return odds !== undefined && Number.isFinite(odds) && odds > 1
+    ? odds.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:3}) : '—';
+}
 /** Keep a strictly positive margin from appearing as rounded zero. */
 export function positiveEvText(ev:number){return ev>0&&ev<.0005?'>0%':`${ev>0?'+':''}${(ev*100).toFixed(1)}%`;}

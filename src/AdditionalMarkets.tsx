@@ -1,7 +1,8 @@
 import {useEffect,useState} from 'react';
 import {bookmakerSelectionLabel,marketPriceKey,type BookmakerMarkets,type MarketEstimateReport} from './shared/additional-markets';
 import type {FeedMatch,FeedQuote} from './shared/board';
-import {dateTime,fairOddsText} from './shared/format';
+import {dateTime} from './shared/format';
+import {QuoteComparison} from './QuoteComparison';
 
 type Props = {match:FeedMatch;groups:BookmakerMarkets;now:number;available:boolean;boardCheckedAt?:string;token?:string;initiallyOpen?:boolean};
 
@@ -59,9 +60,9 @@ function MarketPrices({title,quotes,estimates,initiallyOpen}:{title:string;quote
       return <li key={key}>
         <span><strong>{bookmakerSelectionLabel(quote)}</strong>
           <small>Bet365 · {dateTime(quote.ts)}</small>
-          {probability!==undefined && <small>{probability.toLocaleString('it-IT',{style:'percent',maximumFractionDigits:1})} stimata · Quota equa {fairOddsText(probability)}</small>}
+          {probability!==undefined && <small>{probability.toLocaleString('it-IT',{style:'percent',maximumFractionDigits:1})} stimata</small>}
         </span>
-        <strong>{quote.odds_dec.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:3})}</strong>
+        <QuoteComparison odds={quote.odds_dec} probability={probability}/>
       </li>;
     })}</ul>}
   </details>;

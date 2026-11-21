@@ -1,0 +1,360 @@
+{
+  "protocol": {
+    "markets": [
+      "prematch match winner"
+    ],
+    "targetUniqueTestMatches": 40000,
+    "movioddsTestFrom": "2026-11-06",
+    "movioddsTestBefore": "2026-11-21",
+    "movioddsArtifact": "score-full-v1",
+    "movioddsHistoryLagDays": 2,
+    "setkaWindows": [
+      "2022-06-10",
+      "2022-06-16",
+      "2022-06-18",
+      "2022-06-21",
+      "2022-06-23",
+      "2022-07-09"
+    ],
+    "wttWindows": [
+      "2022-01-01",
+      "2023-12-24",
+      "2024-01-01",
+      "2024-04-23",
+      "2024-05-01",
+      "2026-01-01"
+    ],
+    "scope": "Count unique out-of-sample fixtures across separate cohorts. MoviOdds historical v32 overlaps the current feed; count v32 once and only append new results dated at or after 6 November. Setka 2022 and WTT names and histories stay separate, and their test rows only count once. Use the archive finish day as a proxy for the current archive's match day; earliest eligible history day uses two completed calendar days. WTT uses its source event dates and an eight-day lag. No synchronized prices or operational promotions."
+  },
+  "cohorts": {
+    "Setka 2022": {
+      "counts": {
+        "raw": 7851,
+        "valid": 7843,
+        "invalid": 4,
+        "duplicates": 4
+      },
+      "training": 1692,
+      "calibration": 809,
+      "test": 4223,
+      "testDays": 16,
+      "logistic": {
+        "n": 4223,
+        "correct": 2378,
+        "wrong": 1845,
+        "undecided": 0,
+        "accuracy": 0.5631067961165048,
+        "coverage": 1.0,
+        "brier": 0.24524123191124814,
+        "logLoss": 0.6837877364905853,
+        "ece": 0.02875435907390998,
+        "calibration": [
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 8,
+            "probability": 0.16684000015627226,
+            "frequency": 0.375
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 135,
+            "probability": 0.2649249124805085,
+            "frequency": 0.28888888888888886
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 557,
+            "probability": 0.36082144302200003,
+            "frequency": 0.39497307001795334
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 1248,
+            "probability": 0.45325956698787195,
+            "frequency": 0.4639423076923077
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 1350,
+            "probability": 0.5469026553394748,
+            "frequency": 0.534074074074074
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 699,
+            "probability": 0.6439392122092068,
+            "frequency": 0.5722460658082976
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 207,
+            "probability": 0.7303779352841864,
+            "frequency": 0.6618357487922706
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 19,
+            "probability": 0.8186525406845123,
+            "frequency": 0.6842105263157895
+          }
+        ]
+      },
+      "reference": {
+        "n": 4223,
+        "correct": 2111,
+        "wrong": 2112,
+        "undecided": 0,
+        "accuracy": 0.4998816007577552,
+        "coverage": 1.0,
+        "brier": 0.25002955291181206,
+        "logLoss": 0.693206289680904,
+        "ece": 0.005437548178415186,
+        "calibration": [
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 4223,
+            "probability": 0.4946808510638297,
+            "frequency": 0.5001183992422449
+          }
+        ]
+      }
+    },
+    "table_tennis_wtt_men_std.csv": {
+      "counts": {
+        "raw": 5442,
+        "outsideCompleteBO5OrInvalid": 228,
+        "acceptedBO5": 5214
+      },
+      "training": 2387,
+      "calibration": 416,
+      "test": 2411,
+      "testDays": 42,
+      "logistic": {
+        "n": 2411,
+        "correct": 1616,
+        "wrong": 795,
+        "undecided": 0,
+        "accuracy": 0.6702613023641643,
+        "coverage": 1.0,
+        "brier": 0.21257319891260246,
+        "logLoss": 0.6144405094954467,
+        "ece": 0.05748078513162188,
+        "calibration": [
+          {
+            "from": 0.0,
+            "to": 0.1,
+            "n": 61,
+            "probability": 0.07378856631014874,
+            "frequency": 0.14754098360655737
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 213,
+            "probability": 0.15143901952782327,
+            "frequency": 0.2535211267605634
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 281,
+            "probability": 0.25155175818418524,
+            "frequency": 0.302491103202847
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 378,
+            "probability": 0.3507133187617823,
+            "frequency": 0.4417989417989418
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 426,
+            "probability": 0.44696350279609687,
+            "frequency": 0.4460093896713615
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 366,
+            "probability": 0.5469186588654587,
+            "frequency": 0.6256830601092896
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 300,
+            "probability": 0.6486465666615246,
+            "frequency": 0.6866666666666666
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 236,
+            "probability": 0.744193932927767,
+            "frequency": 0.7838983050847458
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 127,
+            "probability": 0.8422930423695616,
+            "frequency": 0.9448818897637795
+          },
+          {
+            "from": 0.9,
+            "to": 1.0,
+            "n": 23,
+            "probability": 0.9321653607669199,
+            "frequency": 0.9565217391304348
+          }
+        ]
+      },
+      "reference": {
+        "n": 2411,
+        "correct": 1144,
+        "wrong": 1267,
+        "undecided": 0,
+        "accuracy": 0.4744919120696806,
+        "coverage": 1.0,
+        "brier": 0.25026899467764707,
+        "logLoss": 0.6936851872841236,
+        "ece": 0.030325850812598476,
+        "calibration": [
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 2411,
+            "probability": 0.49518223711772086,
+            "frequency": 0.5255080879303193
+          }
+        ]
+      }
+    },
+    "table_tennis_wtt_women_std.csv": {
+      "counts": {
+        "raw": 4850,
+        "outsideCompleteBO5OrInvalid": 223,
+        "acceptedBO5": 4627
+      },
+      "training": 2015,
+      "calibration": 354,
+      "test": 2258,
+      "testDays": 42,
+      "logistic": {
+        "n": 2258,
+        "correct": 1591,
+        "wrong": 667,
+        "undecided": 0,
+        "accuracy": 0.7046058458813109,
+        "coverage": 1.0,
+        "brier": 0.19216647627487218,
+        "logLoss": 0.5664170214786576,
+        "ece": 0.026314254022356712,
+        "calibration": [
+          {
+            "from": 0.0,
+            "to": 0.1,
+            "n": 128,
+            "probability": 0.05189026543851522,
+            "frequency": 0.0859375
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 171,
+            "probability": 0.15345143453213084,
+            "frequency": 0.15789473684210525
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 242,
+            "probability": 0.24907914180395735,
+            "frequency": 0.28512396694214875
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 239,
+            "probability": 0.34918342458281176,
+            "frequency": 0.3598326359832636
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 259,
+            "probability": 0.45235009402577203,
+            "frequency": 0.39768339768339767
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 345,
+            "probability": 0.5404598093838431,
+            "frequency": 0.5304347826086957
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 251,
+            "probability": 0.6496897800588131,
+            "frequency": 0.6454183266932271
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 233,
+            "probability": 0.7451370022482048,
+            "frequency": 0.7081545064377682
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 179,
+            "probability": 0.8511573736473121,
+            "frequency": 0.7821229050279329
+          },
+          {
+            "from": 0.9,
+            "to": 1.0,
+            "n": 211,
+            "probability": 0.9543516154686824,
+            "frequency": 0.9383886255924171
+          }
+        ]
+      },
+      "reference": {
+        "n": 2258,
+        "correct": 1144,
+        "wrong": 1114,
+        "undecided": 0,
+        "accuracy": 0.5066430469441984,
+        "coverage": 1.0,
+        "brier": 0.2499982281281442,
+        "logLoss": 0.6931436759068972,
+        "ece": 0.0065083178200697755,
+        "calibration": [
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 2258,
+            "probability": 0.5131513647642681,
+            "frequency": 0.5066430469441984
+          }
+        ]
+      }
+    }
+  }
+}

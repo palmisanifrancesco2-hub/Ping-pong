@@ -7,11 +7,17 @@ import {liveWinnerEstimates} from '../server/live-winner.js';
 import {marketEstimateReport} from '../server/market-estimates.js';
 import {otherBookmakerMarkets} from '../src/shared/additional-markets.js';
 import {startsInNextTwoHours} from '../src/shared/board.js';
+import expansionProtocol from '../research/protocol-expansion-v35.json' with {type:'json'};
+import {benchmarkFreshResults} from './benchmark-fresh-results.js';
 import model from'../models/elo-v1.json' with{type:'json'};
 try {
   const archive=await new ResultsFeed().archive();
   console.info(JSON.stringify({playerDataVerification:'success',source:archive.source,results:archive.results.length,rejected:archive.rejected,from:archive.from,to:archive.to,checkedAt:archive.checkedAt,modelValidated:model.validated,validation:model.validation}));
   if (process.env.VERCEL_ENV === 'production') {
+    if (archive.checkedAt.startsWith(expansionProtocol.movioddsTestBefore)) {
+      try { console.info(JSON.stringify(benchmarkFreshResults(archive))); }
+      catch { console.warn('EXPANSION_BENCHMARK_UNAVAILABLE'); }
+    }
     try {
       const board = await new MoviOddsFeed().board();
       const now = Date.now();

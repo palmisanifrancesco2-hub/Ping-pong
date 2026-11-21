@@ -1,0 +1,11 @@
+{
+  "markets": ["prematch match winner"],
+  "targetUniqueTestMatches": 40000,
+  "movioddsTestFrom": "2026-11-06",
+  "movioddsTestBefore": "2026-11-21",
+  "movioddsArtifact": "score-full-v1",
+  "movioddsHistoryLagDays": 2,
+  "setkaWindows": ["2022-06-10","2022-06-16","2022-06-18","2022-06-21","2022-06-23","2022-07-09"],
+  "wttWindows": ["2022-01-01","2023-12-24","2024-01-01","2024-04-23","2024-05-01","2026-01-01"],
+  "scope": "Count unique out-of-sample fixtures across separate cohorts. MoviOdds historical v32 overlaps the current feed; count v32 once and only append new results dated at or after 6 November. Setka 2022 and WTT names and histories stay separate, and their test rows only count once. Use the archive finish day as a proxy for the current archive's match day; earliest eligible history day uses two completed calendar days. WTT uses its source event dates and an eight-day lag. No synchronized prices or operational promotions."
+}

@@ -33,3 +33,12 @@
 .competition-filter input[type="checkbox"]{width:18px;min-height:18px;height:18px;accent-color:#bef264}
 .custom-start-window input{min-width:0;max-width:100%}
 .match-list .match-card:not([open]){content-visibility:auto;contain-intrinsic-size:auto 130px}
+.quote-comparison{display:inline-grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-width:100%;font-variant-numeric:tabular-nums}
+.quote-comparison>span{padding:6px 8px;border:1px solid #496048;border-radius:7px;background:#101e21}
+.quote-comparison>span:last-child{border-color:#4b637e;background:#142435}
+.quote-comparison small,.quote-comparison strong{display:block;text-align:left}
+.quote-comparison small{color:#c2d5df;font-size:11px;font-weight:500;line-height:1.2;margin:0}
+.quote-comparison strong{color:#f1f7ff;font-size:18px;line-height:1.3}
+.best-quote{flex-wrap:wrap}
+.quote-highlights>span.quote-comparison{display:grid;grid-column:span 2;margin:0}
+.quote-highlights .quote-comparison small{margin:0}
