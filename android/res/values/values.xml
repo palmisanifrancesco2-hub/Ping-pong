@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ping Pong Analytics</string>
+    <string name="browser_required">Installa un browser per aprire Ping Pong Analytics.</string>
+    <style name="AppTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#0D1524</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>
