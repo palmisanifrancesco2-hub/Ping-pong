@@ -151,3 +151,7 @@ Applicati i modelli congelati v29 a 261 incontri del 5 novembre successivi alla 
 ## Vincente prematch su 10.789 partite
 
 Completato il replay v31 su tre finestre cronologiche disgiunte, ognuna con nuovo training e calibrazione sui giorni precedenti. Logistica 5.927 corretti e Brier 0,24545. CatBoost binario 5.883 corretti e Brier 0,24607. Su 260 gare con quote prematch di entrambe le selezioni, il mercato depurato dal margine ha il Brier migliore. Sopra 2,00 la logistica ne indovina 17 su 50 e CatBoost 19 su 50. Tutti i 42 test Python passati. Il passaggio ancora aperto è la validazione prospettica con quote registrate al momento della previsione. [Rapporto e riproduzione](STUDIO-PREMATCH-10000-V31.md).
+
+## Vincente prematch su 20.449 partite
+
+Completato il replay v32 su sei finestre, con 9.660 partite aggiunte e riproduzione delle tre finestre v31. La logistica indovina 11.051 vincitori (54,04%, Brier 0,24676) e CatBoost 11.002 (53,80%, Brier 0,24701). Sulle sole partite aggiunte CatBoost ha un Brier leggermente migliore. Su 266 partite con quote archiviate, il bookmaker depurato dal margine conserva il Brier più basso. Sopra quota 2,00 la logistica ne indovina 18 su 52 e CatBoost 19 su 51. Tutti i 42 test Python passati. Validazione prospettica ancora aperta. [Rapporto e riproduzione](STUDIO-PREMATCH-20000-V32.md).

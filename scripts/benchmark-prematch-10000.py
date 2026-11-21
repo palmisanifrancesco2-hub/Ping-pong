@@ -1,4 +1,5 @@
 """Compare two fixed prematch model families across non-overlapping date folds."""
+import argparse
 import hashlib
 import importlib.util
 import json
@@ -24,9 +25,9 @@ def load_module(name, basename):
     return module
 
 
-def configure():
+def configure(protocol_name):
     read = lambda name: json.loads((ROOT/'research'/name).read_text())
-    plan = read('protocol-prematch-10000-v31.json')
+    plan = read(protocol_name)
     archive = read(plan['archiveProtocol'])
     rules = read(plan['modelProtocol'])
     setka_rules = read(rules['archive'])
@@ -77,15 +78,21 @@ def quote_pairs(rows, archive_path, inventory):
     return pairs
 
 
-def main():
-    plan, archive, rules, setka_rules, paths = configure()
+def main(protocol_name, report_name):
+    plan, archive, rules, setka_rules, paths = configure(protocol_name)
     expanded = load_module('expanded', 'benchmark-live-expanded.py')
     inventory = load_module('inventory', 'inventory-data-v16.py')
-    above_two = load_module('odds', 'benchmark-odds-above-two.py').above_two
+    odds = load_module('odds', 'benchmark-odds-above-two.py')
+    if plan['quoteMinimumExclusive'] != odds.THRESHOLD:
+        raise ValueError('Protocol and selection odds thresholds differ')
     rows, counts = features(expanded, paths[0], archive)
     setka, _ = expanded.replay.setka.read_matches(paths[1])
     older = expanded.replay.setka.build_features(setka, setka_rules)
     boundaries = [date.fromisoformat(d).toordinal() for d in plan['testBoundariesUtc']]
+    if len(boundaries) < 2 or any(a >= b for a,b in zip(boundaries,boundaries[1:])):
+        raise ValueError('Test boundaries must be in strictly increasing order')
+    if not plan['trainingEndsDaysBeforeFold'] > plan['calibrationStartsDaysBeforeFold'] >= plan['calibrationEndsDaysBeforeFold'] > 0:
+        raise ValueError('Train, calibration and test dates must be disjoint and ordered')
     folds, tested = [], []
     forecasts = defaultdict(list)
     block = lambda sample: [(r['x'], (0,0), r['y'][0], r['day']) for r in sample]
@@ -105,7 +112,7 @@ def main():
         folds.append({'from':date.fromordinal(start).isoformat(), 'untilExclusive':date.fromordinal(end).isoformat(),
                       'trainMoviOdds':len(train),'trainSetka':len(older),'calibration':len(cal),
                       'test':len(test),'testMetrics':fitted_report[0]['testMetrics']})
-    if len(tested) < 10000 or len({r['id'] for r in tested}) != len(tested):
+    if len(tested) < plan.get('minimumTestMatches', 10000) or len({r['id'] for r in tested}) != len(tested):
         raise ValueError('Test count or uniqueness failed')
     truth = np.asarray([r['y'][0] for r in tested])
     pairs = quote_pairs(tested, paths[0], inventory)
@@ -113,20 +120,42 @@ def main():
     report = {'protocol':plan,'sourceCounts':counts,'n':len(tested),
               'testDays':len({r['day'] for r in tested}),'folds':folds,'quoted':len(quoted),
               'models':{},'retrospective':True,'operationallyValidated':False}
-    market = [(1/pairs[tested[i]['id']]['homeOdds'])/(1/pairs[tested[i]['id']]['homeOdds']+
-               1/pairs[tested[i]['id']]['awayOdds']) for i in quoted]
-    report['marketNoVigOnQuotedMatches'] = metrics(truth[quoted],market)
+    market = np.asarray([pair['awayOdds']/(pair['homeOdds']+pair['awayOdds'])
+                         if (pair := pairs.get(row['id'])) else np.nan for row in tested])
+    report['marketNoVigOnQuotedMatches'] = metrics(truth[quoted],market[quoted]) if quoted else None
+
+    extra_until = plan.get('additionalTestUntilExclusive')
+    if extra_until:
+        cutoff = date.fromisoformat(extra_until).toordinal()
+        if cutoff not in boundaries[1:-1]:
+            raise ValueError('Added tests must occupy whole folds')
+        added = np.asarray([i for i,r in enumerate(tested) if r['day'] < cutoff], dtype=int)
+        added_quoted = [i for i in quoted if tested[i]['day'] < cutoff]
+        report['additionalTests'] = {'n':len(added),'quoted':len(added_quoted),'models':{},
+                                     'marketNoVigOnQuotedMatches':metrics(truth[added_quoted],market[added_quoted])
+                                     if added_quoted else None}
+
     for name, p in forecasts.items():
         p = np.asarray(p)
         selections = [{'p':float(p[i]),'y':int(truth[i]),**pairs[tested[i]['id']]} for i in quoted]
         delta = (p-truth)**2-(np.asarray(forecasts['elo'])-truth)**2
-        report['models'][name] = {'all':metrics(truth,p),'quoted':metrics(truth[quoted],p[quoted]),
-                                  'aboveTwo':summarize(above_two(selections)),
+        report['models'][name] = {'all':metrics(truth,p),'quoted':metrics(truth[quoted],p[quoted]) if quoted else None,
+                                  'aboveTwo':summarize(odds.above_two(selections)),
                                   'pairedBrierVsElo':paired_interval(tested,delta,plan['pairedComparisons']) if name!='elo' else None}
-    with (ROOT/'research/report-prematch-10000-v31.json').open('x') as file:
+        if extra_until:
+            added_selections = [s for i,s in zip(quoted,selections,strict=True) if tested[i]['day'] < cutoff]
+            report['additionalTests']['models'][name] = {
+                'all':metrics(truth[added],p[added]),
+                'quoted':metrics(truth[added_quoted],p[added_quoted]) if added_quoted else None,
+                'aboveTwo':summarize(odds.above_two(added_selections))}
+    with (ROOT/'research'/report_name).open('x') as file:
         json.dump(report,file,indent=2,allow_nan=False)
         file.write('\n')
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--protocol', default='protocol-prematch-10000-v31.json')
+    parser.add_argument('--report', default='report-prematch-10000-v31.json')
+    args = parser.parse_args()
+    main(args.protocol, args.report)
