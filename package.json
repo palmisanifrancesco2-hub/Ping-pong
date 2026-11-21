@@ -20,6 +20,7 @@
     "db:choices": "tsx scripts/setup-choices.ts",
     "db:bootstrap": "tsx scripts/bootstrap-db.ts",
     "db:verify": "tsx scripts/verify-db.ts",
+    "research:train-sports": "tsx scripts/train-individual-sports.ts",
     "research:collect": "tsx scripts/collect-research.ts",
     "research:evaluate": "tsx scripts/evaluate-models.ts",
     "study:bootstrap": "tsx scripts/bootstrap-forward-study.ts",

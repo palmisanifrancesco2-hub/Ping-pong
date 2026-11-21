@@ -10,6 +10,8 @@ export type SportCandidate = {
 export type SportTraining = {
   sport:AdditionalSport;
   source:string;
+  label?:string;
+  timeline?:'date'|'season';
   raw:number;
   complete:number;
   withScheduledStart:number;

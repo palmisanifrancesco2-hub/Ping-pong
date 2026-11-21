@@ -44,3 +44,6 @@
 .quote-highlights .quote-comparison small{margin:0}
 
 .personal-choice .panel-heading { flex-wrap: wrap; }
+
+.sport-training { margin-top: 24px; padding-top: 18px; border-top: 1px solid #29374b; }
+.sport-training dd { overflow-wrap: anywhere; }

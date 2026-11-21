@@ -1,0 +1,565 @@
+[
+  {
+    "sport": "tennis",
+    "source": "postgres",
+    "raw": 15509,
+    "complete": 10932,
+    "withScheduledStart": 0,
+    "withPublication": 10932,
+    "eligible": 2238,
+    "from": "2026-10-04T17:50:23.468Z",
+    "to": "2026-11-21T21:55:10.406Z",
+    "train": 525,
+    "calibration": 659,
+    "test": 863,
+    "selected": "Elo",
+    "candidates": [
+      {
+        "name": "Elo",
+        "calibration": {
+          "n": 659,
+          "hits": 377,
+          "accuracy": 0.5720789074355084,
+          "brier": 0.24388437365936746,
+          "logLoss": 0.6808127745997713
+        },
+        "test": {
+          "n": 863,
+          "hits": 509,
+          "accuracy": 0.589803012746234,
+          "brier": 0.2391629621489483,
+          "logLoss": 0.6710993519786549
+        }
+      },
+      {
+        "name": "Logistica Elo e storico",
+        "calibration": {
+          "n": 659,
+          "hits": 382,
+          "accuracy": 0.5796661608497724,
+          "brier": 0.24466563138662967,
+          "logLoss": 0.6824225545019591
+        },
+        "coefficients": [
+          0.2769778213975721,
+          0.0600193509076181,
+          0.43337008021728285,
+          0.49939058150424287
+        ],
+        "test": {
+          "n": 863,
+          "hits": 515,
+          "accuracy": 0.59675550405562,
+          "brier": 0.23943482844781522,
+          "logLoss": 0.6716846046883207
+        }
+      },
+      {
+        "name": "Elo calibrato",
+        "calibration": {
+          "n": 659,
+          "hits": 377,
+          "accuracy": 0.5720789074355084,
+          "brier": 0.24822920379788962,
+          "logLoss": 0.6896036683995727
+        },
+        "coefficients": [
+          0.44991242242077684
+        ],
+        "test": {
+          "n": 863,
+          "hits": 509,
+          "accuracy": 0.589803012746234,
+          "brier": 0.24714000512998474,
+          "logLoss": 0.6874226387774729
+        }
+      }
+    ],
+    "checkedAt": "2026-11-21T22:04:50.349Z"
+  },
+  {
+    "sport": "badminton",
+    "source": "postgres",
+    "raw": 2392,
+    "complete": 690,
+    "withScheduledStart": 0,
+    "withPublication": 690,
+    "eligible": 69,
+    "from": "2026-10-06T06:46:13.826Z",
+    "to": "2026-11-21T11:34:40.512Z",
+    "train": 17,
+    "calibration": 24,
+    "test": 27,
+    "selected": null,
+    "candidates": [],
+    "checkedAt": "2026-11-21T22:04:50.350Z"
+  },
+  {
+    "sport": "badminton",
+    "source": "historical",
+    "raw": 48820,
+    "complete": 48324,
+    "withScheduledStart": 0,
+    "withPublication": 0,
+    "eligible": 37154,
+    "from": "2007-01-16T12:00:00.000Z",
+    "to": "2026-07-05T12:00:00.000Z",
+    "train": 22249,
+    "calibration": 6921,
+    "test": 7977,
+    "selected": "Elo",
+    "candidates": [
+      {
+        "name": "Elo",
+        "calibration": {
+          "n": 6921,
+          "hits": 5001,
+          "accuracy": 0.7225834416991764,
+          "brier": 0.18450775682652285,
+          "logLoss": 0.5473766250232721
+        },
+        "test": {
+          "n": 7977,
+          "hits": 5664,
+          "accuracy": 0.7100413689356901,
+          "brier": 0.19101017786940605,
+          "logLoss": 0.5611395957155858
+        }
+      },
+      {
+        "name": "Elo calibrato",
+        "calibration": {
+          "n": 6921,
+          "hits": 5001,
+          "accuracy": 0.7225834416991764,
+          "brier": 0.1847301796075287,
+          "logLoss": 0.5479635447626314
+        },
+        "coefficients": [
+          2.235665819340255
+        ],
+        "test": {
+          "n": 7977,
+          "hits": 5664,
+          "accuracy": 0.7100413689356901,
+          "brier": 0.1912454053324849,
+          "logLoss": 0.5618251480049024
+        }
+      },
+      {
+        "name": "Logistica Elo e storico",
+        "calibration": {
+          "n": 6921,
+          "hits": 4945,
+          "accuracy": 0.7144921254154024,
+          "brier": 0.188290453372632,
+          "logLoss": 0.5571718660324924
+        },
+        "coefficients": [
+          1.0679268795747563,
+          1.0679268795747563,
+          0.5576297519458362,
+          0.25727147079294815
+        ],
+        "test": {
+          "n": 7977,
+          "hits": 5622,
+          "accuracy": 0.7047762316660399,
+          "brier": 0.1932359574307292,
+          "logLoss": 0.5665443927913576
+        }
+      }
+    ],
+    "checkedAt": "2026-11-21T22:08:15.872Z",
+    "label": "Archivio BWF · singolare maschile e femminile",
+    "timeline": "date"
+  },
+  {
+    "sport": "darts",
+    "source": "postgres",
+    "raw": 1158,
+    "complete": 834,
+    "withScheduledStart": 0,
+    "withPublication": 834,
+    "eligible": 133,
+    "from": "2026-10-07T10:55:03.973Z",
+    "to": "2026-11-21T22:00:10.364Z",
+    "train": 75,
+    "calibration": 12,
+    "test": 41,
+    "selected": null,
+    "candidates": [],
+    "checkedAt": "2026-11-21T22:04:50.350Z"
+  },
+  {
+    "sport": "darts",
+    "source": "historical",
+    "raw": 26196,
+    "complete": 26196,
+    "withScheduledStart": 0,
+    "withPublication": 0,
+    "eligible": 24547,
+    "from": "2019-02-09T12:00:00.000Z",
+    "to": "2025-10-30T12:00:00.000Z",
+    "train": 14468,
+    "calibration": 5048,
+    "test": 5031,
+    "selected": "Logistica Elo e storico",
+    "candidates": [
+      {
+        "name": "Logistica Elo e storico",
+        "calibration": {
+          "n": 5048,
+          "hits": 3280,
+          "accuracy": 0.6497622820919176,
+          "brier": 0.22062879967708088,
+          "logLoss": 0.6324204889665909
+        },
+        "coefficients": [
+          0.7038398702988594,
+          0.7038398702988594,
+          0.3943036036953493,
+          0.12243195922372571
+        ],
+        "test": {
+          "n": 5031,
+          "hits": 3302,
+          "accuracy": 0.6563307493540051,
+          "brier": 0.21729497452872004,
+          "logLoss": 0.624683381687833
+        }
+      },
+      {
+        "name": "Elo",
+        "calibration": {
+          "n": 5048,
+          "hits": 3305,
+          "accuracy": 0.6547147385103012,
+          "brier": 0.2203273107760847,
+          "logLoss": 0.6327829456279372
+        },
+        "test": {
+          "n": 5031,
+          "hits": 3287,
+          "accuracy": 0.6533492347445836,
+          "brier": 0.21785229552380903,
+          "logLoss": 0.6263066220950475
+        }
+      },
+      {
+        "name": "Elo calibrato",
+        "calibration": {
+          "n": 5048,
+          "hits": 3305,
+          "accuracy": 0.6547147385103012,
+          "brier": 0.22163412362096963,
+          "logLoss": 0.6346073070093019
+        },
+        "coefficients": [
+          1.505778907848775
+        ],
+        "test": {
+          "n": 5031,
+          "hits": 3287,
+          "accuracy": 0.6533492347445836,
+          "brier": 0.21869266201411294,
+          "logLoss": 0.6278529933450301
+        }
+      }
+    ],
+    "checkedAt": "2026-11-21T22:08:16.991Z",
+    "label": "Wharton SABI · PDC Players Championship",
+    "timeline": "date"
+  },
+  {
+    "sport": "snooker",
+    "source": "postgres",
+    "raw": 214,
+    "complete": 180,
+    "withScheduledStart": 0,
+    "withPublication": 180,
+    "eligible": 0,
+    "from": "2026-10-18T19:41:23.548Z",
+    "to": "2026-11-21T19:11:01.261Z",
+    "train": 0,
+    "calibration": 0,
+    "test": 0,
+    "selected": null,
+    "candidates": [],
+    "checkedAt": "2026-11-21T22:04:50.350Z"
+  },
+  {
+    "sport": "snooker",
+    "source": "historical",
+    "raw": 46334,
+    "complete": 46334,
+    "withScheduledStart": 0,
+    "withPublication": 0,
+    "eligible": 39423,
+    "from": "1968-07-01T12:00:00.000Z",
+    "to": "2019-07-01T12:00:00.000Z",
+    "train": 15216,
+    "calibration": 8397,
+    "test": 15810,
+    "selected": "Logistica Elo e storico",
+    "candidates": [
+      {
+        "name": "Logistica Elo e storico",
+        "calibration": {
+          "n": 8397,
+          "hits": 4899,
+          "accuracy": 0.5834226509467667,
+          "brier": 0.23713142536967552,
+          "logLoss": 0.6664057350437864
+        },
+        "coefficients": [
+          0.8943553312734579,
+          0.8943553312734579,
+          0.424338978281805,
+          -0.11227363720084388
+        ],
+        "test": {
+          "n": 15810,
+          "hits": 10156,
+          "accuracy": 0.6423782416192283,
+          "brier": 0.220350761755996,
+          "logLoss": 0.6307609729405111
+        }
+      },
+      {
+        "name": "Elo calibrato",
+        "calibration": {
+          "n": 8397,
+          "hits": 4889,
+          "accuracy": 0.5822317494343218,
+          "brier": 0.23767115823084828,
+          "logLoss": 0.6675993549120545
+        },
+        "coefficients": [
+          1.474493977965873
+        ],
+        "test": {
+          "n": 15810,
+          "hits": 10141,
+          "accuracy": 0.6414294750158128,
+          "brier": 0.22037312321038335,
+          "logLoss": 0.6309444015794814
+        }
+      },
+      {
+        "name": "Elo",
+        "calibration": {
+          "n": 8397,
+          "hits": 4889,
+          "accuracy": 0.5822317494343218,
+          "brier": 0.24094714995374367,
+          "logLoss": 0.6754960187440427
+        },
+        "test": {
+          "n": 15810,
+          "hits": 10141,
+          "accuracy": 0.6414294750158128,
+          "brier": 0.22102934852725606,
+          "logLoss": 0.6333040098649722
+        }
+      }
+    ],
+    "checkedAt": "2026-11-21T22:08:17.887Z",
+    "label": "Joseph D. O’Brien · archivio storico del circuito",
+    "timeline": "season"
+  },
+  {
+    "sport": "boxing",
+    "source": "postgres",
+    "raw": 118,
+    "complete": 0,
+    "withScheduledStart": 0,
+    "withPublication": 0,
+    "eligible": 0,
+    "from": null,
+    "to": null,
+    "train": 0,
+    "calibration": 0,
+    "test": 0,
+    "selected": null,
+    "candidates": [],
+    "checkedAt": "2026-11-21T22:04:50.350Z"
+  },
+  {
+    "sport": "boxing",
+    "source": "historical",
+    "raw": 7023,
+    "complete": 7023,
+    "withScheduledStart": 0,
+    "withPublication": 0,
+    "eligible": 698,
+    "from": "1912-06-24T12:00:00.000Z",
+    "to": "2026-11-14T12:00:00.000Z",
+    "train": 421,
+    "calibration": 140,
+    "test": 137,
+    "selected": "Logistica Elo e storico",
+    "candidates": [
+      {
+        "name": "Logistica Elo e storico",
+        "calibration": {
+          "n": 140,
+          "hits": 92,
+          "accuracy": 0.6571428571428571,
+          "brier": 0.22673372221692237,
+          "logLoss": 0.6457406380316819
+        },
+        "coefficients": [
+          0.9163217350593414,
+          1.0025821787775413,
+          1.2142374505637645,
+          -0.3000584425843493
+        ],
+        "test": {
+          "n": 137,
+          "hits": 87,
+          "accuracy": 0.635036496350365,
+          "brier": 0.22417564853597957,
+          "logLoss": 0.6406291557372705
+        }
+      },
+      {
+        "name": "Elo",
+        "calibration": {
+          "n": 140,
+          "hits": 88,
+          "accuracy": 0.6285714285714286,
+          "brier": 0.2328049347992487,
+          "logLoss": 0.6579462003219335
+        },
+        "test": {
+          "n": 137,
+          "hits": 95,
+          "accuracy": 0.6934306569343066,
+          "brier": 0.2214041533821318,
+          "logLoss": 0.6346266003467574
+        }
+      },
+      {
+        "name": "Elo calibrato",
+        "calibration": {
+          "n": 140,
+          "hits": 88,
+          "accuracy": 0.6285714285714286,
+          "brier": 0.23864392871870982,
+          "logLoss": 0.6702341007177534
+        },
+        "coefficients": [
+          1.2329343560825818
+        ],
+        "test": {
+          "n": 137,
+          "hits": 95,
+          "accuracy": 0.6934306569343066,
+          "brier": 0.23197610662323792,
+          "logLoss": 0.6568077010582165
+        }
+      }
+    ],
+    "checkedAt": "2026-11-21T22:08:18.660Z",
+    "label": "Open Boxing · incontri per il titolo mondiale",
+    "timeline": "date"
+  },
+  {
+    "sport": "mma",
+    "source": "postgres",
+    "raw": 74,
+    "complete": 0,
+    "withScheduledStart": 0,
+    "withPublication": 0,
+    "eligible": 0,
+    "from": null,
+    "to": null,
+    "train": 0,
+    "calibration": 0,
+    "test": 0,
+    "selected": null,
+    "candidates": [],
+    "checkedAt": "2026-11-21T22:04:50.350Z"
+  },
+  {
+    "sport": "mma",
+    "source": "historical",
+    "raw": 6618,
+    "complete": 6618,
+    "withScheduledStart": 0,
+    "withPublication": 0,
+    "eligible": 2298,
+    "from": "2013-02-16T12:00:00.000Z",
+    "to": "2026-10-10T12:00:00.000Z",
+    "train": 1196,
+    "calibration": 546,
+    "test": 556,
+    "selected": "Elo",
+    "candidates": [
+      {
+        "name": "Elo",
+        "calibration": {
+          "n": 546,
+          "hits": 297,
+          "accuracy": 0.5439560439560439,
+          "brier": 0.2466880480558904,
+          "logLoss": 0.6864430548159187
+        },
+        "test": {
+          "n": 556,
+          "hits": 306,
+          "accuracy": 0.5503597122302158,
+          "brier": 0.24465290298637776,
+          "logLoss": 0.6823636139767038
+        }
+      },
+      {
+        "name": "Logistica Elo e storico",
+        "calibration": {
+          "n": 546,
+          "hits": 297,
+          "accuracy": 0.5439560439560439,
+          "brier": 0.24778305872111792,
+          "logLoss": 0.6886912179061956
+        },
+        "coefficients": [
+          0.43646847395260874,
+          0.36824292033350325,
+          0.5278887704443598,
+          0.0635976836218889
+        ],
+        "test": {
+          "n": 556,
+          "hits": 303,
+          "accuracy": 0.5449640287769785,
+          "brier": 0.24679606619877378,
+          "logLoss": 0.6867132849262838
+        }
+      },
+      {
+        "name": "Elo calibrato",
+        "calibration": {
+          "n": 546,
+          "hits": 297,
+          "accuracy": 0.5439560439560439,
+          "brier": 0.2488987877856393,
+          "logLoss": 0.6909433302344786
+        },
+        "coefficients": [
+          0.5208304691212022
+        ],
+        "test": {
+          "n": 556,
+          "hits": 306,
+          "accuracy": 0.5503597122302158,
+          "brier": 0.24845026185072733,
+          "logLoss": 0.6900462095649198
+        }
+      }
+    ],
+    "checkedAt": "2026-11-21T22:08:18.718Z",
+    "label": "Nathan Bair · incontri UFC",
+    "timeline": "date"
+  }
+]

@@ -1,15 +1,11 @@
 import {useEffect,useState} from 'react';
+import {SportSelect} from './SportSelect';
 import {bookmakerOddsText,dateTime} from './shared/format';
 import {individualSports,type AdditionalSport,type IndividualSport,type SportBoard,type SportDetail} from './shared/individual-sports';
 
-export function IndividualOdds({token,onTableTennis}:{token:string;onTableTennis:()=>void}) {
-  const [sport,setSport]=useState<IndividualSport>('tennis');
+export function IndividualOdds({token,sport,onSelect,onTableTennis}:{token:string;sport:IndividualSport;onSelect:(sport:IndividualSport)=>void;onTableTennis:()=>void}) {
   return <>
-    <section className="panel"><label>Seleziona sport
-      <select aria-label="Seleziona sport" value={sport} onChange={event=>setSport(event.target.value as IndividualSport)}>
-        {Object.entries(individualSports).map(([key,label])=><option key={key} value={key}>{label}</option>)}
-      </select></label>
-    </section>
+    <section className="panel"><SportSelect sport={sport} onSelect={onSelect}/></section>
     {sport==='table_tennis' ? <section className="panel"><h2>Quote e modelli di tennistavolo</h2>
       <button className="primary" onClick={onTableTennis}>Apri Partite e mercati</button>
     </section> : <SportOdds key={sport} sport={sport} token={token}/>}
