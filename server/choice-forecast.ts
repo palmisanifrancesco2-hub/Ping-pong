@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { playerKey, type MatchResult } from '../src/domain/player-model.js';
 import { isUpcomingOrLive, quoteIdentity, type FeedMatch } from '../src/shared/board.js';
 import type { ChoiceForecast, ChoiceModelResult, ChoiceSnapshot, PersonalChoice } from '../src/shared/choices.js';
+import { bookmakerWinnerPrices } from '../src/shared/quote-selection.js';
 import { liveWinnerEstimate } from './live-winner.js';
 import { ensembleSignals, ensembleWinnerEstimate } from './multi-model.js';
 import { scoreSignals, scoreWinnerEstimate } from './score-signals.js';
@@ -10,6 +11,7 @@ import type { ResultsArchive } from './results.js';
 
 const forecastShape = z.object({
   selection: z.string(), probability: z.number().min(0).max(1), model: z.string(), phase: z.enum(['prematch','live']),
+  prices: z.object({fairOdds:z.number().min(1),bet365:z.object({odds:z.number().gt(1),quoteAt:z.iso.datetime({offset:true}),key:z.string()}).nullable()}).optional(),
 });
 const resultShape = z.object({
   winner: z.string(), sets: z.array(z.tuple([z.number(), z.number()])), finishedAt: z.iso.datetime({offset:true}),
@@ -18,13 +20,25 @@ export type StoredChoice = Omit<PersonalChoice, 'snapshot'> & {
   snapshot: ChoiceSnapshot & { modelForecast?: ChoiceForecast; forecastSignature?: string; modelResult?: ChoiceModelResult; resultSignature?: string };
 };
 
+function withPrices(forecast: ChoiceForecast, match: FeedMatch, snapshot: ChoiceSnapshot, now: number): ChoiceForecast {
+  const fairOdds = 1 / forecast.probability;
+  if (!Number.isFinite(fairOdds) || fairOdds < 1) return forecast;
+  const winnerPrice = snapshot.selection ? undefined
+    : bookmakerWinnerPrices(match,now).find(quote=>quote.side===forecast.selection);
+  const bet365 = snapshot.selection
+    ? {odds:snapshot.selection.odds,quoteAt:snapshot.selection.quoteAt,key:snapshot.selection.key}
+    : winnerPrice && winnerPrice.odds_dec>1
+      ? {odds:winnerPrice.odds_dec,quoteAt:winnerPrice.ts,key:quoteIdentity(winnerPrice)} : null;
+  return {...forecast,prices:{fairOdds,bet365}};
+}
+
 export function estimateChoice(match: FeedMatch, snapshot: ChoiceSnapshot, archive: ResultsArchive | undefined, preferEnsemble: boolean, now: number): ChoiceForecast | undefined {
   if (!isUpcomingOrLive(match, now) || archive?.results.some(result=>result.id===match.id)) return;
   if (snapshot.selection) {
     if (!archive || match.in_play) return;
     const signals = preferEnsemble ? ensembleSignals : scoreSignals;
     const forecast = signals(match, archive, now).find(item=>quoteIdentity(item.quote)===snapshot.selection?.key);
-    if (forecast?.modelName) return {selection:forecast.selection,probability:forecast.probability,model:forecast.modelName,phase:'prematch'};
+    if (forecast?.modelName) return withPrices({selection:forecast.selection,probability:forecast.probability,model:forecast.modelName,phase:'prematch'},match,snapshot,now);
     return;
   }
 
@@ -35,12 +49,12 @@ export function estimateChoice(match: FeedMatch, snapshot: ChoiceSnapshot, archi
   const rounded = Math.round(estimate.homeProbability * 1000);
   if (rounded === 500) return;
   const home = rounded > 500;
-  return {
+  return withPrices({
     selection:home ? match.home : match.away,
     probability:home ? estimate.homeProbability : 1-estimate.homeProbability,
     model:estimate.modelName,
     phase:match.in_play ? 'live' : 'prematch',
-  };
+  },match,snapshot,now);
 }
 
 function signature(key: string, userId: string, choiceKey: string, snapshot: ChoiceSnapshot, forecast: ChoiceForecast, result?: ChoiceModelResult) {
@@ -49,6 +63,9 @@ function signature(key: string, userId: string, choiceKey: string, snapshot: Cho
     snapshot.startsAt,snapshot.selection?.key,snapshot.selection?.odds,snapshot.selection?.quoteAt,
     forecast.selection,forecast.probability,forecast.model,forecast.phase,
     result && [result.winner,result.sets,result.finishedAt],
+    // Preserve signatures issued before prices were stored on the forecast.
+    ...(forecast.prices ? [forecast.prices.fairOdds,forecast.prices.bet365?.odds,
+      forecast.prices.bet365?.quoteAt,forecast.prices.bet365?.key] : []),
   ])).digest('hex');
 }
 

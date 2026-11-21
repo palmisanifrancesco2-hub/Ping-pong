@@ -3,8 +3,9 @@ import { setTimeout, clearTimeout } from 'node:timers';
 import { createClient } from '@supabase/supabase-js';
 import type { Board } from '../src/shared/board.js';
 import { isUpcomingOrLive, marketName, quoteIdentity, quoteStatus } from '../src/shared/board.js';
+import { fairOddsText } from '../src/shared/format.js';
 import { historyWindow } from '../src/shared/history.js';
-import type { ChoiceSnapshot } from '../src/shared/choices.js';
+import type { ChoiceComparison, ChoiceSnapshot } from '../src/shared/choices.js';
 import { userDatabase } from './supabase.js';
 import type { Env } from './auth.js';
 import { estimateChoice, matchChoiceResult, readComparison, settleSnapshot, signForecast, type StoredChoice } from './choice-forecast.js';
@@ -24,6 +25,11 @@ export function choiceSnapshot(board: Board, eventId: string, quoteKey: string |
       line: q.line ?? null, handicap: q.handicap ?? null, key: quoteIdentity(q), odds: q.odds_dec, quoteAt: q.ts,
     } : null };
 }
+function publicChoice(entry: StoredChoice, comparison?: ChoiceComparison) {
+  const {modelForecast,forecastSignature,modelResult,resultSignature,...snapshot} = entry.snapshot;
+  return {...entry,snapshot,comparison};
+}
+
 export class Choices {
   constructor(private env: Env, private fetcher: typeof fetch = fetch, private now = Date.now,
     private getArchive?: () => Promise<ResultsArchive>) {}
@@ -58,17 +64,17 @@ export class Choices {
 
     return Promise.all(entries.map(async (entry,index)=>{
       let comparison = comparisons[index];
-      const {modelForecast,forecastSignature,modelResult,resultSignature,...snapshot} = entry.snapshot;
+      const {snapshot} = entry;
       if (key && db && comparison && !comparison.result) {
         const result = matchChoiceResult(snapshot,results.get(entry.event_source_id),this.now());
         if (result) {
           const settled = settleSnapshot(key,userId,entry,comparison.forecast,result);
           await db.from('personal_choices').update({snapshot:settled}).eq('id',entry.id).eq('user_id',userId)
-            .eq('snapshot->>forecastSignature',forecastSignature!);
+            .eq('snapshot->>forecastSignature',snapshot.forecastSignature!);
           comparison = {...comparison,result};
         }
       }
-      return {...entry,snapshot,comparison};
+      return publicChoice(entry,comparison);
     }));
   }
   async list(token: string, userId: string, period: string, page: number, status: string) {
@@ -96,17 +102,22 @@ export class Choices {
         ? estimateChoice(match,snapshot,archive,payload.modelChoice==='ensemble',initialTime) : undefined;
       const expected = payload.expectedForecast;
       if (!forecast || forecast.selection!==expected.selection || (expected.model!==undefined && forecast.model!==expected.model) ||
-        Math.round(forecast.probability*1000)!==Math.round(expected.probability*1000)) throw new Error('CHOICE_FORECAST_UNAVAILABLE');
+        Math.round(forecast.probability*1000)!==Math.round(expected.probability*1000) ||
+        fairOddsText(forecast.probability)!==fairOddsText(expected.probability)) throw new Error('CHOICE_FORECAST_UNAVAILABLE');
       stored.modelForecast=forecast;
       stored.forecastSignature=signForecast(key!,userId,choiceKey,snapshot,forecast);
     }
     const result = await db.from('personal_choices').insert({ user_id:userId,event_source_id:payload.eventId,choice_key:choiceKey,snapshot:stored,notes:payload.notes }).select(columns).single();
-    if (!result.error) return result.data;
+    if (!result.error) {
+      const entry = result.data as unknown as StoredChoice;
+      return publicChoice(entry,key ? readComparison(key,userId,entry) : undefined);
+    }
     if (result.error.code !== '23505') throw new Error('CHOICES_SAVE_FAILED');
     // Preserve the first saved price and time on repeat clicks.
     const existing = await db.from('personal_choices').select(columns).eq('user_id',userId).eq('event_source_id',payload.eventId).eq('choice_key',choiceKey).single();
     if (existing.error) throw new Error('CHOICES_SAVE_FAILED');
-    return existing.data;
+    const entry = existing.data as unknown as StoredChoice;
+    return publicChoice(entry,key ? readComparison(key,userId,entry) : undefined);
   }
   async update(token: string, userId: string, payload: z.infer<typeof updateChoiceSchema>) {
     const db = userDatabase(token,this.env,this.fetcher);

@@ -14,6 +14,7 @@ export type ChoiceForecast = {
   probability: number;
   model: string;
   phase: 'prematch' | 'live';
+  prices?: { fairOdds: number; bet365: { odds: number; quoteAt: string; key: string } | null };
 };
 
 export type ChoiceModelResult = {
