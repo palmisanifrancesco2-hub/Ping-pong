@@ -10,6 +10,7 @@ import{z}from'zod';
 import{ManualBets,betSchema,betUpdateSchema}from'./manual-bets.js';
 import{scoreSignals,scoreValueReport,runtimeModel}from'./score-signals.js';
 import{liveWinnerEstimates}from'./live-winner.js';
+import{marketEstimateReport,marketEstimateSelections}from'./market-estimates.js';
 import{userDatabase}from'./supabase.js';
 import{googleAvailability}from'../src/shared/google-auth.js';
 import type { IncomingMessage, ServerResponse } from 'node:http';
@@ -53,7 +54,7 @@ export function createHandler(deps: Dependencies = {}) {
     const methods = ['/api/study','/api/market-study','/api/training'].includes(path)?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
     if (!methods.includes(req.method ?? '')) { res.setHeader('Allow', methods.join(', ')); return send(405, { error: 'Metodo non consentito.' }); }
     if (path === '/api/health') return send(200, { status: 'ok', version: '0.1.0' });
-    if (!['/api/training','/api/prediction-system','/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run','/api/profiles','/api/market-study'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
+    if (!['/api/training','/api/prediction-system','/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run','/api/profiles','/api/market-study','/api/market-estimates'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
     if(path==='/api/study-run'){
       if(!authorizedStudyCron(req.headers.authorization,env.CRON_SECRET))return send(401,{error:'Esecuzione non autorizzata.'});
       const deadline=now()+285000;let legacy:unknown,markets:unknown,training:unknown;
@@ -67,6 +68,14 @@ export function createHandler(deps: Dependencies = {}) {
     if (!match || !userId) return send(401, { error: 'Accesso riservato agli utenti autorizzati.' });
     try {
       if(path==='/api/market-study'){try{return send(200,req.method==='POST'?await marketStudy.run(userId):await marketStudy.report(userId));}catch(error){if(error instanceof Error&&error.message==='MARKET_STUDY_OWNER_ONLY')return send(403,{error:'Accesso al test riservato al proprietario.'});throw error;}}
+      if(path==='/api/market-estimates'){
+        const id=url.searchParams.get('eventId');
+        if(!id||id.length>100)return send(400,{error:'Partita non valida.'});
+        const match=(await feed.board()).matches.find(m=>m.id===id);
+        if(!match)return send(404,{error:'Partita non disponibile.'});
+        const archive=marketEstimateSelections(match,now()).length ? await analyses.results.archive() : null;
+        return send(200,marketEstimateReport(match,archive,now()));
+      }
       if(path==='/api/study'){try{return send(200,req.method==='POST'?await study.run(userId):await study.report(userId));}catch(error){if(error instanceof Error&&error.message==='STUDY_OWNER_ONLY')return send(403,{error:'Solo il proprietario può aggiornare la raccolta.'});throw error;}}
       if(path==='/api/profiles'){const id=url.searchParams.get('eventId');if(!id||id.length>100)return send(400,{error:'Evento non valido.'});let m=(await feed.board()).matches.find(m=>m.id===id);if(!m){const r=(await analyses.results.archive()).results.find(r=>r.id===id);if(r)m={...r,sport:'table_tennis',in_play:false,quotes:[]};}if(!m)return send(404,{error:'Evento non disponibile per la ricerca dei profili.'});return send(200,await profiles.forEvent(m));}
       if(path==='/api/training'){if(req.method==='POST'&&(Number(req.headers['content-length']??0)>0||req.headers['transfer-encoding']))return send(400,{error:'Non sono consentiti parametri di training dal browser.'});try{return send(200,req.method==='POST'?await trainer.run(userId):await trainer.report(userId));}catch(e){if(e instanceof Error&&e.message==='ADAPTIVE_OWNER_ONLY')return send(403,{error:'Training riservato al proprietario.'});throw e;}}

@@ -1,5 +1,6 @@
 import artifact from '../models/live-score-only-v29.json' with {type:'json'};
-import {isFreshLive, quoteStatus, type FeedMatch} from '../src/shared/board.js';
+import {isFreshLive, type FeedMatch} from '../src/shared/board.js';
+import {hasBestOfFiveMarket} from '../src/shared/additional-markets.js';
 import type {WinnerEstimate} from '../src/shared/value.js';
 
 const probabilities: Readonly<Record<string,number>> = artifact.probabilities;
@@ -27,9 +28,7 @@ export function liveWinnerEstimate(match:FeedMatch,now:number):WinnerEstimate|un
   if (!isFreshLive(match,now) || !match.score || !Number.isFinite(age) || age<0 || age>60_000
     || !artifact.leagues.includes(match.league)) return;
   // A current final match score market must identify three sets as the winning total.
-  const finalScores = match.quotes.filter(q=>q.fixture_id===match.id && q.group_id==='920064'
-    && q.group_name==='Match Correct Score' && q.phase==='inplay' && quoteStatus(match,q,now)==='Letta di recente dalla fonte');
-  if (!finalScores.length || finalScores.some(q=>!/^(?:3-[012]|[012]-3)$/.test(q.line ?? ''))) return;
+  if (!hasBestOfFiveMarket(match,now)) return;
   const state = completedSetScore(match.score);
   if (!state || !Object.hasOwn(probabilities,state)) return;
   return {homeProbability:probabilities[state], modelName:'Frequenze storiche per punteggio · v29',

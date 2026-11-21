@@ -4,6 +4,8 @@ import {scoreValueReport} from '../server/score-signals.js';
 import {ensembleValueReport} from '../server/multi-model.js';
 import {selectedQuotes} from '../src/shared/quote-selection.js';
 import {liveWinnerEstimates} from '../server/live-winner.js';
+import {marketEstimateReport} from '../server/market-estimates.js';
+import {otherBookmakerMarkets} from '../src/shared/additional-markets.js';
 import model from'../models/elo-v1.json' with{type:'json'};
 try {
   const archive=await new ResultsFeed().archive();
@@ -26,6 +28,17 @@ try {
         liveWithScoreAndSeenAt:live.filter(match=>match.score&&match.last_live_seen).length,
         liveWithCorrectScoreMarket:live.filter(match=>match.quotes.some(q=>q.group_id==='920064')).length,
         liveEstimates:Object.keys(liveWinnerEstimates(live,now)).length,
+      }));
+      const markets = board.matches.map(match=>otherBookmakerMarkets(match,now));
+      const estimateCounts = board.matches.map(match=>Object.keys(marketEstimateReport(match,archive,now).estimates).length);
+      console.info(JSON.stringify({
+        additionalMarketVerification:'success',
+        eventsWithAdditionalPrices:markets.filter(groups=>groups.length>0).length,
+        eventsWithTotals:markets.filter(groups=>groups.some(group=>group.title.startsWith('Over/Under'))).length,
+        eventsWithHandicap:markets.filter(groups=>groups.some(group=>group.title.startsWith('Handicap'))).length,
+        prices:markets.flat().reduce((sum,group)=>sum+group.quotes.length,0),
+        eventsWithEstimates:estimateCounts.filter(Boolean).length,
+        estimates:estimateCounts.reduce((sum,count)=>sum+count,0),
       }));
     } catch { console.warn('WINNER_DISPLAY_VERIFICATION_UNAVAILABLE'); }
   }

@@ -55,4 +55,8 @@ La raccolta del punto 3 può precedere o affiancare il punto 2, mantenendo sigil
 
 Test: `python -m unittest discover -s scripts -p 'test_market_distributions.py'`, `npm run check`. Verificati causalità temporale, identità/duplicati, orientamento e linee degli handicap, nesting delle probabilità, calibrazione, purging delle etichette tardive, bootstrap e punteggi propri.
 
+## Mercati nei dettagli della partita
+
+La sezione «Altri mercati Bet365» mostra prezzi aggiornati con linea, set e orario quando disponibili. Per i mercati prematch supportati, l’app usa le stime sperimentali dell’artefatto v8 se il formato BO5 è confermato dal mercato del risultato esatto e sono disponibili almeno 30 risultati per giocatore. Ogni stima è abbinata al tipo di mercato, al periodo, alla selezione e alla linea esatta. La quota equa è calcolata sulla probabilità del modello. I prezzi degli altri mercati e quelli live sono consultabili quando presenti nel feed.
+
 Fonti metodologiche: [Quantile Regression Forests](https://www.jmlr.org/papers/v7/meinshausen06a.html), [Distributional Random Forests](https://jmlr.org/papers/v23/21-0585.html), [scikit-learn: ensemble](https://scikit-learn.org/stable/modules/ensemble.html). Queste pubblicazioni motivano candidati: non attestano le prestazioni della nostra app.

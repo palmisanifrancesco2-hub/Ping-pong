@@ -102,6 +102,7 @@ describe('private HTTP API', () => {
     const feed = { board: vi.fn() };
     const base = await start(createHandler({ env: {}, feed }));
     expect((await fetch(`${base}/api/board`)).status).toBe(401);
+    expect((await fetch(`${base}/api/market-estimates?eventId=match`)).status).toBe(401);
     expect(feed.board).not.toHaveBeenCalled();
   });
   it('serves the complete board privately and sanitizes upstream failures', async () => {
