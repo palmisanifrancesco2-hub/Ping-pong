@@ -159,3 +159,7 @@ Completato il replay v32 su sei finestre, con 9.660 partite aggiunte e riproduzi
 ## Mercati prematch su 20.449 partite
 
 Il replay v33 estende le sei finestre v32 a 14 mercati su set, punti e risultato esatto. Modello scelto prima di ciascuna finestra. Brier migliore del riferimento con intervallo interamente sotto zero per sei linee handicap e risultato esatto. Per esempio, handicap +5,5 punti da 0,22831 a 0,22566, risultato esatto 4.165 corretti contro 3.905. Sugli Over/Under e sul primo set gli intervalli includono zero. Quote sincronizzate indisponibili per questo esperimento. [Rapporto e riproduzione](STUDIO-MERCATI-PREMATCH-V33.md).
+
+## Verifica WTT e quote Bet365 per i mercati secondari
+
+Il v34 confronta 2.015 partite WTT distinte e 396 incontri MoviOdds con almeno una coppia quota esatta. Sul WTT il Brier migliora sulle sei linee handicap in entrambe le coorti. Sui campioni Bet365 più grandi, le probabilità del bookmaker al netto del margine restano più precise per primo set e handicap set. Sull’Over 74,5 punti ci sono solo 40 coppie; sugli handicap punti quattro. Tutti i 44 test Python passati. [Rapporto e riproduzione](STUDIO-ROBUSTEZZA-MERCATI-V34.md).

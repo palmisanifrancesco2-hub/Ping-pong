@@ -1,0 +1,15 @@
+{
+  "modelProtocol": "protocol-secondary-markets-v33.json",
+  "externalArchive": "protocol-v15.json",
+  "externalTrainBefore": "2024-01-01",
+  "externalCalibrationBefore": "2024-07-01",
+  "externalSelectionBefore": "2025-01-01",
+  "externalTestBefore": "2026-01-01",
+  "externalMinimumPlayerHistory": 5,
+  "externalHistoryLagCalendarDays": 8,
+  "minimumMarketPrice": 1.30,
+  "minimumQuoteLeadSeconds": 60,
+  "maximumQuoteAgeSeconds": 300,
+  "maximumOutcomeDelayHours": 6,
+  "notes": "External circuit transfer of the model families with new chronological fitting, no pooling with the app circuit. Only internally coherent complete BO5 results. Prior candidate-hyperparameters reused. Market overlay replays the frozen v33 model selection on the same MoviOdds folds and uses exact pairs from the archived Bet365 closing cache. Odds must predate the decision cutoff by construction. No profitability or executable-price claim."
+}

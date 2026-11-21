@@ -87,12 +87,7 @@ def pooled_models(plan, train, cal, choose, test):
     return output,selection,joint_params
 
 
-def main():
-    research=ROOT/'research'
-    plan=json.loads((research/'protocol-secondary-markets-v33.json').read_text())
-    spec=importlib.util.spec_from_file_location('prematch',Path(__file__).with_name('benchmark-prematch-10000.py'))
-    prematch=importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(prematch)
+def load_rows(plan, prematch):
     partition,archive,rules,setka_rules,paths=prematch.configure(plan['partition'])
     expanded=prematch.load_module('expanded','benchmark-live-expanded.py')
     rows,counts=prematch.features(expanded,paths[0],archive)
@@ -111,8 +106,11 @@ def main():
         if r['day']!=day or label!=r['scoreClass']:
             raise ValueError('Misaligned Setka outcome')
         r.update(target=target_outcomes(sets,label),league='Setka 2022 SCORE')
+    return partition,rows,older,counts,setka_counts,paths[0]
+
+
+def replay(plan,partition,rows,older):
     boundaries=[date.fromisoformat(value).toordinal() for value in partition['testBoundariesUtc']]
-    folds,tested,pool=[],[],defaultdict(lambda:defaultdict(list))
     for start,end in zip(boundaries,boundaries[1:]):
         train=older+[r for r in rows if r['day']<=start-partition['trainingEndsDaysBeforeFold']]
         choose_day=start-partition['calibrationEndsDaysBeforeFold']
@@ -120,14 +118,26 @@ def main():
         choose=[r for r in rows if r['day']==choose_day]
         test=[r for r in rows if start<=r['day']<end]
         predictions,selected,temp=pooled_models(plan,train,cal,choose,test)
+        yield ({'from':date.fromordinal(start).isoformat(),'untilExclusive':date.fromordinal(end).isoformat(),
+                'training':len(train),'calibration':len(cal),'selection':len(choose),'test':len(test),
+                'selected':selected,'scoreCalibration':temp},test,predictions)
+
+
+def main():
+    research=ROOT/'research'
+    plan=json.loads((research/'protocol-secondary-markets-v33.json').read_text())
+    spec=importlib.util.spec_from_file_location('prematch',Path(__file__).with_name('benchmark-prematch-10000.py'))
+    prematch=importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(prematch)
+    partition,rows,older,counts,setka_counts,_=load_rows(plan,prematch)
+    folds,tested,pool=[],[],defaultdict(lambda:defaultdict(list))
+    for fold,test,predictions in replay(plan,partition,rows,older):
         for target, models in predictions.items():
             for model,values in models.items():
                 pool[target][model].append(values)
         tested.extend(test)
-        folds.append({'from':date.fromordinal(start).isoformat(),'untilExclusive':date.fromordinal(end).isoformat(),
-                      'training':len(train),'calibration':len(cal),'selection':len(choose),'test':len(test),
-                      'selected':selected,'scoreCalibration':temp})
-        print(folds[-1]['from'],len(test),flush=True)
+        folds.append(fold)
+        print(fold['from'],len(test),flush=True)
     if len({r['id'] for r in tested})!=len(tested) or len(tested)<partition['minimumTestMatches']:
         raise ValueError('Invalid test coverage or duplicate matches')
     _,truth=matrix(tested)
