@@ -14,17 +14,20 @@ const quote = z.object({
   odds_dec: z.number().finite().nonnegative(), odds_frac: text.optional(), ts: time,
   suspended: z.boolean().optional(), phase: z.enum(['prematch', 'inplay']).optional(),
 });
-const schema = z.object({
-  server_time: time, warming: z.boolean().optional(),
+const schema = <S extends string>(sport:S) => z.object({
+  server_time: time, warming: z.boolean().optional(), markets:z.string().optional(),
   matches: z.array(z.object({
-    id: text, sport: z.literal('table_tennis'), home: text, away: text, league: text,
+    id: text, sport: z.literal(sport), home: text, away: text, league: text,
     kickoff_utc: time.optional(), in_play: z.boolean(), score: text.optional(), polled_at: time.optional(), last_live_seen: time.nullish().transform(value=>value??undefined),
     group_status: z.record(z.string(), z.object({ polled_at: time.optional(), stale: z.boolean().optional() })).optional(),
     quotes: z.array(quote).max(20_000),
+    stats: z.object({sport:text,surface:text.optional(),format:text.optional(),current_set:z.number().optional(),home:z.record(z.string(),z.unknown()).optional(),away:z.record(z.string(),z.unknown()).optional()}).nullish().transform(value=>value??undefined),
   })).max(10_000),
 });
-export function parseBoard(payload: unknown, checkedAt: string): Board {
-  const data = schema.parse(payload);
+export function parseBoard(payload: unknown, checkedAt: string): Board;
+export function parseBoard<S extends string>(payload: unknown, checkedAt: string,sport:S): Board<S>;
+export function parseBoard(payload: unknown, checkedAt: string,sport='table_tennis'): Board<string> {
+  const data = schema(sport).parse(payload);
   const age = Date.parse(time.parse(checkedAt)) - Date.parse(data.server_time);
   if (age > 120_000 || age < -60_000) throw new Error('MOVIODDS_INVALID_TIME');
   const ids = new Set<string>();
@@ -39,31 +42,35 @@ export function parseBoard(payload: unknown, checkedAt: string): Board {
     }
   }
   return { provider: 'MoviOdds', bookmakerSite: 'bet365.com.au', checkedAt,
-    serverTime: data.server_time, warming: data.warming ?? false, matches: data.matches };
+    serverTime: data.server_time, warming: data.warming ?? false, matches: data.matches,
+    ...(data.markets==='main' ? {mainLinesOnly:true} : {}) };
 }
 
-export class MoviOddsFeed {
-  private cached?: { at: number; board: Board };
-  private pending?: Promise<Board>;
+export class MoviOddsFeed<S extends string = 'table_tennis'> {
+  private cached?: { at: number; board: Board<S> };
+  private pending?: Promise<Board<S>>;
   private failedAt?: number;
-  constructor(private fetcher: typeof fetch = fetch, private now: () => number = Date.now, private env: Env = process.env) {}
-  async board(force = false): Promise<Board> {
+  constructor(private fetcher: typeof fetch = fetch, private now: () => number = Date.now, private env: Env = process.env, private sport?:S) {}
+  async board(force = false): Promise<Board<S>> {
     const board = await this.rawBoard(force);
     return { ...board, matches: board.matches.filter(m => isUpcomingOrLive(m, this.now())) };
   }
-  private async rawBoard(force: boolean): Promise<Board> {
+  private async rawBoard(force: boolean): Promise<Board<S>> {
     if (this.cached && this.now() - this.cached.at < (force ? 10_000 : 30_000)) return this.cached.board;
     if (this.failedAt !== undefined && this.now() - this.failedAt < 30_000) throw new Error('MOVIODDS_COOLDOWN');
     if (this.pending) return this.pending;
     this.pending = this.read();
     try { return await this.pending; } finally { this.pending = undefined; }
   }
-  private async read(): Promise<Board> {
+  private async read(): Promise<Board<S>> {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 15_000);
     let failure = 'MOVIODDS_NETWORK_ERROR';
     try {
-      const response = await movioddsRequest(MOVIODDS_URL, {
+      const url = new URL(MOVIODDS_URL);
+      if (this.sport) url.searchParams.set('sport',this.sport);
+      if (this.sport==='tennis'||this.sport==='darts') url.searchParams.set('stats','1');
+      const response = await movioddsRequest(url.href, {
         signal: controller.signal, redirect: 'error', cache: 'no-store', headers: { Accept: 'application/json' },
       }, this.fetcher, this.env);
       if (!response.ok) {
@@ -80,14 +87,14 @@ export class MoviOddsFeed {
           const chunk = await reader.read();
           if (chunk.done) break;
           size += chunk.value.byteLength;
-          if (size > 3_500_000) {
+          if (size > (this.sport ? 12_000_000 : 3_500_000)) {
             failure = 'MOVIODDS_PAYLOAD_TOO_LARGE';
             throw new Error(failure);
           }
           chunks.push(chunk.value);
         }
       } finally { await reader.cancel().catch(() => {}); }
-      const board = parseBoard(JSON.parse(Buffer.concat(chunks).toString('utf8')), new Date(this.now()).toISOString());
+      const board = parseBoard(JSON.parse(Buffer.concat(chunks).toString('utf8')), new Date(this.now()).toISOString(),this.sport ?? 'table_tennis' as S);
       this.cached = { at: this.now(), board }; this.failedAt = undefined;
       return board;
     } catch (error) {

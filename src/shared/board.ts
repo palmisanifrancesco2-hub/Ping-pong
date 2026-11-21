@@ -4,30 +4,31 @@ export type FeedQuote = {
   line?: string; handicap?: string; n2?: string; odds_dec: number; odds_frac?: string;
   ts: string; suspended?: boolean; phase?: 'prematch' | 'inplay';
 };
-export type FeedMatch = {
-  id: string; sport: 'table_tennis'; home: string; away: string; league: string;
+export type FeedMatch<S extends string = 'table_tennis'> = {
+  id: string; sport: S; home: string; away: string; league: string;
   kickoff_utc?: string; in_play: boolean; score?: string; polled_at?: string; last_live_seen?: string;
   group_status?: Record<string, { polled_at?: string; stale?: boolean }>;
   quotes: FeedQuote[];
+  stats?: {sport:string;surface?:string;format?:string;current_set?:number;home?:Record<string,unknown>;away?:Record<string,unknown>};
 };
-export type Board = {
+export type Board<S extends string = 'table_tennis'> = {
   provider: 'MoviOdds'; bookmakerSite: 'bet365.com.au'; checkedAt: string;
-  serverTime: string; warming: boolean; matches: FeedMatch[];
+  serverTime: string; warming: boolean; matches: FeedMatch<S>[]; mainLinesOnly?: boolean;
 };
-export function isFreshLive(match: FeedMatch, now: number): boolean {
+export function isFreshLive(match: FeedMatch<string>, now: number): boolean {
   const age = now - Date.parse(match.polled_at ?? '');
   return match.in_play && Number.isFinite(age) && age >= -60_000 && age <= 60_000;
 }
-export function isUpcomingOrLive(match: FeedMatch, now: number): boolean {
+export function isUpcomingOrLive(match: FeedMatch<string>, now: number): boolean {
   return isFreshLive(match, now) || (!match.in_play && Number.isFinite(Date.parse(match.kickoff_utc ?? '')) && Date.parse(match.kickoff_utc!) > now);
 }
-export function startsInNextTwoHours(match: FeedMatch, now: number): boolean {
+export function startsInNextTwoHours(match: FeedMatch<string>, now: number): boolean {
   const lead = Date.parse(match.kickoff_utc ?? '') - now;
   return !match.in_play && lead > 0 && lead <= 2 * 60 * 60 * 1000;
 }
 export type StartWindow = { kind: 'all' | 'soon' } | { kind: 'custom'; from: number; until: number };
 
-export function matchesStartWindow(match: FeedMatch, window: StartWindow, now: number): boolean {
+export function matchesStartWindow(match: FeedMatch<string>, window: StartWindow, now: number): boolean {
   if (window.kind === 'soon') return startsInNextTwoHours(match, now);
   if (window.kind !== 'custom') return isUpcomingOrLive(match, now);
   const start = Date.parse(match.kickoff_utc ?? '');
@@ -39,7 +40,7 @@ export function marketIdentity(q: FeedQuote): string {
 }
 export function quoteIdentity(q: FeedQuote): string { return JSON.stringify([marketIdentity(q), q.sel_id]); }
 export function marketName(q: FeedQuote): string { return q.group_name || `Mercato ${q.group_id}`; }
-export function quoteStatus(match: FeedMatch, q: FeedQuote, now: number): string {
+export function quoteStatus(match: FeedMatch<string>, q: FeedQuote, now: number): string {
   if (q.suspended || q.odds_dec <= 1) return 'Sospesa / non disponibile';
   const status = match.group_status?.[q.group_id];
   const readAt = Date.parse(status?.polled_at ?? '');

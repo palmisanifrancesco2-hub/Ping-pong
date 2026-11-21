@@ -69,3 +69,23 @@ try {
   console.error('PLAYER_DATA_VERIFICATION_FAILED');
   process.exitCode=1;
 }
+
+// Inspect actual access with the same server-side key, without exporting any match data.
+if (process.env.VERCEL_ENV==='production') {
+  const [{IndividualSports},{additionalSports}]=await Promise.all([
+    import('../server/individual-sports.js'),import('../src/shared/individual-sports.js'),
+  ]);
+  const sports=new IndividualSports(process.env);
+  const coverage=await Promise.all(additionalSports.map(async sport=>{
+    try {
+      const board=await sports.board(sport);
+      const sample=board.events.find(event=>event.quoteCount>0);
+      const detail=sample && await sports.event(sport,sample.id);
+      return {sport,events:board.events.length,eventsWithOdds:board.events.filter(event=>event.quoteCount>0).length,
+        marketGroupsChecked:detail?.groups.length??0,mainLinesOnly:board.mainLinesOnly,warming:board.warming};
+    } catch(e) {
+      return {sport,code:e instanceof Error ? e.message : 'UNAVAILABLE'};
+    }
+  }));
+  console.info(JSON.stringify({individualOddsCoverage:coverage}));
+}

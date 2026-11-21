@@ -15,6 +15,20 @@ async function start(handler: ReturnType<typeof createHandler>) {
   return `http://127.0.0.1:${address.port}`;
 }
 describe('private HTTP API', () => {
+  it('keeps sport prices private and rejects team sports or invalid event IDs',async()=>{
+    const individualSports={board:vi.fn(async()=>({sport:'tennis' as const,checkedAt:new Date().toISOString(),events:[],warming:false,mainLinesOnly:false})),
+      event:vi.fn(async()=>undefined)};
+    const base=await start(createHandler({env:{},individualSports,authorize:async t=>t==='member'?'owner':null}));
+    const headers={Authorization:'Bearer member'};
+    expect((await fetch(base+'/api/sport-odds?sport=tennis')).status).toBe(401);
+    expect((await fetch(base+'/api/sport-odds?sport=soccer',{headers})).status).toBe(400);
+    expect((await fetch(base+'/api/sport-odds?sport=tennis&eventId=abc',{headers})).status).toBe(400);
+    expect(individualSports.board).not.toHaveBeenCalled();
+    expect((await fetch(base+'/api/sport-odds?sport=tennis',{headers})).status).toBe(200);
+    expect(individualSports.board).toHaveBeenCalledWith('tennis');
+    expect((await fetch(base+'/api/sport-odds?sport=tennis&eventId=123',{headers})).status).toBe(404);
+    expect(individualSports.event).toHaveBeenCalledWith('tennis','123');
+  });
   it('runs candidate training after original settlement on the same protected cron',async()=>{
     const calls:string[]=[];const secret='synthetic-only-cron-secret-of-sufficient-length';
     const study={run:vi.fn(async()=>{calls.push('winner');return{status:'completed'};}),report:vi.fn()};

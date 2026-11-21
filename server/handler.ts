@@ -18,6 +18,8 @@ import { authorize, type Env } from './auth.js';
 import { OddsApi } from './provider.js';
 import { oddsApiKey } from './env.js';
 import { MoviOddsFeed } from './moviodds.js';
+import { IndividualSports } from './individual-sports.js';
+import { additionalSports } from '../src/shared/individual-sports.js';
 import { ResultsFeed } from './results.js';
 import { parseHistoryQuery, readHistory } from './history.js';
 import { Choices, saveChoiceSchema, updateChoiceSchema } from './choices.js';
@@ -26,12 +28,13 @@ import { ForecastStore } from './forecast-store.js';
 import modelData from '../models/elo-v1.json' with {type:'json'};
 import {researchReport,scoreResearchReport,forwardStudy,modelComparison}from'./research-report.js';
 
-type Dependencies = { trainer?:Pick<AdaptiveTraining,'run'|'report'>; marketStudy?:Pick<MarketStudy,'run'|'report'>; profiles?:Pick<PlayerProfiles,'forEvent'>; study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
+type Dependencies = { individualSports?:Pick<IndividualSports,'board'|'event'>; trainer?:Pick<AdaptiveTraining,'run'|'report'>; marketStudy?:Pick<MarketStudy,'run'|'report'>; profiles?:Pick<PlayerProfiles,'forEvent'>; study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
 export function createHandler(deps: Dependencies = {}) {
   const env = deps.env ?? process.env;
   const provider = deps.provider ?? new OddsApi(oddsApiKey(env));
   const checkAuth = deps.authorize ?? authorize;
   const now = deps.now ?? Date.now;
+  const sports = deps.individualSports ?? new IndividualSports(env,now);
   const feed = deps.feed ?? new MoviOddsFeed(fetch,now,env);
   const analyses = deps.analyses ?? new Analyses(new ResultsFeed(fetch,now,env),now);
   const choices = deps.choices ?? new Choices(env,fetch,now,()=>analyses.results.archive());
@@ -54,7 +57,7 @@ export function createHandler(deps: Dependencies = {}) {
     const methods = ['/api/study','/api/market-study','/api/training'].includes(path)?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
     if (!methods.includes(req.method ?? '')) { res.setHeader('Allow', methods.join(', ')); return send(405, { error: 'Metodo non consentito.' }); }
     if (path === '/api/health') return send(200, { status: 'ok', version: '0.1.0' });
-    if (!['/api/training','/api/prediction-system','/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run','/api/profiles','/api/market-study','/api/market-estimates'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
+    if (!['/api/training','/api/prediction-system','/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/sport-odds','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run','/api/profiles','/api/market-study','/api/market-estimates'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
     if(path==='/api/study-run'){
       if(!authorizedStudyCron(req.headers.authorization,env.CRON_SECRET))return send(401,{error:'Esecuzione non autorizzata.'});
       const deadline=now()+285000;let legacy:unknown,markets:unknown,training:unknown;
@@ -67,6 +70,19 @@ export function createHandler(deps: Dependencies = {}) {
     const userId = match ? await checkAuth(match[1], env) : null;
     if (!match || !userId) return send(401, { error: 'Accesso riservato agli utenti autorizzati.' });
     try {
+      if(path==='/api/sport-odds'){
+        const sport=z.enum(additionalSports).safeParse(url.searchParams.get('sport'));
+        const eventId=url.searchParams.get('eventId');
+        if(!sport.success||(eventId!==null&&!/^\d{1,40}$/.test(eventId)))return send(400,{error:'Sport o partita non validi.'});
+        try {
+          if(eventId===null)return send(200,await sports.board(sport.data));
+          const detail=await sports.event(sport.data,eventId);
+          return detail ? send(200,detail) : send(404,{error:'Partita non più disponibile.'});
+        } catch(error) {
+          const limited=error instanceof Error && error.message==='MOVIODDS_HTTP_429';
+          return send(limited?429:503,{error:limited?'Limite MoviOdds raggiunto. Riprova più tardi.':'Quote MoviOdds al momento indisponibili per questo sport.'});
+        }
+      }
       if(path==='/api/market-study'){try{return send(200,req.method==='POST'?await marketStudy.run(userId):await marketStudy.report(userId));}catch(error){if(error instanceof Error&&error.message==='MARKET_STUDY_OWNER_ONLY')return send(403,{error:'Accesso al test riservato al proprietario.'});throw error;}}
       if(path==='/api/market-estimates'){
         const id=url.searchParams.get('eventId');
