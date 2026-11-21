@@ -47,6 +47,19 @@ export function otherBookmakerMarkets(match:FeedMatch,now:number) {
     .sort((a,b)=>a.priority-b.priority||a.title.localeCompare(b.title,'it',{numeric:true}));
 }
 
+export type BookmakerMarkets = ReturnType<typeof otherBookmakerMarkets>;
+export type BookmakerMarketFilter = 'all'|'totals'|'handicap'|'sets'|'exact';
+
+export function filterBookmakerMarkets(groups:BookmakerMarkets,filter:BookmakerMarketFilter) {
+  const patterns = {
+    totals:/over\/under|(?:^|\s)totals?(?:\s|$)/i,
+    handicap:/handicap/i,
+    sets:/\b(?:set|game)\b/i,
+    exact:/risultato esatto|correct score/i,
+  };
+  return filter==='all' ? groups : groups.filter(group=>patterns[filter].test(group.title));
+}
+
 export function marketPriceKey(quote:FeedQuote) {
   return JSON.stringify([quoteIdentity(quote),quote.group_name,quote.side,quote.line,quote.handicap,quote.odds_dec,quote.ts]);
 }

@@ -1,15 +1,15 @@
 import {useEffect,useState} from 'react';
-import {bookmakerSelectionLabel,marketPriceKey,otherBookmakerMarkets,type MarketEstimateReport} from './shared/additional-markets';
+import {bookmakerSelectionLabel,marketPriceKey,type BookmakerMarkets,type MarketEstimateReport} from './shared/additional-markets';
 import type {FeedMatch,FeedQuote} from './shared/board';
 import {dateTime,fairOddsText} from './shared/format';
 
-type Props = {match:FeedMatch;now:number;available:boolean;boardCheckedAt?:string;token?:string};
+type Props = {match:FeedMatch;groups:BookmakerMarkets;now:number;available:boolean;boardCheckedAt?:string;token?:string;initiallyOpen?:boolean};
 
-export function AdditionalMarkets({match,now,available,boardCheckedAt,token}:Props) {
-  const [expanded,setExpanded] = useState(false);
+export function AdditionalMarkets({match,groups,now,available,boardCheckedAt,token,initiallyOpen=false}:Props) {
+  const [expanded,setExpanded] = useState(initiallyOpen);
   const [report,setReport] = useState<MarketEstimateReport|null>(null);
   const [error,setError] = useState(false);
-  const eligible = expanded && available && !match.in_play;
+  const eligible = expanded && available && groups.length>0 && !match.in_play;
   const eventId = match.id;
 
   useEffect(()=>{
@@ -32,27 +32,26 @@ export function AdditionalMarkets({match,now,available,boardCheckedAt,token}:Pro
     return ()=>controller.abort();
   },[eligible,eventId,token,boardCheckedAt]);
 
-  const groups = expanded && available ? otherBookmakerMarkets(match,now) : [];
   const age = now-Date.parse(report?.checkedAt??'');
   const estimates = eligible && age>=-60_000 && age<=120_000 ? report?.estimates : undefined;
   const canShowEstimates = estimates && Object.keys(estimates).length>0;
   return <details className="selection-method additional-markets" open={expanded} onToggle={event=>{
     if (event.target===event.currentTarget) setExpanded(event.currentTarget.open);
   }}>
-    <summary>Altri mercati Bet365</summary>
+    <summary>Altri mercati Bet365 ({groups.length})</summary>
     {expanded && <>
-      {groups.length===0 ? <p role="status">Altre quote aggiornate al momento indisponibili.</p> : <>
+      {!available || groups.length===0 ? <p role="status">Altre quote aggiornate al momento indisponibili.</p> : <>
         {error ? <p role="status">Stime del modello temporaneamente indisponibili.</p> :
           canShowEstimates ? <p className="fine">Le percentuali e le quote eque indicate sono stime sperimentali del modello prematch.</p> :
             <p className="fine">{match.in_play ? 'Prezzi live di Bet365.' : 'Le stime richiedono una linea studiata, dati storici e il formato della partita confermato.'}</p>}
-        {groups.map(group=><MarketPrices key={group.key} title={group.title} quotes={group.quotes} estimates={estimates}/>)}
+        {groups.map((group,index)=><MarketPrices key={group.key} title={group.title} quotes={group.quotes} estimates={estimates} initiallyOpen={initiallyOpen&&index===0}/>)}
       </>}
     </>}
   </details>;
 }
 
-function MarketPrices({title,quotes,estimates}:{title:string;quotes:FeedQuote[];estimates?:MarketEstimateReport['estimates']}) {
-  const [expanded,setExpanded]=useState(false);
+function MarketPrices({title,quotes,estimates,initiallyOpen}:{title:string;quotes:FeedQuote[];estimates?:MarketEstimateReport['estimates'];initiallyOpen:boolean}) {
+  const [expanded,setExpanded]=useState(initiallyOpen);
   return <details open={expanded} onToggle={event=>setExpanded(event.currentTarget.open)}>
     <summary>{title} · {quotes.length}</summary>
     {expanded && <ul className="competition-list">{quotes.map(quote=>{
