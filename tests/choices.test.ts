@@ -1,6 +1,9 @@
 import{describe,it,expect,vi}from'vitest';
 import{choiceSnapshot,Choices,saveChoiceSchema}from'../server/choices';
 import{quoteIdentity,type Board}from'../src/shared/board';
+import {runtimeModel,scoreWinnerEstimate} from '../server/score-signals';
+import {matchChoiceResult} from '../server/choice-forecast';
+import type {ResultsArchive} from '../server/results';
 const now=Date.parse('2026-11-04T12:00:00Z');
 const q={fixture_id:'e',group_id:'winner',sel_id:'a',label:'Test A',odds_dec:2.1,ts:new Date(now).toISOString()};
 const board:Board={provider:'MoviOdds',bookmakerSite:'bet365.com.au',checkedAt:new Date(now).toISOString(),serverTime:new Date(now).toISOString(),warming:false,matches:[{id:'e',sport:'table_tennis',home:'Test A',away:'Test B',league:'Test league',in_play:false,kickoff_utc:new Date(now+3600000).toISOString(),group_status:{winner:{polled_at:new Date(now).toISOString()}},quotes:[q]}]};
@@ -29,5 +32,81 @@ describe('personal choices and immutable price snapshots',()=>{
   const fetcher=vi.fn(async()=>Response.json({snapshot:{selection:null}}));
   await expect(new Choices(env,fetcher,()=>now).update('t','owner',{id:'11111111-1111-4111-8111-111111111111',status:'won',notes:''})).rejects.toThrow('CHOICE_WATCH_ONLY');
   expect(fetcher).toHaveBeenCalledTimes(1);
+ });
+});
+
+describe('automatic personal forecast outcomes',()=>{
+ const key='service-role-value-for-test';
+ const signedEnv={...env,SUPABASE_SERVICE_ROLE_KEY:key};
+ const at=Date.parse(runtimeModel.generatedAt)+2*86_400_000;
+ const iso=(ms:number)=>new Date(ms).toISOString();
+ const match={...board.matches[0],kickoff_utc:iso(at+3600_000),quotes:[]};
+ const currentBoard={...board,matches:[match]};
+ const homeSets:[[number,number],[number,number],[number,number]]=[[11,5],[11,7],[11,9]];
+ const past=Array.from({length:32},(_,index)=>({
+   id:'past-'+index,home:match.home,away:match.away,league:match.league,homeWon:true,sets:homeSets,
+   finishedAt:iso(at-(32-index)*120_000),availableAt:iso(at-(32-index)*120_000+10_000),
+ }));
+ const archive={results:past,source:'postgres',checkedAt:iso(at),from:null,to:null,rejected:0};
+ const final={...past[0],id:'e',finishedAt:iso(at+5_400_000),availableAt:iso(at+5_460_000)};
+ const estimate=scoreWinnerEstimate(match,archive,at)!;
+ const expectedForecast={selection:match.home,probability:estimate.homeProbability,model:estimate.modelName};
+ const entry={id:'first',event_source_id:'e',choice_key:'event',saved_at:iso(at),manual_status:'pending'};
+
+ it('verifies a displayed forecast, persists the final and keeps it if the source goes offline',async()=>{
+   let row:Record<string,unknown>={};
+   let current=at;
+   let provider:ResultsArchive|undefined=archive;
+   const archiveRequest=vi.fn(async()=>{if(!provider)throw Error('OFFLINE');return provider;});
+   const fetcher=vi.fn(async(input:URL|RequestInfo,init?:RequestInit)=>{
+     const url=new URL(String(input));
+     if(init?.method==='POST'){
+       expect(new Headers(init.headers).get('authorization')).toBe('Bearer token');
+       row={...entry,...JSON.parse(String(init.body))};
+       return Response.json(row);
+     }
+     expect(url.searchParams.get('user_id')).toBe('eq.owner');
+     if(init?.method==='PATCH'){
+       expect(new Headers(init.headers).get('authorization')).toBe('Bearer '+key);
+       expect(url.searchParams.get('id')).toBe('eq.first');
+       row={...row,...JSON.parse(String(init.body))};
+       return new Response(null,{status:204});
+     }
+     return Response.json([row],{headers:{'content-range':'0-0/1'}});
+   });
+   const choices=new Choices(signedEnv,fetcher,()=>current,archiveRequest);
+   await choices.save('token','owner',{eventId:'e',notes:'',expectedForecast},currentBoard);
+   const load=()=>choices.list('token','owner','all',1,'all');
+   expect((await load()).entries[0].comparison).toEqual({forecast:{...expectedForecast,phase:'prematch'},result:null});
+   expect(archiveRequest).toHaveBeenCalledTimes(1);
+
+   current=at+6_000_000;
+   provider={...archive,results:[...past,final]};
+   const settled=(await load()).entries[0];
+   expect(settled.comparison?.result).toEqual({winner:match.home,sets:homeSets,finishedAt:final.finishedAt});
+   expect(settled.snapshot).not.toHaveProperty('modelResult');
+   expect(settled.manual_status).toBe('pending');
+   provider=undefined;
+   expect((await load()).entries[0]).toEqual(settled);
+   expect(archiveRequest).toHaveBeenCalledTimes(2);
+ });
+
+ it('matches reversed players, but rejects an earlier result or a different competition',()=>{
+   const snapshot=choiceSnapshot(currentBoard,'e',undefined,at);
+   const wrong={...final,home:match.away,away:match.home};
+   expect(matchChoiceResult(snapshot,wrong,at+6_000_000)?.winner).toBe(match.away);
+   expect(matchChoiceResult(snapshot,{...final,finishedAt:iso(at)},at+6_000_000)).toBeUndefined();
+   expect(matchChoiceResult(snapshot,{...final,league:'Different'},at+6_000_000)).toBeUndefined();
+ });
+
+ it('rejects a changed forecast and ignores unauthorized forecast claims in storage',async()=>{
+   const row={...entry,snapshot:{...choiceSnapshot(currentBoard,'e',undefined,at),
+     modelForecast:{...expectedForecast,phase:'prematch'},forecastSignature:'bad'}};
+   const fetcher=vi.fn(async()=>Response.json([row],{headers:{'content-range':'0-0/1'}}));
+   const choices=new Choices(signedEnv,fetcher,()=>at,async()=>archive);
+   await expect(choices.save('token','owner',{eventId:'e',notes:'',expectedForecast:{...expectedForecast,selection:match.away}},currentBoard))
+     .rejects.toThrow('CHOICE_FORECAST_UNAVAILABLE');
+   expect(fetcher).not.toHaveBeenCalled();
+   expect((await choices.list('token','owner','all',1,'all')).entries[0].comparison).toBeUndefined();
  });
 });

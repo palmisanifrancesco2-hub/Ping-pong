@@ -33,8 +33,8 @@ export function createHandler(deps: Dependencies = {}) {
   const checkAuth = deps.authorize ?? authorize;
   const now = deps.now ?? Date.now;
   const feed = deps.feed ?? new MoviOddsFeed(fetch,now,env);
-  const choices = deps.choices ?? new Choices(env);
   const analyses = deps.analyses ?? new Analyses(new ResultsFeed(fetch,now,env),now);
+  const choices = deps.choices ?? new Choices(env,fetch,now,()=>analyses.results.archive());
   const forecasts = deps.forecasts ?? new ForecastStore(env);
   const bets=deps.bets??new ManualBets(env,now);
   const profiles=deps.profiles??new PlayerProfiles(undefined,now,true);
@@ -135,7 +135,7 @@ export function createHandler(deps: Dependencies = {}) {
         if (req.method === 'POST') {
           const input=saveChoiceSchema.safeParse(payload);if(!input.success)return send(400,{error:'Scelta non valida.'});
           try { return send(200,await choices.save(match[1],userId,input.data,await feed.board())); }
-          catch(error) { if(error instanceof Error && /^CHOICE_(EVENT|QUOTE)_UNAVAILABLE$/.test(error.message))return send(409,{error:'Partita o quota non più disponibile. Aggiorna le quote e riprova.'});throw error; }
+          catch(error) { if(error instanceof Error && /^CHOICE_(EVENT|QUOTE|FORECAST)_UNAVAILABLE$/.test(error.message))return send(409,{error:'Partita, quota o pronostico cambiati. Aggiorna i dati e riprova.'});throw error; }
         }
         const input=updateChoiceSchema.safeParse(payload);if(!input.success)return send(400,{error:'Esito personale non valido.'});
         try { return send(200,await choices.update(match[1],userId,input.data)); }

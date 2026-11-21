@@ -31,6 +31,12 @@ function ensembleEstimate(m: FeedMatch, archive: ResultsArchive, now: number) {
   ];
   return {p:components.reduce((n,c)=>n+c.probability/3,0), features, glicko, components};
 }
+export function ensembleWinnerEstimate(m: FeedMatch, archive: ResultsArchive, now: number) {
+  if (!scoreWinnerEstimate(m, archive, now)) return;
+  const estimate = ensembleEstimate(m, archive, now);
+  if (estimate) return {homeProbability:estimate.p,sampleSize:estimate.features.sampleSize,modelName};
+}
+
 export function ensembleSignals(m: FeedMatch, archive: ResultsArchive, now: number): Forecast[] {
   const original = scoreSignals(m, archive, now);
   if (!original.length) return [];
@@ -47,9 +53,8 @@ export function ensembleValueReport(board: Board, archive: ResultsArchive, now: 
     const q=f.quote; estimates.push({id:JSON.stringify([m.id,quoteIdentity(q),multiModelVersion]),eventId:m.id,startsAt:m.kickoff_utc,marketReadAt:m.group_status?.[q.group_id]?.polled_at,modelVersion:multiModelVersion,quoteKey:quoteIdentity(q),match:`${m.home} — ${m.away}`,competition:m.league,market:'Vincente partita prematch',selection:f.selection,odds:q.odds_dec,quoteAt:q.ts,probability:f.probability,probabilityLower:f.probabilityLower,sampleSize:f.sampleSize,validationSize:f.validation.n,modelValidated:false,fresh:true,admVerified:false,impliedProbability:1/q.odds_dec,fairOdds:1/f.probability,ev:f.probability*q.odds_dec-1,conservativeEv:f.probabilityLower*q.odds_dec-1,assessment:'Sperimentale',rank:f.probabilityLower*q.odds_dec-1});
   }
   const winnerEstimates = Object.fromEntries(board.matches.flatMap(m=>{
-    if (!scoreWinnerEstimate(m,archive,now)) return [];
-    const estimate = ensembleEstimate(m,archive,now);
-    return estimate ? [[m.id,{homeProbability:estimate.p,sampleSize:estimate.features.sampleSize,modelName}]] : [];
+    const estimate = ensembleWinnerEstimate(m, archive, now);
+    return estimate ? [[m.id,estimate]] : [];
   }));
   return {modelName,estimates,experimental:estimates.filter(o=>o.conservativeEv>0),opportunities:[],modelValidated:false,winnerEstimates};
 }

@@ -42,3 +42,5 @@
 .best-quote{flex-wrap:wrap}
 .quote-highlights>span.quote-comparison{display:grid;grid-column:span 2;margin:0}
 .quote-highlights .quote-comparison small{margin:0}
+
+.personal-choice .panel-heading { flex-wrap: wrap; }
