@@ -15,15 +15,22 @@ function priceStatus(match:FeedMatch<AdditionalSport>,quote:FeedQuote,now:number
   return quoteStatus(match,quote,now);
 }
 
-function summary(match: FeedMatch<AdditionalSport>,now:number): SportEvent {
-  const {quotes,group_status,stats,...event} = match;
-  const candidates=quotes.filter(quote => {
+export function individualWinnerOffers(match: FeedMatch<AdditionalSport>,now:number) {
+  return match.quotes.filter(quote => {
     const winnerGroup=match.sport==='tennis' ? quote.group_id===(match.in_play?'67':'83')
       : /^(?:match winner|to win match|to win fight)$/i.test(quote.group_name??'') || (quote.group_name==='Fight Lines'&&quote.line==='To Win');
     return winnerGroup && priceStatus(match,quote,now)==='Letta di recente dalla fonte';
   });
-  const winnerPrices=candidates.length===2 && marketIdentity(candidates[0])===marketIdentity(candidates[1])
-    ? candidates.map(quote=>({label:quote.side||quote.label||quote.sel_id,odds:quote.odds_dec})) : [];
+}
+
+function individualWinnerPair(match: FeedMatch<AdditionalSport>,now:number) {
+  const candidates=individualWinnerOffers(match,now);
+  return candidates.length===2 && marketIdentity(candidates[0])===marketIdentity(candidates[1]) ? candidates : [];
+}
+
+function summary(match: FeedMatch<AdditionalSport>,now:number): SportEvent {
+  const {quotes,group_status,stats,...event} = match;
+  const winnerPrices=individualWinnerPair(match,now).map(quote=>({label:quote.side||quote.label||quote.sel_id,odds:quote.odds_dec}));
   return {...event,quoteCount:quotes.length,winnerPrices};
 }
 
@@ -69,13 +76,14 @@ export class IndividualSports {
   constructor(env:Env,private now=Date.now,fetcher:typeof fetch=fetch) {
     this.feeds = new Map(additionalSports.map(sport=>[sport,new MoviOddsFeed(fetcher,now,env,sport)]));
   }
+  activeBoard(sport:AdditionalSport) { return this.feeds.get(sport)!.board(); }
   async board(sport:AdditionalSport):Promise<SportBoard> {
-    const board = await this.feeds.get(sport)!.board();
+    const board = await this.activeBoard(sport);
     return {sport,checkedAt:board.checkedAt,warming:board.warming,mainLinesOnly:board.mainLinesOnly===true,
       events:board.matches.filter(singles).map(match=>summary(match,this.now()))};
   }
   async event(sport:AdditionalSport,id:string):Promise<SportDetail|undefined> {
-    const board = await this.feeds.get(sport)!.board();
+    const board = await this.activeBoard(sport);
     const match = board.matches.find(match=>match.id===id&&singles(match));
     if (match) return sportDetail(match,board.checkedAt,this.now());
   }

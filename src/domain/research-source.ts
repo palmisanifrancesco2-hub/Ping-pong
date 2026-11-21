@@ -1,6 +1,6 @@
 import type {MatchResult} from './player-model.js';
 const record=(v:unknown):Record<string,unknown>|null=>v!==null&&typeof v==='object'&&!Array.isArray(v)?v as Record<string,unknown>:null;
-export function verifiedStart(payload:unknown,target:MatchResult){
+export function verifiedStart(payload:unknown,target:Pick<MatchResult,'id'|'home'|'away'|'finishedAt'>){
  const p=record(payload);if(!p)return null;
  const at=Date.parse(String(p.kickoff_utc))-60000;
  const selections=Array.isArray(p.selections)?p.selections.map(record).filter(x=>x!==null):[];

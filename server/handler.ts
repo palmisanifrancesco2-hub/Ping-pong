@@ -19,6 +19,7 @@ import { OddsApi } from './provider.js';
 import { oddsApiKey } from './env.js';
 import { MoviOddsFeed } from './moviodds.js';
 import { IndividualSports } from './individual-sports.js';
+import { BlindStudy } from './blind-study.js';
 import { additionalSports } from '../src/shared/individual-sports.js';
 import { ResultsFeed } from './results.js';
 import { parseHistoryQuery, readHistory } from './history.js';
@@ -28,7 +29,7 @@ import { ForecastStore } from './forecast-store.js';
 import modelData from '../models/elo-v1.json' with {type:'json'};
 import {researchReport,scoreResearchReport,forwardStudy,modelComparison}from'./research-report.js';
 
-type Dependencies = { individualSports?:Pick<IndividualSports,'board'|'event'>; trainer?:Pick<AdaptiveTraining,'run'|'report'>; marketStudy?:Pick<MarketStudy,'run'|'report'>; profiles?:Pick<PlayerProfiles,'forEvent'>; study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
+type Dependencies = { blindStudy?:Pick<BlindStudy,'run'|'report'>; individualSports?:Pick<IndividualSports,'board'|'event'>; trainer?:Pick<AdaptiveTraining,'run'|'report'>; marketStudy?:Pick<MarketStudy,'run'|'report'>; profiles?:Pick<PlayerProfiles,'forEvent'>; study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
 export function createHandler(deps: Dependencies = {}) {
   const env = deps.env ?? process.env;
   const provider = deps.provider ?? new OddsApi(oddsApiKey(env));
@@ -38,6 +39,7 @@ export function createHandler(deps: Dependencies = {}) {
   const feed = deps.feed ?? new MoviOddsFeed(fetch,now,env);
   const analyses = deps.analyses ?? new Analyses(new ResultsFeed(fetch,now,env),now);
   const choices = deps.choices ?? new Choices(env,fetch,now,()=>analyses.results.archive());
+  const blindStudy=deps.blindStudy??new BlindStudy(env,now,feed,analyses.results);
   const forecasts = deps.forecasts ?? new ForecastStore(env);
   const bets=deps.bets??new ManualBets(env,now);
   const profiles=deps.profiles??new PlayerProfiles(undefined,now,true);
@@ -54,22 +56,27 @@ export function createHandler(deps: Dependencies = {}) {
     const send = (status: number, body: unknown) => { res.statusCode = status; res.end(JSON.stringify(body)); };
     const url = new URL(req.url ?? '/', 'http://localhost');
     const path = url.pathname;
-    const methods = ['/api/study','/api/market-study','/api/training'].includes(path)?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
+    const methods = ['/api/study','/api/market-study','/api/training','/api/blind-study'].includes(path)?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
     if (!methods.includes(req.method ?? '')) { res.setHeader('Allow', methods.join(', ')); return send(405, { error: 'Metodo non consentito.' }); }
     if (path === '/api/health') return send(200, { status: 'ok', version: '0.1.0' });
-    if (!['/api/training','/api/prediction-system','/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/sport-odds','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run','/api/profiles','/api/market-study','/api/market-estimates'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
+    if (!['/api/training','/api/prediction-system','/api/connection', '/api/board', '/api/history','/api/choices','/api/analysis','/api/settle','/api/model','/api/access','/api/sport-odds','/api/value','/api/predictions','/api/bets','/api/status','/api/study','/api/study-run','/api/profiles','/api/market-study','/api/market-estimates','/api/blind-study'].includes(path)) return send(404, { error: 'Endpoint non disponibile.' });
     if(path==='/api/study-run'){
       if(!authorizedStudyCron(req.headers.authorization,env.CRON_SECRET))return send(401,{error:'Esecuzione non autorizzata.'});
       const deadline=now()+285000;let legacy:unknown,markets:unknown,training:unknown;
+      const prospective=blindStudy.run(undefined,now()+170000).catch(()=>{console.error('BLIND_STUDY_FAILED');return {status:'failed'};});
       try{legacy=await study.run();}catch{legacy={status:'failed'};console.error(JSON.stringify({apiPath:path,code:'STUDY_FAILED'}));}
       try{markets=await marketStudy.run(undefined,deadline);}catch{markets={status:'failed'};console.error(JSON.stringify({apiPath:path,code:'MARKET_STUDY_FAILED'}));}
       try{training=await trainer.run(undefined,deadline);}catch{training={status:'failed'};console.error('ADAPTIVE_TRAINING_FAILED');}
-      return send((legacy as {status?:string})?.status==='failed'||(markets as {status?:string})?.status==='failed'||(training as {status?:string})?.status==='failed'?503:200,{winnerStudy:legacy,marketStudy:markets,adaptiveTraining:training});
+      return send((legacy as {status?:string})?.status==='failed'||(markets as {status?:string})?.status==='failed'||(training as {status?:string})?.status==='failed'?503:200,{winnerStudy:legacy,marketStudy:markets,adaptiveTraining:training,blindStudy:await prospective});
     }
     const match = /^Bearer ([^\s]+)$/.exec(req.headers.authorization ?? '');
     const userId = match ? await checkAuth(match[1], env) : null;
     if (!match || !userId) return send(401, { error: 'Accesso riservato agli utenti autorizzati.' });
     try {
+      if(path==='/api/blind-study'){
+        try { return send(200,req.method==='POST'?await blindStudy.run(userId):await blindStudy.report(userId)); }
+        catch(error) { if(error instanceof Error&&error.message==='BLIND_STUDY_OWNER_ONLY')return send(403,{error:'Raccolta riservata al proprietario.'});throw error; }
+      }
       if(path==='/api/sport-odds'){
         const sport=z.enum(additionalSports).safeParse(url.searchParams.get('sport'));
         const eventId=url.searchParams.get('eventId');

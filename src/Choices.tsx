@@ -52,7 +52,7 @@ function ChoiceCard({entry,token,onSaved,onBet}:{onBet?:(p:BetPrefill)=>void;ent
   const s=entry.snapshot,q=s.selection;
   const {forecast,result}=entry.comparison??{};
   const verdict = forecast
-    ? result ? result.winner===forecast.selection ? {label:'Azzeccato',css:'won'} : {label:'Sbagliato',css:'lost'}
+    ? result ? result.winner===forecast.selection ? {label:'Esatto',css:'won'} : {label:'Sbagliato',css:'lost'}
       : {label:'In attesa del risultato',css:'pending'}
     : {label:'Pronostico non registrato',css:'pending'};
   async function update(){setBusy(true);setError('');try{const response=await fetch('/api/choices',{method:'PATCH',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({id:entry.id,status,notes}),signal:AbortSignal.timeout(20_000)});if(!response.ok)throw new Error('Aggiornamento non riuscito.');const saved=await response.json() as {id?:unknown};if(saved.id!==entry.id)throw new Error('Aggiornamento non confermato.');onSaved();}catch{setError('Esito non salvato. Riprova.');}finally{setBusy(false);}}

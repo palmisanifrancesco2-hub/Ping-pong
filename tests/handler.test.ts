@@ -15,6 +15,15 @@ async function start(handler: ReturnType<typeof createHandler>) {
   return `http://127.0.0.1:${address.port}`;
 }
 describe('private HTTP API', () => {
+  it('protects the blind study and uses the logged-in owner for manual runs',async()=>{
+    const blindStudy={run:vi.fn(async user=>{if(user!=='owner')throw Error('BLIND_STUDY_OWNER_ONLY');return {status:'completed'};}),
+      report:vi.fn(async()=>({checkedAt:new Date().toISOString(),enabled:true,scheduled:true,canRun:true,sports:[]}))};
+    const base=await start(createHandler({env:{},blindStudy,authorize:async t=>['owner','member'].includes(t)?t:null}));
+    expect((await fetch(base+'/api/blind-study')).status).toBe(401);
+    expect((await fetch(base+'/api/blind-study',{method:'POST',headers:{Authorization:'Bearer member'}})).status).toBe(403);
+    expect((await fetch(base+'/api/blind-study',{method:'POST',headers:{Authorization:'Bearer owner'}})).status).toBe(200);
+    expect(blindStudy.run).toHaveBeenLastCalledWith('owner');
+  });
   it('keeps sport prices private and rejects team sports or invalid event IDs',async()=>{
     const individualSports={board:vi.fn(async()=>({sport:'tennis' as const,checkedAt:new Date().toISOString(),events:[],warming:false,mainLinesOnly:false})),
       event:vi.fn(async()=>undefined)};

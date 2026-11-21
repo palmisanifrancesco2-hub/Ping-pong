@@ -19,7 +19,7 @@ const key=(name:string)=>name.normalize('NFKC').trim().replace(/\s+/g,' ').toLoc
 const binaryScore=/^(\d{1,3})\s*-\s*(\d{1,3})$/;
 const excludedPairs=/\/|\s(?:&|\+)\s/;
 const teamEvents=/\b(?:doubles?|teams?|pairs?)\b/i;
-type Result={id:string;home:string;away:string;league:string;finished:number;cutoff:number;available:number;scheduled:boolean;reported:boolean;won:number};
+export type SportResult={id:string;home:string;away:string;league:string;finished:number;cutoff:number;available:number;scheduled:boolean;reported:boolean;won:number};
 
 function matchOutcome(sport:AdditionalSport,result:z.infer<typeof resultSchema>) {
   if (sport==='boxing'||sport==='mma') {
@@ -52,7 +52,7 @@ function matchOutcome(sport:AdditionalSport,result:z.infer<typeof resultSchema>)
   return Number(a>b);
 }
 
-function acceptedResult(input:unknown,sport:AdditionalSport,now:number):Result|undefined {
+function acceptedResult(input:unknown,sport:AdditionalSport,now:number):SportResult|undefined {
   const parsed=resultSchema.safeParse(input);
   if (!parsed.success||parsed.data.sport!==sport) return;
   const row=parsed.data, home=key(row.home),away=key(row.away);
@@ -75,7 +75,7 @@ const sigmoid=(x:number)=>1/(1+Math.exp(-Math.max(-30,Math.min(30,x))));
 type Example={at:number;x:number[];won:number};
 type Rating={elo:number;wins:number;games:number};
 
-function trainingExamples(rows:Result[]):Example[] {
+function trainingExamples(rows:SportResult[]):Example[] {
   const byAvailability=[...rows].sort((a,b)=>a.available-b.available||a.id.localeCompare(b.id));
   const byCutoff=[...rows].sort((a,b)=>a.cutoff-b.cutoff||a.id.localeCompare(b.id));
   const global=new Map<string,Rating>(),competition=new Map<string,Rating>();
@@ -129,9 +129,9 @@ function score(rows:Example[],predict:(x:number[])=>number):WinnerMetrics {
   return {n:rows.length,hits,accuracy:hits/rows.length,brier:brier/rows.length,logLoss:loss/rows.length};
 }
 
-export function evaluateSport(sport:AdditionalSport,payload:unknown,now:number):SportTraining {
+export function sportResults(sport:AdditionalSport,payload:unknown,now:number) {
   const parsed=z.object({source:z.enum(['postgres','memory']),results:z.array(z.unknown()).max(100_000)}).parse(payload);
-  const byId=new Map<string,Result>(),ambiguous=new Set<string>();
+  const byId=new Map<string,SportResult>(),ambiguous=new Set<string>();
   for(const raw of parsed.results){
     const result=acceptedResult(raw,sport,now);
     if(!result)continue;
@@ -140,6 +140,11 @@ export function evaluateSport(sport:AdditionalSport,payload:unknown,now:number):
     else byId.set(result.id,result);
   }
   const rows=[...byId.values()].filter(row=>!ambiguous.has(row.id)).sort((a,b)=>a.finished-b.finished);
+  return { source:parsed.source, raw:parsed.results.length, rows };
+}
+
+export function evaluateSport(sport:AdditionalSport,payload:unknown,now:number):SportTraining {
+  const {source,raw,rows}=sportResults(sport,payload,now);
   const examples=trainingExamples(rows);
   const dates=[...new Set(examples.map(example=>Math.floor(example.at/day)))];
   const validationStart=dates[Math.floor(dates.length*.6)]??Infinity;
@@ -148,12 +153,12 @@ export function evaluateSport(sport:AdditionalSport,payload:unknown,now:number):
   const calibration=examples.filter(x=>x.at>=validationStart*day&&x.at<(testStart-1)*day);
   const test=examples.filter(x=>x.at>=testStart*day);
   const covered=(set:Example[],minimum:number)=>set.length>=minimum&&new Set(set.map(row=>row.won)).size===2;
-  const result:SportTraining={sport,source:parsed.source,raw:parsed.results.length,complete:rows.length,
+  const result:SportTraining={sport,source,raw,complete:rows.length,
     withScheduledStart:rows.filter(row=>row.scheduled).length,withPublication:rows.filter(row=>row.reported).length,
     eligible:examples.length,from:rows.length?new Date(rows[0].finished).toISOString():null,
     to:rows.length?new Date(rows.at(-1)!.finished).toISOString():null,train:train.length,calibration:calibration.length,test:test.length,
     selected:null,candidates:[],checkedAt:new Date(now).toISOString()};
-  if (parsed.source!=='postgres'||!covered(train,100)||!covered(calibration,40)||!covered(test,40)) return result;
+  if (source!=='postgres'||!covered(train,100)||!covered(calibration,40)||!covered(test,40)) return result;
   const models=[
     {name:'Elo',predict:(x:number[])=>baseline(x[0]),coefficients:undefined},
     {name:'Elo calibrato',...fit(train,1)},
@@ -166,8 +171,8 @@ export function evaluateSport(sport:AdditionalSport,payload:unknown,now:number):
   return result;
 }
 
-export async function trainSport(sport:AdditionalSport,env:Env,now=Date.now()):Promise<SportTraining> {
-  const response=await movioddsRequest(`https://moviodds.com/results?sport=${sport}`,{signal:AbortSignal.timeout(28_000),cache:'no-store'},fetch,env);
+export async function readSportResults(sport:AdditionalSport,env:Env,fetcher:typeof fetch=fetch):Promise<unknown> {
+  const response=await movioddsRequest(`https://moviodds.com/results?sport=${sport}`,{signal:AbortSignal.timeout(28_000),cache:'no-store'},fetcher,env);
   if(!response.ok||!response.body) throw Error(`RESULTS_HTTP_${response.status}`);
   const reader=response.body.getReader(),chunks:Uint8Array[]=[];
   let size=0;
@@ -181,5 +186,9 @@ export async function trainSport(sport:AdditionalSport,env:Env,now=Date.now()):P
     }
   } finally { await reader.cancel().catch(()=>{}); }
   const text=Buffer.concat(chunks).toString('utf8');
-  return evaluateSport(sport,JSON.parse(text),now);
+  return JSON.parse(text);
+}
+
+export async function trainSport(sport:AdditionalSport,env:Env,now=Date.now()) {
+  return evaluateSport(sport,await readSportResults(sport,env),now);
 }

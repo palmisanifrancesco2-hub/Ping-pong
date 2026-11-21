@@ -23,6 +23,7 @@
     "research:train-sports": "tsx scripts/train-individual-sports.ts",
     "research:collect": "tsx scripts/collect-research.ts",
     "research:evaluate": "tsx scripts/evaluate-models.ts",
+    "study:blind-bootstrap": "tsx scripts/bootstrap-blind-study.ts",
     "study:bootstrap": "tsx scripts/bootstrap-forward-study.ts",
     "study:markets": "tsx scripts/bootstrap-market-study.ts",
     "check:server": "node scripts/check-server-runtime.mjs"
