@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue,bookmakerWinnerPrices,eventWinnerEstimate } from '../src/shared/quote-selection';
+import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue,bookmakerWinnerPrices,eventWinnerEstimate,nearOneFifty,oddsInRange } from '../src/shared/quote-selection';
 import type { FeedMatch } from '../src/shared/board';
 import { quoteIdentity } from '../src/shared/board';
 import type { ValueOpportunity } from '../src/domain/value';
@@ -34,6 +34,17 @@ it('shows current Bet365 winner prices independently of the prediction filter', 
 });
 
 describe('probability-ranked selected quotes', () => {
+  it('applies the inclusive 1.40–1.60 range without changing EV eligibility', () => {
+    const lower = fixture('lower', .88, 1.4);
+    const upper = fixture('upper', .8, 1.6);
+    const outside = fixture('outside', .8, 1.61);
+    const noValue = fixture('no-value', .6, 1.5);
+    const samples = [lower,upper,outside,noValue];
+    const {minimum,maximum} = nearOneFifty;
+    expect(samples.filter(x=>oddsInRange(x.o.odds,minimum,maximum)).map(x=>x.o.id)).toEqual(['lower','upper','no-value']);
+    expect(selectedQuotes(report(...samples.map(x=>x.o)),samples.map(x=>x.m),now,minimum,maximum).map(x=>x.id))
+      .toEqual(['lower','upper']);
+  });
   it('shows experimental candidates without adding them to verified rankings', () => {
     const { m, o } = fixture('a', .6, 2);
     const r: ValueReport = { ...report(o), status:'blocked', policy:'bet365-independent-v17',

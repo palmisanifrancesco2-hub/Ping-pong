@@ -2,6 +2,12 @@ import type { ValueReport } from './value.js';
 import type { ValueOpportunity } from '../domain/value.js';
 import { isUpcomingOrLive, marketIdentity, quoteIdentity, quoteStatus, type FeedMatch } from './board.js';
 
+export const nearOneFifty = { minimum: 1.4, maximum: 1.6 };
+
+export function oddsInRange(odds: number, minimum: number, maximum = Infinity) {
+  return Number.isFinite(odds) && odds >= minimum && odds <= maximum;
+}
+
 /** Recompute both margins from the current price; cached EV fields are not authoritative. */
 export function hasPositiveValue(o:Pick<ValueOpportunity,'probability'|'probabilityLower'|'odds'>){
   return [o.odds,o.probability,o.probabilityLower].every(Number.isFinite)
@@ -35,14 +41,14 @@ export function eventWinnerEstimate(report: ValueReport | null, match: FeedMatch
 }
 
 /** Display policy only: the frozen prospective enrollment rules stay unchanged. */
-export function selectedQuotes(report: ValueReport | null, matches: FeedMatch[], now: number, minOdds = 1.3) {
+export function selectedQuotes(report: ValueReport | null, matches: FeedMatch[], now: number, minOdds = 1.3, maxOdds = Infinity) {
   if (!freshReport(report, now)) return [];
   const events = new Map(matches.map(m => [m.id, m]));
   const sourceRows = displayedCandidates(report);
   const rows = sourceRows.filter(o => {
     const m = events.get(o.eventId);
     if (!m || m.in_play || !isUpcomingOrLive(m, now) || !o.fresh || o.sampleSize < 30) return false;
-    if (!hasPositiveValue(o)||o.odds<Math.max(1.3,minOdds)) return false;
+    if (!hasPositiveValue(o)||!oddsInRange(o.odds,Math.max(1.3,minOdds),maxOdds)) return false;
     const q = m.quotes.find(q => quoteIdentity(q) === o.quoteKey);
     return !!q && q.fixture_id === m.id && q.side === o.selection && q.group_id === '920000' && q.line === 'To Win' && q.phase !== 'inplay'
       && q.odds_dec === o.odds && q.ts === o.quoteAt && Date.parse(q.ts) <= now

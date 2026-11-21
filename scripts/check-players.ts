@@ -2,7 +2,7 @@ import{ResultsFeed}from'../server/results.js';
 import {MoviOddsFeed} from '../server/moviodds.js';
 import {scoreValueReport} from '../server/score-signals.js';
 import {ensembleValueReport} from '../server/multi-model.js';
-import {selectedQuotes} from '../src/shared/quote-selection.js';
+import {bookmakerWinnerPrices, nearOneFifty, oddsInRange, selectedQuotes} from '../src/shared/quote-selection.js';
 import {liveWinnerEstimates} from '../server/live-winner.js';
 import {marketEstimateReport} from '../server/market-estimates.js';
 import {otherBookmakerMarkets} from '../src/shared/additional-markets.js';
@@ -34,6 +34,19 @@ try {
         valueWithinTwoHours:selectedQuotes(score,soon,now).length,
       }));
       const markets = board.matches.map(match=>otherBookmakerMarkets(match,now));
+      const {minimum,maximum} = nearOneFifty;
+      const inRange = (odds: number) => oddsInRange(odds,minimum,maximum);
+      const matchingCompetitions = new Set(board.matches.filter((match,index)=>
+        bookmakerWinnerPrices(match,now).some(q=>inRange(q.odds_dec)) ||
+        markets[index].some(group=>group.quotes.some(q=>inRange(q.odds_dec)))).map(match=>match.league));
+      console.info(JSON.stringify({
+        oddsBandVerification:'success',
+        feedCompetitions:new Set(board.matches.map(match=>match.league)).size,
+        competitionsWithPricesInBand:matchingCompetitions.size,
+        winnerPricesInBand:board.matches.flatMap(match=>bookmakerWinnerPrices(match,now)).filter(q=>inRange(q.odds_dec)).length,
+        additionalPricesInBand:markets.flatMap(groups=>groups.flatMap(group=>group.quotes)).filter(q=>inRange(q.odds_dec)).length,
+        valueSelectionsInBand:selectedQuotes(score,board.matches,now,minimum,maximum).length,
+      }));
       const estimateCounts = board.matches.map(match=>Object.keys(marketEstimateReport(match,archive,now).estimates).length);
       console.info(JSON.stringify({
         additionalMarketVerification:'success',
