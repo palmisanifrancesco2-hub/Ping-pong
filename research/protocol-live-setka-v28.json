@@ -1,0 +1,12 @@
+{
+  "archive": "protocol-setka-2022-v25.json",
+  "decision": "Before play and immediately after each completed set while the match is open",
+  "features": "Setka v25 prematch features and count of sets won by each player. No point from the current or later set.",
+  "catboost": {"iterations": 120, "depth": 4, "learning_rate": 0.035, "l2_leaf_reg": 8, "thread_count": 2, "random_seed": 20261117},
+  "logisticC": 0.1,
+  "calibrationC": 1,
+  "statePriorWeight": 10,
+  "selector": "Lowest calibration Brier per stage including references; frozen before test",
+  "reference": "Training frequency for each set score smoothed toward 0.5",
+  "validation": "Chronological historical replay on previously inspected Setka dates. No live quotes or observations with exchange timestamps."
+}

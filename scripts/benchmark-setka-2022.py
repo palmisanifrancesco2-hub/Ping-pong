@@ -20,7 +20,7 @@ from projection_ensemble import paired_interval
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def read_matches(path):
+def read_matches(path, *, set_history=None):
     rows_by_day, counts, seen = defaultdict(list), Counter(), set()
     with path.open(newline='') as file:
         for row in csv.DictReader(file):
@@ -56,6 +56,8 @@ def read_matches(path):
                 counts['invalid'] += 1
                 continue
             rows_by_day[day].append((players, won, score[0]-score[1], sum(points), len(points)))
+            if set_history is not None:
+                set_history[day].append(tuple(int(gap > 0) for gap in points))
             counts['valid'] += 1
     return rows_by_day, counts
 

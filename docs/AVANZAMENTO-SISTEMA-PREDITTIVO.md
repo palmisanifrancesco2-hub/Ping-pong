@@ -135,3 +135,7 @@ Verificati 170 incontri storici con prezzi prematch. CatBoost coerente ne ha sce
 ## CatBoost coerente su Setka
 
 Confronto cronologico su 2.077 incontri Setka. CatBoost ha indovinato 1.210 vincitori contro 1.209 della logistica, che conserva il Brier migliore. Risultato esatto 446 corretti contro 388 della frequenza storica. Il dataset non contiene quote. [Studio e risultati per mercato](STUDIO-CATBOOST-SETKA-V27.md).
+
+## Replay live del vincente
+
+Sui reali punteggi Setka storici, dopo due set la logistica ha indovinato 1.519 vincitori su 2.077, CatBoost 1.504 e il solo punteggio 1.476. Sul 2–2 il vantaggio non emerge. I modelli sono salvati per ricerca e il replay è privo di quote live abbinate. [Studio e prerequisiti del test live](STUDIO-LIVE-SETKA-V28.md).
