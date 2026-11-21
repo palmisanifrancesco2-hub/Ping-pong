@@ -27,3 +27,9 @@
 .best-quote span{min-width:0;overflow-wrap:anywhere}
 .best-quote span:last-child{text-align:right}
 .best-quote small{display:block;margin-top:4px;color:#bdd0c4}
+.competition-filter summary{cursor:pointer;min-height:44px;padding:10px 12px;border:1px solid #45596c;border-radius:8px}
+.competition-filter fieldset{margin:8px 0 0;padding:9px 12px;border:1px solid #45596c;border-radius:8px}
+.competition-filter fieldset label{display:flex;align-items:center;gap:9px;min-height:38px}
+.competition-filter input[type="checkbox"]{width:18px;min-height:18px;height:18px;accent-color:#bef264}
+.custom-start-window input{min-width:0;max-width:100%}
+.match-list .match-card:not([open]){content-visibility:auto;contain-intrinsic-size:auto 130px}

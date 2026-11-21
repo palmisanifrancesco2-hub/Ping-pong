@@ -1,6 +1,6 @@
 import{PredictionRankings}from'./PredictionRankings';
 import { useMemo, useRef, useState } from 'react';
-import { isFreshLive, isUpcomingOrLive, startsInNextTwoHours, type Board, type FeedMatch } from './shared/board';
+import { isFreshLive, isUpcomingOrLive, startsInNextTwoHours, matchesStartWindow, type StartWindow, type Board, type FeedMatch } from './shared/board';
 import { SaveChoice } from './Choices';
 import { dateTime,fairOddsText,positiveEvText } from './shared/format';
 import { PlayerAnalysis } from './PlayerAnalysis';
@@ -28,9 +28,17 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
   const values = useValue(token);
   const [modelChoice,setModelChoice]=useState<'study'|'ensemble'>('study');
   const selectionReport=modelChoice==='ensemble'?(values.report?.ensemble?{...values.report,...values.report.ensemble,rankings:undefined}:null):values.report;
-  const [search, setSearch] = useState(''), [competition, setCompetition] = useState('');
+  const [search, setSearch] = useState(''), [selectedCompetitions,setSelectedCompetitions] = useState<string[]>([]);
   const [state, setState] = useState(''), [mode, setMode] = useState<'value' | 'events' | 'markets'>(tracker ? 'value' : 'events');
-  const [soon,setSoon] = useState(tracker);
+  const [chosenWindow,setChosenWindow] = useState<StartWindow|null>(null);
+  const [showCustomWindow,setShowCustomWindow] = useState(false);
+  const [fromText,setFromText] = useState(''), [untilText,setUntilText] = useState('');
+  const [timeError,setTimeError] = useState('');
+  const activeWindow: StartWindow = chosenWindow ?? {kind:mode==='value'||tracker ? 'soon' : 'all'};
+  const custom = activeWindow.kind==='custom' ? activeWindow : null;
+  const windowKind = activeWindow.kind;
+  const soon = windowKind==='soon';
+  const from = custom?.from ?? -Infinity, until = custom?.until ?? Infinity;
   const [marketFilter,setMarketFilter] = useState<BookmakerMarketFilter>('all');
   const [nearOdds,setNearOdds] = useState(false);
   const [minOdds, setMinOdds] = useState('1.30'), [limit, setLimit] = useState(12);
@@ -75,11 +83,13 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
   },[marketFilter,marketsByEvent,mode,nearOdds,minimum,maximum]);
   const matchingEvents = useMemo(() => {
     const term = search.trim().toLocaleLowerCase('it');
-    return (board?.matches ?? []).filter(m => isUpcomingOrLive(m, now) && (!competition || m.league === competition)
+    const enabledCompetitions = new Set(selectedCompetitions);
+    const startWindow:StartWindow = windowKind==='custom' ? {kind:'custom',from,until} : {kind:windowKind};
+    return (board?.matches ?? []).filter(m => (enabledCompetitions.size===0 || enabledCompetitions.has(m.league))
       && (!term || `${m.home} ${m.away} ${m.league} ${m.id}`.toLocaleLowerCase('it').includes(term))
       && (!state || (state === 'live' ? m.in_play : !m.in_play))
-      && (!soon || startsInNextTwoHours(m,now)));
-  }, [board,now,competition,search,state,soon]);
+      && matchesStartWindow(m,startWindow,now));
+  }, [board,now,selectedCompetitions,search,state,windowKind,from,until]);
   const visibleEvents = new Map(matchingEvents.map(match=>[match.id,match]));
   const opportunities = eligible.filter(quote=>visibleEvents.has(quote.eventId));
   const byEvent = new Map(opportunities.map(quote=>[quote.eventId,quote]));
@@ -91,20 +101,37 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
   const currentOpen=board?.matches.find(m=>m.id===openEvent);
   const refreshedQuote=openQuote(selectionReport,currentOpen,opened?.selection??(openEvent ? byEvent.get(openEvent)?.selection ?? null : null),now);
   const inspectedQuote=refreshedQuote && oddsInRange(refreshedQuote.odds,minimum,maximum) ? refreshedQuote : undefined;
-  const competitions = [...new Set(board?.matches.map(m => m.league) ?? [])].sort();
+  const competitions = [...new Set([...(board?.matches.map(m=>m.league) ?? []),...selectedCompetitions])].sort((a,b)=>a.localeCompare(b,'it'));
+  const visibleMatches = mode==='events' ? matches : matches.slice(0,limit);
+  const boardIds = new Set(board?.matches.map(match=>match.id));
+  const rankedIds = new Set(rankedMatches.map(match=>match.id));
+  const windowLabel = soon ? 'Prossime 2 ore' : custom ? 'Intervallo personalizzato' : 'Tutti gli orari';
   function changed() { setLimit(12); setShown(true); }
-  function showMode(next: typeof mode, nextSoon=next==='value') {
-    if (next!==mode) {
-      setMode(next);
-      changeTimeWindow(nextSoon);
-    } else changed();
+  function showMode(next: typeof mode, forcedWindow?:StartWindow) {
+    if (next!==mode) { setMode(next);setOpened(null); }
+    if (forcedWindow) changeTimeWindow(forcedWindow);
+    else changed();
   }
-  function changeTimeWindow(next: boolean) {
-    if (next && state==='live') setState('');
-    setSoon(next);setOpened(null);changed();
+  function changeTimeWindow(next: StartWindow) {
+    if (next.kind!=='all' && state==='live') setState('');
+    setChosenWindow(next);setShowCustomWindow(next.kind==='custom');setTimeError('');setOpened(null);changed();
+  }
+  function applyTimeWindow() {
+    const start = fromText ? Date.parse(fromText) : -Infinity;
+    const end = untilText ? Date.parse(untilText) : Infinity;
+    if ((!fromText&&!untilText) || Number.isNaN(start) || Number.isNaN(end) || start>end) {
+      setTimeError('Imposta una data di inizio o fine valida. La fine deve seguire l’inizio.');
+      return;
+    }
+    changeTimeWindow({kind:'custom',from:start,until:end});
+  }
+  function toggleCompetition(league:string) {
+    setSelectedCompetitions(previous=>previous.includes(league) ? previous.filter(name=>name!==league) : [...previous,league]);
+    setOpened(null);changed();
   }
   function resetMarketFilters() {
-    setSearch('');setCompetition('');setState('');setMarketFilter('all');setSoon(false);setNearOdds(false);changed();
+    setSearch('');setSelectedCompetitions([]);setState('');setMarketFilter('all');setNearOdds(false);
+    setFromText('');setUntilText('');changeTimeWindow({kind:'all'});
   }
   function closeList() { setShown(false); setOpened(null); heading.current?.focus({ preventScroll: true }); heading.current?.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
   function closeEvent() {
@@ -115,7 +142,7 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
     const match=visibleEvents.get(quote.eventId);
     const index=opportunities.findIndex(row=>row.id===quote.id);
     if (!match||index<0) return;
-    setMode('value');setShown(true);setLimit(Math.max(12,index+1));
+    setMode('value');setChosenWindow(activeWindow);setShown(true);setLimit(Math.max(12,index+1));
     setOpened({match,index,selection:quote.selection});
     requestAnimationFrame(()=>{
       const summary=cards.current?.querySelector<HTMLElement>('details.match-card[open] > summary');
@@ -136,7 +163,7 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
     <h2 ref={heading} tabIndex={-1}>Quote selezionate</h2>
     <section className="best-quotes" aria-labelledby="best-quotes-heading">
       <h3 id="best-quotes-heading" ref={bestHeading} tabIndex={-1}>Quote migliori</h3>
-      <p className="fine">Vincente prematch · {soon?'Prossime 2 ore':'Tutti gli orari'} · EV prudente positivo</p>
+      <p className="fine">Vincente prematch · {windowLabel} · EV prudente positivo</p>
       {opportunities.length ? <ul className="best-quotes-list">{opportunities.slice(0,3).map(quote=>
         <li key={quote.id}><button className="secondary best-quote" onClick={()=>openOpportunity(quote)}>
           <span><strong>{quote.selection}</strong><small>{quote.match} · {dateTime(quote.startsAt)}</small></span>
@@ -147,15 +174,26 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
     <div className="selection-notice"><span className="badge">Stime sperimentali</span><span>Vincente partita</span></div>
     {!tracker && <div className="quote-tabs" role="group" aria-label="Vista partite"><button className={mode === 'value' ? 'primary' : 'secondary'} aria-pressed={mode === 'value'} onClick={() => showMode('value')}>Quote migliori ({opportunities.length})</button><button className={mode === 'events' ? 'primary' : 'secondary'} aria-pressed={mode === 'events'} onClick={() => showMode('events')}>Eventi e giocatori</button><button className={mode === 'markets' ? 'primary' : 'secondary'} aria-pressed={mode === 'markets'} onClick={() => showMode('markets')}>Altri mercati ({marketsByEvent.size})</button></div>}
     <div className="quote-toolbar" role="group" aria-label="Orario di inizio">
-      <button className={soon?'primary':'secondary'} aria-pressed={soon} onClick={()=>changeTimeWindow(true)}>Prossime 2 ore ({upcomingCount})</button>
-      <button className={soon?'secondary':'primary'} aria-pressed={!soon} onClick={()=>changeTimeWindow(false)}>Tutti gli orari</button>
+      <button className={soon?'primary':'secondary'} aria-pressed={soon} onClick={()=>changeTimeWindow({kind:'soon'})}>Prossime 2 ore ({upcomingCount})</button>
+      <button className={windowKind==='all'?'primary':'secondary'} aria-pressed={windowKind==='all'} onClick={()=>changeTimeWindow({kind:'all'})}>Tutti gli orari</button>
+      <button className={custom?'primary':'secondary'} aria-expanded={showCustomWindow} aria-controls="custom-start-window" onClick={()=>setShowCustomWindow(value=>!value)}>Scegli orario</button>
     </div>
+    {showCustomWindow && <div id="custom-start-window" className="filters custom-start-window">
+      <label>Da <input aria-label="Da data e ora" type="datetime-local" value={fromText} onChange={e=>setFromText(e.target.value)}/></label>
+      <label>A <input aria-label="A data e ora" type="datetime-local" value={untilText} onChange={e=>setUntilText(e.target.value)}/></label>
+      <button className="primary" onClick={applyTimeWindow}>Applica orario</button>
+      {timeError && <p className="error" role="alert">{timeError}</p>}
+    </div>}
+    {custom && <p className="fine">Orario del dispositivo · {Number.isFinite(from)?`Da ${dateTime(new Date(from).toISOString())}`:'Da ora'} · {Number.isFinite(until)?`Fino a ${dateTime(new Date(until).toISOString())}`:'Senza ora finale'}</p>}
     <div className="filters quote-filters">
-      <label>Competizione<select aria-label="Competizione" value={competition} onChange={e=>{setCompetition(e.target.value);setOpened(null);changed();}}>
-        <option value="">Tutte le competizioni ({competitions.length})</option>
-        {competition && !competitions.includes(competition) && <option value={competition}>{competition}</option>}
-        {competitions.map(c=><option key={c}>{c}</option>)}
-      </select></label>
+      <details className="competition-filter">
+        <summary>{selectedCompetitions.length ? `Competizioni (${selectedCompetitions.length} selezionate)` : `Tutte le competizioni (${competitions.length})`}</summary>
+        <fieldset>
+          <legend>Scegli le competizioni</legend>
+          {competitions.map(league=><label key={league}><input type="checkbox" checked={selectedCompetitions.includes(league)} onChange={()=>toggleCompetition(league)}/>{league}</label>)}
+          {selectedCompetitions.length>0 && <button className="secondary" onClick={()=>{setSelectedCompetitions([]);setOpened(null);changed();}}>Tutte le competizioni</button>}
+        </fieldset>
+      </details>
       <label>Fascia quota<select aria-label="Fascia quota" value={nearOdds?'near':'all'} onChange={e=>{setNearOdds(e.target.value==='near');setOpened(null);changed();}}>
         <option value="all">Qualsiasi fascia</option>
         <option value="near">Intorno a 1,50 (1,40–1,60)</option>
@@ -164,27 +202,27 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
     {mode==='markets' && <label className="model-choice">Mercato Bet365<select value={marketFilter} onChange={e=>{
       setMarketFilter(e.target.value as BookmakerMarketFilter);setOpened(null);changed();
     }}><option value="all">Tutti i mercati</option><option value="totals">Over/Under</option><option value="handicap">Handicap</option><option value="sets">Set</option><option value="exact">Risultato esatto</option></select></label>}
-    {mode!=='markets' && <label className="model-choice">Modello per le quote<select aria-label="Modello per le quote" value={modelChoice} onChange={e=>{setModelChoice(e.target.value as 'study'|'ensemble');setOpened(null);changed();}}><option value="study">Modello del test in corso</option><option value="ensemble">Ensemble di tre modelli · sperimentale</option></select></label>}<div className="quote-search"><label>Cerca eventi<input type="search" value={search} placeholder="Giocatore, campionato o ID evento" onChange={e => { setSearch(e.target.value); changed(); }}/></label></div><details className="quote-filter-details"><summary>Stato e quota minima</summary><div className="filters quote-filters"><label>Stato<select aria-label="Stato" value={state} onChange={e => { setState(e.target.value); if (e.target.value==='live') setSoon(false); changed(); }}><option value="">Live e da iniziare</option><option value="prematch">Da iniziare</option><option value="live">Live confermate</option></select></label><label>Quota minima<input disabled={nearOdds} type="number" min="1.3" step="0.01" value={minOdds} onChange={e => { setMinOdds(e.target.value); changed(); }}/></label></div></details>
+    {mode!=='markets' && <label className="model-choice">Modello per le quote<select aria-label="Modello per le quote" value={modelChoice} onChange={e=>{setModelChoice(e.target.value as 'study'|'ensemble');setOpened(null);changed();}}><option value="study">Modello del test in corso</option><option value="ensemble">Ensemble di tre modelli · sperimentale</option></select></label>}<div className="quote-search"><label>Cerca eventi<input type="search" value={search} placeholder="Giocatore, campionato o ID evento" onChange={e => { setSearch(e.target.value); changed(); }}/></label></div><details className="quote-filter-details"><summary>Stato e quota minima</summary><div className="filters quote-filters"><label>Stato<select aria-label="Stato" value={state} onChange={e => { setState(e.target.value); if (e.target.value==='live') changeTimeWindow({kind:'all'}); changed(); }}><option value="">Live e da iniziare</option><option value="prematch">Da iniziare</option><option value="live">Live confermate</option></select></label><label>Quota minima<input disabled={nearOdds} type="number" min="1.3" step="0.01" value={minOdds} onChange={e => { setMinOdds(e.target.value); changed(); }}/></label></div></details>
     {(!shown || matches.length === 0) && <div className="quote-toolbar"><button className="primary" disabled={busy} onClick={refresh}>{busy ? 'Aggiornamento…' : '↻ Aggiorna quote ora'}</button><button className="secondary" onClick={() => shown ? closeList() : setShown(true)}>{shown ? 'Chiudi lista quote' : 'Mostra lista quote'}</button></div>}
     <p className="fine" role="status">{rankedMatches.length} {mode === 'value' || tracker ? 'partite con quota selezionata · ordine: probabilità decrescente, poi EV prudente' : mode==='markets' ? 'partite con altri mercati Bet365 disponibili' : 'eventi disponibili · live prima, poi orario'}. {values.report ? `Verifica: ${dateTime(values.report.checkedAt)}` : 'Analisi delle quote in corso…'}</p>
     {values.error && <p role="alert" className="error">{values.error}</p>}
     {!board && !opened ? <p role="status">{boardLoading ? 'Recupero eventi reali…' : 'Feed non disponibile. Aggiorna per riprovare.'}</p> : shown && <>
       {!matches.length && nearOdds && (mode==='value'||tracker) ? <div className="empty">
         <h3>{values.loading ? 'Analisi delle quote…' : 'Nessuna opportunità selezionata tra 1,40 e 1,60'}</h3>
-        {!tracker && <button className="text-button" onClick={()=>showMode('events',soon)}>Vedi i prezzi Bet365 in questa fascia →</button>}
+        {!tracker && <button className="text-button" onClick={()=>showMode('events',activeWindow)}>Vedi i prezzi Bet365 in questa fascia →</button>}
       </div> : !matches.length && soon && (mode==='value'||tracker) ? <div className="empty">
         <h3>{values.loading ? 'Analisi delle partite in arrivo…' : !selectionReport ? 'Analisi delle quote indisponibile'
           : upcomingCount ? 'Nessuna quota selezionata nelle prossime 2 ore' : 'Nessuna partita nelle prossime 2 ore'}</h3>
         {upcomingCount>0 && <p>Partite in programma nel feed: {upcomingCount}. La lista delle quote migliori applica i filtri di EV prudente e i filtri attivi.</p>}
-        {upcomingCount>0 && !tracker && <button className="text-button" onClick={()=>showMode('events',true)}>Vedi le partite delle prossime 2 ore →</button>}
+        {upcomingCount>0 && !tracker && <button className="text-button" onClick={()=>showMode('events',{kind:'soon'})}>Vedi le partite delle prossime 2 ore →</button>}
       </div> : !matches.length && mode==='events' ? <div className="empty">
         <h3>{nearOdds ? 'Nessuna quota Bet365 tra 1,40 e 1,60 per questi filtri' : soon ? 'Nessuna partita corrispondente nelle prossime 2 ore' : 'Nessuna partita corrispondente'}</h3>
-        {soon && <button className="secondary" onClick={()=>changeTimeWindow(false)}>Vedi tutti gli orari</button>}
+        {soon && <button className="secondary" onClick={()=>changeTimeWindow({kind:'all'})}>Vedi tutti gli orari</button>}
       </div> : !matches.length && mode==='markets' ? <div className="empty">
         <h3>{boardLoading ? 'Aggiornamento mercati…' : 'Nessun mercato disponibile con questi filtri'}</h3>
         {marketsByEvent.size>0 && <button className="secondary" onClick={resetMarketFilters}>Azzera filtri</button>}
-      </div> : !matches.length ? <div className="empty"><h3>{values.loading ? 'Analisi statistica in corso…' : 'Nessuna selezione soddisfa i filtri'}</h3><p>Quote migliori seleziona le opportunità prematch con storico sufficiente, prezzo aggiornato ed EV prudente positivo. Le stime live disponibili compaiono nei dettagli della partita.</p>{!tracker && <button className="text-button" onClick={() => showMode('events')}>Consulta eventi e giocatori →</button>}</div> : <div ref={cards} className="match-list">{matches.slice(0, limit).map(m => <SelectedMatch key={m.id} match={m} assessment={matchModelAssessment(board?.matches.some(current=>current.id===m.id) ? values.report : null,m,now,modelChoice==='ensemble')} estimating={values.loading} quote={openEvent===m.id?inspectedQuote:byEvent.get(m.id)} current={!!board?.matches.some(current=>current.id===m.id)} retained={openEvent===m.id&&!rankedMatches.some(row=>row.id===m.id)} token={token} now={now} open={openEvent === m.id} onToggle={() => setOpened(previous=>previous?.match.id===m.id?null:{match:m,index:matches.findIndex(row=>row.id===m.id),selection:byEvent.get(m.id)?.selection??null})} onClose={closeEvent} onRefresh={refresh} busy={busy} boardCheckedAt={board?.checkedAt} marketGroups={filteredMarkets.get(m.id)} showMarketsFirst={mode==='markets'} nearOdds={nearOdds} winnerPricesInRange={winnerPricesInRange.get(m.id)}/>)}</div>}
-      {matches.length > limit && <div className="quote-toolbar">
+      </div> : !matches.length ? <div className="empty"><h3>{values.loading ? 'Analisi statistica in corso…' : 'Nessuna selezione soddisfa i filtri'}</h3><p>Quote migliori seleziona le opportunità prematch con storico sufficiente, prezzo aggiornato ed EV prudente positivo. Le stime live disponibili compaiono nei dettagli della partita.</p>{!tracker && <button className="text-button" onClick={() => showMode('events')}>Consulta eventi e giocatori →</button>}</div> : <div ref={cards} className="match-list">{visibleMatches.map((m,index) => <SelectedMatch key={m.id} match={m} assessment={matchModelAssessment(boardIds.has(m.id) ? values.report : null,m,now,modelChoice==='ensemble')} estimating={values.loading} quote={openEvent===m.id?inspectedQuote:byEvent.get(m.id)} current={boardIds.has(m.id)} retained={openEvent===m.id&&!rankedIds.has(m.id)} token={token} now={now} open={openEvent === m.id} onToggle={() => setOpened(previous=>previous?.match.id===m.id?null:{match:m,index,selection:byEvent.get(m.id)?.selection??null})} onClose={closeEvent} onRefresh={refresh} busy={busy} boardCheckedAt={board?.checkedAt} marketGroups={filteredMarkets.get(m.id)} showMarketsFirst={mode==='markets'} nearOdds={nearOdds} winnerPricesInRange={winnerPricesInRange.get(m.id)}/>)}</div>}
+      {mode!=='events' && matches.length > limit && <div className="quote-toolbar">
         <button className="primary" onClick={() => setLimit(n => n + 12)}>Mostra altre {Math.min(12,matches.length-limit)} partite</button>
         <button className="secondary" onClick={() => setLimit(Number.POSITIVE_INFINITY)}>Mostra tutte ({matches.length})</button>
       </div>}

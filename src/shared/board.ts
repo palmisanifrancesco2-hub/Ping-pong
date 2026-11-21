@@ -25,6 +25,14 @@ export function startsInNextTwoHours(match: FeedMatch, now: number): boolean {
   const lead = Date.parse(match.kickoff_utc ?? '') - now;
   return !match.in_play && lead > 0 && lead <= 2 * 60 * 60 * 1000;
 }
+export type StartWindow = { kind: 'all' | 'soon' } | { kind: 'custom'; from: number; until: number };
+
+export function matchesStartWindow(match: FeedMatch, window: StartWindow, now: number): boolean {
+  if (window.kind === 'soon') return startsInNextTwoHours(match, now);
+  if (window.kind !== 'custom') return isUpcomingOrLive(match, now);
+  const start = Date.parse(match.kickoff_utc ?? '');
+  return !match.in_play && start > now && start >= window.from && start <= window.until;
+}
 // Preserve provider identity including changing game period and sub-market.
 export function marketIdentity(q: FeedQuote): string {
   return JSON.stringify([q.group_id, q.market_key ?? '', q.period ?? '', q.market_id ?? '', q.phase ?? 'prematch']);
