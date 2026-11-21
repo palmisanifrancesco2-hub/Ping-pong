@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, type FormEvent } from 'react';
+import { lazy, Suspense, useEffect, useState, useRef, type FormEvent } from 'react';
 import { createClient, type Session } from '@supabase/supabase-js';
 import { FeedStatus, Markets } from './Markets';
 import { IndividualOdds } from './IndividualOdds';
@@ -13,11 +13,11 @@ import { GoogleSignIn } from './GoogleSignIn';
 import{SmartStake}from'./SmartStake';
 import{ConnectionHealth}from'./ConnectionHealth';
 import type{BetPrefill}from'./shared/bets';
-import { BestOdds } from './BestOdds';
 import type { IndividualSport } from './shared/individual-sports';
 import { usePrivateAccess } from './usePrivateAccess';
 import { cleanAuthCallbackUrl, googleCallbackError } from './shared/google-auth';
 
+const BestOdds = lazy(() => import('./BestOdds').then(module => ({default:module.BestOdds})));
 const url = import.meta.env.VITE_SUPABASE_URL;
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 const auth = (() => {
@@ -81,7 +81,7 @@ export function App() {
       {section === 'Collegamenti' && <><FeedStatus {...feed} disabled={false}/><ConnectionHealth token={session?.access_token} demo={false}/></>}
       {section === 'Partite e mercati' && <><FeedStatus {...feed} compact/><Markets board={feed.board} now={feed.now} token={session.access_token} refreshBoard={feed.refresh} boardLoading={feed.loading}/></>}
       {section === 'Quote per sport' && <IndividualOdds token={session.access_token} sport={oddsSport} onSelect={setOddsSport} onTableTennis={()=>setSection('Partite e mercati')}/>}
-      {section === 'Quote migliori' && <BestOdds token={session.access_token} onMarkets={()=>setSection('Partite e mercati')} onSportPrices={sport=>{setOddsSport(sport);setSection('Quote per sport');}}/>}
+      {section === 'Quote migliori' && <Suspense fallback={<p role="status">Caricamento delle quote migliori…</p>}><BestOdds token={session.access_token} onMarkets={()=>setSection('Partite e mercati')} onSportPrices={sport=>{setOddsSport(sport);setSection('Quote per sport');}}/></Suspense>}
       {section === 'Simulatore mercati' && <MarketSimulator/>}
       {section === 'Le mie scelte' && <PersonalChoices key={`${session.user.id}-${period}`} token={session?.access_token} demo={false} period={period} onPeriod={setPeriod} onBet={openBet}/>}
       {section === 'Storico pronostici' && <PredictionHistory key={`${session.user.id}-${period}`} token={session?.access_token} demo={false} period={period} onPeriod={setPeriod} onBet={openBet}/>}

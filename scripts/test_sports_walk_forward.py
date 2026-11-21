@@ -41,6 +41,22 @@ class SportsWalkForwardTests(unittest.TestCase):
         assert study.winner_from_score("0-0", "boxing") is None
 
 
+    def test_completed_tennis_score_requires_a_deciding_outcome(self):
+        assert study.tennis_completed("7-6(5) 6-3", "3")
+        assert study.tennis_completed("6-3 3-6 [10-8]", "3")
+        assert not study.tennis_completed("6-3 3-6 0-1", "3")
+        assert not study.tennis_completed("6-3 6-4 1-0", "3")
+        assert not study.tennis_completed("6-2 1-0 RET", "3")
+
+    def test_rating_refit_uses_last_historically_available_results(self):
+        start = date(2024, 1, 1)
+        history = [study.Match("old", start, start, "a", "b", "league", 1),
+                   study.Match("future", start, date(2099, 1, 1), "a", "b", "league", 0)]
+        ratings = {}
+        study.features(history, ratings)
+        assert ratings["globalPlayers"]["a"]["matches"] == 1
+        assert ratings["globalPlayers"]["a"]["wins"] == 1
+
     def test_temporal_interval_handles_small_samples_and_multiple_comparisons(self):
         assert study.evaluate([])[0]["folds"] == []
         assert study.block_intervals(np.array([0.0]), np.array([1]))["familyInterval95"] is None

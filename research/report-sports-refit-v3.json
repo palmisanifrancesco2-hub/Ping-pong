@@ -1,0 +1,56 @@
+{
+  "table_tennis": {
+    "family": "Logistica con forma e precedenti",
+    "eligible": 6858,
+    "through": "2025-12-10",
+    "model": "fit on all eligible matches"
+  },
+  "tennis": {
+    "family": "Logistica con forma e precedenti",
+    "eligible": 271139,
+    "through": "2025-12-29",
+    "model": "fit on all eligible matches"
+  },
+  "badminton": {
+    "family": "Gradient boosting",
+    "eligible": 37334,
+    "through": "2026-07-05",
+    "model": "fit on all eligible matches"
+  },
+  "darts": {
+    "family": "Logistica di riferimento",
+    "eligible": 24586,
+    "through": "2025-10-30",
+    "model": "fit on all eligible matches"
+  },
+  "snooker": {
+    "family": "Elo",
+    "eligible": 101512,
+    "through": "2026-11-19",
+    "model": "rating updates only"
+  },
+  "boxing": {
+    "family": "Logistica con forma e precedenti",
+    "eligible": 698,
+    "through": "2026-11-14",
+    "model": "fit on all eligible matches"
+  },
+  "mma": {
+    "family": "Logistica di riferimento",
+    "eligible": 2298,
+    "through": "2026-10-10",
+    "model": "fit on all eligible matches"
+  },
+  "setka": {
+    "family": "Logistica con forma e precedenti",
+    "eligible": 5556,
+    "through": "2022-07-08",
+    "model": "fit on all eligible matches"
+  },
+  "moviodds": {
+    "family": "Logistica con forma e precedenti",
+    "eligible": 16764,
+    "through": "2026-11-04",
+    "model": "fit on all eligible matches"
+  }
+}
