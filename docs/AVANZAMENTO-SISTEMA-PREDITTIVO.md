@@ -163,3 +163,7 @@ Il replay v33 estende le sei finestre v32 a 14 mercati su set, punti e risultato
 ## Verifica WTT e quote Bet365 per i mercati secondari
 
 Il v34 confronta 2.015 partite WTT distinte e 396 incontri MoviOdds con almeno una coppia quota esatta. Sul WTT il Brier migliora sulle sei linee handicap in entrambe le coorti. Sui campioni Bet365 più grandi, le probabilità del bookmaker al netto del margine restano più precise per primo set e handicap set. Sull’Over 74,5 punti ci sono solo 40 coppie; sugli handicap punti quattro. Tutti i 44 test Python passati. [Rapporto e riproduzione](STUDIO-ROBUSTEZZA-MERCATI-V34.md).
+
+## Vincente prematch su 41.216 partite
+
+Il v35 aggiunge 11.875 partite MoviOdds successive al v32 e ricalcola su altre coorti 4.223 casi Setka e 4.669 WTT. Sul nuovo campione, logistica con riferimento di riserva 6.409 corretti e Brier 0,24667 contro 0,24967 della frequenza. Su 7.607 gare con storico sufficiente, logistica 4.179 corretti contro 4.066 di Elo. La UI mostra quota Bet365 e quota equa affiancate. [Rapporto](STUDIO-40000-PARTITE-V35.md).
