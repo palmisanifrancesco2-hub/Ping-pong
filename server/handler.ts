@@ -135,6 +135,6 @@ export function createHandler(deps: Dependencies = {}) {
         try { cached = { at: now(), value: await pending }; } finally { pending = undefined; }
       }
       return send(200, cached.value);
-    } catch(error) { console.error(JSON.stringify({apiPath:path,code:error instanceof Error&&/^[A-Z_]+$/.test(error.message)?error.message:'API_FAILURE'}));res.setHeader('Retry-After', '30'); return send(503, { error: 'Fonte temporaneamente non disponibile. Riprova tra 30 secondi.' }); }
+    } catch(error) { console.error(JSON.stringify({apiPath:path,code:error instanceof Error&&/^[A-Z0-9_]+$/.test(error.message)?error.message:'API_FAILURE'}));res.setHeader('Retry-After', '30'); return send(503, { error: 'Fonte temporaneamente non disponibile. Riprova tra 30 secondi.' }); }
   };
 }

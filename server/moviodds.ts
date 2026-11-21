@@ -61,11 +61,17 @@ export class MoviOddsFeed {
   private async read(): Promise<Board> {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 15_000);
+    let failure = 'MOVIODDS_NETWORK_ERROR';
     try {
       const response = await movioddsRequest(MOVIODDS_URL, {
         signal: controller.signal, redirect: 'error', cache: 'no-store', headers: { Accept: 'application/json' },
       }, this.fetcher, this.env);
-      if (!response.ok || !response.body) throw new Error('upstream');
+      if (!response.ok) {
+        failure = `MOVIODDS_HTTP_${response.status}`;
+        throw new Error(failure);
+      }
+      failure = 'MOVIODDS_INVALID_BODY';
+      if (!response.body) throw new Error(failure);
       // Bound the decompressed payload below the Vercel response size limit.
       const reader = response.body.getReader();
       const chunks: Uint8Array[] = []; let size = 0;
@@ -74,16 +80,24 @@ export class MoviOddsFeed {
           const chunk = await reader.read();
           if (chunk.done) break;
           size += chunk.value.byteLength;
-          if (size > 3_500_000) throw new Error('size');
+          if (size > 3_500_000) {
+            failure = 'MOVIODDS_PAYLOAD_TOO_LARGE';
+            throw new Error(failure);
+          }
           chunks.push(chunk.value);
         }
       } finally { await reader.cancel().catch(() => {}); }
       const board = parseBoard(JSON.parse(Buffer.concat(chunks).toString('utf8')), new Date(this.now()).toISOString());
       this.cached = { at: this.now(), board }; this.failedAt = undefined;
       return board;
-    } catch {
+    } catch (error) {
       this.cached = undefined; this.failedAt = this.now();
-      throw new Error('MOVIODDS_UNAVAILABLE');
+      if (controller.signal.aborted) throw new Error('MOVIODDS_TIMEOUT');
+      if (error instanceof Error && ['MOVIODDS_INVALID_TIME', 'MOVIODDS_DUPLICATE_EVENT',
+        'MOVIODDS_AMBIGUOUS_QUOTE', 'MOVIODDS_INVALID_KEY'].includes(error.message)) {
+        throw new Error(error.message);
+      }
+      throw new Error(failure);
     } finally { clearTimeout(timer); controller.abort(); }
   }
 }

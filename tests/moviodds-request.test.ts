@@ -58,7 +58,7 @@ describe('private MoviOdds authentication', () => {
   it('sanitizes provider denial bodies and keeps cooldown rather than retrying', async () => {
     const fetcher = vi.fn(async () => new Response(env.MOVIODDS_API_KEY, {status:403}));
     const feed = new MoviOddsFeed(fetcher, Date.now, env);
-    await expect(feed.board()).rejects.toThrow('MOVIODDS_UNAVAILABLE');
+    await expect(feed.board()).rejects.toThrow(/^MOVIODDS_HTTP_403$/);
     await expect(feed.board()).rejects.toThrow('MOVIODDS_COOLDOWN');
     expect(fetcher).toHaveBeenCalledTimes(1);
     await expect(new ResultsFeed(fetcher, Date.now, env).archive()).rejects.toThrow('RESULTS_UNAVAILABLE');

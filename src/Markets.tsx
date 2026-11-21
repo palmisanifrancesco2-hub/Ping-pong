@@ -27,7 +27,7 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
   const [modelChoice,setModelChoice]=useState<'study'|'ensemble'>('study');
   const selectionReport=modelChoice==='ensemble'?(values.report?.ensemble?{...values.report,...values.report.ensemble}:null):values.report;
   const [search, setSearch] = useState(''), [competition, setCompetition] = useState('');
-  const [state, setState] = useState(''), [mode, setMode] = useState<'value' | 'events'>('value');
+  const [state, setState] = useState(''), [mode, setMode] = useState<'value' | 'events'>(tracker ? 'value' : 'events');
   const [minOdds, setMinOdds] = useState('1.30'), [limit, setLimit] = useState(12);
   const [shown, setShown] = useState(true), [opened, setOpened] = useState<OpenMatch | null>(null);
   const openEvent=opened?.match.id??null;

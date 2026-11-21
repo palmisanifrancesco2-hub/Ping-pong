@@ -69,13 +69,18 @@ describe('all-market foreign board', () => {
     const fetcher = vi.fn().mockResolvedValueOnce(Response.json(payload)).mockResolvedValue(new Response('upstream details', { status: 429 }));
     const feed = new MoviOddsFeed(fetcher, () => clock);
     await feed.board(); clock += 30_001;
-    await expect(feed.board()).rejects.toThrow(/^MOVIODDS_UNAVAILABLE$/);
+    await expect(feed.board()).rejects.toThrow(/^MOVIODDS_HTTP_429$/);
     await expect(feed.board()).rejects.toThrow(/^MOVIODDS_COOLDOWN$/);
     expect(fetcher).toHaveBeenCalledTimes(2);
   });
   it('bounds decompressed responses and sanitizes HTML, invalid JSON and errors', async () => {
-    for (const response of [new Response('x'.repeat(3_500_001)), new Response('<html>error</html>'), Response.json({})]) {
-      await expect(new MoviOddsFeed(vi.fn().mockResolvedValue(response), () => now).board()).rejects.toThrow(/^MOVIODDS_UNAVAILABLE$/);
+    for (const [response, code] of [
+      [new Response('x'.repeat(3_500_001)), 'MOVIODDS_PAYLOAD_TOO_LARGE'],
+      [new Response('<html>error</html>'), 'MOVIODDS_INVALID_BODY'],
+      [Response.json({}), 'MOVIODDS_INVALID_BODY'],
+      [Response.json({...payload, server_time: new Date(now - 120_001).toISOString()}), 'MOVIODDS_INVALID_TIME'],
+    ] as const) {
+      await expect(new MoviOddsFeed(vi.fn().mockResolvedValue(response), () => now).board()).rejects.toThrow(new RegExp(`^${code}$`));
     }
   });
 });
