@@ -1,0 +1,111 @@
+{
+  "version": "advanced-benchmark-v16",
+  "createdAt": "2026-11-07T12:25:16.133034+00:00",
+  "input": ".research-data/market-v8-features.json",
+  "inputHash": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4",
+  "results": ".research-data/3000-data.json",
+  "resultsHash": "2380fc423d187688028575f301aea2cc3dfb5b6b458aac46b7370bc9f967e02f",
+  "foldStarts": [
+    "2026-10-25T00:00:00Z",
+    "2026-10-27T00:00:00Z",
+    "2026-10-29T00:00:00Z",
+    "2026-10-31T00:00:00Z",
+    "2026-11-02T00:00:00Z"
+  ],
+  "endExclusive": "2026-11-05T00:00:00Z",
+  "tuningDays": 1,
+  "calibrationDays": 1,
+  "minimumTraining": 50,
+  "minimumTuning": 30,
+  "minimumCalibration": 30,
+  "models": [
+    "hierarchical-eb",
+    "logistic",
+    "hist-gradient-boosting",
+    "random-forest",
+    "bradley-terry-winner"
+  ],
+  "parameterGrid": {
+    "logistic": [
+      {
+        "C": 0.1
+      },
+      {
+        "C": 1
+      }
+    ],
+    "hist-gradient-boosting": [
+      {
+        "max_leaf_nodes": 7
+      },
+      {
+        "max_leaf_nodes": 15
+      }
+    ],
+    "random-forest": [
+      {
+        "max_depth": 5,
+        "min_samples_leaf": 15
+      },
+      {
+        "max_depth": null,
+        "min_samples_leaf": 30
+      }
+    ],
+    "bradley-terry-winner": [
+      {
+        "C": 0.1
+      },
+      {
+        "C": 1
+      }
+    ]
+  },
+  "fixed": {
+    "logistic": {
+      "max_iter": 1000
+    },
+    "hist-gradient-boosting": {
+      "max_iter": 80,
+      "learning_rate": 0.05,
+      "l2_regularization": 5,
+      "min_samples_leaf": 20
+    },
+    "random-forest": {
+      "n_estimators": 120,
+      "n_jobs": 2
+    }
+  },
+  "shrinkWeights": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "seed": 20261107,
+  "bootstrapReplicates": 10000,
+  "blockDays": 3,
+  "familyComparisons": 62,
+  "selection": "Hyperparameters from tuning day only; weights and candidate family from subsequent calibration day only. Test labels never select configurations or candidate.",
+  "forestSemantics": "Multioutput classification trained once per configuration; all heads share tree partitions. Calibration per head may break cross-market coherence; experimental only.",
+  "btSemantics": "Winner only; regularized player strength by competition, fitted to all BO5 source-reported past results available before cutoff, no future players; unseen player strength=0.",
+  "optionalLibraries": {
+    "catboost": "not installed; not executed",
+    "lightgbm": "not installed; not executed",
+    "xgboost": "not installed; not executed"
+  },
+  "independentValidation": false,
+  "automaticPromotion": false,
+  "limitations": [
+    "Entire historical archive and source outcomes already inspected by earlier research; temporal separation is not new independent validation.",
+    "No historical executable as-of odds in this feature archive; odds-enhanced benchmark/ROI cannot be computed.",
+    "Source-reported results and closing times, not independently certified official records.",
+    "Per-head calibration/direct models do not ensure one coherent joint distribution across every market.",
+    "No promotion or modification of original prospective protocols."
+  ],
+  "prePerformanceImplementationCorrection": {
+    "at": "2026-11-07T12:28:54.826752+00:00",
+    "reason": "First run excluded 14 test cases settling after their intermediate fold boundary. Correct test settlement cutoff to global Nov5 snapshot; keep all training/tuning/calibration deadlines. No performance inspected or optimized. First run report and artifacts preserved privately."
+  }
+}

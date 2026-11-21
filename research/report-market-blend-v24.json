@@ -1,0 +1,3868 @@
+{
+  "protocol": {
+    "sportWeights": [
+      0,
+      0.1,
+      0.25,
+      0.5,
+      1
+    ],
+    "models": {
+      "CatBoost coerente": [
+        "v21/categorical-catboost",
+        "v21/categorical-catboost"
+      ],
+      "Rete neurale coerente": [
+        "v21/categorical-mlp",
+        "v21/categorical-mlp"
+      ],
+      "NGBoost": [
+        "v18/ngboost",
+        "v20/ngboost"
+      ],
+      "Random Forest": [
+        "v16/random-forest",
+        "v20/random-forest"
+      ]
+    },
+    "minimumOdds": 1.3,
+    "selection": "Most likely side of blended probability; strictly positive nominal EV at recorded odds",
+    "design": "Exploratory replay on the inspected v22 cohorts. Linear blend with normalized bookmaker probability; fixed weights recorded before this run. No fit, no selection on these outcomes; all configurations reported. The later cohort uses the final frozen fold of each family.",
+    "prospectiveValidation": false
+  },
+  "cohorts": [
+    {
+      "name": "v16-asof-test-88",
+      "n": 88,
+      "models": {
+        "CatBoost coerente": [
+          {
+            "sportWeight": 0,
+            "metrics": {
+              "n": 88,
+              "correct": 45,
+              "wrong": 37,
+              "undecided": 6,
+              "accuracy": 0.5487804878048781,
+              "coverage": 0.9318181818181819,
+              "brier": 0.24781377531774373,
+              "logLoss": 0.689431761938443,
+              "ece": 0.08430844137763603,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 5,
+                  "probability": 0.2640408210398683,
+                  "frequency": 0.2
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 8,
+                  "probability": 0.36243358915624946,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 26,
+                  "probability": 0.44768934699495666,
+                  "frequency": 0.46153846153846156
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 31,
+                  "probability": 0.5418251272215824,
+                  "frequency": 0.5483870967741935
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 14,
+                  "probability": 0.6479202632934664,
+                  "frequency": 0.35714285714285715
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 3,
+                  "probability": 0.749621728653354,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.813953488372093,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": 0.0,
+            "deltaLogLoss": 0.0,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": 0.0
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": 0.0
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.0
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 6,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 76,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.1,
+            "metrics": {
+              "n": 88,
+              "correct": 48,
+              "wrong": 40,
+              "undecided": 0,
+              "accuracy": 0.5454545454545454,
+              "coverage": 1.0,
+              "brier": 0.24646743646672958,
+              "logLoss": 0.6862637538608692,
+              "ece": 0.08452766507997335,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 4,
+                  "probability": 0.27897966474212976,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 8,
+                  "probability": 0.3645108267972743,
+                  "frequency": 0.125
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 32,
+                  "probability": 0.45778560587780576,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 27,
+                  "probability": 0.5463229743290647,
+                  "frequency": 0.5185185185185185
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 13,
+                  "probability": 0.6360042610342914,
+                  "frequency": 0.38461538461538464
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 4,
+                  "probability": 0.7408017646374528,
+                  "frequency": 0.75
+                }
+              ]
+            },
+            "deltaBrier": -0.0013463388510141505,
+            "deltaLogLoss": -0.0031680080775737807,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": -0.0009133344286373407
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.0041432818589339435
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": -8.72438544581456e-06
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 82,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.25,
+            "metrics": {
+              "n": 88,
+              "correct": 48,
+              "wrong": 40,
+              "undecided": 0,
+              "accuracy": 0.5454545454545454,
+              "coverage": 1.0,
+              "brier": 0.24492677953995826,
+              "logLoss": 0.6828520123681625,
+              "ece": 0.08176939481303944,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.2843532494848462,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 9,
+                  "probability": 0.36005184427530174,
+                  "frequency": 0.1111111111111111
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 34,
+                  "probability": 0.45996023662209895,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 30,
+                  "probability": 0.5430983893252758,
+                  "frequency": 0.5333333333333333
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 12,
+                  "probability": 0.6297620620353858,
+                  "frequency": 0.4166666666666667
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 2,
+                  "probability": 0.7297192582766852,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "deltaBrier": -0.0028869957777854782,
+            "deltaLogLoss": -0.006579749570280513,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": -0.0018701248154395283
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.009861951112312828
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.00048805918810147856
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 82,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.5,
+            "metrics": {
+              "n": 88,
+              "correct": 50,
+              "wrong": 38,
+              "undecided": 0,
+              "accuracy": 0.5681818181818182,
+              "coverage": 1.0,
+              "brier": 0.24363595492800585,
+              "logLoss": 0.6802193292789829,
+              "ece": 0.06602897167704401,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 5,
+                  "probability": 0.3720808747190306,
+                  "frequency": 0.2
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 41,
+                  "probability": 0.4658469359535457,
+                  "frequency": 0.4146341463414634
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 37,
+                  "probability": 0.5411678450712334,
+                  "frequency": 0.4864864864864865
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 5,
+                  "probability": 0.6345579015492578,
+                  "frequency": 0.8
+                }
+              ]
+            },
+            "deltaBrier": -0.00417782038973788,
+            "deltaLogLoss": -0.009212432659460146,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": -0.0023628787770330166
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.018069723774552172
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.0026756855485897063
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 1,
+              "correct": {
+                "n": 1,
+                "mean": 2,
+                "median": 2,
+                "min": 2,
+                "max": 2
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 81,
+              "accuracy": 1.0,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": 1,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": 1.0
+          },
+          {
+            "sportWeight": 1,
+            "metrics": {
+              "n": 88,
+              "correct": 56,
+              "wrong": 32,
+              "undecided": 0,
+              "accuracy": 0.6363636363636364,
+              "coverage": 1.0,
+              "brier": 0.24584281920160028,
+              "logLoss": 0.6848222458199786,
+              "ece": 0.12299718926846324,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 54,
+                  "probability": 0.4846864125661269,
+                  "frequency": 0.35185185185185186
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 34,
+                  "probability": 0.5102739300866496,
+                  "frequency": 0.6176470588235294
+                }
+              ]
+            },
+            "deltaBrier": -0.001970956116143452,
+            "deltaLogLoss": -0.004609516118464385,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": 0.0007837258613181086
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.029522733748810405
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.012149639786726448
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 34,
+              "correct": {
+                "n": 21,
+                "mean": 2.394047619047619,
+                "median": 2.2,
+                "min": 2,
+                "max": 5
+              },
+              "wrong": {
+                "n": 13,
+                "mean": 2.4384615384615387,
+                "median": 2.25,
+                "min": 2,
+                "max": 3.75
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 4,
+              "excludedByEV": 50,
+              "accuracy": 0.6176470588235294,
+              "meanWrongMinusCorrect": 0.0444139194139197,
+              "theoreticalNetUnitsAtRecordedPrices": 16.275,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": 0.47867647058823526
+          }
+        ],
+        "Rete neurale coerente": [
+          {
+            "sportWeight": 0,
+            "metrics": {
+              "n": 88,
+              "correct": 45,
+              "wrong": 37,
+              "undecided": 6,
+              "accuracy": 0.5487804878048781,
+              "coverage": 0.9318181818181819,
+              "brier": 0.24781377531774373,
+              "logLoss": 0.689431761938443,
+              "ece": 0.08430844137763603,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 5,
+                  "probability": 0.2640408210398683,
+                  "frequency": 0.2
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 8,
+                  "probability": 0.36243358915624946,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 26,
+                  "probability": 0.44768934699495666,
+                  "frequency": 0.46153846153846156
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 31,
+                  "probability": 0.5418251272215824,
+                  "frequency": 0.5483870967741935
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 14,
+                  "probability": 0.6479202632934664,
+                  "frequency": 0.35714285714285715
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 3,
+                  "probability": 0.749621728653354,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.813953488372093,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": 0.0,
+            "deltaLogLoss": 0.0,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": 0.0
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": 0.0
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.0
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 6,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 76,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.1,
+            "metrics": {
+              "n": 88,
+              "correct": 48,
+              "wrong": 40,
+              "undecided": 0,
+              "accuracy": 0.5454545454545454,
+              "coverage": 1.0,
+              "brier": 0.24648756717115577,
+              "logLoss": 0.6863328478620768,
+              "ece": 0.08471377336509482,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 4,
+                  "probability": 0.28093510076037764,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 8,
+                  "probability": 0.3653956547649031,
+                  "frequency": 0.125
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 32,
+                  "probability": 0.45832242467541895,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 27,
+                  "probability": 0.5470570776857389,
+                  "frequency": 0.5185185185185185
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 13,
+                  "probability": 0.635399863794751,
+                  "frequency": 0.38461538461538464
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 4,
+                  "probability": 0.7391288305664244,
+                  "frequency": 0.75
+                }
+              ]
+            },
+            "deltaBrier": -0.0013262081465879594,
+            "deltaLogLoss": -0.0030989140763661993,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": -0.0010586949343023178
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.004104403321586519
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.00010405832135763661
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 82,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.25,
+            "metrics": {
+              "n": 88,
+              "correct": 48,
+              "wrong": 40,
+              "undecided": 0,
+              "accuracy": 0.5454545454545454,
+              "coverage": 1.0,
+              "brier": 0.2450231342256166,
+              "logLoss": 0.6831045269214401,
+              "ece": 0.08167815182030809,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.294009424031657,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 9,
+                  "probability": 0.3622560090147454,
+                  "frequency": 0.1111111111111111
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 34,
+                  "probability": 0.46145149444981387,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 30,
+                  "probability": 0.5446847636315955,
+                  "frequency": 0.5333333333333333
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 12,
+                  "probability": 0.6271787717989099,
+                  "frequency": 0.4166666666666667
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 2,
+                  "probability": 0.7280132478908176,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "deltaBrier": -0.002790641092127122,
+            "deltaLogLoss": -0.006327235017002941,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": -0.0021953156674994713
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.009728130083307293
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.0008263366874091572
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 82,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.5,
+            "metrics": {
+              "n": 88,
+              "correct": 47,
+              "wrong": 41,
+              "undecided": 0,
+              "accuracy": 0.5340909090909091,
+              "coverage": 1.0,
+              "brier": 0.24398209071463217,
+              "logLoss": 0.6809840487079151,
+              "ece": 0.06000314764683196,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 4,
+                  "probability": 0.37538048951163716,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 39,
+                  "probability": 0.46472144269075305,
+                  "frequency": 0.4358974358974359
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 41,
+                  "probability": 0.5411200166813455,
+                  "frequency": 0.4634146341463415
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 4,
+                  "probability": 0.6328254784999671,
+                  "frequency": 0.75
+                }
+              ]
+            },
+            "deltaBrier": -0.0038316846031115626,
+            "deltaLogLoss": -0.008447713230527953,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": -0.0028858924408112093
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.017679999431084704
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.0035399763215352314
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 82,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 1,
+            "metrics": {
+              "n": 88,
+              "correct": 54,
+              "wrong": 34,
+              "undecided": 0,
+              "accuracy": 0.6136363636363636,
+              "coverage": 1.0,
+              "brier": 0.24714879643609136,
+              "logLoss": 0.6874416656628995,
+              "ece": 0.10388276856978385,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 68,
+                  "probability": 0.49292329508349214,
+                  "frequency": 0.39705882352941174
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 20,
+                  "probability": 0.5188550215768245,
+                  "frequency": 0.65
+                }
+              ]
+            },
+            "deltaBrier": -0.0006649788816523727,
+            "deltaLogLoss": -0.0019900962755434737,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": 0.0002471706951284491
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.02825495592004986
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.014629164429938179
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 41,
+              "correct": {
+                "n": 23,
+                "mean": 2.4521739130434783,
+                "median": 2.25,
+                "min": 2,
+                "max": 5
+              },
+              "wrong": {
+                "n": 18,
+                "mean": 2.6458333333333335,
+                "median": 2.5,
+                "min": 2,
+                "max": 4.5
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 44,
+              "accuracy": 0.5609756097560976,
+              "meanWrongMinusCorrect": 0.19365942028985517,
+              "theoreticalNetUnitsAtRecordedPrices": 15.399999999999999,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": 0.3756097560975609
+          }
+        ],
+        "NGBoost": [
+          {
+            "sportWeight": 0,
+            "metrics": {
+              "n": 88,
+              "correct": 45,
+              "wrong": 37,
+              "undecided": 6,
+              "accuracy": 0.5487804878048781,
+              "coverage": 0.9318181818181819,
+              "brier": 0.24781377531774373,
+              "logLoss": 0.689431761938443,
+              "ece": 0.08430844137763603,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 5,
+                  "probability": 0.2640408210398683,
+                  "frequency": 0.2
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 8,
+                  "probability": 0.36243358915624946,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 26,
+                  "probability": 0.44768934699495666,
+                  "frequency": 0.46153846153846156
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 31,
+                  "probability": 0.5418251272215824,
+                  "frequency": 0.5483870967741935
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 14,
+                  "probability": 0.6479202632934664,
+                  "frequency": 0.35714285714285715
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 3,
+                  "probability": 0.749621728653354,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.813953488372093,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": 0.0,
+            "deltaLogLoss": 0.0,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": 0.0
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": 0.0
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.0
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 6,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 76,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.1,
+            "metrics": {
+              "n": 88,
+              "correct": 48,
+              "wrong": 40,
+              "undecided": 0,
+              "accuracy": 0.5454545454545454,
+              "coverage": 1.0,
+              "brier": 0.2463812177811885,
+              "logLoss": 0.685978822154981,
+              "ece": 0.08423857219173878,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 4,
+                  "probability": 0.2709806979007401,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 8,
+                  "probability": 0.3612723818559924,
+                  "frequency": 0.125
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 32,
+                  "probability": 0.45754677130045274,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 26,
+                  "probability": 0.5447317766555847,
+                  "frequency": 0.5384615384615384
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 14,
+                  "probability": 0.636311139328737,
+                  "frequency": 0.35714285714285715
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 4,
+                  "probability": 0.74774823890273,
+                  "frequency": 0.75
+                }
+              ]
+            },
+            "deltaBrier": -0.0014325575365552456,
+            "deltaLogLoss": -0.003452939783462061,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": -0.0001555218100464334
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.004653401338095861
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": -0.0003787196797374494
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 82,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.25,
+            "metrics": {
+              "n": 88,
+              "correct": 49,
+              "wrong": 39,
+              "undecided": 0,
+              "accuracy": 0.5568181818181818,
+              "coverage": 1.0,
+              "brier": 0.24463483793335453,
+              "logLoss": 0.6819933183701195,
+              "ece": 0.11087150066608711,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 2,
+                  "probability": 0.27382875301669485,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 9,
+                  "probability": 0.3595635716972593,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 34,
+                  "probability": 0.4619104544616354,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 28,
+                  "probability": 0.5443159218256401,
+                  "frequency": 0.5714285714285714
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 11,
+                  "probability": 0.627030278156029,
+                  "frequency": 0.2727272727272727
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 4,
+                  "probability": 0.7208135943822667,
+                  "frequency": 0.75
+                }
+              ]
+            },
+            "deltaBrier": -0.0031789373843892077,
+            "deltaLogLoss": -0.007438443568323572,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": 6.40696114945788e-05
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.011253242544900626
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": -0.0005630912895225583
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 82,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.5,
+            "metrics": {
+              "n": 88,
+              "correct": 49,
+              "wrong": 39,
+              "undecided": 0,
+              "accuracy": 0.5568181818181818,
+              "coverage": 1.0,
+              "brier": 0.24279742207229507,
+              "logLoss": 0.6780593649101399,
+              "ece": 0.05653796275093358,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.2679307954327794,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 6,
+                  "probability": 0.3550083379977254,
+                  "frequency": 0.16666666666666666
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 36,
+                  "probability": 0.4607543781529287,
+                  "frequency": 0.4444444444444444
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 38,
+                  "probability": 0.5425713606097414,
+                  "frequency": 0.47368421052631576
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 6,
+                  "probability": 0.6544194975758534,
+                  "frequency": 0.6666666666666666
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7009924325574656,
+                  "frequency": 1.0
+                }
+              ]
+            },
+            "deltaBrier": -0.005016353245448663,
+            "deltaLogLoss": -0.011372397028303172,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": 0.0016377196783579867
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.021238949088671192
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.00015284378702508112
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 6,
+              "correct": {
+                "n": 4,
+                "mean": 2.0647727272727274,
+                "median": 2.05,
+                "min": 1.9090909090909092,
+                "max": 2.25
+              },
+              "wrong": {
+                "n": 2,
+                "mean": 1.9,
+                "median": 1.9,
+                "min": 1.8,
+                "max": 2
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 76,
+              "accuracy": 0.6666666666666666,
+              "meanWrongMinusCorrect": -0.16477272727272751,
+              "theoreticalNetUnitsAtRecordedPrices": 2.2590909090909097,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": 0.37651515151515164
+          },
+          {
+            "sportWeight": 1,
+            "metrics": {
+              "n": 88,
+              "correct": 44,
+              "wrong": 44,
+              "undecided": 0,
+              "accuracy": 0.5,
+              "coverage": 1.0,
+              "brier": 0.24314715492016548,
+              "logLoss": 0.6788520407825565,
+              "ece": 0.06202340896217717,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 8,
+                  "probability": 0.3661264902690421,
+                  "frequency": 0.375
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 38,
+                  "probability": 0.471513705208597,
+                  "frequency": 0.47368421052631576
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 37,
+                  "probability": 0.5287689454088959,
+                  "frequency": 0.40540540540540543
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 5,
+                  "probability": 0.6519716542757064,
+                  "frequency": 0.8
+                }
+              ]
+            },
+            "deltaBrier": -0.004666620397578258,
+            "deltaLogLoss": -0.010579721155886568,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": 0.009313761178191202
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.037407754172822154
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.0054217930383309645
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 36,
+              "correct": {
+                "n": 15,
+                "mean": 2.206161616161616,
+                "median": 2.1,
+                "min": 1.8333333333333335,
+                "max": 2.75
+              },
+              "wrong": {
+                "n": 21,
+                "mean": 2.259235209235209,
+                "median": 2.1,
+                "min": 1.6666666666666665,
+                "max": 3.75
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 5,
+              "excludedByEV": 47,
+              "accuracy": 0.4166666666666667,
+              "meanWrongMinusCorrect": 0.05307359307359283,
+              "theoreticalNetUnitsAtRecordedPrices": -2.9075757575757564,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": -0.08076599326599324
+          }
+        ],
+        "Random Forest": [
+          {
+            "sportWeight": 0,
+            "metrics": {
+              "n": 88,
+              "correct": 45,
+              "wrong": 37,
+              "undecided": 6,
+              "accuracy": 0.5487804878048781,
+              "coverage": 0.9318181818181819,
+              "brier": 0.24781377531774373,
+              "logLoss": 0.689431761938443,
+              "ece": 0.08430844137763603,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 5,
+                  "probability": 0.2640408210398683,
+                  "frequency": 0.2
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 8,
+                  "probability": 0.36243358915624946,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 26,
+                  "probability": 0.44768934699495666,
+                  "frequency": 0.46153846153846156
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 31,
+                  "probability": 0.5418251272215824,
+                  "frequency": 0.5483870967741935
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 14,
+                  "probability": 0.6479202632934664,
+                  "frequency": 0.35714285714285715
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 3,
+                  "probability": 0.749621728653354,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.813953488372093,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": 0.0,
+            "deltaLogLoss": 0.0,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": 0.0
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": 0.0
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.0
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 6,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 76,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.1,
+            "metrics": {
+              "n": 88,
+              "correct": 47,
+              "wrong": 41,
+              "undecided": 0,
+              "accuracy": 0.5340909090909091,
+              "coverage": 1.0,
+              "brier": 0.24609474658292682,
+              "logLoss": 0.6853778149314391,
+              "ece": 0.0956224530236462,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 4,
+                  "probability": 0.27425717112343456,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 8,
+                  "probability": 0.3625349362283941,
+                  "frequency": 0.125
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 33,
+                  "probability": 0.45827782630898356,
+                  "frequency": 0.5151515151515151
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 26,
+                  "probability": 0.5471680969320143,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 13,
+                  "probability": 0.6385451267098197,
+                  "frequency": 0.38461538461538464
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 4,
+                  "probability": 0.7467053018758985,
+                  "frequency": 0.75
+                }
+              ]
+            },
+            "deltaBrier": -0.001719028734816913,
+            "deltaLogLoss": -0.0040539470070039,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": -0.001171883502581474
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.003921013792794953
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": -0.0007948530966267724
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 82,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.25,
+            "metrics": {
+              "n": 88,
+              "correct": 48,
+              "wrong": 40,
+              "undecided": 0,
+              "accuracy": 0.5454545454545454,
+              "coverage": 1.0,
+              "brier": 0.24392090877538009,
+              "logLoss": 0.6805533043140375,
+              "ece": 0.09220791403513723,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.2582813020163544,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 10,
+                  "probability": 0.3593003163550906,
+                  "frequency": 0.1
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 35,
+                  "probability": 0.46125392702383455,
+                  "frequency": 0.5142857142857142
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 28,
+                  "probability": 0.5450108943731735,
+                  "frequency": 0.5357142857142857
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 11,
+                  "probability": 0.6337347111144139,
+                  "frequency": 0.36363636363636365
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 3,
+                  "probability": 0.7251708502172051,
+                  "frequency": 0.6666666666666666
+                }
+              ]
+            },
+            "deltaBrier": -0.003892866542363649,
+            "deltaLogLoss": -0.008878457624405534,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": -0.00257595259381081
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.009402931412432177
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": -0.00154765045991978
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 82,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.5,
+            "metrics": {
+              "n": 88,
+              "correct": 47,
+              "wrong": 41,
+              "undecided": 0,
+              "accuracy": 0.5340909090909091,
+              "coverage": 1.0,
+              "brier": 0.2413770598819455,
+              "logLoss": 0.6753098882336622,
+              "ece": 0.0470892868634547,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.28252005084121945,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 5,
+                  "probability": 0.3700412742892208,
+                  "frequency": 0.2
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 43,
+                  "probability": 0.46360939842917476,
+                  "frequency": 0.46511627906976744
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 32,
+                  "probability": 0.5425195374985051,
+                  "frequency": 0.46875
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 7,
+                  "probability": 0.6551013934570058,
+                  "frequency": 0.5714285714285714
+                }
+              ]
+            },
+            "deltaBrier": -0.00643671543579824,
+            "deltaLogLoss": -0.014121873704780796,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": -0.0039727179788119835
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.017473852593013706
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": -0.001630359981015799
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 6,
+              "correct": {
+                "n": 4,
+                "mean": 2.0272727272727273,
+                "median": 2.05,
+                "min": 1.9090909090909092,
+                "max": 2.1
+              },
+              "wrong": {
+                "n": 2,
+                "mean": 2.1,
+                "median": 2.1,
+                "min": 2.1,
+                "max": 2.1
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 6,
+              "excludedByEV": 76,
+              "accuracy": 0.6666666666666666,
+              "meanWrongMinusCorrect": 0.07272727272727275,
+              "theoreticalNetUnitsAtRecordedPrices": 2.1090909090909093,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": 0.35151515151515156
+          },
+          {
+            "sportWeight": 1,
+            "metrics": {
+              "n": 88,
+              "correct": 50,
+              "wrong": 38,
+              "undecided": 0,
+              "accuracy": 0.5681818181818182,
+              "coverage": 1.0,
+              "brier": 0.2403364150418634,
+              "logLoss": 0.6735239706140059,
+              "ece": 0.03893499433837557,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 4,
+                  "probability": 0.3740355011028613,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 50,
+                  "probability": 0.47125327232498315,
+                  "frequency": 0.42
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 31,
+                  "probability": 0.5249568086066771,
+                  "frequency": 0.5161290322580645
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 3,
+                  "probability": 0.6353957285635151,
+                  "frequency": 0.6666666666666666
+                }
+              ]
+            },
+            "deltaBrier": -0.007477360275880335,
+            "deltaLogLoss": -0.015907791324437093,
+            "daily": [
+              {
+                "date": "2026-11-02",
+                "n": 25,
+                "deltaBrier": -0.0032286871223855466
+              },
+              {
+                "date": "2026-11-03",
+                "n": 23,
+                "deltaBrier": -0.029619664258624823
+              },
+              {
+                "date": "2026-11-04",
+                "n": 40,
+                "deltaBrier": 0.0025990437932634875
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 88,
+              "selected": 35,
+              "correct": {
+                "n": 19,
+                "mean": 2.3048644338118023,
+                "median": 2.1,
+                "min": 1.8333333333333335,
+                "max": 5
+              },
+              "wrong": {
+                "n": 16,
+                "mean": 2.2656723484848484,
+                "median": 2.1,
+                "min": 1.6666666666666665,
+                "max": 3.75
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 4,
+              "excludedByEV": 49,
+              "accuracy": 0.5428571428571428,
+              "meanWrongMinusCorrect": -0.03919208532695384,
+              "theoreticalNetUnitsAtRecordedPrices": 8.79242424242424,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": 0.2512121212121211
+          }
+        ]
+      }
+    },
+    {
+      "name": "v20-transfer-qualified-28",
+      "n": 28,
+      "models": {
+        "CatBoost coerente": [
+          {
+            "sportWeight": 0,
+            "metrics": {
+              "n": 28,
+              "correct": 13,
+              "wrong": 12,
+              "undecided": 3,
+              "accuracy": 0.52,
+              "coverage": 0.8928571428571429,
+              "brier": 0.2629033190781795,
+              "logLoss": 0.729723684802794,
+              "ece": 0.1619682478073711,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 2,
+                  "probability": 0.27978290366350067,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 2,
+                  "probability": 0.3337244027303754,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 7,
+                  "probability": 0.4560922119442353,
+                  "frequency": 0.5714285714285714
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 11,
+                  "probability": 0.5432904216239656,
+                  "frequency": 0.5454545454545454
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 4,
+                  "probability": 0.6319629530916844,
+                  "frequency": 0.75
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7313432835820896,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.8552631578947368,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": 0.0,
+            "deltaLogLoss": 0.0,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": 0.0
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 3,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 22,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.1,
+            "metrics": {
+              "n": 28,
+              "correct": 14,
+              "wrong": 14,
+              "undecided": 0,
+              "accuracy": 0.5,
+              "coverage": 1.0,
+              "brier": 0.26010050757962244,
+              "logLoss": 0.7201837918526042,
+              "ece": 0.15905748429458585,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.2920706488743585,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 3,
+                  "probability": 0.33491412586860125,
+                  "frequency": 0.3333333333333333
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 10,
+                  "probability": 0.47069568531127715,
+                  "frequency": 0.6
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 10,
+                  "probability": 0.5616326793960423,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 2,
+                  "probability": 0.6399068529116504,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7087925852434646,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.8201741817360727,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": -0.002802811498557045,
+            "deltaLogLoss": -0.009539892950189865,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.00280281149855708
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 25,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.25,
+            "metrics": {
+              "n": 28,
+              "correct": 14,
+              "wrong": 14,
+              "undecided": 0,
+              "accuracy": 0.5,
+              "coverage": 1.0,
+              "brier": 0.2564779553862083,
+              "logLoss": 0.7094149201662774,
+              "ece": 0.12231962068802107,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 4,
+                  "probability": 0.35037766175469437,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 10,
+                  "probability": 0.4728423907367457,
+                  "frequency": 0.6
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 11,
+                  "probability": 0.554390514909184,
+                  "frequency": 0.5454545454545454
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 2,
+                  "probability": 0.6554762239241381,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7675407174980766,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": -0.006425363691971164,
+            "deltaLogLoss": -0.020308764636516652,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.0064253636919711565
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 25,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.5,
+            "metrics": {
+              "n": 28,
+              "correct": 14,
+              "wrong": 14,
+              "undecided": 0,
+              "accuracy": 0.5,
+              "coverage": 1.0,
+              "brier": 0.2519914752089757,
+              "logLoss": 0.6979014664922284,
+              "ece": 0.08906008423636148,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 3,
+                  "probability": 0.38756893409085347,
+                  "frequency": 0.6666666666666666
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 11,
+                  "probability": 0.47068201910022817,
+                  "frequency": 0.5454545454545454
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 12,
+                  "probability": 0.5387097248330991,
+                  "frequency": 0.5833333333333334
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 2,
+                  "probability": 0.6492040344951905,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "deltaBrier": -0.010911843869203797,
+            "deltaLogLoss": -0.03182221831056564,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.010911843869203842
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 25,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 1,
+            "metrics": {
+              "n": 28,
+              "correct": 18,
+              "wrong": 10,
+              "undecided": 0,
+              "accuracy": 0.6428571428571429,
+              "coverage": 1.0,
+              "brier": 0.24883516539872574,
+              "logLoss": 0.6908167839758809,
+              "ece": 0.12903913093470876,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 18,
+                  "probability": 0.4808069510220151,
+                  "frequency": 0.4444444444444444
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 10,
+                  "probability": 0.5041429452224427,
+                  "frequency": 0.8
+                }
+              ]
+            },
+            "deltaBrier": -0.014068153679453743,
+            "deltaLogLoss": -0.03890690082691317,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.014068153679453821
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 8,
+              "correct": {
+                "n": 6,
+                "mean": 2.3625,
+                "median": 2.1500000000000004,
+                "min": 2,
+                "max": 3.5
+              },
+              "wrong": {
+                "n": 2,
+                "mean": 2.5,
+                "median": 2.5,
+                "min": 2,
+                "max": 3
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 2,
+              "excludedByEV": 18,
+              "accuracy": 0.75,
+              "meanWrongMinusCorrect": 0.13750000000000018,
+              "theoreticalNetUnitsAtRecordedPrices": 6.174999999999999,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": 0.7718749999999999
+          }
+        ],
+        "Rete neurale coerente": [
+          {
+            "sportWeight": 0,
+            "metrics": {
+              "n": 28,
+              "correct": 13,
+              "wrong": 12,
+              "undecided": 3,
+              "accuracy": 0.52,
+              "coverage": 0.8928571428571429,
+              "brier": 0.2629033190781795,
+              "logLoss": 0.729723684802794,
+              "ece": 0.1619682478073711,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 2,
+                  "probability": 0.27978290366350067,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 2,
+                  "probability": 0.3337244027303754,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 7,
+                  "probability": 0.4560922119442353,
+                  "frequency": 0.5714285714285714
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 11,
+                  "probability": 0.5432904216239656,
+                  "frequency": 0.5454545454545454
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 4,
+                  "probability": 0.6319629530916844,
+                  "frequency": 0.75
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7313432835820896,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.8552631578947368,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": 0.0,
+            "deltaLogLoss": 0.0,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": 0.0
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 3,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 22,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.1,
+            "metrics": {
+              "n": 28,
+              "correct": 14,
+              "wrong": 14,
+              "undecided": 0,
+              "accuracy": 0.5,
+              "coverage": 1.0,
+              "brier": 0.25998116282544703,
+              "logLoss": 0.7196587043627484,
+              "ece": 0.158472688163885,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.2936765469338018,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 3,
+                  "probability": 0.3354910334211687,
+                  "frequency": 0.3333333333333333
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 10,
+                  "probability": 0.4719551489382252,
+                  "frequency": 0.6
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 10,
+                  "probability": 0.5617370431324318,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 2,
+                  "probability": 0.640206807530953,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7100944573815631,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.8171278457604791,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": -0.002922156252732455,
+            "deltaLogLoss": -0.010064980440045668,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.002922156252732483
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 25,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.25,
+            "metrics": {
+              "n": 28,
+              "correct": 14,
+              "wrong": 14,
+              "undecided": 0,
+              "accuracy": 0.5,
+              "coverage": 1.0,
+              "brier": 0.256228084095611,
+              "logLoss": 0.7085270198009656,
+              "ece": 0.1204727311480163,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 4,
+                  "probability": 0.3524630497029104,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 10,
+                  "probability": 0.475991049804116,
+                  "frequency": 0.6
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 11,
+                  "probability": 0.5545311795517709,
+                  "frequency": 0.5454545454545454
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 2,
+                  "probability": 0.6583843418156574,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7599248775590925,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": -0.006675234982568501,
+            "deltaLogLoss": -0.021196665001828485,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.006675234982568592
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 25,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.5,
+            "metrics": {
+              "n": 28,
+              "correct": 14,
+              "wrong": 14,
+              "undecided": 0,
+              "accuracy": 0.5,
+              "coverage": 1.0,
+              "brier": 0.25165336794391757,
+              "logLoss": 0.6969735491609237,
+              "ece": 0.0856102150530363,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 2,
+                  "probability": 0.3880827163639964,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 12,
+                  "probability": 0.470308322048351,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 12,
+                  "probability": 0.5393945359174738,
+                  "frequency": 0.5833333333333334
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 2,
+                  "probability": 0.6448428749014528,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "deltaBrier": -0.011249951134261915,
+            "deltaLogLoss": -0.03275013564187035,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.011249951134261926
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 25,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 1,
+            "metrics": {
+              "n": 28,
+              "correct": 15,
+              "wrong": 13,
+              "undecided": 0,
+              "accuracy": 0.5357142857142857,
+              "coverage": 1.0,
+              "brier": 0.24880549213315684,
+              "logLoss": 0.690756852367746,
+              "ece": 0.07663364399510707,
+              "calibration": [
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 23,
+                  "probability": 0.4895644721849078,
+                  "frequency": 0.5217391304347826
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 5,
+                  "probability": 0.5188550215768246,
+                  "frequency": 0.8
+                }
+              ]
+            },
+            "deltaBrier": -0.014097826945022651,
+            "deltaLogLoss": -0.03896683243504806,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.014097826945022738
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 14,
+              "correct": {
+                "n": 8,
+                "mean": 2.865625,
+                "median": 2.225,
+                "min": 2,
+                "max": 6.5
+              },
+              "wrong": {
+                "n": 6,
+                "mean": 2.3541666666666665,
+                "median": 2.3125,
+                "min": 2,
+                "max": 3
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 1,
+              "excludedByEV": 13,
+              "accuracy": 0.5714285714285714,
+              "meanWrongMinusCorrect": -0.5114583333333336,
+              "theoreticalNetUnitsAtRecordedPrices": 8.925,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": 0.6375000000000001
+          }
+        ],
+        "NGBoost": [
+          {
+            "sportWeight": 0,
+            "metrics": {
+              "n": 28,
+              "correct": 13,
+              "wrong": 12,
+              "undecided": 3,
+              "accuracy": 0.52,
+              "coverage": 0.8928571428571429,
+              "brier": 0.2629033190781795,
+              "logLoss": 0.729723684802794,
+              "ece": 0.1619682478073711,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 2,
+                  "probability": 0.27978290366350067,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 2,
+                  "probability": 0.3337244027303754,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 7,
+                  "probability": 0.4560922119442353,
+                  "frequency": 0.5714285714285714
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 11,
+                  "probability": 0.5432904216239656,
+                  "frequency": 0.5454545454545454
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 4,
+                  "probability": 0.6319629530916844,
+                  "frequency": 0.75
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7313432835820896,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.8552631578947368,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": 0.0,
+            "deltaLogLoss": 0.0,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": 0.0
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 3,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 22,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.1,
+            "metrics": {
+              "n": 28,
+              "correct": 14,
+              "wrong": 14,
+              "undecided": 0,
+              "accuracy": 0.5,
+              "coverage": 1.0,
+              "brier": 0.2588795868186507,
+              "logLoss": 0.7172213607262873,
+              "ece": 0.18765972464910455,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.2930064035829597,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 4,
+                  "probability": 0.34749318371830445,
+                  "frequency": 0.25
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 7,
+                  "probability": 0.47076502340983195,
+                  "frequency": 0.7142857142857143
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 12,
+                  "probability": 0.5530736785753488,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 2,
+                  "probability": 0.642405278657537,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7159594506627716,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.8167469878271524,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": -0.0040237322595287894,
+            "deltaLogLoss": -0.012502324076506754,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.004023732259528853
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 25,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.25,
+            "metrics": {
+              "n": 28,
+              "correct": 14,
+              "wrong": 14,
+              "undecided": 0,
+              "accuracy": 0.5,
+              "coverage": 1.0,
+              "brier": 0.25345218931152835,
+              "logLoss": 0.7024902091988928,
+              "ece": 0.15397706103045786,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 5,
+                  "probability": 0.3500206994104547,
+                  "frequency": 0.4
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 7,
+                  "probability": 0.47374887345201866,
+                  "frequency": 0.7142857142857143
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 12,
+                  "probability": 0.5462408901595773,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 3,
+                  "probability": 0.6453866981904932,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7589727327257758,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": -0.009451129766651134,
+            "deltaLogLoss": -0.027233475603901214,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.0094511297666512
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 25,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.5,
+            "metrics": {
+              "n": 28,
+              "correct": 15,
+              "wrong": 13,
+              "undecided": 0,
+              "accuracy": 0.5357142857142857,
+              "coverage": 1.0,
+              "brier": 0.2460283958187803,
+              "logLoss": 0.6849905077565644,
+              "ece": 0.08970670001185836,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 5,
+                  "probability": 0.37239548560915336,
+                  "frequency": 0.4
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 6,
+                  "probability": 0.46770562072369887,
+                  "frequency": 0.6666666666666666
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 15,
+                  "probability": 0.542473844921488,
+                  "frequency": 0.6
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 2,
+                  "probability": 0.6585532132711572,
+                  "frequency": 0.5
+                }
+              ]
+            },
+            "deltaBrier": -0.016874923259399183,
+            "deltaLogLoss": -0.04473317704622959,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.01687492325939929
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 4,
+              "correct": {
+                "n": 2,
+                "mean": 1.7857142857142856,
+                "median": 1.7857142857142856,
+                "min": 1.5714285714285714,
+                "max": 2
+              },
+              "wrong": {
+                "n": 2,
+                "mean": 1.9166666666666667,
+                "median": 1.9166666666666667,
+                "min": 1.8333333333333335,
+                "max": 2
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 21,
+              "accuracy": 0.5,
+              "meanWrongMinusCorrect": 0.13095238095238115,
+              "theoreticalNetUnitsAtRecordedPrices": -0.4285714285714288,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": -0.1071428571428572
+          },
+          {
+            "sportWeight": 1,
+            "metrics": {
+              "n": 28,
+              "correct": 16,
+              "wrong": 12,
+              "undecided": 0,
+              "accuracy": 0.5714285714285714,
+              "coverage": 1.0,
+              "brier": 0.23726281765499332,
+              "logLoss": 0.6667306096285748,
+              "ece": 0.16923522867582858,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.2892794512450295,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 1,
+                  "probability": 0.3323929586018539,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 12,
+                  "probability": 0.464908059238251,
+                  "frequency": 0.5833333333333334
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 13,
+                  "probability": 0.5322368343368991,
+                  "frequency": 0.6923076923076923
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 1,
+                  "probability": 0.6148895503150165,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": -0.025640501423186163,
+            "deltaLogLoss": -0.06299307517421926,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.025640501423186215
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 11,
+              "correct": {
+                "n": 6,
+                "mean": 3.024404761904762,
+                "median": 2.2875,
+                "min": 1.5714285714285714,
+                "max": 6.5
+              },
+              "wrong": {
+                "n": 5,
+                "mean": 2.2416666666666667,
+                "median": 2,
+                "min": 1.8333333333333335,
+                "max": 3
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 1,
+              "excludedByEV": 16,
+              "accuracy": 0.5454545454545454,
+              "meanWrongMinusCorrect": -0.7827380952380953,
+              "theoreticalNetUnitsAtRecordedPrices": 7.146428571428572,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": 0.6496753246753247
+          }
+        ],
+        "Random Forest": [
+          {
+            "sportWeight": 0,
+            "metrics": {
+              "n": 28,
+              "correct": 13,
+              "wrong": 12,
+              "undecided": 3,
+              "accuracy": 0.52,
+              "coverage": 0.8928571428571429,
+              "brier": 0.2629033190781795,
+              "logLoss": 0.729723684802794,
+              "ece": 0.1619682478073711,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 2,
+                  "probability": 0.27978290366350067,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 2,
+                  "probability": 0.3337244027303754,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 7,
+                  "probability": 0.4560922119442353,
+                  "frequency": 0.5714285714285714
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 11,
+                  "probability": 0.5432904216239656,
+                  "frequency": 0.5454545454545454
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 4,
+                  "probability": 0.6319629530916844,
+                  "frequency": 0.75
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7313432835820896,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.8552631578947368,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": 0.0,
+            "deltaLogLoss": 0.0,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": 0.0
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 3,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 22,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.1,
+            "metrics": {
+              "n": 28,
+              "correct": 15,
+              "wrong": 13,
+              "undecided": 0,
+              "accuracy": 0.5357142857142857,
+              "coverage": 1.0,
+              "brier": 0.2607266430204779,
+              "logLoss": 0.7223033450957893,
+              "ece": 0.153549722154302,
+              "calibration": [
+                {
+                  "from": 0.2,
+                  "to": 0.3,
+                  "n": 1,
+                  "probability": 0.2882258294272189,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 3,
+                  "probability": 0.33136148040248026,
+                  "frequency": 0.3333333333333333
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 9,
+                  "probability": 0.4647067393108435,
+                  "frequency": 0.5555555555555556
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 10,
+                  "probability": 0.5521132591541157,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 3,
+                  "probability": 0.6261385588865981,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7081150314268931,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.8,
+                  "to": 0.9,
+                  "n": 1,
+                  "probability": 0.8294612612982367,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": -0.0021766760577016098,
+            "deltaLogLoss": -0.0074203397070047306,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.0021766760577016505
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 25,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.25,
+            "metrics": {
+              "n": 28,
+              "correct": 15,
+              "wrong": 13,
+              "undecided": 0,
+              "accuracy": 0.5357142857142857,
+              "coverage": 1.0,
+              "brier": 0.25795074836306275,
+              "logLoss": 0.7136325470451108,
+              "ece": 0.119374914341715,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 4,
+                  "probability": 0.3413134393512552,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 9,
+                  "probability": 0.46299260100883416,
+                  "frequency": 0.5555555555555556
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 12,
+                  "probability": 0.5510174275452546,
+                  "frequency": 0.5833333333333334
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 2,
+                  "probability": 0.6519322589039419,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7907584164034867,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": -0.004952570715116733,
+            "deltaLogLoss": -0.016091137757683227,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.004952570715116775
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 0,
+              "correct": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "wrong": {
+                "n": 0,
+                "mean": null,
+                "median": null,
+                "min": null,
+                "max": null
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 25,
+              "accuracy": null,
+              "meanWrongMinusCorrect": null,
+              "theoreticalNetUnitsAtRecordedPrices": null,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": null
+          },
+          {
+            "sportWeight": 0.5,
+            "metrics": {
+              "n": 28,
+              "correct": 15,
+              "wrong": 13,
+              "undecided": 0,
+              "accuracy": 0.5357142857142857,
+              "coverage": 1.0,
+              "brier": 0.2546285757450705,
+              "logLoss": 0.7041498788931427,
+              "ece": 0.12445649555182677,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 4,
+                  "probability": 0.37587322550557234,
+                  "frequency": 0.5
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 11,
+                  "probability": 0.464905260524441,
+                  "frequency": 0.5454545454545454
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 11,
+                  "probability": 0.5462562735330763,
+                  "frequency": 0.6363636363636364
+                },
+                {
+                  "from": 0.6,
+                  "to": 0.7,
+                  "n": 1,
+                  "probability": 0.6152020228061077,
+                  "frequency": 1.0
+                },
+                {
+                  "from": 0.7,
+                  "to": 0.8,
+                  "n": 1,
+                  "probability": 0.7262536749122364,
+                  "frequency": 0.0
+                }
+              ]
+            },
+            "deltaBrier": -0.008274743333109014,
+            "deltaLogLoss": -0.025573805909651304,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.008274743333109073
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 2,
+              "correct": {
+                "n": 1,
+                "mean": 2.2,
+                "median": 2.2,
+                "min": 2.2,
+                "max": 2.2
+              },
+              "wrong": {
+                "n": 1,
+                "mean": 2,
+                "median": 2,
+                "min": 2,
+                "max": 2
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 3,
+              "excludedByEV": 23,
+              "accuracy": 0.5,
+              "meanWrongMinusCorrect": -0.20000000000000018,
+              "theoreticalNetUnitsAtRecordedPrices": 0.20000000000000018,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": 0.10000000000000009
+          },
+          {
+            "sportWeight": 1,
+            "metrics": {
+              "n": 28,
+              "correct": 13,
+              "wrong": 15,
+              "undecided": 0,
+              "accuracy": 0.4642857142857143,
+              "coverage": 1.0,
+              "brier": 0.2528754248004593,
+              "logLoss": 0.698835853153593,
+              "ece": 0.11924196718397147,
+              "calibration": [
+                {
+                  "from": 0.3,
+                  "to": 0.4,
+                  "n": 1,
+                  "probability": 0.38195652089663196,
+                  "frequency": 0.0
+                },
+                {
+                  "from": 0.4,
+                  "to": 0.5,
+                  "n": 20,
+                  "probability": 0.46234343004138,
+                  "frequency": 0.6
+                },
+                {
+                  "from": 0.5,
+                  "to": 0.6,
+                  "n": 7,
+                  "probability": 0.54233040555969,
+                  "frequency": 0.5714285714285714
+                }
+              ]
+            },
+            "deltaBrier": -0.010027894277720162,
+            "deltaLogLoss": -0.03088783164920106,
+            "daily": [
+              {
+                "date": "2026-11-05",
+                "n": 28,
+                "deltaBrier": -0.010027894277720257
+              }
+            ],
+            "selected": {
+              "eligibleSourceCases": 28,
+              "selected": 8,
+              "correct": {
+                "n": 3,
+                "mean": 2.15,
+                "median": 2.2,
+                "min": 2,
+                "max": 2.25
+              },
+              "wrong": {
+                "n": 5,
+                "mean": 2.64,
+                "median": 2.5,
+                "min": 2,
+                "max": 3.5
+              },
+              "undecided": 0,
+              "excludedByMinimumOdds": 2,
+              "excludedByEV": 18,
+              "accuracy": 0.375,
+              "meanWrongMinusCorrect": 0.4900000000000002,
+              "theoreticalNetUnitsAtRecordedPrices": -1.5499999999999998,
+              "realBetsPlaced": false,
+              "executablePricesVerified": false,
+              "verifiedHistoricalROI": null
+            },
+            "theoreticalReturnPerUnit": -0.19374999999999998
+          }
+        ]
+      }
+    }
+  ],
+  "operationallyValidated": false
+}

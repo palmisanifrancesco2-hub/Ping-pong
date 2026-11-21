@@ -1,0 +1,51 @@
+{
+  "version": "temporal-pooling-v13",
+  "createdAt": "2026-11-07T11:41:12.522934+00:00",
+  "sources": {
+    ".research-data/projection-v11-audit.json": "2c97066715818db9875b94471828c167887b65260acfbefd40806fea4a04e216",
+    ".research-data/multi-model-v7-audit.json": "a189883f928f6efa24cda62367e5a352bafca5d787e5589cdb31d29e60ce58e3",
+    ".research-data/market-v8-features.json": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4"
+  },
+  "components": [
+    "full:0.001-v7",
+    "rally-beta-binomial-v11"
+  ],
+  "minimumCalibration": 400,
+  "minimumDays": 3,
+  "schedule": "Fit once before each UTC test day; past forecast event time AND outcome available time strictly before that day",
+  "candidates": [
+    "learned-weight",
+    "learned-weight-temperature"
+  ],
+  "bounds": {
+    "projectionWeight": [
+      0,
+      1
+    ],
+    "temperature": [
+      0.5,
+      1.5
+    ]
+  },
+  "ridge": 0.001,
+  "objective": "Mean Brier + ridge*((weight-.5)^2+(temperature-1)^2)",
+  "comparators": [
+    "full",
+    "projection",
+    "fixed-half",
+    "league"
+  ],
+  "familyComparisons": 8,
+  "bootstrapReplicates": 10000,
+  "blockDays": 3,
+  "seed": 20261107,
+  "independentValidation": false,
+  "automaticPromotion": false,
+  "limitations": [
+    "Already inspected archive and previously selected base models; exploratory only.",
+    "No optimization or recipe changes after inspecting this report.",
+    "No read of prospective outcomes; no changes to v9/v10.",
+    "Under seven observed test days, paired intervals are unavailable.",
+    "No executable historical odds; no ROI or value validation."
+  ]
+}

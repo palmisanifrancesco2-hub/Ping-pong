@@ -1,0 +1,6 @@
+# Offline research only. Install CPU PyTorch separately from its official index.
+-r requirements.txt
+catboost==1.2.8
+ngboost==0.5.8
+nflows==0.14
+torch==2.6.0

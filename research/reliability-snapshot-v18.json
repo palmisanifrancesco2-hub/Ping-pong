@@ -1,0 +1,123 @@
+{
+  "version": "probabilistic-benchmark-v18",
+  "generatedAt": "2026-11-11T14:40:03.422249+00:00",
+  "n": 1804,
+  "observedDays": 9,
+  "independentValidation": false,
+  "operationallyValidated": false,
+  "automaticPromotion": false,
+  "markets": [
+    {
+      "target": "winner",
+      "baseline": 0.250108442984218,
+      "previous": 0.24736485644812206,
+      "previousName": "bradley-terry-winner",
+      "newCandidate": 0.24851629761462285,
+      "newName": "catboost"
+    },
+    {
+      "target": "first-set",
+      "baseline": 0.2498834179899676,
+      "previous": 0.24906296575672088,
+      "previousName": "logistic",
+      "newCandidate": 0.24994253788372753,
+      "newName": "ngboost"
+    },
+    {
+      "target": "first-set-points-over-19.5",
+      "baseline": 0.21855199135315279,
+      "previous": 0.21817636487156283,
+      "previousName": "hist-gradient-boosting",
+      "newCandidate": 0.21818062460046223,
+      "newName": "catboost"
+    },
+    {
+      "target": "sets-over-3.5",
+      "baseline": 0.20233372825714555,
+      "previous": 0.2017218256637273,
+      "previousName": "hierarchical-eb",
+      "newCandidate": 0.20264543591197162,
+      "newName": "ngboost"
+    },
+    {
+      "target": "sets-over-4.5",
+      "baseline": 0.2185312613402781,
+      "previous": 0.21815455320196633,
+      "previousName": "hierarchical-eb",
+      "newCandidate": 0.2185312613402781,
+      "newName": "ngboost"
+    },
+    {
+      "target": "points-over-74.5",
+      "baseline": 0.24976151725008253,
+      "previous": 0.24875339926472195,
+      "previousName": "hierarchical-eb",
+      "newCandidate": 0.2506717934412008,
+      "newName": "conditional-normalizing-flow"
+    },
+    {
+      "target": "points-over-79.5",
+      "baseline": 0.24062993701385535,
+      "previous": 0.2391099157882921,
+      "previousName": "hierarchical-eb",
+      "newCandidate": 0.2408511695966166,
+      "newName": "catboost"
+    },
+    {
+      "target": "points-over-84.5",
+      "baseline": 0.2200162671345243,
+      "previous": 0.21944741462077885,
+      "previousName": "hierarchical-eb",
+      "newCandidate": 0.2200162671345243,
+      "newName": "ngboost"
+    },
+    {
+      "target": "home-set-handicap-minus-1.5",
+      "baseline": 0.22137127652731967,
+      "previous": 0.21866292311158936,
+      "previousName": "hierarchical-eb",
+      "newCandidate": 0.21952048990295892,
+      "newName": "catboost"
+    },
+    {
+      "target": "home-set-handicap-plus-1.5",
+      "baseline": 0.22746704181553298,
+      "previous": 0.22567084647431496,
+      "previousName": "hierarchical-eb",
+      "newCandidate": 0.22706715390361581,
+      "newName": "catboost"
+    },
+    {
+      "target": "home-point-handicap-minus-5.5",
+      "baseline": 0.22361473182567443,
+      "previous": 0.22006151238694208,
+      "previousName": "hierarchical-eb",
+      "newCandidate": 0.2221383422202809,
+      "newName": "conditional-normalizing-flow"
+    },
+    {
+      "target": "home-point-handicap-plus-5.5",
+      "baseline": 0.23121240352679653,
+      "previous": 0.22910182575539495,
+      "previousName": "logistic",
+      "newCandidate": 0.22932113214545086,
+      "newName": "catboost"
+    },
+    {
+      "target": "home-point-handicap-minus-9.5",
+      "baseline": 0.1562219208152689,
+      "previous": 0.15407424498218006,
+      "previousName": "random-forest",
+      "newCandidate": 0.15491794984942983,
+      "newName": "catboost"
+    },
+    {
+      "target": "home-point-handicap-plus-9.5",
+      "baseline": 0.16336769611632948,
+      "previous": 0.16149122542978714,
+      "previousName": "hierarchical-eb",
+      "newCandidate": 0.16269905700278034,
+      "newName": "conditional-normalizing-flow"
+    }
+  ]
+}

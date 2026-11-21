@@ -1,0 +1,51 @@
+{
+  "version": "common-3000-v6",
+  "targetCases": 3000,
+  "targetFrom": "2026-10-25T00:00:00Z",
+  "endExclusive": "2026-11-05T00:00:00Z",
+  "candidates": [
+    "elo10",
+    "elo20",
+    "elo40",
+    "elo80",
+    "form20",
+    "elo40-form20",
+    "scores:0.001",
+    "scores:0.01",
+    "scores:0.1",
+    "full:0.001",
+    "full:0.01",
+    "full:0.1",
+    "form:0.001",
+    "form:0.01",
+    "form:0.1"
+  ],
+  "foldStarts": [
+    "2026-10-25T00:00:00Z",
+    "2026-10-27T00:00:00Z",
+    "2026-10-29T00:00:00Z",
+    "2026-10-31T00:00:00Z",
+    "2026-11-02T00:00:00Z"
+  ],
+  "calibrationDays": 2,
+  "minimumTraining": 50,
+  "minimumCalibration": 40,
+  "minimumPlayerHistory": 20,
+  "temperatures": [
+    0.25,
+    0.5,
+    0.75,
+    1,
+    1.25,
+    1.5
+  ],
+  "selection": "Verified cached starts plus outcome-blind deterministic fixture-ID hash ordering; prefilter 20 prior records at finished_at minus 6 hours only to reduce requests; final eligibility checked at actual known kickoff minus one minute",
+  "ranking": "Pooled Brier on exactly 3000 common test IDs, then log loss; exploratory previously examined archive",
+  "limitations": [
+    "No automatic model promotion",
+    "Actual verified starts required, no inferred kickoff",
+    "No retrospective outcome-based exclusions",
+    "3000 complete test cases required before reporting a 3000-case result"
+  ],
+  "scopeChange": "User explicitly reduced the requested sample from 5000 to 3000 before this comparison; preserve prior collection and use exactly the first 3000 eligible cases in the unchanged hash ordering."
+}

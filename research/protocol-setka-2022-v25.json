@@ -1,0 +1,18 @@
+{
+  "source": "https://data.scorenetwork.org/table_tennis/table_tennis_sept2022.html",
+  "sha256": "d400562f49ced084133c8e926025efb6023dd62a8341fd4484864d567a4e392d",
+  "trainingThrough": "2022-06-23",
+  "calibrationFrom": "2022-06-25",
+  "calibrationThrough": "2022-06-29",
+  "testFrom": "2022-07-01",
+  "testThrough": "2022-07-08",
+  "historyLagCalendarDays": 2,
+  "markets": ["winner", "sets-over-3.5"],
+  "logisticC": 0.1,
+  "eloK": 16,
+  "seed": 25,
+  "blockDays": 2,
+  "bootstrapReplicates": 10000,
+  "familyComparisons": 4,
+  "description": "Setka SCORE 2022 only. Fixed parameters. Fit through June 23, probability calibration June 25–29, holdout July 1–8. The intervening days contribute only to eligible player history. At prediction date D, use source dates at most D−2. Update Elo in simultaneous daily batches. Date/availability assumption, retrospective; no odds."
+}

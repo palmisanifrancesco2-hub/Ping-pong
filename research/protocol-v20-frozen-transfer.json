@@ -1,0 +1,49 @@
+{
+  "version": "frozen-transfer-v20",
+  "createdAt": "2026-11-17T19:54:12.944270+00:00",
+  "features": ".research-data/market-v8-confirmation-features.json",
+  "featuresHash": "4088b07a52bee4132c3c9277452886e756ed1374689d7d91ed4d17812f7f32ed",
+  "sealed": ".research-data/market-v8-confirmation/sealed.json",
+  "sealedHash": "6b0bcda64999a17916a8961f9dd76114cdf3e7c431e42e5c8854af6f54ea1f96",
+  "originalFeaturesHash": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4",
+  "originalBenchmark": "research/report-v18-probabilistic.json",
+  "fold": 4,
+  "models": [
+    "catboost",
+    "ngboost",
+    "conditional-normalizing-flow",
+    "logistic",
+    "hist-gradient-boosting",
+    "random-forest",
+    "bradley-terry-winner",
+    "hierarchical-eb"
+  ],
+  "pooling": {
+    "classifier-pool": {
+      "catboost": 0.5,
+      "ngboost": 0.5
+    },
+    "point-pool": {
+      "catboost": 0.3333333333333333,
+      "ngboost": 0.3333333333333333,
+      "conditional-normalizing-flow": 0.3333333333333333
+    }
+  },
+  "flowSamples": 8192,
+  "seed": 20261117,
+  "fitAllowed": false,
+  "selectionAllowed": false,
+  "automaticPromotion": false,
+  "independentValidation": false,
+  "quoteRule": "Same exact verified pre-close pair at verified kickoff minus one minute, not older than five minutes, same sides/period, unsuspended. Evaluate winner only on the exact same qualifying subset; do not infer executions or ROI.",
+  "minimumCalendarDaysForIntervals": 7,
+  "limitations": [
+    "Historical outcomes already inspected by earlier research; exploratory transfer only.",
+    "Single-day cohort cannot prove multi-day reliability.",
+    "Features for this cohort use frozen previous-day history; runtime updates history causally, so the setting differs.",
+    "No training, recalibration or model-family selection on this cohort.",
+    "Pooling and per-head calibration may break joint coherence across markets.",
+    "Do not count multiple markets or model predictions as additional matches.",
+    "12 extension rows with missing outcome availability are excluded."
+  ]
+}

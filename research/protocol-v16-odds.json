@@ -1,0 +1,56 @@
+{
+  "version": "asof-odds-comparison-v16",
+  "createdAt": "2026-11-11T10:15:30.213591+00:00",
+  "hashes": {
+    ".research-data/v16-qualified-market-baselines.json": "bb32f84e69f322898bcadd1d8151da83a5dde6a50bd39e7f9532ba45935e315b",
+    ".research-data/market-v8-features.json": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4"
+  },
+  "trainBefore": "2026-10-30T00:00:00Z",
+  "calibrationBefore": "2026-11-02T00:00:00Z",
+  "testBefore": "2026-11-05T00:00:00Z",
+  "models": [
+    "sports-only",
+    "sports-and-market"
+  ],
+  "marketReference": "Unmodified no-vig probability from exact bet365.com.au pre-close winner pair; quote time <= decisionTime=actualKickoff-60s, age <=5min, feature availability<decisionTime",
+  "sportsFeatures": "First eight signed causal strength features; excludes bookmaker inputs",
+  "oddsFeature": "Logit of same-event as-of no-vig market probability appended only for combined model",
+  "fit": {
+    "C": 0.1,
+    "fit_intercept": false,
+    "max_iter": 1000
+  },
+  "symmetry": "Mirrored player training rows with complemented labels; 29 independent train events remain 29, not 58",
+  "temperatures": [
+    0.5,
+    1,
+    1.5
+  ],
+  "shrinkWeights": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "calibrationBaseline": {
+    "sports-only": 0.5,
+    "sports-and-market": "same-event no-vig market"
+  },
+  "minimumTraining": 20,
+  "minimumCalibration": 20,
+  "bootstrapReplicates": 10000,
+  "blockDays": 3,
+  "familyComparisons": 2,
+  "seed": 20261111,
+  "independentValidation": false,
+  "automaticPromotion": false,
+  "limitations": [
+    "Very small selected subset of already inspected historical archive.",
+    "No global best-model selection or threshold tuning on test.",
+    "No ADM authorization verified for source bet365.com.au.",
+    "Historical provider timestamps do not prove executable liquidity or independent official provenance.",
+    "Below seven observed test days, uncertainty intervals are unavailable; no model advantage can be declared.",
+    "ROI and operational selections unavailable under ADM policy."
+  ]
+}

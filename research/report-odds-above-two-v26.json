@@ -1,0 +1,1310 @@
+{
+  "market": "match winner",
+  "strictlyAbove": 2.0,
+  "selection": "Most probable side only, exact ties omitted",
+  "prospectiveValidation": false,
+  "cohorts": [
+    {
+      "name": "v16-matched-test",
+      "n": 142,
+      "days": 9,
+      "models": {
+        "v16/hierarchical-eb": {
+          "all": {
+            "eligibleSourceCases": 31,
+            "selected": 31,
+            "correct": {
+              "n": 12,
+              "mean": 2.341666666666667,
+              "median": 2.225,
+              "min": 2.1,
+              "max": 3.4
+            },
+            "wrong": {
+              "n": 19,
+              "mean": 2.430263157894737,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.3870967741935484,
+            "meanWrongMinusCorrect": 0.08859649122807012,
+            "theoreticalNetUnitsAtRecordedPrices": -2.8999999999999986,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 31,
+            "selected": 31,
+            "correct": {
+              "n": 12,
+              "mean": 2.341666666666667,
+              "median": 2.225,
+              "min": 2.1,
+              "max": 3.4
+            },
+            "wrong": {
+              "n": 19,
+              "mean": 2.430263157894737,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.3870967741935484,
+            "meanWrongMinusCorrect": 0.08859649122807012,
+            "theoreticalNetUnitsAtRecordedPrices": -2.8999999999999986,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v16/logistic": {
+          "all": {
+            "eligibleSourceCases": 31,
+            "selected": 31,
+            "correct": {
+              "n": 13,
+              "mean": 2.355769230769231,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 3.4
+            },
+            "wrong": {
+              "n": 18,
+              "mean": 2.5125,
+              "median": 2.3125,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.41935483870967744,
+            "meanWrongMinusCorrect": 0.15673076923076934,
+            "theoreticalNetUnitsAtRecordedPrices": -0.375,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 31,
+            "selected": 31,
+            "correct": {
+              "n": 13,
+              "mean": 2.355769230769231,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 3.4
+            },
+            "wrong": {
+              "n": 18,
+              "mean": 2.5125,
+              "median": 2.3125,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.41935483870967744,
+            "meanWrongMinusCorrect": 0.15673076923076934,
+            "theoreticalNetUnitsAtRecordedPrices": -0.375,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v16/hist-gradient-boosting": {
+          "all": {
+            "eligibleSourceCases": 35,
+            "selected": 35,
+            "correct": {
+              "n": 17,
+              "mean": 2.5161764705882352,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 18,
+              "mean": 2.4402777777777778,
+              "median": 2.3125,
+              "min": 2.1,
+              "max": 3.4
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.4857142857142857,
+            "meanWrongMinusCorrect": -0.07589869281045747,
+            "theoreticalNetUnitsAtRecordedPrices": 7.774999999999999,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 35,
+            "selected": 35,
+            "correct": {
+              "n": 17,
+              "mean": 2.5161764705882352,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 18,
+              "mean": 2.4402777777777778,
+              "median": 2.3125,
+              "min": 2.1,
+              "max": 3.4
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.4857142857142857,
+            "meanWrongMinusCorrect": -0.07589869281045747,
+            "theoreticalNetUnitsAtRecordedPrices": 7.774999999999999,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v16/random-forest": {
+          "all": {
+            "eligibleSourceCases": 28,
+            "selected": 28,
+            "correct": {
+              "n": 13,
+              "mean": 2.580769230769231,
+              "median": 2.2,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 15,
+              "mean": 2.5116666666666667,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.4642857142857143,
+            "meanWrongMinusCorrect": -0.06910256410256421,
+            "theoreticalNetUnitsAtRecordedPrices": 5.549999999999997,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 28,
+            "selected": 28,
+            "correct": {
+              "n": 13,
+              "mean": 2.580769230769231,
+              "median": 2.2,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 15,
+              "mean": 2.5116666666666667,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.4642857142857143,
+            "meanWrongMinusCorrect": -0.06910256410256421,
+            "theoreticalNetUnitsAtRecordedPrices": 5.549999999999997,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v16/bradley-terry-winner": {
+          "all": {
+            "eligibleSourceCases": 32,
+            "selected": 32,
+            "correct": {
+              "n": 13,
+              "mean": 2.478846153846154,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 3.5
+            },
+            "wrong": {
+              "n": 19,
+              "mean": 2.5105263157894737,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.40625,
+            "meanWrongMinusCorrect": 0.031680161943319796,
+            "theoreticalNetUnitsAtRecordedPrices": 0.22500000000000142,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 32,
+            "selected": 32,
+            "correct": {
+              "n": 13,
+              "mean": 2.478846153846154,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 3.5
+            },
+            "wrong": {
+              "n": 19,
+              "mean": 2.5105263157894737,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.40625,
+            "meanWrongMinusCorrect": 0.031680161943319796,
+            "theoreticalNetUnitsAtRecordedPrices": 0.22500000000000142,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v18/catboost": {
+          "all": {
+            "eligibleSourceCases": 34,
+            "selected": 34,
+            "correct": {
+              "n": 15,
+              "mean": 2.5616666666666665,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 19,
+              "mean": 2.4763157894736842,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.4411764705882353,
+            "meanWrongMinusCorrect": -0.08535087719298229,
+            "theoreticalNetUnitsAtRecordedPrices": 4.424999999999997,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 34,
+            "selected": 34,
+            "correct": {
+              "n": 15,
+              "mean": 2.5616666666666665,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 19,
+              "mean": 2.4763157894736842,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.4411764705882353,
+            "meanWrongMinusCorrect": -0.08535087719298229,
+            "theoreticalNetUnitsAtRecordedPrices": 4.424999999999997,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v18/ngboost": {
+          "all": {
+            "eligibleSourceCases": 35,
+            "selected": 35,
+            "correct": {
+              "n": 13,
+              "mean": 2.351923076923077,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 2.75
+            },
+            "wrong": {
+              "n": 22,
+              "mean": 2.528409090909091,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.37142857142857144,
+            "meanWrongMinusCorrect": 0.17648601398601382,
+            "theoreticalNetUnitsAtRecordedPrices": -4.425000000000001,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 35,
+            "selected": 35,
+            "correct": {
+              "n": 13,
+              "mean": 2.351923076923077,
+              "median": 2.25,
+              "min": 2.1,
+              "max": 2.75
+            },
+            "wrong": {
+              "n": 22,
+              "mean": 2.528409090909091,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.37142857142857144,
+            "meanWrongMinusCorrect": 0.17648601398601382,
+            "theoreticalNetUnitsAtRecordedPrices": -4.425000000000001,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v21/categorical-catboost": {
+          "all": {
+            "eligibleSourceCases": 33,
+            "selected": 33,
+            "correct": {
+              "n": 18,
+              "mean": 2.5430555555555556,
+              "median": 2.3125,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 15,
+              "mean": 2.493333333333333,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5454545454545454,
+            "meanWrongMinusCorrect": -0.049722222222222445,
+            "theoreticalNetUnitsAtRecordedPrices": 12.774999999999999,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 33,
+            "selected": 33,
+            "correct": {
+              "n": 18,
+              "mean": 2.5430555555555556,
+              "median": 2.3125,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 15,
+              "mean": 2.493333333333333,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5454545454545454,
+            "meanWrongMinusCorrect": -0.049722222222222445,
+            "theoreticalNetUnitsAtRecordedPrices": 12.774999999999999,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v21/categorical-mlp": {
+          "all": {
+            "eligibleSourceCases": 49,
+            "selected": 49,
+            "correct": {
+              "n": 24,
+              "mean": 2.6635416666666667,
+              "median": 2.5625,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 25,
+              "mean": 2.676,
+              "median": 2.5,
+              "min": 2.1,
+              "max": 4.5
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.4897959183673469,
+            "meanWrongMinusCorrect": 0.01245833333333346,
+            "theoreticalNetUnitsAtRecordedPrices": 14.924999999999997,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 49,
+            "selected": 49,
+            "correct": {
+              "n": 24,
+              "mean": 2.6635416666666667,
+              "median": 2.5625,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 25,
+              "mean": 2.676,
+              "median": 2.5,
+              "min": 2.1,
+              "max": 4.5
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.4897959183673469,
+            "meanWrongMinusCorrect": 0.01245833333333346,
+            "theoreticalNetUnitsAtRecordedPrices": 14.924999999999997,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v21/calibration-selector": {
+          "all": {
+            "eligibleSourceCases": 36,
+            "selected": 36,
+            "correct": {
+              "n": 19,
+              "mean": 2.5539473684210527,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 17,
+              "mean": 2.552941176470588,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5277777777777778,
+            "meanWrongMinusCorrect": -0.0010061919504646966,
+            "theoreticalNetUnitsAtRecordedPrices": 12.524999999999999,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 36,
+            "selected": 36,
+            "correct": {
+              "n": 19,
+              "mean": 2.5539473684210527,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 17,
+              "mean": 2.552941176470588,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5277777777777778,
+            "meanWrongMinusCorrect": -0.0010061919504646966,
+            "theoreticalNetUnitsAtRecordedPrices": 12.524999999999999,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v21/fixed-pool": {
+          "all": {
+            "eligibleSourceCases": 36,
+            "selected": 36,
+            "correct": {
+              "n": 19,
+              "mean": 2.588157894736842,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 17,
+              "mean": 2.598529411764706,
+              "median": 2.5,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5277777777777778,
+            "meanWrongMinusCorrect": 0.010371517027863764,
+            "theoreticalNetUnitsAtRecordedPrices": 13.174999999999997,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 36,
+            "selected": 36,
+            "correct": {
+              "n": 19,
+              "mean": 2.588157894736842,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 5
+            },
+            "wrong": {
+              "n": 17,
+              "mean": 2.598529411764706,
+              "median": 2.5,
+              "min": 2.1,
+              "max": 3.75
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5277777777777778,
+            "meanWrongMinusCorrect": 0.010371517027863764,
+            "theoreticalNetUnitsAtRecordedPrices": 13.174999999999997,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        }
+      }
+    },
+    {
+      "name": "v20-transfer-qualified-28",
+      "n": 28,
+      "days": 1,
+      "models": {
+        "v20/catboost": {
+          "all": {
+            "eligibleSourceCases": 5,
+            "selected": 5,
+            "correct": {
+              "n": 3,
+              "mean": 2.275,
+              "median": 2.25,
+              "min": 2.2,
+              "max": 2.375
+            },
+            "wrong": {
+              "n": 2,
+              "mean": 2.6875,
+              "median": 2.6875,
+              "min": 2.375,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.6,
+            "meanWrongMinusCorrect": 0.4125000000000001,
+            "theoreticalNetUnitsAtRecordedPrices": 1.8250000000000002,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 5,
+            "selected": 5,
+            "correct": {
+              "n": 3,
+              "mean": 2.275,
+              "median": 2.25,
+              "min": 2.2,
+              "max": 2.375
+            },
+            "wrong": {
+              "n": 2,
+              "mean": 2.6875,
+              "median": 2.6875,
+              "min": 2.375,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.6,
+            "meanWrongMinusCorrect": 0.4125000000000001,
+            "theoreticalNetUnitsAtRecordedPrices": 1.8250000000000002,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v20/ngboost": {
+          "all": {
+            "eligibleSourceCases": 6,
+            "selected": 6,
+            "correct": {
+              "n": 4,
+              "mean": 3.64375,
+              "median": 2.9375,
+              "min": 2.2,
+              "max": 6.5
+            },
+            "wrong": {
+              "n": 2,
+              "mean": 2.6875,
+              "median": 2.6875,
+              "min": 2.375,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.6666666666666666,
+            "meanWrongMinusCorrect": -0.9562499999999998,
+            "theoreticalNetUnitsAtRecordedPrices": 8.575,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 6,
+            "selected": 6,
+            "correct": {
+              "n": 4,
+              "mean": 3.64375,
+              "median": 2.9375,
+              "min": 2.2,
+              "max": 6.5
+            },
+            "wrong": {
+              "n": 2,
+              "mean": 2.6875,
+              "median": 2.6875,
+              "min": 2.375,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.6666666666666666,
+            "meanWrongMinusCorrect": -0.9562499999999998,
+            "theoreticalNetUnitsAtRecordedPrices": 8.575,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v20/logistic": {
+          "all": {
+            "eligibleSourceCases": 5,
+            "selected": 5,
+            "correct": {
+              "n": 2,
+              "mean": 2.2875,
+              "median": 2.2875,
+              "min": 2.2,
+              "max": 2.375
+            },
+            "wrong": {
+              "n": 3,
+              "mean": 2.6666666666666665,
+              "median": 2.625,
+              "min": 2.375,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.4,
+            "meanWrongMinusCorrect": 0.37916666666666643,
+            "theoreticalNetUnitsAtRecordedPrices": -0.4249999999999998,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 5,
+            "selected": 5,
+            "correct": {
+              "n": 2,
+              "mean": 2.2875,
+              "median": 2.2875,
+              "min": 2.2,
+              "max": 2.375
+            },
+            "wrong": {
+              "n": 3,
+              "mean": 2.6666666666666665,
+              "median": 2.625,
+              "min": 2.375,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.4,
+            "meanWrongMinusCorrect": 0.37916666666666643,
+            "theoreticalNetUnitsAtRecordedPrices": -0.4249999999999998,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v20/hist-gradient-boosting": {
+          "all": {
+            "eligibleSourceCases": 4,
+            "selected": 4,
+            "correct": {
+              "n": 2,
+              "mean": 2.2875,
+              "median": 2.2875,
+              "min": 2.2,
+              "max": 2.375
+            },
+            "wrong": {
+              "n": 2,
+              "mean": 2.2875,
+              "median": 2.2875,
+              "min": 2.2,
+              "max": 2.375
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5,
+            "meanWrongMinusCorrect": 0.0,
+            "theoreticalNetUnitsAtRecordedPrices": 0.5750000000000002,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 4,
+            "selected": 4,
+            "correct": {
+              "n": 2,
+              "mean": 2.2875,
+              "median": 2.2875,
+              "min": 2.2,
+              "max": 2.375
+            },
+            "wrong": {
+              "n": 2,
+              "mean": 2.2875,
+              "median": 2.2875,
+              "min": 2.2,
+              "max": 2.375
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5,
+            "meanWrongMinusCorrect": 0.0,
+            "theoreticalNetUnitsAtRecordedPrices": 0.5750000000000002,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v20/random-forest": {
+          "all": {
+            "eligibleSourceCases": 6,
+            "selected": 6,
+            "correct": {
+              "n": 2,
+              "mean": 2.225,
+              "median": 2.225,
+              "min": 2.2,
+              "max": 2.25
+            },
+            "wrong": {
+              "n": 4,
+              "mean": 2.8,
+              "median": 2.75,
+              "min": 2.2,
+              "max": 3.5
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.3333333333333333,
+            "meanWrongMinusCorrect": 0.5749999999999997,
+            "theoreticalNetUnitsAtRecordedPrices": -1.5499999999999998,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 6,
+            "selected": 6,
+            "correct": {
+              "n": 2,
+              "mean": 2.225,
+              "median": 2.225,
+              "min": 2.2,
+              "max": 2.25
+            },
+            "wrong": {
+              "n": 4,
+              "mean": 2.8,
+              "median": 2.75,
+              "min": 2.2,
+              "max": 3.5
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.3333333333333333,
+            "meanWrongMinusCorrect": 0.5749999999999997,
+            "theoreticalNetUnitsAtRecordedPrices": -1.5499999999999998,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v20/bradley-terry-winner": {
+          "all": {
+            "eligibleSourceCases": 4,
+            "selected": 4,
+            "correct": {
+              "n": 2,
+              "mean": 2.85,
+              "median": 2.85,
+              "min": 2.2,
+              "max": 3.5
+            },
+            "wrong": {
+              "n": 2,
+              "mean": 2.225,
+              "median": 2.225,
+              "min": 2.2,
+              "max": 2.25
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5,
+            "meanWrongMinusCorrect": -0.625,
+            "theoreticalNetUnitsAtRecordedPrices": 1.7000000000000002,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 4,
+            "selected": 4,
+            "correct": {
+              "n": 2,
+              "mean": 2.85,
+              "median": 2.85,
+              "min": 2.2,
+              "max": 3.5
+            },
+            "wrong": {
+              "n": 2,
+              "mean": 2.225,
+              "median": 2.225,
+              "min": 2.2,
+              "max": 2.25
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5,
+            "meanWrongMinusCorrect": -0.625,
+            "theoreticalNetUnitsAtRecordedPrices": 1.7000000000000002,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v20/hierarchical-eb": {
+          "all": {
+            "eligibleSourceCases": 6,
+            "selected": 6,
+            "correct": {
+              "n": 2,
+              "mean": 2.85,
+              "median": 2.85,
+              "min": 2.2,
+              "max": 3.5
+            },
+            "wrong": {
+              "n": 4,
+              "mean": 3.03125,
+              "median": 3.0,
+              "min": 2.625,
+              "max": 3.5
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.3333333333333333,
+            "meanWrongMinusCorrect": 0.1812499999999999,
+            "theoreticalNetUnitsAtRecordedPrices": -0.2999999999999998,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 6,
+            "selected": 6,
+            "correct": {
+              "n": 2,
+              "mean": 2.85,
+              "median": 2.85,
+              "min": 2.2,
+              "max": 3.5
+            },
+            "wrong": {
+              "n": 4,
+              "mean": 3.03125,
+              "median": 3.0,
+              "min": 2.625,
+              "max": 3.5
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.3333333333333333,
+            "meanWrongMinusCorrect": 0.1812499999999999,
+            "theoreticalNetUnitsAtRecordedPrices": -0.2999999999999998,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v20/classifier-pool": {
+          "all": {
+            "eligibleSourceCases": 4,
+            "selected": 4,
+            "correct": {
+              "n": 2,
+              "mean": 2.2875,
+              "median": 2.2875,
+              "min": 2.2,
+              "max": 2.375
+            },
+            "wrong": {
+              "n": 2,
+              "mean": 2.6875,
+              "median": 2.6875,
+              "min": 2.375,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5,
+            "meanWrongMinusCorrect": 0.3999999999999999,
+            "theoreticalNetUnitsAtRecordedPrices": 0.5750000000000002,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 4,
+            "selected": 4,
+            "correct": {
+              "n": 2,
+              "mean": 2.2875,
+              "median": 2.2875,
+              "min": 2.2,
+              "max": 2.375
+            },
+            "wrong": {
+              "n": 2,
+              "mean": 2.6875,
+              "median": 2.6875,
+              "min": 2.375,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.5,
+            "meanWrongMinusCorrect": 0.3999999999999999,
+            "theoreticalNetUnitsAtRecordedPrices": 0.5750000000000002,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v21/categorical-catboost": {
+          "all": {
+            "eligibleSourceCases": 5,
+            "selected": 5,
+            "correct": {
+              "n": 4,
+              "mean": 2.54375,
+              "median": 2.2875,
+              "min": 2.1,
+              "max": 3.5
+            },
+            "wrong": {
+              "n": 1,
+              "mean": 3,
+              "median": 3,
+              "min": 3,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.8,
+            "meanWrongMinusCorrect": 0.4562499999999998,
+            "theoreticalNetUnitsAtRecordedPrices": 5.175000000000001,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 5,
+            "selected": 5,
+            "correct": {
+              "n": 4,
+              "mean": 2.54375,
+              "median": 2.2875,
+              "min": 2.1,
+              "max": 3.5
+            },
+            "wrong": {
+              "n": 1,
+              "mean": 3,
+              "median": 3,
+              "min": 3,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.8,
+            "meanWrongMinusCorrect": 0.4562499999999998,
+            "theoreticalNetUnitsAtRecordedPrices": 5.175000000000001,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v21/categorical-mlp": {
+          "all": {
+            "eligibleSourceCases": 10,
+            "selected": 10,
+            "correct": {
+              "n": 6,
+              "mean": 3.154166666666667,
+              "median": 2.3125,
+              "min": 2.1,
+              "max": 6.5
+            },
+            "wrong": {
+              "n": 4,
+              "mean": 2.53125,
+              "median": 2.4375,
+              "min": 2.25,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.6,
+            "meanWrongMinusCorrect": -0.6229166666666668,
+            "theoreticalNetUnitsAtRecordedPrices": 8.925,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 10,
+            "selected": 10,
+            "correct": {
+              "n": 6,
+              "mean": 3.154166666666667,
+              "median": 2.3125,
+              "min": 2.1,
+              "max": 6.5
+            },
+            "wrong": {
+              "n": 4,
+              "mean": 2.53125,
+              "median": 2.4375,
+              "min": 2.25,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.6,
+            "meanWrongMinusCorrect": -0.6229166666666668,
+            "theoreticalNetUnitsAtRecordedPrices": 8.925,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v21/calibration-selector": {
+          "all": {
+            "eligibleSourceCases": 5,
+            "selected": 5,
+            "correct": {
+              "n": 4,
+              "mean": 2.54375,
+              "median": 2.2875,
+              "min": 2.1,
+              "max": 3.5
+            },
+            "wrong": {
+              "n": 1,
+              "mean": 3,
+              "median": 3,
+              "min": 3,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.8,
+            "meanWrongMinusCorrect": 0.4562499999999998,
+            "theoreticalNetUnitsAtRecordedPrices": 5.175000000000001,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 5,
+            "selected": 5,
+            "correct": {
+              "n": 4,
+              "mean": 2.54375,
+              "median": 2.2875,
+              "min": 2.1,
+              "max": 3.5
+            },
+            "wrong": {
+              "n": 1,
+              "mean": 3,
+              "median": 3,
+              "min": 3,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.8,
+            "meanWrongMinusCorrect": 0.4562499999999998,
+            "theoreticalNetUnitsAtRecordedPrices": 5.175000000000001,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        },
+        "v21/fixed-pool": {
+          "all": {
+            "eligibleSourceCases": 8,
+            "selected": 8,
+            "correct": {
+              "n": 5,
+              "mean": 3.335,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 6.5
+            },
+            "wrong": {
+              "n": 3,
+              "mean": 2.5416666666666665,
+              "median": 2.375,
+              "min": 2.25,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.625,
+            "meanWrongMinusCorrect": -0.7933333333333334,
+            "theoreticalNetUnitsAtRecordedPrices": 8.675,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          },
+          "positiveEV": {
+            "eligibleSourceCases": 8,
+            "selected": 8,
+            "correct": {
+              "n": 5,
+              "mean": 3.335,
+              "median": 2.375,
+              "min": 2.1,
+              "max": 6.5
+            },
+            "wrong": {
+              "n": 3,
+              "mean": 2.5416666666666665,
+              "median": 2.375,
+              "min": 2.25,
+              "max": 3
+            },
+            "undecided": 0,
+            "excludedByMinimumOdds": 0,
+            "excludedByEV": 0,
+            "accuracy": 0.625,
+            "meanWrongMinusCorrect": -0.7933333333333334,
+            "theoreticalNetUnitsAtRecordedPrices": 8.675,
+            "realBetsPlaced": false,
+            "executablePricesVerified": false,
+            "verifiedHistoricalROI": null
+          }
+        }
+      }
+    }
+  ]
+}

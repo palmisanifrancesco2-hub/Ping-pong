@@ -1,0 +1,77 @@
+{
+  "version": "projection-ensembles-v12",
+  "createdAt": "2026-11-06T11:00:07.695624+00:00",
+  "scope": "Exploratory fixed-weight pooling on already examined historical forecasts; no prospective data or activation",
+  "sources": {
+    ".research-data/projection-v11-audit.json": "2c97066715818db9875b94471828c167887b65260acfbefd40806fea4a04e216",
+    ".research-data/market-v8-historical-audit.json": "9bf385f6f7e8a240b6be6677b151970dba6fb0cc9db9af1b7ff1ead457eed96a",
+    ".research-data/multi-model-v7-audit.json": "a189883f928f6efa24cda62367e5a352bafca5d787e5589cdb31d29e60ce58e3",
+    ".research-data/market-v8-selection.json": "793f1c676b1cc8c8fd13b78e6a3c1841fb54b6509bb75a93fda05f6d6332e718",
+    ".research-data/market-v8-features.json": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4"
+  },
+  "projection": "rally-beta-binomial",
+  "reference": "ensemble-equal-v7 for winner; historically selected v8 candidate per other target",
+  "recipes": {
+    "projection-with-reference": {
+      "all14Targets": true,
+      "weights": [
+        0.5,
+        0.5
+      ]
+    },
+    "projection-with-reference-and-poisson": {
+      "targets": [
+        "points-over-74.5",
+        "points-over-79.5",
+        "points-over-84.5"
+      ],
+      "weights": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.3333333333333333
+      ]
+    },
+    "projection-with-full": {
+      "targets": [
+        "winner"
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "fullModel": "full:0.001-v7"
+    }
+  },
+  "bootstrapReplicates": 10000,
+  "blockDays": 3,
+  "familyComparisons": 58,
+  "seed": 20261106,
+  "metrics": [
+    "brier",
+    "logLoss",
+    "eceFiveBins",
+    "correct",
+    "wrong",
+    "undecided"
+  ],
+  "diagnostics": [
+    "residualCorrelation",
+    "binaryMistakeCorrelation",
+    "selectionAgreement",
+    "accuracyOnAgreementSubsetDescriptiveOnly"
+  ],
+  "comparators": "Every component, previous best and causal league baseline on identical cases",
+  "activation": false,
+  "independentValidation": false,
+  "limitations": [
+    "All historical outcomes already inspected; no independent confirmatory inference.",
+    "Previously best candidates selected using this archive; optimistic reference selection.",
+    "Fixed weights not optimized on test outcomes; no post-hoc grid search.",
+    "Each market pooled separately; no claim of one coherent joint distribution across all markets.",
+    "Pooling can alter calibration; no recalibration without a separate causal calibration sample.",
+    "Agreement of models is not independent evidence; disagreement is diagnostic only.",
+    "Nine days are insufficient for strong day-block interval guarantees.",
+    "No pre-event executable odds; cannot estimate tradable EV or profit.",
+    "No changes to original prospective protocols or recorded predictions."
+  ]
+}

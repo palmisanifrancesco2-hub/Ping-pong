@@ -1,0 +1,337 @@
+{
+  "scope": "Verified normal production release aggregates; no individual rows or private audit script.",
+  "deployment": "dpl_ACXuqPsNw6BWrWZY43oeimFBc8nn",
+  "commit": "c735d474598761638aee4183713d56084bed2c7c",
+  "observations": [
+    {
+      "loggedAt": "2026-11-18T05:55:54.098Z",
+      "adaptiveTrainingBootstrap": {
+        "day": "2026-11-18",
+        "checkedAt": "2026-11-18T05:55:53.147Z",
+        "automaticPromotion": false,
+        "operationallyValidated": false,
+        "status": "daily_already_attempted",
+        "reason": "Tentativo già registrato oggi; prossimo tentativo nel prossimo giorno UTC."
+      }
+    },
+    {
+      "loggedAt": "2026-11-18T05:55:53.149Z",
+      "winnerPriceStatus": "winner-challengers-v10-20261105",
+      "checkedAt": "2026-11-18T05:55:53.118Z",
+      "registered": 980,
+      "eligibleSettled": 800,
+      "unavailableQuotes": 0,
+      "duplicateSettled": 0,
+      "models": [
+        {
+          "id": "current-eb",
+          "eligibleSettled": 800,
+          "selected": 282,
+          "correct": {
+            "n": 118,
+            "mean": 2.140037928173519,
+            "median": 2.1
+          },
+          "wrong": {
+            "n": 164,
+            "mean": 2.3065687361419047,
+            "median": 2.1500000000000004
+          },
+          "undecided": 0,
+          "excludedByMinimum": 45,
+          "excludedByEV": 473,
+          "invalidProbability": 0,
+          "accuracy": 0.41843971631205673,
+          "meanWrongMinusCorrect": 0.16653080796838582,
+          "theoreticalNetUnits": -29.475524475524537,
+          "realBets": false,
+          "verifiedROI": null
+        },
+        {
+          "id": "full-logistic",
+          "eligibleSettled": 800,
+          "selected": 294,
+          "correct": {
+            "n": 136,
+            "mean": 1.9456531621972777,
+            "median": 1.9090909090909092
+          },
+          "wrong": {
+            "n": 158,
+            "mean": 2.1101767606514423,
+            "median": 2
+          },
+          "undecided": 0,
+          "excludedByMinimum": 46,
+          "excludedByEV": 460,
+          "invalidProbability": 0,
+          "accuracy": 0.46258503401360546,
+          "meanWrongMinusCorrect": 0.16452359845416464,
+          "theoreticalNetUnits": -29.391169941169778,
+          "realBets": false,
+          "verifiedROI": null
+        },
+        {
+          "id": "scores-logistic",
+          "eligibleSettled": 800,
+          "selected": 302,
+          "correct": {
+            "n": 132,
+            "mean": 2.0819537154764407,
+            "median": 2.05
+          },
+          "wrong": {
+            "n": 170,
+            "mean": 2.2286229946524045,
+            "median": 2.1
+          },
+          "undecided": 0,
+          "excludedByMinimum": 45,
+          "excludedByEV": 453,
+          "invalidProbability": 0,
+          "accuracy": 0.4370860927152318,
+          "meanWrongMinusCorrect": 0.14666927917596384,
+          "theoreticalNetUnits": -27.182109557109584,
+          "realBets": false,
+          "verifiedROI": null
+        },
+        {
+          "id": "context-logistic",
+          "eligibleSettled": 800,
+          "selected": 245,
+          "correct": {
+            "n": 105,
+            "mean": 2.0971759986045684,
+            "median": 2
+          },
+          "wrong": {
+            "n": 140,
+            "mean": 2.250800865800864,
+            "median": 2.1
+          },
+          "undecided": 0,
+          "excludedByMinimum": 45,
+          "excludedByEV": 510,
+          "invalidProbability": 0,
+          "accuracy": 0.42857142857142855,
+          "meanWrongMinusCorrect": 0.15362486719629542,
+          "theoreticalNetUnits": -24.79652014652015,
+          "realBets": false,
+          "verifiedROI": null
+        }
+      ],
+      "validated": false
+    },
+    {
+      "loggedAt": "2026-11-18T05:55:53.149Z",
+      "winnerShadowStatus": "winner-challengers-v10-20261105",
+      "captured": 980,
+      "settled": 800,
+      "pending": 173,
+      "invalid": 7,
+      "observedDays": 13,
+      "models": [
+        {
+          "id": "current-eb",
+          "n": 800,
+          "correct": 432,
+          "wrong": 368,
+          "undecided": 0,
+          "brier": 0.2440328667052073,
+          "logLoss": 0.6810755248929649,
+          "ece": 0.026062455630627854
+        },
+        {
+          "id": "full-logistic",
+          "n": 800,
+          "correct": 445,
+          "wrong": 355,
+          "undecided": 0,
+          "brier": 0.24199967726850893,
+          "logLoss": 0.6768136024651895,
+          "ece": 0.020044707915205375
+        },
+        {
+          "id": "scores-logistic",
+          "n": 800,
+          "correct": 449,
+          "wrong": 351,
+          "undecided": 0,
+          "brier": 0.24298913674646602,
+          "logLoss": 0.6788433219020342,
+          "ece": 0.01660022753394222
+        },
+        {
+          "id": "context-logistic",
+          "n": 800,
+          "correct": 443,
+          "wrong": 357,
+          "undecided": 0,
+          "brier": 0.2437246332745599,
+          "logLoss": 0.6804451629915671,
+          "ece": 0.01581499821031114
+        }
+      ],
+      "league": {
+        "n": 800,
+        "brier": 0.25007923533732407,
+        "logLoss": 0.6933080147090972,
+        "ece": 0.019457334077445206,
+        "correct": 400,
+        "wrong": 400,
+        "undecided": 0,
+        "accuracy": 0.5
+      },
+      "bookmaker": {
+        "n": 800,
+        "brier": 0.23016298801690216,
+        "logLoss": 0.651389184686192,
+        "ece": 0.02002790348575758,
+        "correct": 451,
+        "wrong": 276,
+        "undecided": 73,
+        "accuracy": 0.6203576341127923
+      },
+      "checkpoints": [],
+      "validated": false
+    },
+    {
+      "loggedAt": "2026-11-18T05:55:52.508Z",
+      "marketStudyStatus": "forward-markets-v9-20261105",
+      "checkedAt": "2026-11-18T05:55:52.496Z",
+      "captured": 1300,
+      "settled": 1109,
+      "pending": 185,
+      "invalid": 6,
+      "observedDays": 13,
+      "targets": [
+        {
+          "target": "winner",
+          "n": 1109,
+          "correct": 589,
+          "wrong": 520,
+          "undecided": 0,
+          "accuracy": 0.5311091073038774
+        },
+        {
+          "target": "first-set",
+          "n": 1109,
+          "correct": 593,
+          "wrong": 516,
+          "undecided": 0,
+          "accuracy": 0.5347159603246168
+        },
+        {
+          "target": "first-set-points-over-19.5",
+          "n": 1109,
+          "correct": 729,
+          "wrong": 380,
+          "undecided": 0,
+          "accuracy": 0.6573489630297565
+        },
+        {
+          "target": "sets-over-3.5",
+          "n": 1109,
+          "correct": 779,
+          "wrong": 330,
+          "undecided": 0,
+          "accuracy": 0.7024346257889991
+        },
+        {
+          "target": "sets-over-4.5",
+          "n": 1109,
+          "correct": 740,
+          "wrong": 369,
+          "undecided": 0,
+          "accuracy": 0.6672678088367899
+        },
+        {
+          "target": "points-over-74.5",
+          "n": 1109,
+          "correct": 582,
+          "wrong": 527,
+          "undecided": 0,
+          "accuracy": 0.5247971145175834
+        },
+        {
+          "target": "points-over-79.5",
+          "n": 1109,
+          "correct": 664,
+          "wrong": 445,
+          "undecided": 0,
+          "accuracy": 0.5987376014427412
+        },
+        {
+          "target": "points-over-84.5",
+          "n": 1109,
+          "correct": 744,
+          "wrong": 365,
+          "undecided": 0,
+          "accuracy": 0.6708746618575293
+        },
+        {
+          "target": "home-set-handicap-minus-1.5",
+          "n": 1109,
+          "correct": 773,
+          "wrong": 336,
+          "undecided": 0,
+          "accuracy": 0.69702434625789
+        },
+        {
+          "target": "home-set-handicap-plus-1.5",
+          "n": 1109,
+          "correct": 705,
+          "wrong": 404,
+          "undecided": 0,
+          "accuracy": 0.6357078449053201
+        },
+        {
+          "target": "home-point-handicap-minus-5.5",
+          "n": 1109,
+          "correct": 761,
+          "wrong": 348,
+          "undecided": 0,
+          "accuracy": 0.6862037871956718
+        },
+        {
+          "target": "home-point-handicap-plus-5.5",
+          "n": 1109,
+          "correct": 674,
+          "wrong": 435,
+          "undecided": 0,
+          "accuracy": 0.6077547339945897
+        },
+        {
+          "target": "home-point-handicap-minus-9.5",
+          "n": 1109,
+          "correct": 908,
+          "wrong": 201,
+          "undecided": 0,
+          "accuracy": 0.8187556357078449
+        },
+        {
+          "target": "home-point-handicap-plus-9.5",
+          "n": 1109,
+          "correct": 860,
+          "wrong": 249,
+          "undecided": 0,
+          "accuracy": 0.7754733994589721
+        }
+      ]
+    },
+    {
+      "loggedAt": "2026-11-18T05:55:50.776Z",
+      "marketStudyRun": "forward-markets-v9-20261105",
+      "status": "completed",
+      "captured": 0,
+      "settled": 1,
+      "attempted": 1,
+      "sourceErrors": 0,
+      "total": 1300,
+      "checkedAt": "2026-11-18T05:55:50.615Z"
+    }
+  ],
+  "operationallyValidated": false,
+  "automaticPromotion": false,
+  "verifiedROI": null
+}

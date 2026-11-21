@@ -1,0 +1,11 @@
+import{readFile,writeFile}from'node:fs/promises';import{createHash}from'node:crypto';
+import{featureRows,fitScore,featureGroups,predictScore}from'../src/domain/score-model.js';
+import{calibrateTemperature}from'../src/domain/model-comparison.js';import report from'../research/report-v6.json';
+const raw=await readFile('.research-data/3000-data.json','utf8'),data=JSON.parse(raw);
+const rows=featureRows(data.results,data.starts,30),boundary=Date.parse('2026-11-03T00:00:00Z'),end=Date.parse('2026-11-05T00:00:00Z');
+const train=rows.filter(r=>r.at<boundary&&r.available<boundary),cal=rows.filter(r=>r.at>=boundary&&r.at<end&&r.available<end);
+if(train.length<100||cal.length<40)throw Error('INSUFFICIENT_DATA');
+const [group,penalty]=report.winner.split(':'),model=fitScore(train,featureGroups[group],Number(penalty));
+const temperature=calibrateTemperature(cal.map(r=>({p:predictScore(model,r.x),y:r.y})),[.25,.5,.75,1,1.25,1.5]);
+const artifact={version:'score-full-v1',name:'Logistica completa tennistavolo',generatedAt:new Date().toISOString(),trainingCutoff:new Date(Math.max(...train.map(r=>r.available))).toISOString(),calibrationCutoff:new Date(Math.max(...cal.map(r=>r.available))).toISOString(),datasetHash:createHash('sha256').update(raw).digest('hex'),model,temperature,validated:false,validation:report.ranking[0],trainingSamples:train.length,calibrationSamples:cal.length,scope:'Experimental prematch match winner; retrospective comparison is not independent validation'};
+await writeFile('models/score-runtime-v1.json',JSON.stringify(artifact,null,2)+'\n',{flag:'wx'});console.info(JSON.stringify(artifact));

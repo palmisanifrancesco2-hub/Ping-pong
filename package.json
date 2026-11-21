@@ -1,0 +1,52 @@
+{
+  "name": "ping-pong-analytics",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k \"vite --host 0.0.0.0\" \"tsx watch server/dev.ts\"",
+    "build": "npm run typecheck && npm run check:server && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "npm run test && npm run build",
+    "check:connection": "tsx scripts/check-connection.ts",
+    "check:coverage": "tsx scripts/check-public-coverage.ts",
+    "check:oddspapi": "tsx scripts/check-oddspapi.ts",
+    "check:moviodds": "tsx scripts/check-moviodds.ts",
+    "check:feed": "tsx scripts/check-feed.ts",
+    "check:history-schema": "tsx scripts/check-history-schema.ts",
+    "check:google-auth": "tsx scripts/check-google-auth.ts",
+    "check:players": "tsx scripts/check-players.ts",
+    "db:choices": "tsx scripts/setup-choices.ts",
+    "db:bootstrap": "tsx scripts/bootstrap-db.ts",
+    "db:verify": "tsx scripts/verify-db.ts",
+    "research:collect": "tsx scripts/collect-research.ts",
+    "research:evaluate": "tsx scripts/evaluate-models.ts",
+    "study:bootstrap": "tsx scripts/bootstrap-forward-study.ts",
+    "study:markets": "tsx scripts/bootstrap-market-study.ts",
+    "check:server": "node scripts/check-server-runtime.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.80.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15",
+    "@types/node": "^24.10.0",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.1.0",
+    "concurrently": "^9.2.1",
+    "pg": "^8.23.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.0",
+    "vitest": "^4.0.6"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "artifacts": {
+    "table_tennis_wtt_men_std.csv.boosted.joblib": {
+      "sha256": "d706c831dc4d76f0beaeec2dce0faeba31201c215f6df3d5cc11f710080884d5",
+      "bytes": 111500
+    },
+    "table_tennis_wtt_women_std.csv.logistic.joblib": {
+      "sha256": "2f5fb7b5fbdb2bcfb284263a47b8d24c83149bf3a29e528ca04d1fbd6ac871e2",
+      "bytes": 3412
+    },
+    "table_tennis_wtt_women_std.csv.boosted.joblib": {
+      "sha256": "2892632ae2f1bf8afe749a0862ae174dfaf9b7910de20d6217443e5fdbc95d2f",
+      "bytes": 107708
+    },
+    "table_tennis_wtt_men_std.csv.logistic.joblib": {
+      "sha256": "69f51b603362cfb8770da7f9b7cd2a7341044f3e4e861c04192f1552ad1e6bc1",
+      "bytes": 3419
+    }
+  },
+  "privateArtifacts": true,
+  "validatedForProduction": false
+}

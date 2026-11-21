@@ -1,0 +1,248 @@
+{
+  "version": "asof-odds-comparison-v16",
+  "generatedAt": "2026-11-11T10:15:32.393403+00:00",
+  "protocol": {
+    "version": "asof-odds-comparison-v16",
+    "createdAt": "2026-11-11T10:15:30.213591+00:00",
+    "hashes": {
+      ".research-data/v16-qualified-market-baselines.json": "bb32f84e69f322898bcadd1d8151da83a5dde6a50bd39e7f9532ba45935e315b",
+      ".research-data/market-v8-features.json": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4"
+    },
+    "trainBefore": "2026-10-30T00:00:00Z",
+    "calibrationBefore": "2026-11-02T00:00:00Z",
+    "testBefore": "2026-11-05T00:00:00Z",
+    "models": [
+      "sports-only",
+      "sports-and-market"
+    ],
+    "marketReference": "Unmodified no-vig probability from exact bet365.com.au pre-close winner pair; quote time <= decisionTime=actualKickoff-60s, age <=5min, feature availability<decisionTime",
+    "sportsFeatures": "First eight signed causal strength features; excludes bookmaker inputs",
+    "oddsFeature": "Logit of same-event as-of no-vig market probability appended only for combined model",
+    "fit": {
+      "C": 0.1,
+      "fit_intercept": false,
+      "max_iter": 1000
+    },
+    "symmetry": "Mirrored player training rows with complemented labels; 29 independent train events remain 29, not 58",
+    "temperatures": [
+      0.5,
+      1,
+      1.5
+    ],
+    "shrinkWeights": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "calibrationBaseline": {
+      "sports-only": 0.5,
+      "sports-and-market": "same-event no-vig market"
+    },
+    "minimumTraining": 20,
+    "minimumCalibration": 20,
+    "bootstrapReplicates": 10000,
+    "blockDays": 3,
+    "familyComparisons": 2,
+    "seed": 20261111,
+    "independentValidation": false,
+    "automaticPromotion": false,
+    "limitations": [
+      "Very small selected subset of already inspected historical archive.",
+      "No global best-model selection or threshold tuning on test.",
+      "No ADM authorization verified for source bet365.com.au.",
+      "Historical provider timestamps do not prove executable liquidity or independent official provenance.",
+      "Below seven observed test days, uncertainty intervals are unavailable; no model advantage can be declared.",
+      "ROI and operational selections unavailable under ADM policy."
+    ]
+  },
+  "qualifiedRows": 153,
+  "training": 29,
+  "calibration": 35,
+  "test": 88,
+  "outsideSplits": 1,
+  "observedTestDays": 3,
+  "models": [
+    {
+      "name": "sports-only",
+      "temperature": 1,
+      "shrinkWeight": 0,
+      "metrics": {
+        "n": 88,
+        "correct": 0,
+        "wrong": 0,
+        "undecided": 88,
+        "accuracy": null,
+        "coverage": 0.0,
+        "brier": 0.25,
+        "logLoss": 0.6931471805599453,
+        "ece": 0.04545454545454548,
+        "calibration": [
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 88,
+            "probability": 0.5,
+            "frequency": 0.45454545454545453
+          }
+        ]
+      },
+      "pairedBrierDifferenceVsMarket": {
+        "lower": null,
+        "upper": null,
+        "days": 3
+      }
+    },
+    {
+      "name": "sports-and-market",
+      "temperature": 1,
+      "shrinkWeight": 0,
+      "metrics": {
+        "n": 88,
+        "correct": 45,
+        "wrong": 37,
+        "undecided": 6,
+        "accuracy": 0.5487804878048781,
+        "coverage": 0.9318181818181819,
+        "brier": 0.24781377531774373,
+        "logLoss": 0.689431761938443,
+        "ece": 0.08430844137763603,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 5,
+            "probability": 0.2640408210398683,
+            "frequency": 0.2
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 8,
+            "probability": 0.36243358915624946,
+            "frequency": 0.25
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 26,
+            "probability": 0.44768934699495666,
+            "frequency": 0.46153846153846156
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 31,
+            "probability": 0.5418251272215824,
+            "frequency": 0.5483870967741935
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 14,
+            "probability": 0.6479202632934664,
+            "frequency": 0.35714285714285715
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 3,
+            "probability": 0.749621728653354,
+            "frequency": 1.0
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 1,
+            "probability": 0.813953488372093,
+            "frequency": 0.0
+          }
+        ]
+      },
+      "pairedBrierDifferenceVsMarket": {
+        "lower": null,
+        "upper": null,
+        "days": 3
+      }
+    }
+  ],
+  "marketOnly": {
+    "n": 88,
+    "correct": 45,
+    "wrong": 37,
+    "undecided": 6,
+    "accuracy": 0.5487804878048781,
+    "coverage": 0.9318181818181819,
+    "brier": 0.24781377531774373,
+    "logLoss": 0.689431761938443,
+    "ece": 0.08430844137763603,
+    "calibration": [
+      {
+        "from": 0.2,
+        "to": 0.3,
+        "n": 5,
+        "probability": 0.2640408210398683,
+        "frequency": 0.2
+      },
+      {
+        "from": 0.3,
+        "to": 0.4,
+        "n": 8,
+        "probability": 0.36243358915624946,
+        "frequency": 0.25
+      },
+      {
+        "from": 0.4,
+        "to": 0.5,
+        "n": 26,
+        "probability": 0.44768934699495666,
+        "frequency": 0.46153846153846156
+      },
+      {
+        "from": 0.5,
+        "to": 0.6,
+        "n": 31,
+        "probability": 0.5418251272215824,
+        "frequency": 0.5483870967741935
+      },
+      {
+        "from": 0.6,
+        "to": 0.7,
+        "n": 14,
+        "probability": 0.6479202632934664,
+        "frequency": 0.35714285714285715
+      },
+      {
+        "from": 0.7,
+        "to": 0.8,
+        "n": 3,
+        "probability": 0.749621728653354,
+        "frequency": 1.0
+      },
+      {
+        "from": 0.8,
+        "to": 0.9,
+        "n": 1,
+        "probability": 0.813953488372093,
+        "frequency": 0.0
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "file": "v16-asof-sports-only.joblib",
+      "sha256": "a18b5e58ffda8997287e57c8a1c61497ccbb3fe39a9e7a364474b637ccd9bd8d",
+      "bytes": 3553
+    },
+    {
+      "file": "v16-asof-sports-and-market.joblib",
+      "sha256": "fe69781c41c0c4f2db3d156275b6a436141bab83c12718bdc94e60339c784e2c",
+      "bytes": 3569
+    }
+  ],
+  "roi": null,
+  "independentValidation": false,
+  "operationallyValidated": false,
+  "automaticPromotion": false
+}

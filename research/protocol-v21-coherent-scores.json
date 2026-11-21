@@ -1,0 +1,132 @@
+{
+  "version": "coherent-score-benchmark-v21",
+  "createdAt": "2026-11-17T20:06:33.836647+00:00",
+  "input": ".research-data/market-v8-features.json",
+  "inputHash": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4",
+  "results": ".research-data/3000-data.json",
+  "resultsHash": "2380fc423d187688028575f301aea2cc3dfb5b6b458aac46b7370bc9f967e02f",
+  "foldStarts": [
+    "2026-10-25T00:00:00Z",
+    "2026-10-27T00:00:00Z",
+    "2026-10-29T00:00:00Z",
+    "2026-10-31T00:00:00Z",
+    "2026-11-02T00:00:00Z"
+  ],
+  "endExclusive": "2026-11-05T00:00:00Z",
+  "tuningDays": 1,
+  "calibrationDays": 1,
+  "minimumTraining": 50,
+  "minimumTuning": 30,
+  "minimumCalibration": 30,
+  "models": [
+    "categorical-catboost",
+    "categorical-mlp"
+  ],
+  "parameterGrid": {
+    "categorical-catboost": [
+      {
+        "depth": 3
+      },
+      {
+        "depth": 4
+      }
+    ],
+    "categorical-mlp": [
+      {
+        "hidden": 16,
+        "weightDecay": 0.01
+      },
+      {
+        "hidden": 32,
+        "weightDecay": 0.05
+      }
+    ]
+  },
+  "fixed": {
+    "categorical-catboost": {
+      "iterations": 120,
+      "learning_rate": 0.035,
+      "l2_leaf_reg": 8,
+      "thread_count": 2,
+      "classes_count": 6
+    },
+    "categorical-mlp": {
+      "epochs": 120,
+      "learningRate": 0.003,
+      "dropout": 0.1
+    }
+  },
+  "shrinkWeights": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "seed": 20261117,
+  "bootstrapReplicates": 10000,
+  "blockDays": 3,
+  "familyComparisons": 24,
+  "selection": "Configuration from tuning day multiclass log loss; refit before calibration; temperature and distribution-wide shrink from calibration multiclass log loss only. Per-fold selector from calibration only; fixed 50/50 pool. No test or transfer outcome selects model/configuration.",
+  "independentValidation": false,
+  "automaticPromotion": false,
+  "limitations": [
+    "All historical outcomes already inspected in prior studies, including the 249 transfer cases. Exploratory temporal benchmark, not new independent validation.",
+    "Only BO5 exact-score, winner, total sets and set handicaps. No points totals/handicaps or individual-set winners can be inferred from the final match set score alone.",
+    "Joint calibration preserves probability coherence but may underperform independently calibrated binary heads.",
+    "Main source reports results and availability; not independently certified official scores or first publication.",
+    "Transfer features use frozen previous-day history and cover one day.",
+    "No historical executable odds for these markets; no ROI or new operational opportunities.",
+    "Multiple earlier research iterations are not fully corrected by the current experiment family adjustment."
+  ],
+  "exactScores": [
+    [
+      3,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      2,
+      3
+    ]
+  ],
+  "derivedTargets": [
+    "winner",
+    "sets-over-3.5",
+    "sets-over-4.5",
+    "home-set-handicap-minus-1.5",
+    "home-set-handicap-plus-1.5"
+  ],
+  "originalTargetIndices": [
+    0,
+    3,
+    4,
+    8,
+    9
+  ],
+  "temperatures": [
+    0.75,
+    1,
+    1.25
+  ],
+  "baselinePrior": 50,
+  "confirmationFeatures": ".research-data/market-v8-confirmation-features.json",
+  "confirmationFeaturesHash": "4088b07a52bee4132c3c9277452886e756ed1374689d7d91ed4d17812f7f32ed",
+  "confirmationResults": ".research-data/market-v8-confirmation/sealed.json",
+  "confirmationResultsHash": "6b0bcda64999a17916a8961f9dd76114cdf3e7c431e42e5c8854af6f54ea1f96"
+}

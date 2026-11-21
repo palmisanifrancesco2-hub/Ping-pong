@@ -1,0 +1,923 @@
+{
+  "protocol": {
+    "archiveProtocol": "protocol-live-expanded-v29.json",
+    "modelProtocol": "protocol-live-setka-v28.json",
+    "testBoundariesUtc": [
+      "2026-10-22",
+      "2026-10-27",
+      "2026-11-01",
+      "2026-11-05"
+    ],
+    "trainingEndsDaysBeforeFold": 6,
+    "calibrationStartsDaysBeforeFold": 4,
+    "calibrationEndsDaysBeforeFold": 2,
+    "quoteMinimumExclusive": 2.0,
+    "pairedComparisons": {
+      "blockDays": 3,
+      "bootstrapReplicates": 10000,
+      "familyComparisons": 2,
+      "seed": 311
+    },
+    "notes": "Use all complete dates, not a quota-based or outcome-based subset. Both candidates train with eligible archived Setka 2022 and prior MoviOdds outcomes. Scores only at prematch 0\u20130. Archived finish date proxies match date, with existing two-day history lag. Quotes are optional, from the existing MoviOdds closing cache and matched to the same UTC date as the model decision."
+  },
+  "sourceCounts": {
+    "raw": 23670,
+    "valid": 23235,
+    "outsideLeagues": 435
+  },
+  "n": 10789,
+  "testDays": 14,
+  "folds": [
+    {
+      "from": "2026-10-22",
+      "untilExclusive": "2026-10-27",
+      "trainMoviOdds": 8974,
+      "trainSetka": 7843,
+      "calibration": 1988,
+      "test": 3880,
+      "testMetrics": {
+        "scoreOnly": {
+          "n": 3880,
+          "correct": 1950,
+          "wrong": 1930,
+          "undecided": 0,
+          "accuracy": 0.5025773195876289,
+          "coverage": 1.0,
+          "brier": 0.2499959070427419,
+          "logLoss": 0.6931389946361671,
+          "ece": 0.0015967526416489353,
+          "calibration": [
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 3880,
+              "probability": 0.4990194330540201,
+              "frequency": 0.49742268041237114
+            }
+          ]
+        },
+        "logistic": {
+          "n": 3880,
+          "correct": 2131,
+          "wrong": 1749,
+          "undecided": 0,
+          "accuracy": 0.5492268041237114,
+          "coverage": 1.0,
+          "brier": 0.24549372035701947,
+          "logLoss": 0.6840491037354469,
+          "ece": 0.007223051328427089,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 2,
+              "probability": 0.2926464044735184,
+              "frequency": 0.0
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 154,
+              "probability": 0.36626119311075594,
+              "frequency": 0.35064935064935066
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1755,
+              "probability": 0.4648941545459178,
+              "frequency": 0.4564102564102564
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1829,
+              "probability": 0.5343026153684768,
+              "frequency": 0.5369054127938764
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 140,
+              "probability": 0.6258131079489142,
+              "frequency": 0.6642857142857143
+            }
+          ]
+        },
+        "catboost": {
+          "n": 3880,
+          "correct": 2114,
+          "wrong": 1766,
+          "undecided": 0,
+          "accuracy": 0.5448453608247422,
+          "coverage": 1.0,
+          "brier": 0.24599375302726414,
+          "logLoss": 0.6850605835115493,
+          "ece": 0.011524381361822966,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 8,
+              "probability": 0.2890194760707176,
+              "frequency": 0.0
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 157,
+              "probability": 0.36795397439690436,
+              "frequency": 0.4140127388535032
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1903,
+              "probability": 0.47314883201442065,
+              "frequency": 0.46085128744088283
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1667,
+              "probability": 0.5320913291988524,
+              "frequency": 0.5356928614277144
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 145,
+              "probability": 0.6154121634023046,
+              "frequency": 0.6551724137931034
+            }
+          ]
+        }
+      }
+    },
+    {
+      "from": "2026-10-27",
+      "untilExclusive": "2026-11-01",
+      "trainMoviOdds": 12446,
+      "trainSetka": 7843,
+      "calibration": 2282,
+      "test": 3820,
+      "testMetrics": {
+        "scoreOnly": {
+          "n": 3820,
+          "correct": 1933,
+          "wrong": 1887,
+          "undecided": 0,
+          "accuracy": 0.5060209424083769,
+          "coverage": 1.0,
+          "brier": 0.24999349886318897,
+          "logLoss": 0.6931341782808964,
+          "ece": 0.005454412037422695,
+          "calibration": [
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 3820,
+              "probability": 0.4994334696290457,
+              "frequency": 0.493979057591623
+            }
+          ]
+        },
+        "logistic": {
+          "n": 3820,
+          "correct": 2088,
+          "wrong": 1732,
+          "undecided": 0,
+          "accuracy": 0.5465968586387434,
+          "coverage": 1.0,
+          "brier": 0.24551055061834634,
+          "logLoss": 0.6841034046840357,
+          "ece": 0.005902245505281588,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 14,
+              "probability": 0.27988864192473234,
+              "frequency": 0.5
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 267,
+              "probability": 0.365146522243845,
+              "frequency": 0.35580524344569286
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1880,
+              "probability": 0.46086392803616755,
+              "frequency": 0.46702127659574466
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1514,
+              "probability": 0.5361697896293439,
+              "frequency": 0.535667107001321
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 142,
+              "probability": 0.6300985401295672,
+              "frequency": 0.6619718309859155
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 3,
+              "probability": 0.7026710951940749,
+              "frequency": 0.6666666666666666
+            }
+          ]
+        },
+        "catboost": {
+          "n": 3820,
+          "correct": 2080,
+          "wrong": 1740,
+          "undecided": 0,
+          "accuracy": 0.5445026178010471,
+          "coverage": 1.0,
+          "brier": 0.24592737499286413,
+          "logLoss": 0.6849377771739936,
+          "ece": 0.006099260549831411,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 10,
+              "probability": 0.2840238537720797,
+              "frequency": 0.5
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 221,
+              "probability": 0.3606679035085709,
+              "frequency": 0.3393665158371041
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 2130,
+              "probability": 0.4693431666983242,
+              "frequency": 0.47136150234741786
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1353,
+              "probability": 0.5359213643138472,
+              "frequency": 0.5424981522542498
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 106,
+              "probability": 0.6204305835212415,
+              "frequency": 0.6509433962264151
+            }
+          ]
+        }
+      }
+    },
+    {
+      "from": "2026-11-01",
+      "untilExclusive": "2026-11-05",
+      "trainMoviOdds": 16326,
+      "trainSetka": 7843,
+      "calibration": 2318,
+      "test": 3089,
+      "testMetrics": {
+        "scoreOnly": {
+          "n": 3089,
+          "correct": 1498,
+          "wrong": 1591,
+          "undecided": 0,
+          "accuracy": 0.4849465846552282,
+          "coverage": 1.0,
+          "brier": 0.2500275617142705,
+          "logLoss": 0.6932023040474333,
+          "ece": 0.015942616717864122,
+          "calibration": [
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 3089,
+              "probability": 0.49911079862690766,
+              "frequency": 0.5150534153447718
+            }
+          ]
+        },
+        "logistic": {
+          "n": 3089,
+          "correct": 1708,
+          "wrong": 1381,
+          "undecided": 0,
+          "accuracy": 0.552929750728391,
+          "coverage": 1.0,
+          "brier": 0.24532899214148077,
+          "logLoss": 0.6836244070725341,
+          "ece": 0.03443351938458335,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 13,
+              "probability": 0.280571867021803,
+              "frequency": 0.07692307692307693
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 242,
+              "probability": 0.3685294863078446,
+              "frequency": 0.4049586776859504
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1684,
+              "probability": 0.4591240184975369,
+              "frequency": 0.4821852731591449
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1039,
+              "probability": 0.534576536199807,
+              "frequency": 0.5745909528392685
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 110,
+              "probability": 0.629265806981514,
+              "frequency": 0.7545454545454545
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 1,
+              "probability": 0.7109498236111652,
+              "frequency": 0.0
+            }
+          ]
+        },
+        "catboost": {
+          "n": 3089,
+          "correct": 1689,
+          "wrong": 1400,
+          "undecided": 0,
+          "accuracy": 0.5467788928455811,
+          "coverage": 1.0,
+          "brier": 0.24634669768979367,
+          "logLoss": 0.6857056183522163,
+          "ece": 0.03579892046280616,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 19,
+              "probability": 0.2882360199142804,
+              "frequency": 0.10526315789473684
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 240,
+              "probability": 0.36837723555685875,
+              "frequency": 0.4166666666666667
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1779,
+              "probability": 0.4617072060730549,
+              "frequency": 0.48791455874086564
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 932,
+              "probability": 0.5340924104760789,
+              "frequency": 0.5772532188841202
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 119,
+              "probability": 0.6246372803987128,
+              "frequency": 0.6974789915966386
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "quoted": 260,
+  "models": {
+    "logistic": {
+      "all": {
+        "n": 10789,
+        "correct": 5927,
+        "wrong": 4862,
+        "undecided": 0,
+        "accuracy": 0.5493558253776996,
+        "coverage": 1.0,
+        "brier": 0.24545251599521295,
+        "logLoss": 0.683946734807082,
+        "ece": 0.010165607982870743,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 29,
+            "probability": 0.2810747609371286,
+            "frequency": 0.27586206896551724
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 663,
+            "probability": 0.36664024263146516,
+            "frequency": 0.37254901960784315
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 5319,
+            "probability": 0.4616428413397129,
+            "frequency": 0.46832111299116375
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 4382,
+            "probability": 0.5350126805384231,
+            "frequency": 0.5454130534002738
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 392,
+            "probability": 0.6283343535184007,
+            "frequency": 0.6887755102040817
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 4,
+            "probability": 0.7047407772983475,
+            "frequency": 0.5
+          }
+        ]
+      },
+      "quoted": {
+        "n": 260,
+        "correct": 141,
+        "wrong": 119,
+        "undecided": 0,
+        "accuracy": 0.5423076923076923,
+        "coverage": 1.0,
+        "brier": 0.24756644670339917,
+        "logLoss": 0.6881446538018213,
+        "ece": 0.013785848605571999,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 2,
+            "probability": 0.27802472694383196,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 16,
+            "probability": 0.3683947817019609,
+            "frequency": 0.3125
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 123,
+            "probability": 0.46211219111892643,
+            "frequency": 0.4715447154471545
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 108,
+            "probability": 0.5360763879637933,
+            "frequency": 0.5370370370370371
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 11,
+            "probability": 0.6347366356202391,
+            "frequency": 0.5454545454545454
+          }
+        ]
+      },
+      "aboveTwo": {
+        "eligibleSourceCases": 50,
+        "selected": 50,
+        "correct": {
+          "n": 17,
+          "mean": 2.320588235294118,
+          "median": 2.2,
+          "min": 2.1,
+          "max": 3.4
+        },
+        "wrong": {
+          "n": 33,
+          "mean": 2.4795454545454545,
+          "median": 2.25,
+          "min": 2.1,
+          "max": 4.5
+        },
+        "undecided": 0,
+        "excludedByMinimumOdds": 0,
+        "excludedByEV": 0,
+        "accuracy": 0.34,
+        "meanWrongMinusCorrect": 0.15895721925133666,
+        "theoreticalNetUnitsAtRecordedPrices": -10.549999999999997,
+        "realBetsPlaced": false,
+        "executablePricesVerified": false,
+        "verifiedHistoricalROI": null
+      },
+      "pairedBrierVsElo": {
+        "lower": -0.004755592660960039,
+        "upper": -0.0018975355480725879,
+        "days": 14,
+        "blockDays": 3,
+        "familyComparisons": 2
+      }
+    },
+    "catboost": {
+      "all": {
+        "n": 10789,
+        "correct": 5883,
+        "wrong": 4906,
+        "undecided": 0,
+        "accuracy": 0.5452775975530633,
+        "coverage": 1.0,
+        "brier": 0.2460713025657891,
+        "logLoss": 0.6852017821780946,
+        "ece": 0.010942390339383185,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 37,
+            "probability": 0.28726699255832067,
+            "frequency": 0.1891891891891892
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 618,
+            "probability": 0.3655128109860102,
+            "frequency": 0.3883495145631068
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 5812,
+            "probability": 0.4682519428759184,
+            "frequency": 0.4729869236063317
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 3952,
+            "probability": 0.5338744884248046,
+            "frequency": 0.5478238866396761
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 370,
+            "probability": 0.619816870037926,
+            "frequency": 0.6675675675675675
+          }
+        ]
+      },
+      "quoted": {
+        "n": 260,
+        "correct": 141,
+        "wrong": 119,
+        "undecided": 0,
+        "accuracy": 0.5423076923076923,
+        "coverage": 1.0,
+        "brier": 0.24808253982974499,
+        "logLoss": 0.6892451961277416,
+        "ece": 0.023533591717648683,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 3,
+            "probability": 0.2860227147546411,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 17,
+            "probability": 0.37634334511742257,
+            "frequency": 0.47058823529411764
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 131,
+            "probability": 0.46819499424613353,
+            "frequency": 0.4580152671755725
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 100,
+            "probability": 0.5360115644393874,
+            "frequency": 0.55
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 9,
+            "probability": 0.6269167839493335,
+            "frequency": 0.4444444444444444
+          }
+        ]
+      },
+      "aboveTwo": {
+        "eligibleSourceCases": 50,
+        "selected": 50,
+        "correct": {
+          "n": 19,
+          "mean": 2.293421052631579,
+          "median": 2.2,
+          "min": 2.1,
+          "max": 2.75
+        },
+        "wrong": {
+          "n": 31,
+          "mean": 2.5443548387096775,
+          "median": 2.375,
+          "min": 2.1,
+          "max": 4.5
+        },
+        "undecided": 0,
+        "excludedByMinimumOdds": 0,
+        "excludedByEV": 0,
+        "accuracy": 0.38,
+        "meanWrongMinusCorrect": 0.25093378607809846,
+        "theoreticalNetUnitsAtRecordedPrices": -6.424999999999997,
+        "realBetsPlaced": false,
+        "executablePricesVerified": false,
+        "verifiedHistoricalROI": null
+      },
+      "pairedBrierVsElo": {
+        "lower": -0.003977369239129626,
+        "upper": -0.0014069012592311807,
+        "days": 14,
+        "blockDays": 3,
+        "familyComparisons": 2
+      }
+    },
+    "elo": {
+      "all": {
+        "n": 10789,
+        "correct": 5764,
+        "wrong": 4953,
+        "undecided": 72,
+        "accuracy": 0.5378370812727442,
+        "coverage": 0.993326536286959,
+        "brier": 0.2487324919892985,
+        "logLoss": 0.6906981866530018,
+        "ece": 0.027285697690504908,
+        "calibration": [
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 5,
+            "probability": 0.1812154819837554,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 96,
+            "probability": 0.2711547791521118,
+            "frequency": 0.3020833333333333
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 1005,
+            "probability": 0.36558520774075387,
+            "frequency": 0.42388059701492536
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 4050,
+            "probability": 0.45784493777051993,
+            "frequency": 0.47555555555555556
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 4358,
+            "probability": 0.5428091955691913,
+            "frequency": 0.5256998623221661
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 1133,
+            "probability": 0.6328854045584353,
+            "frequency": 0.5675198587819947
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 137,
+            "probability": 0.733695245705241,
+            "frequency": 0.6496350364963503
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 5,
+            "probability": 0.8114838409488045,
+            "frequency": 0.8
+          }
+        ]
+      },
+      "quoted": {
+        "n": 260,
+        "correct": 147,
+        "wrong": 113,
+        "undecided": 0,
+        "accuracy": 0.5653846153846154,
+        "coverage": 1.0,
+        "brier": 0.2512580197074266,
+        "logLoss": 0.6961970307504954,
+        "ece": 0.057685427971261985,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 4,
+            "probability": 0.2701196820204331,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 19,
+            "probability": 0.3603977802786094,
+            "frequency": 0.42105263157894735
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 86,
+            "probability": 0.45738464423588526,
+            "frequency": 0.4069767441860465
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 121,
+            "probability": 0.5428457590735019,
+            "frequency": 0.5702479338842975
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 28,
+            "probability": 0.6368950027335906,
+            "frequency": 0.4642857142857143
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 2,
+            "probability": 0.7212225964852432,
+            "frequency": 0.5
+          }
+        ]
+      },
+      "aboveTwo": {
+        "eligibleSourceCases": 56,
+        "selected": 56,
+        "correct": {
+          "n": 24,
+          "mean": 2.403125,
+          "median": 2.25,
+          "min": 2.1,
+          "max": 3.5
+        },
+        "wrong": {
+          "n": 32,
+          "mean": 2.57734375,
+          "median": 2.25,
+          "min": 2.1,
+          "max": 5
+        },
+        "undecided": 0,
+        "excludedByMinimumOdds": 0,
+        "excludedByEV": 0,
+        "accuracy": 0.42857142857142855,
+        "meanWrongMinusCorrect": 0.17421874999999964,
+        "theoreticalNetUnitsAtRecordedPrices": 1.6750000000000043,
+        "realBetsPlaced": false,
+        "executablePricesVerified": false,
+        "verifiedHistoricalROI": null
+      },
+      "pairedBrierVsElo": null
+    }
+  },
+  "retrospective": true,
+  "operationallyValidated": false,
+  "marketNoVigOnQuotedMatches": {
+    "n": 260,
+    "correct": 145,
+    "wrong": 96,
+    "undecided": 19,
+    "accuracy": 0.6016597510373444,
+    "coverage": 0.926923076923077,
+    "brier": 0.23832551640940589,
+    "logLoss": 0.6692746662204149,
+    "ece": 0.04321843341807033,
+    "calibration": [
+      {
+        "from": 0.1,
+        "to": 0.2,
+        "n": 2,
+        "probability": 0.1711482558139535,
+        "frequency": 0.0
+      },
+      {
+        "from": 0.2,
+        "to": 0.3,
+        "n": 12,
+        "probability": 0.27272655099743065,
+        "frequency": 0.3333333333333333
+      },
+      {
+        "from": 0.3,
+        "to": 0.4,
+        "n": 26,
+        "probability": 0.3636656878962739,
+        "frequency": 0.2692307692307692
+      },
+      {
+        "from": 0.4,
+        "to": 0.5,
+        "n": 81,
+        "probability": 0.4466075859814127,
+        "frequency": 0.4567901234567901
+      },
+      {
+        "from": 0.5,
+        "to": 0.6,
+        "n": 87,
+        "probability": 0.5375052760954172,
+        "frequency": 0.5632183908045977
+      },
+      {
+        "from": 0.6,
+        "to": 0.7,
+        "n": 41,
+        "probability": 0.6385030836320227,
+        "frequency": 0.5609756097560976
+      },
+      {
+        "from": 0.7,
+        "to": 0.8,
+        "n": 10,
+        "probability": 0.7342499528752867,
+        "frequency": 0.8
+      },
+      {
+        "from": 0.8,
+        "to": 0.9,
+        "n": 1,
+        "probability": 0.813953488372093,
+        "frequency": 0.0
+      }
+    ]
+  }
+}

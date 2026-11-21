@@ -1,0 +1,284 @@
+{
+  "version": "temporal-pooling-v13",
+  "generatedAt": "2026-11-07T11:41:41.188551+00:00",
+  "protocol": {
+    "version": "temporal-pooling-v13",
+    "createdAt": "2026-11-07T11:41:12.522934+00:00",
+    "sources": {
+      ".research-data/projection-v11-audit.json": "2c97066715818db9875b94471828c167887b65260acfbefd40806fea4a04e216",
+      ".research-data/multi-model-v7-audit.json": "a189883f928f6efa24cda62367e5a352bafca5d787e5589cdb31d29e60ce58e3",
+      ".research-data/market-v8-features.json": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4"
+    },
+    "components": [
+      "full:0.001-v7",
+      "rally-beta-binomial-v11"
+    ],
+    "minimumCalibration": 400,
+    "minimumDays": 3,
+    "schedule": "Fit once before each UTC test day; past forecast event time AND outcome available time strictly before that day",
+    "candidates": [
+      "learned-weight",
+      "learned-weight-temperature"
+    ],
+    "bounds": {
+      "projectionWeight": [
+        0,
+        1
+      ],
+      "temperature": [
+        0.5,
+        1.5
+      ]
+    },
+    "ridge": 0.001,
+    "objective": "Mean Brier + ridge*((weight-.5)^2+(temperature-1)^2)",
+    "comparators": [
+      "full",
+      "projection",
+      "fixed-half",
+      "league"
+    ],
+    "familyComparisons": 8,
+    "bootstrapReplicates": 10000,
+    "blockDays": 3,
+    "seed": 20261107,
+    "independentValidation": false,
+    "automaticPromotion": false,
+    "limitations": [
+      "Already inspected archive and previously selected base models; exploratory only.",
+      "No optimization or recipe changes after inspecting this report.",
+      "No read of prospective outcomes; no changes to v9/v10.",
+      "Under seven observed test days, paired intervals are unavailable.",
+      "No executable historical odds; no ROI or value validation."
+    ]
+  },
+  "n": 1291,
+  "observedDays": 6,
+  "folds": [
+    {
+      "day": "2026-10-30",
+      "calibration": 508,
+      "maxOutcomeAvailable": 1793318158792,
+      "start": 1793318400000,
+      "test": 245,
+      "parameters": {
+        "learned-weight": {
+          "weight": 0.8502755137761931,
+          "temperature": 1,
+          "objective": 0.24777432018528095
+        },
+        "learned-weight-temperature": {
+          "weight": 0.8233690264119983,
+          "temperature": 1.1505844385444854,
+          "objective": 0.24771870539495383
+        }
+      }
+    },
+    {
+      "day": "2026-10-31",
+      "calibration": 754,
+      "maxOutcomeAvailable": 1793404198404,
+      "start": 1793404800000,
+      "test": 180,
+      "parameters": {
+        "learned-weight": {
+          "weight": 0.7151745801297053,
+          "temperature": 1,
+          "objective": 0.24706581521241483
+        },
+        "learned-weight-temperature": {
+          "weight": 0.7096549755766249,
+          "temperature": 1.216084927830778,
+          "objective": 0.2469388609676639
+        }
+      }
+    },
+    {
+      "day": "2026-11-01",
+      "calibration": 935,
+      "maxOutcomeAvailable": 1793490690206,
+      "start": 1793491200000,
+      "test": 232,
+      "parameters": {
+        "learned-weight": {
+          "weight": 0.6293233390783999,
+          "temperature": 1,
+          "objective": 0.24651507237026823
+        },
+        "learned-weight-temperature": {
+          "weight": 0.6323848422474515,
+          "temperature": 1.170533145062816,
+          "objective": 0.24642094808817563
+        }
+      }
+    },
+    {
+      "day": "2026-11-02",
+      "calibration": 1164,
+      "maxOutcomeAvailable": 1793577514709,
+      "start": 1793577600000,
+      "test": 248,
+      "parameters": {
+        "learned-weight": {
+          "weight": 0.5698730252102037,
+          "temperature": 1,
+          "objective": 0.24657004691960227
+        },
+        "learned-weight-temperature": {
+          "weight": 0.5740626873237004,
+          "temperature": 1.0809330093824836,
+          "objective": 0.24654607511917728
+        }
+      }
+    },
+    {
+      "day": "2026-11-03",
+      "calibration": 1413,
+      "maxOutcomeAvailable": 1793663478512,
+      "start": 1793664000000,
+      "test": 214,
+      "parameters": {
+        "learned-weight": {
+          "weight": 0.5351068952797998,
+          "temperature": 1,
+          "objective": 0.24627507049366626
+        },
+        "learned-weight-temperature": {
+          "weight": 0.5452923296168846,
+          "temperature": 1.0381560832961518,
+          "objective": 0.24626924033797024
+        }
+      }
+    },
+    {
+      "day": "2026-11-04",
+      "calibration": 1627,
+      "maxOutcomeAvailable": 1793749736873,
+      "start": 1793750400000,
+      "test": 172,
+      "parameters": {
+        "learned-weight": {
+          "weight": 0.484490532192202,
+          "temperature": 1,
+          "objective": 0.2453202436214896
+        },
+        "learned-weight-temperature": {
+          "weight": 0.5254470951572754,
+          "temperature": 1.1134696909192627,
+          "objective": 0.24526818115003537
+        }
+      }
+    }
+  ],
+  "comparators": {
+    "full": {
+      "n": 1291,
+      "brier": 0.24441973808840173,
+      "logLoss": 0.6816492522201488,
+      "ece": 0.01520127115304111,
+      "correct": 713,
+      "wrong": 578,
+      "undecided": 0
+    },
+    "projection": {
+      "n": 1291,
+      "brier": 0.2449890455680571,
+      "logLoss": 0.6830181408737932,
+      "ece": 0.01371068545863708,
+      "correct": 721,
+      "wrong": 570,
+      "undecided": 0
+    },
+    "league": {
+      "n": 1291,
+      "brier": 0.25002640780309443,
+      "logLoss": 0.6932001828521903,
+      "ece": 0.005622648730737905,
+      "correct": 646,
+      "wrong": 645,
+      "undecided": 0
+    },
+    "fixed-half": {
+      "n": 1291,
+      "brier": 0.24423963387523567,
+      "logLoss": 0.6814061555947362,
+      "ece": 0.018637061824852818,
+      "correct": 719,
+      "wrong": 572,
+      "undecided": 0
+    }
+  },
+  "candidates": [
+    {
+      "name": "learned-weight",
+      "metrics": {
+        "n": 1291,
+        "brier": 0.2444159190776847,
+        "logLoss": 0.6817847337376355,
+        "ece": 0.016679481219258982,
+        "correct": 723,
+        "wrong": 568,
+        "undecided": 0
+      },
+      "pairedBrierDifference": {
+        "full": {
+          "lower": null,
+          "upper": null,
+          "days": 6
+        },
+        "projection": {
+          "lower": null,
+          "upper": null,
+          "days": 6
+        },
+        "league": {
+          "lower": null,
+          "upper": null,
+          "days": 6
+        },
+        "fixed-half": {
+          "lower": null,
+          "upper": null,
+          "days": 6
+        }
+      }
+    },
+    {
+      "name": "learned-weight-temperature",
+      "metrics": {
+        "n": 1291,
+        "brier": 0.2443966678314626,
+        "logLoss": 0.6817213728285143,
+        "ece": 0.013725389282923961,
+        "correct": 724,
+        "wrong": 567,
+        "undecided": 0
+      },
+      "pairedBrierDifference": {
+        "full": {
+          "lower": null,
+          "upper": null,
+          "days": 6
+        },
+        "projection": {
+          "lower": null,
+          "upper": null,
+          "days": 6
+        },
+        "league": {
+          "lower": null,
+          "upper": null,
+          "days": 6
+        },
+        "fixed-half": {
+          "lower": null,
+          "upper": null,
+          "days": 6
+        }
+      }
+    }
+  ],
+  "independentValidation": false,
+  "operationallyValidated": false,
+  "automaticPromotion": false
+}
