@@ -155,3 +155,7 @@ Completato il replay v31 su tre finestre cronologiche disgiunte, ognuna con nuov
 ## Vincente prematch su 20.449 partite
 
 Completato il replay v32 su sei finestre, con 9.660 partite aggiunte e riproduzione delle tre finestre v31. La logistica indovina 11.051 vincitori (54,04%, Brier 0,24676) e CatBoost 11.002 (53,80%, Brier 0,24701). Sulle sole partite aggiunte CatBoost ha un Brier leggermente migliore. Su 266 partite con quote archiviate, il bookmaker depurato dal margine conserva il Brier più basso. Sopra quota 2,00 la logistica ne indovina 18 su 52 e CatBoost 19 su 51. Tutti i 42 test Python passati. Validazione prospettica ancora aperta. [Rapporto e riproduzione](STUDIO-PREMATCH-20000-V32.md).
+
+## Mercati prematch su 20.449 partite
+
+Il replay v33 estende le sei finestre v32 a 14 mercati su set, punti e risultato esatto. Modello scelto prima di ciascuna finestra. Brier migliore del riferimento con intervallo interamente sotto zero per sei linee handicap e risultato esatto. Per esempio, handicap +5,5 punti da 0,22831 a 0,22566, risultato esatto 4.165 corretti contro 3.905. Sugli Over/Under e sul primo set gli intervalli includono zero. Quote sincronizzate indisponibili per questo esperimento. [Rapporto e riproduzione](STUDIO-MERCATI-PREMATCH-V33.md).

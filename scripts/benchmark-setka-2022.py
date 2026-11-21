@@ -20,7 +20,7 @@ from projection_ensemble import paired_interval
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def read_matches(path, *, set_history=None):
+def read_matches(path, *, set_history=None, point_history=None):
     rows_by_day, counts, seen = defaultdict(list), Counter(), set()
     with path.open(newline='') as file:
         for row in csv.DictReader(file):
@@ -34,6 +34,7 @@ def read_matches(path, *, set_history=None):
             players = tuple(' '.join(row[k].casefold().split()) for k in ('Player1', 'Player2'))
             score = [0, 0]
             points = []
+            set_scores = []
             valid = bool(all(players)) and players[0] != players[1]
             ended = False
             for idx in range(1, 6):
@@ -50,6 +51,7 @@ def read_matches(path, *, set_history=None):
                     break
                 score[int(b > a)] += 1
                 points.append(a-b)
+                set_scores.append((a,b))
             won = int(score[0] > score[1])
             if (not valid or max(score) != 3 or [str(v) for v in score] != [row['Sets_P1'], row['Sets_P2']]
                     or row['HomeWinner'] != str(won)):
@@ -58,6 +60,8 @@ def read_matches(path, *, set_history=None):
             rows_by_day[day].append((players, won, score[0]-score[1], sum(points), len(points)))
             if set_history is not None:
                 set_history[day].append(tuple(int(gap > 0) for gap in points))
+            if point_history is not None:
+                point_history[day].append(set_scores)
             counts['valid'] += 1
     return rows_by_day, counts
 
