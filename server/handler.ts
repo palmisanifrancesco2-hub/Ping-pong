@@ -9,6 +9,7 @@ import{authorizedStudyCron}from'./cron-auth.js';
 import{z}from'zod';
 import{ManualBets,betSchema,betUpdateSchema}from'./manual-bets.js';
 import{scoreSignals,scoreValueReport,runtimeModel}from'./score-signals.js';
+import{liveWinnerEstimates}from'./live-winner.js';
 import{userDatabase}from'./supabase.js';
 import{googleAvailability}from'../src/shared/google-auth.js';
 import type { IncomingMessage, ServerResponse } from 'node:http';
@@ -93,7 +94,14 @@ export function createHandler(deps: Dependencies = {}) {
         return send(200,await forecasts.record(userId,m,f));
       }
 
-      if(path==='/api/value'){const[board,archive]=await Promise.all([feed.board(url.searchParams.get('refresh')==='1'),analyses.results.archive()]);return send(200,{...strictPredictionPolicy(scoreValueReport(board,archive,now()),board,now()),ensemble:ensembleValueReport(board,archive,now())});}
+      if(path==='/api/value'){
+        const [board,archive]=await Promise.all([feed.board(url.searchParams.get('refresh')==='1'),analyses.results.archive()]);
+        const at=now(), live=liveWinnerEstimates(board.matches,at);
+        const score=strictPredictionPolicy(scoreValueReport(board,archive,at),board,at);
+        const ensemble=ensembleValueReport(board,archive,at);
+        return send(200,{...score,winnerEstimates:{...score.winnerEstimates,...live},
+          ensemble:{...ensemble,winnerEstimates:{...ensemble.winnerEstimates,...live}}});
+      }
       if(path==='/api/model')return send(200,{comparison:modelComparison,research:researchReport,scoreResearch:scoreResearchReport,forwardStudy,version:runtimeModel.version,validated:false,generatedAt:runtimeModel.generatedAt,trainingCutoff:runtimeModel.calibrationCutoff,validation:runtimeModel.validation,calibration:{temperature:runtimeModel.temperature},leagues:{},source:'MoviOdds; validazione preliminare su risultati riportati'});
       if(path==='/api/settle')return send(200,await forecasts.settle(userId,()=>analyses.results.archive()));
       if(path==='/api/analysis'){

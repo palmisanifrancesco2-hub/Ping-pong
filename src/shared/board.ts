@@ -6,7 +6,7 @@ export type FeedQuote = {
 };
 export type FeedMatch = {
   id: string; sport: 'table_tennis'; home: string; away: string; league: string;
-  kickoff_utc?: string; in_play: boolean; score?: string; polled_at?: string;
+  kickoff_utc?: string; in_play: boolean; score?: string; polled_at?: string; last_live_seen?: string;
   group_status?: Record<string, { polled_at?: string; stale?: boolean }>;
   quotes: FeedQuote[];
 };

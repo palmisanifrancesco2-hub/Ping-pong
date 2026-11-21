@@ -18,7 +18,7 @@ const schema = z.object({
   server_time: time, warming: z.boolean().optional(),
   matches: z.array(z.object({
     id: text, sport: z.literal('table_tennis'), home: text, away: text, league: text,
-    kickoff_utc: time.optional(), in_play: z.boolean(), score: text.optional(), polled_at: time.optional(),
+    kickoff_utc: time.optional(), in_play: z.boolean(), score: text.optional(), polled_at: time.optional(), last_live_seen: time.nullish().transform(value=>value??undefined),
     group_status: z.record(z.string(), z.object({ polled_at: time.optional(), stale: z.boolean().optional() })).optional(),
     quotes: z.array(quote).max(20_000),
   })).max(10_000),

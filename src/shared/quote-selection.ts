@@ -24,9 +24,14 @@ function displayedCandidates(report: ValueReport) {
 }
 
 export function eventWinnerEstimate(report: ValueReport | null, match: FeedMatch, now: number) {
-  if (!freshReport(report, now) || match.in_play || !isUpcomingOrLive(match, now)) return;
+  if (!freshReport(report, now) || !isUpcomingOrLive(match, now)) return;
   if (!report.winnerEstimates || !Object.hasOwn(report.winnerEstimates, match.id)) return;
-  return report.winnerEstimates[match.id];
+  const estimate = report.winnerEstimates[match.id];
+  if (match.in_play) {
+    const age = now - Date.parse(report.checkedAt);
+    if (!estimate.liveScore || estimate.liveScore !== match.score || age > 60_000) return;
+  } else if (estimate.liveScore) return;
+  return estimate;
 }
 
 /** Display policy only: the frozen prospective enrollment rules stay unchanged. */

@@ -18,3 +18,7 @@ Dopo due set la logistica estesa indovina il 72,87% delle partite, con Brier 0,1
 Il training usa gli esiti verificabili dell’archivio come etichette. Il test non contiene quote live sincronizzate e non stima il rendimento sopra quota 2,00. Le previsioni del registro privato dell’app non sono state esportate o conteggiate come partite di training. I modelli e i calibratori addestrati sono salvati localmente in `.research-data/live-expanded-v29.joblib` con hash registrato. Nessun aggiornamento del modello operativo da questi soli risultati storici.
 
 Riproduzione con `.research-data/venv-v18/bin/python scripts/benchmark-live-expanded.py`. La suite Python completa ha superato 42 test. Verificati conteggi comuni di calibrazione e test e hash dell’artefatto. [Protocollo](../research/protocol-live-expanded-v29.json) · [Risultati](../research/report-live-expanded-v29.json)
+
+## Stima live nell’app
+
+L’app usa le frequenze del riferimento `scoreOnly` esteso, esportate dall’artefatto verificato con `scripts/export-live-winner-baseline.py`. Sul test storico dopo due set questo riferimento ha indovinato 3.811 vincitori su 5.355, con Brier 0,16261. Nell’app la stima appare nelle sei competizioni dello studio quando il feed conferma un incontro live recente, almeno un set concluso e un mercato del risultato esatto coerente con il formato al meglio di cinque. I punti del set in corso sono esclusi dal calcolo. La quota equa è l’inverso della probabilità stimata. Il confronto delle opportunità resta prematch. [Formato del punteggio MoviOdds](https://moviodds.com/doc)
