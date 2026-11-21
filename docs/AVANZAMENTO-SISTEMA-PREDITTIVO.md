@@ -143,3 +143,7 @@ Sui reali punteggi Setka storici, dopo due set la logistica ha indovinato 1.519 
 ## Addestramento live esteso a MoviOdds e Setka
 
 Con 21.089 incontri di training e 5.355 incontri MoviOdds di test, dopo due set la logistica estesa indovina 3.902 vincitori e passa da 0,16192 a 0,16157 di Brier rispetto alla versione MoviOdds. CatBoost esteso ne indovina 3.892. Nessuna quota live abbinata nel replay. [Studio](STUDIO-LIVE-ESTESO-V29.md).
+
+## Verifica prematch dell’addestramento esteso
+
+Applicati i modelli congelati v29 a 261 incontri del 5 novembre successivi alla loro finestra di test. Logistica 153 corretti, CatBoost binario 151. Su 28 partite con quote valide, sopra 2,00 la logistica ne indovina 1 su 2, CatBoost 1 su 1. Campione storico già usato per altri confronti, con selezioni insufficienti per concludere sulla fascia di quota. [Rapporto](TEST-PREMATCH-ESPANSIONE-V30.md).
