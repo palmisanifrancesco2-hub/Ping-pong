@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "concurrently -k \"vite --host 0.0.0.0\" \"tsx watch server/dev.ts\"",
     "build": "npm run typecheck && npm run check:server && vite build",
+    "build:vercel": "npm run build && npm run check:feed && npm run check:players && npm run db:bootstrap && npm run db:choices && npm run db:verify && npm run check:history-schema && npm run check:google-auth && npm run study:bootstrap && npm run study:markets && npm run study:blind-bootstrap",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "check": "npm run test && npm run build",
