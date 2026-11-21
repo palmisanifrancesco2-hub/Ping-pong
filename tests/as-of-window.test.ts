@@ -1,12 +1,12 @@
 import {describe,expect,it} from 'vitest';
 import {asOfWindow,withinWindow} from '../server/as-of-window';
-import {scoreSignals} from '../server/score-signals';
-import {ensembleSignals} from '../server/multi-model';
+import {scoreSignals,scoreValueReport,scoreWinnerEstimate} from '../server/score-signals';
+import {ensembleSignals,ensembleValueReport} from '../server/multi-model';
 import model from '../models/score-runtime-v1.json';
 import ensembleModel from '../models/multi-research-v1.json';
 import type {MatchResult} from '../src/domain/player-model';
 import type {ResultsArchive} from '../server/results';
-import type {FeedMatch} from '../src/shared/board';
+import type {Board, FeedMatch} from '../src/shared/board';
 const time=Math.max(Date.parse(model.generatedAt),Date.parse(ensembleModel.generatedAt))+60000;
 const iso=(n:number)=>new Date(n).toISOString();
 const result=(id:string,at:number,homeWon:boolean):MatchResult=>({
@@ -42,5 +42,15 @@ describe('as-of feature availability',()=>{
   expect(initial).toHaveLength(2);expect(later).toHaveLength(2);
   expect(later[0].sampleSize).toBe(initial[0].sampleSize+1);
   expect(replay).toEqual(initial);
+ });
+ it('publishes model probabilities with sufficient causal history even without odds',()=>{
+  const noOdds={...match,quotes:[]};
+  const board:Board={provider:'MoviOdds',bookmakerSite:'bet365.com.au',checkedAt:iso(time),serverTime:iso(time),warming:false,matches:[noOdds]};
+  const score=scoreValueReport(board,archive,time);
+  const ensemble=ensembleValueReport(board,archive,time);
+  expect(score.winnerEstimates?.[match.id]).toMatchObject({homeProbability:scoreSignals(match,archive,time)[0].homeProbability,sampleSize:40});
+  expect(ensemble.winnerEstimates[match.id]).toMatchObject({homeProbability:ensembleSignals(match,archive,time)[0].homeProbability,sampleSize:40});
+  expect(score.estimates).toEqual([]);expect(ensemble.estimates).toEqual([]);
+  expect(scoreWinnerEstimate(noOdds,{...archive,results:results.slice(0,29)},time)).toBeUndefined();
  });
 });

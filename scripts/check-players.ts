@@ -1,3 +1,28 @@
 import{ResultsFeed}from'../server/results.js';
+import {MoviOddsFeed} from '../server/moviodds.js';
+import {scoreValueReport} from '../server/score-signals.js';
+import {ensembleValueReport} from '../server/multi-model.js';
+import {selectedQuotes} from '../src/shared/quote-selection.js';
 import model from'../models/elo-v1.json' with{type:'json'};
-try{const archive=await new ResultsFeed().archive();console.info(JSON.stringify({playerDataVerification:'success',source:archive.source,results:archive.results.length,rejected:archive.rejected,from:archive.from,to:archive.to,checkedAt:archive.checkedAt,modelValidated:model.validated,validation:model.validation}));}catch{console.error('PLAYER_DATA_VERIFICATION_FAILED');process.exitCode=1;}
+try {
+  const archive=await new ResultsFeed().archive();
+  console.info(JSON.stringify({playerDataVerification:'success',source:archive.source,results:archive.results.length,rejected:archive.rejected,from:archive.from,to:archive.to,checkedAt:archive.checkedAt,modelValidated:model.validated,validation:model.validation}));
+  if (process.env.VERCEL_ENV === 'production') {
+    try {
+      const board = await new MoviOddsFeed().board();
+      const now = Date.now();
+      const score = scoreValueReport(board, archive, now);
+      const ensemble = ensembleValueReport(board, archive, now);
+      console.info(JSON.stringify({
+        winnerDisplayVerification:'success',
+        scoreEstimates:Object.keys(score.winnerEstimates ?? {}).length,
+        scoreValueSelections:selectedQuotes(score, board.matches, now).length,
+        ensembleEstimates:Object.keys(ensemble.winnerEstimates).length,
+        ensembleValueSelections:selectedQuotes({...score,...ensemble}, board.matches, now).length,
+      }));
+    } catch { console.warn('WINNER_DISPLAY_VERIFICATION_UNAVAILABLE'); }
+  }
+} catch {
+  console.error('PLAYER_DATA_VERIFICATION_FAILED');
+  process.exitCode=1;
+}

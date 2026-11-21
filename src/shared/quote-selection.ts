@@ -14,11 +14,26 @@ export function probabilityOrder(a: ValueOpportunity, b: ValueOpportunity) {
     || Math.abs(a.odds - 2) - Math.abs(b.odds - 2) || a.id.localeCompare(b.id);
 }
 
+function freshReport(report: ValueReport | null, now: number): report is ValueReport {
+  const age = now - Date.parse(report?.checkedAt ?? '');
+  return !!report && Number.isFinite(age) && age >= -60_000 && age <= 120_000;
+}
+
+function displayedCandidates(report: ValueReport) {
+  return [...(report.rankings?.value ?? report.opportunities), ...(report.experimental ?? [])];
+}
+
+export function eventWinnerEstimate(report: ValueReport | null, match: FeedMatch, now: number) {
+  if (!freshReport(report, now) || match.in_play || !isUpcomingOrLive(match, now)) return;
+  if (!report.winnerEstimates || !Object.hasOwn(report.winnerEstimates, match.id)) return;
+  return report.winnerEstimates[match.id];
+}
+
 /** Display policy only: the frozen prospective enrollment rules stay unchanged. */
 export function selectedQuotes(report: ValueReport | null, matches: FeedMatch[], now: number, minOdds = 1.3) {
-  if (!report || !Number.isFinite(now) || !Number.isFinite(Date.parse(report.checkedAt)) || now - Date.parse(report.checkedAt) > 120000 || Date.parse(report.checkedAt) > now + 60000) return [];
+  if (!freshReport(report, now)) return [];
   const events = new Map(matches.map(m => [m.id, m]));
-  const sourceRows=(report.policy==='strict-adm-independent-v16'||report.policy==='bet365-independent-v17')?(report.rankings?.value??[]):[...report.opportunities,...(report.experimental??[])];
+  const sourceRows = displayedCandidates(report);
   const rows = sourceRows.filter(o => {
     const m = events.get(o.eventId);
     if (!m || m.in_play || !isUpcomingOrLive(m, now) || !o.fresh || o.sampleSize < 30) return false;
@@ -53,11 +68,11 @@ export function keepOpenMatch(rows:FeedMatch[],opened:OpenMatch|null,current:Fee
   const rest=rows.filter(m=>m.id!==opened.match.id);rest.splice(Math.min(opened.index,rest.length),0,latest);return rest;
 }
 export function openQuote(report:ValueReport|null,m:FeedMatch|undefined,selection:string|null,now:number){
-  if(!report||!m||!selection||m.in_play||!isUpcomingOrLive(m,now)||!Number.isFinite(Date.parse(report.checkedAt))||now-Date.parse(report.checkedAt)>120000)return undefined;
-  const sourceRows=(report.policy==='strict-adm-independent-v16'||report.policy==='bet365-independent-v17')?(report.rankings?.value??[]):[...(report.estimates??[]),...report.opportunities,...(report.experimental??[])];
+  if(!freshReport(report,now)||!m||!selection||m.in_play||!isUpcomingOrLive(m,now))return undefined;
+  const sourceRows = [...displayedCandidates(report),...(report.estimates??[])];
   return sourceRows.find(o=>{
-    if(o.eventId!==m.id||o.selection!==selection||!hasPositiveValue(o))return false;
+    if(o.eventId!==m.id||o.selection!==selection||!o.fresh||o.sampleSize<30||!hasPositiveValue(o))return false;
     const q=m.quotes.find(q=>quoteIdentity(q)===o.quoteKey);
-    return !!q&&q.fixture_id===m.id&&q.side===selection&&q.odds_dec===o.odds&&q.ts===o.quoteAt&&q.phase!=='inplay'&&Date.parse(q.ts)<=now&&quoteStatus(m,q,now)==='Letta di recente dalla fonte';
+    return !!q&&q.fixture_id===m.id&&q.side===selection&&q.group_id==='920000'&&q.line==='To Win'&&q.odds_dec===o.odds&&q.ts===o.quoteAt&&q.phase!=='inplay'&&Date.parse(q.ts)<=now&&quoteStatus(m,q,now)==='Letta di recente dalla fonte';
   });
 }

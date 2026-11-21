@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue,bookmakerWinnerPrices } from '../src/shared/quote-selection';
+import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue,bookmakerWinnerPrices,eventWinnerEstimate } from '../src/shared/quote-selection';
 import type { FeedMatch } from '../src/shared/board';
 import { quoteIdentity } from '../src/shared/board';
 import type { ValueOpportunity } from '../src/domain/value';
@@ -34,6 +34,23 @@ it('shows current Bet365 winner prices independently of the prediction filter', 
 });
 
 describe('probability-ranked selected quotes', () => {
+  it('shows experimental candidates without adding them to verified rankings', () => {
+    const { m, o } = fixture('a', .6, 2);
+    const r: ValueReport = { ...report(o), status:'blocked', policy:'bet365-independent-v17',
+      rankings:{probability:[],value:[],combined:[],weights:{probability:.5,value:.5},excluded:1,policy:'bet365-independent-v17',reasons:[]} };
+    expect(selectedQuotes(r, [m], now)).toEqual([o]);
+    expect(openQuote(r, m, 'A', now)).toEqual(o);
+    expect(r.rankings?.value).toEqual([]);
+  });
+  it('shows a fresh prematch estimate with no corresponding bookmaker price', () => {
+    const { m } = fixture('a', .6, 2);
+    const estimate = {homeProbability:.6,sampleSize:40,modelName:'Test'};
+    const r = {...report(),winnerEstimates:{[m.id]:estimate}};
+    expect(eventWinnerEstimate(r, {...m,quotes:[]}, now)).toEqual(estimate);
+    expect(eventWinnerEstimate(r, m, now+120_001)).toBeUndefined();
+    expect(eventWinnerEstimate(r, {...m,in_play:true}, now)).toBeUndefined();
+    expect(eventWinnerEstimate(r, {...m,id:'missing'}, now)).toBeUndefined();
+  });
   it('filters by conservative value first, then orders by actual model probability', () => {
     const favorite = fixture('favorite', .8, 1.3, .7); // likely, but no prudent value
     const a = fixture('a', .65, 1.9), b = fixture('b', .4, 4);

@@ -1,3 +1,5 @@
 import type{PredictionRankings}from'../domain/prediction-rankings.js';
 import type{ValueOpportunity}from'../domain/value.js';
-export type ValueReport={policy?:string;rankings?:PredictionRankings;ensemble?:{modelName:string;estimates:ValueOpportunity[];experimental:ValueOpportunity[];opportunities:ValueOpportunity[];modelValidated:boolean};estimates?:ValueOpportunity[];checkedAt:string;status:'blocked'|'ready'|'experimental';modelValidated:boolean;admVerified:boolean;reasons:string[];opportunities:ValueOpportunity[];experimental?:ValueOpportunity[]};
+export type WinnerEstimate={homeProbability:number;sampleSize:number;modelName:string};
+type ModelSelections={estimates?:ValueOpportunity[];experimental?:ValueOpportunity[];opportunities:ValueOpportunity[];modelValidated:boolean;winnerEstimates?:Record<string,WinnerEstimate>};
+export type ValueReport=ModelSelections&{policy?:string;rankings?:PredictionRankings;ensemble?:(ModelSelections&{modelName:string});checkedAt:string;status:'blocked'|'ready'|'experimental';admVerified:boolean;reasons:string[]};
