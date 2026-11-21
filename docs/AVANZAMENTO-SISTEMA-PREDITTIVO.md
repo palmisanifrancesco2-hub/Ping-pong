@@ -147,3 +147,7 @@ Con 21.089 incontri di training e 5.355 incontri MoviOdds di test, dopo due set 
 ## Verifica prematch dell’addestramento esteso
 
 Applicati i modelli congelati v29 a 261 incontri del 5 novembre successivi alla loro finestra di test. Logistica 153 corretti, CatBoost binario 151. Su 28 partite con quote valide, sopra 2,00 la logistica ne indovina 1 su 2, CatBoost 1 su 1. Campione storico già usato per altri confronti, con selezioni insufficienti per concludere sulla fascia di quota. [Rapporto](TEST-PREMATCH-ESPANSIONE-V30.md).
+
+## Vincente prematch su 10.789 partite
+
+Completato il replay v31 su tre finestre cronologiche disgiunte, ognuna con nuovo training e calibrazione sui giorni precedenti. Logistica 5.927 corretti e Brier 0,24545. CatBoost binario 5.883 corretti e Brier 0,24607. Su 260 gare con quote prematch di entrambe le selezioni, il mercato depurato dal margine ha il Brier migliore. Sopra 2,00 la logistica ne indovina 17 su 50 e CatBoost 19 su 50. Tutti i 42 test Python passati. Il passaggio ancora aperto è la validazione prospettica con quote registrate al momento della previsione. [Rapporto e riproduzione](STUDIO-PREMATCH-10000-V31.md).

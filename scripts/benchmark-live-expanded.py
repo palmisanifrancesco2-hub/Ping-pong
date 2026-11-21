@@ -16,7 +16,7 @@ replay = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(replay)
 
 
-def load_moviodds(path, protocol):
+def load_moviodds(path, protocol, *, fixture_ids=None):
     archive = json.loads(path.read_text())
     occurrences = Counter(r['id'] for r in archive)
     counts = Counter(raw=len(archive))
@@ -46,6 +46,8 @@ def load_moviodds(path, protocol):
         day = finished.date().toordinal()
         eligible_row = (players, won, 2*sum(sequence)-len(sequence), sum(margins), len(sequence))
         accepted[match['league']].append((day, eligible_row, sequence))
+        if fixture_ids is not None:
+            fixture_ids[match['league']].append(match['id'])
         counts['valid'] += 1
     return accepted, counts
 
