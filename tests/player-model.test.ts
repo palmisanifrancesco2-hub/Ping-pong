@@ -36,6 +36,20 @@ describe('real-data guards and interpretable model (synthetic fixtures)',()=>{
   const report=buildAnalysis(m,{results:[parseResult(raw,now)!],checkedAt:new Date(now).toISOString(),source:'postgres',rejected:0,from:raw.finished_at,to:raw.finished_at},now);
   expect(report.home.matches).toBe(1);expect(report.h2h.homeWins).toBe(1);expect(report.forecast).toBeNull();
  });
+ it('returns all prior head-to-head results in order with scores in the displayed player order',()=>{
+  const original=parseResult(raw,now)!;
+  const m:FeedMatch={id:'current',sport:'table_tennis',home:raw.home,away:raw.away,league:raw.league,in_play:false,kickoff_utc:new Date(now+1000).toISOString(),quotes:[]};
+  const earlier=Array.from({length:23},(_,i)=>({...original,id:`earlier-${i}`,finishedAt:new Date(now-(i+5)*3600_000).toISOString()}));
+  const reversed={...original,id:'most-recent',home:raw.away.toLowerCase(),away:` ${raw.home} `,finishedAt:new Date(now-3600_000).toISOString()};
+  const report=buildAnalysis(m,{results:[...earlier.reverse(),reversed,{...original,id:'other-league',league:'Other'},
+   {...original,id:'other-player',away:'Other'},{...original,id:m.id},
+   {...original,id:'future-result',availableAt:new Date(now+1000).toISOString()}],
+   checkedAt:new Date(now).toISOString(),source:'postgres',rejected:0,from:null,to:null},now);
+  expect(report.h2h).toMatchObject({matches:24,homeWins:23,awayWins:1});
+  expect(report.h2h.results[0]).toEqual({eventId:'most-recent',finishedAt:reversed.finishedAt,competition:m.league,
+   winner:m.away,sets:[[8,11],[7,11],[9,11]]});
+  expect(report.h2h.results.at(-1)?.eventId).toBe('earlier-22');
+ });
  it('requires validated competition, sample, price freshness and a prudent bound',()=>{
   const key=(name:string)=>createHash('sha256').update(playerKey(raw.league,name)).digest('hex');
   const m:FeedMatch={id:'future',sport:'table_tennis',home:raw.home,away:raw.away,league:raw.league,in_play:false,kickoff_utc:new Date(now+3600000).toISOString(),group_status:{'920000':{polled_at:new Date(now).toISOString()}},quotes:[raw.home,raw.away].map((name,i)=>({fixture_id:'future',group_id:'920000',sel_id:String(i),side:name,line:'To Win',odds_dec:i?4:1.4,ts:new Date(now).toISOString()}))};

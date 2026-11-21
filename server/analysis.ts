@@ -35,10 +35,21 @@ export function modelForecast(m:FeedMatch,now:number,model:ModelArtifact=modelDa
 export function buildAnalysis(m:FeedMatch,archive:ResultsArchive,now:number):PlayerAnalysis{
  const home=playerStats(archive.results,m.league,m.home),away=playerStats(archive.results,m.league,m.away);
  const hk=playerKey(m.league,m.home),ak=playerKey(m.league,m.away);
- const h2h=archive.results.filter(r=>(playerKey(r.league,r.home)===hk&&playerKey(r.league,r.away)===ak)||(playerKey(r.league,r.home)===ak&&playerKey(r.league,r.away)===hk));
- const homeWins=h2h.filter(r=>playerKey(r.league,r.home)===hk?r.homeWon:!r.homeWon).length;
+ const headToHead:PlayerAnalysis['h2h']['results'] = [];
+ let homeWins = 0;
+ for (const result of archive.results) {
+  if (result.id===m.id || Date.parse(result.availableAt)>now) continue;
+  const first = playerKey(result.league,result.home), second = playerKey(result.league,result.away);
+  const reversed = first===ak && second===hk;
+  if (!reversed && (first!==hk || second!==ak)) continue;
+  const homeWon = result.homeWon!==reversed;
+  if (homeWon) homeWins++;
+  headToHead.push({eventId:result.id,finishedAt:result.finishedAt,competition:result.league,
+   winner:homeWon ? m.home : m.away,sets:reversed ? result.sets.map(([a,b])=>[b,a]) : result.sets});
+ }
+ headToHead.sort((a,b)=>Date.parse(b.finishedAt)-Date.parse(a.finishedAt) || a.eventId.localeCompare(b.eventId));
  const prediction=archive.source==='postgres'?modelForecast(m,now):{forecast:null,reason:'Archivio temporaneo incompleto: nessuna previsione operativa.'};
- return{eventId:m.id,checkedAt:new Date(now).toISOString(),home,away,h2h:{matches:h2h.length,homeWins,awayWins:h2h.length-homeWins},
+ return{eventId:m.id,checkedAt:new Date(now).toISOString(),home,away,h2h:{matches:headToHead.length,homeWins,awayWins:headToHead.length-homeWins,results:headToHead},
   coverage:{from:archive.from,to:archive.to,source:'MoviOdds, risultati riportati; non certificati indipendentemente',rejected:archive.rejected,archive:archive.source},
   identity:'Nomi esatti normalizzati nella stessa competizione, senza abbinamenti approssimativi. Profili anagrafici e ranking non disponibili.',
   model:{version:runtimeModel.version,validated:false,trainingCutoff:runtimeModel.calibrationCutoff,validation:runtimeModel.validation},...prediction,experimental:scoreSignals(m,archive,now),ensemble:ensembleSignals(m,archive,now)};

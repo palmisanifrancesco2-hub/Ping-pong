@@ -5,6 +5,32 @@ import{dateTime}from'./shared/format';
 import{RecordPrediction}from'./RecordPrediction';
 import{wilsonInterval}from'./domain/statistical-interval';
 function WinRateRange({wins,total}:{wins:number;total:number}){const interval=wilsonInterval(wins,total);return interval?<p className="fine">Intervallo descrittivo al 95%: {(interval.lower*100).toFixed(1)}%–{(interval.upper*100).toFixed(1)}%. Misura l’incertezza del campione storico; avversari ripetuti e forma variabile possono aumentarla.</p>:null;}
+const headToHeadPageSize = 20;
+
+function HeadToHeadHistory({h2h,home,away}:{h2h:Analysis['h2h'];home:string;away:string}) {
+ const [visible,setVisible]=useState(headToHeadPageSize);
+ const results=h2h.results;
+ return <section className="panel" aria-label="Scontri diretti">
+  <h3>Scontri diretti</h3>
+  {results?.length ? <>
+   <p>{h2h.matches} incontri nella stessa competizione · {home}: {h2h.homeWins} vittorie · {away}: {h2h.awayWins} vittorie.</p>
+   <p className="fine">Punteggi nell’ordine {home} – {away}. Risultati MoviOdds, dal più recente.</p>
+   <ol className="player-results">{results.slice(0,visible).map(result=>{
+    const homeSets=result.sets.filter(([a,b])=>a>b).length;
+    return <li key={result.eventId}>
+     <strong>{homeSets}–{result.sets.length-homeSets} · Vince {result.winner}</strong>
+     <span>Set: {result.sets.map(([a,b])=>`${a}–${b}`).join(', ')}</span>
+     <small>{dateTime(result.finishedAt)} · {result.competition}</small>
+    </li>;
+   })}</ol>
+   {visible<results.length && <>
+    <p className="fine" role="status">{visible} di {results.length} incontri visualizzati</p>
+    <button className="secondary" onClick={()=>setVisible(count=>count+headToHeadPageSize)}>Mostra altri scontri diretti</button>
+   </>}
+  </> : <p>Nessuno scontro diretto disponibile nell’archivio MoviOdds per questa competizione.</p>}
+ </section>;
+}
+
 export function PlayerAnalysis({eventId,token,showEstimates=true}:{eventId:string;token?:string;showEstimates?:boolean}){
  const [data,setData]=useState<Analysis|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState('');const controller=useRef<AbortController|null>(null);
  useEffect(()=>()=>controller.current?.abort(),[]);
@@ -17,8 +43,9 @@ export function PlayerAnalysis({eventId,token,showEstimates=true}:{eventId:strin
   {!data.forecast&&!data.experimental?.length&&<p>Nessuna stima disponibile per questo evento. Le statistiche osservate restano consultabili; il modello copre solo il vincente partita prematch con storico sufficiente.</p>}
   <p className="fine">Risultati disponibili: {dateTime(data.coverage.from??undefined)} — {dateTime(data.coverage.to??undefined)} · {data.coverage.source}. Righe escluse per dati mancanti/incoerenti: {data.coverage.rejected}. {data.identity}</p>
   <div className="two-columns">{[data.home,data.away].map(p=><section className="panel" key={p.name}><h3>{p.name}</h3><dl><dt>Partite utilizzabili</dt><dd>{p.matches}</dd><dt>Vittorie / sconfitte</dt><dd>{p.wins} / {p.losses}</dd><dt>Percentuale vittorie nello storico</dt><dd>{p.winRate===null?'Dati insufficienti':`${(p.winRate*100).toFixed(1)}%`}</dd><dt>Set vinti / persi</dt><dd>{p.setsFor} / {p.setsAgainst}</dd><dt>Punti fatti / subiti</dt><dd>{p.pointsFor} / {p.pointsAgainst}</dd></dl><WinRateRange wins={p.wins} total={p.matches}/><p className="fine">La percentuale storica non è la probabilità di vincere la prossima partita.</p><details><summary>Ultimi {p.recent.length} risultati disponibili</summary><ul className="player-results">{p.recent.map(r=><li key={r.eventId}><strong>{r.won?'Vittoria':'Sconfitta'} · {r.opponent}</strong><span>{r.score}</span><small>{dateTime(r.date)}</small></li>)}</ul></details></section>)}</div>
+  <HeadToHeadHistory h2h={data.h2h} home={data.home.name} away={data.away.name}/>
   {!!data.ensemble?.length&&<details className="ensemble-details"><summary>Confronta tre modelli sul vincente partita</summary><p>Probabilità di vittoria di {data.home.name}. Media sperimentale; il test già avviato resta sul modello originale.</p><dl>{data.ensemble[0].components?.map(c=><div key={c.name}><dt>{c.name}</dt><dd>{(c.probability*100).toFixed(1)}%</dd></div>)}<div><dt>Ensemble: media dei tre</dt><dd>{(data.ensemble[0].homeProbability*100).toFixed(1)}%</dd></div></dl><p className="fine">Disaccordo tra modelli e campione limitato possono rendere la stima meno attendibile. Nessuna superiorità indipendente dimostrata.</p></details>}
   <PlayerProfiles token={token} eventId={eventId}/>
-  <p>Scontri diretti nella stessa competizione: {data.h2h.matches} · {data.home.name}: {data.h2h.homeWins} vittorie · {data.away.name}: {data.h2h.awayWins}.</p><p className="fine">Modello {data.model.version}, dati fino al {dateTime(data.model.trainingCutoff??undefined)}. Pronostico solo vincente partita prematch; gli altri mercati e i pronostici live richiedono modelli specifici. Nessun ranking, età o biografia viene ricostruito senza fonte.</p>
+  <p className="fine">Modello {data.model.version}, dati fino al {dateTime(data.model.trainingCutoff??undefined)}. Pronostico solo vincente partita prematch; gli altri mercati e i pronostici live richiedono modelli specifici. Nessun ranking, età o biografia viene ricostruito senza fonte.</p>
  </>}</section>;
 }
