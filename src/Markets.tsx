@@ -19,9 +19,8 @@ export function FeedStatus({ board, loading, error, refresh,disabled=false,compa
 
 
 import { useValue } from './useValue';
-import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue,bookmakerWinnerPrices,eventWinnerEstimate,nearOneFifty,oddsInRange,type OpenMatch } from './shared/quote-selection';
+import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue,bookmakerWinnerPrices,matchModelAssessment,nearOneFifty,oddsInRange,type OpenMatch } from './shared/quote-selection';
 import type { ValueOpportunity } from './domain/value';
-import type { WinnerEstimate } from './shared/value';
 import { RecordPrediction } from './RecordPrediction';
 
 type Props = { board: Board | null; now: number; token?: string; refreshBoard: () => Promise<void>; boardLoading: boolean; tracker?: boolean };
@@ -38,7 +37,7 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
   const [shown, setShown] = useState(true), [opened, setOpened] = useState<OpenMatch | null>(null);
   const openEvent=opened?.match.id??null;
   const [manualBusy, setManualBusy] = useState(false);
-  const heading = useRef<HTMLHeadingElement>(null), cards = useRef<HTMLDivElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null), bestHeading = useRef<HTMLHeadingElement>(null), cards = useRef<HTMLDivElement>(null);
   const busy = boardLoading || values.loading || manualBusy;
   const minimum = nearOdds ? nearOneFifty.minimum : Number(minOdds) || 1.3;
   const maximum = nearOdds ? nearOneFifty.maximum : Infinity;
@@ -51,7 +50,6 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
     }
     return byMatch;
   },[board,now,nearOdds,minimum,maximum]);
-  const byEvent = new Map(eligible.map(o => [o.eventId, o]));
   const upcomingMatches = board?.matches.filter(m=>startsInNextTwoHours(m,now)) ?? [];
   const upcomingCount = upcomingMatches.length;
   const marketsByEvent = useMemo(()=>{
@@ -75,21 +73,20 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
     }
     return filtered;
   },[marketFilter,marketsByEvent,mode,nearOdds,minimum,maximum]);
-  const rankedMatches = useMemo(() => {
+  const matchingEvents = useMemo(() => {
     const term = search.trim().toLocaleLowerCase('it');
-    const filtered = (board?.matches ?? []).filter(m => isUpcomingOrLive(m, now) && (!competition || m.league === competition)
+    return (board?.matches ?? []).filter(m => isUpcomingOrLive(m, now) && (!competition || m.league === competition)
       && (!term || `${m.home} ${m.away} ${m.league} ${m.id}`.toLocaleLowerCase('it').includes(term))
       && (!state || (state === 'live' ? m.in_play : !m.in_play))
       && (!soon || startsInNextTwoHours(m,now)));
-    if (mode === 'value' || tracker) {
-      const events = new Map(filtered.map(m => [m.id, m]));
-      return eligible.flatMap(o => events.has(o.eventId) ? [events.get(o.eventId)!] : []);
-    }
-    const visible = mode === 'markets' ? filtered.filter(match=>filteredMarkets.has(match.id))
-      : nearOdds ? filtered.filter(match=>winnerPricesInRange.has(match.id)||filteredMarkets.has(match.id))
-      : filtered;
-    return visible.sort((a, b) => Number(b.in_play) - Number(a.in_play) || Date.parse(a.kickoff_utc ?? '') - Date.parse(b.kickoff_utc ?? '') || a.id.localeCompare(b.id));
-  }, [board, now, competition, search, state, eligible, mode, tracker,filteredMarkets,soon,nearOdds,winnerPricesInRange]);
+  }, [board,now,competition,search,state,soon]);
+  const visibleEvents = new Map(matchingEvents.map(match=>[match.id,match]));
+  const opportunities = eligible.filter(quote=>visibleEvents.has(quote.eventId));
+  const byEvent = new Map(opportunities.map(quote=>[quote.eventId,quote]));
+  const rankedMatches = mode==='value'||tracker ? opportunities.map(quote=>visibleEvents.get(quote.eventId)!)
+    : matchingEvents.filter(match=>mode==='markets' ? filteredMarkets.has(match.id)
+      : !nearOdds||winnerPricesInRange.has(match.id)||filteredMarkets.has(match.id))
+      .sort((a,b)=>Number(b.in_play)-Number(a.in_play)||Date.parse(a.kickoff_utc??'')-Date.parse(b.kickoff_utc??'')||a.id.localeCompare(b.id));
   const matches=keepOpenMatch(rankedMatches,opened,board?.matches??[]);
   const currentOpen=board?.matches.find(m=>m.id===openEvent);
   const refreshedQuote=openQuote(selectionReport,currentOpen,opened?.selection??(openEvent ? byEvent.get(openEvent)?.selection ?? null : null),now);
@@ -114,6 +111,21 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
     const summary = cards.current?.querySelector<HTMLDetailsElement>('details.match-card[open]')?.querySelector('summary');
     setOpened(null); summary?.focus({ preventScroll: true }); summary?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
+  function openOpportunity(quote: ValueOpportunity) {
+    const match=visibleEvents.get(quote.eventId);
+    const index=opportunities.findIndex(row=>row.id===quote.id);
+    if (!match||index<0) return;
+    setMode('value');setShown(true);setLimit(Math.max(12,index+1));
+    setOpened({match,index,selection:quote.selection});
+    requestAnimationFrame(()=>{
+      const summary=cards.current?.querySelector<HTMLElement>('details.match-card[open] > summary');
+      summary?.focus({preventScroll:true});summary?.scrollIntoView({block:'start'});
+    });
+  }
+  function showBestQuotes() {
+    bestHeading.current?.focus({preventScroll:true});
+    bestHeading.current?.scrollIntoView({block:'start'});
+  }
   async function refresh() {
     if (busy) return;
     setManualBusy(true);
@@ -122,9 +134,18 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
   return <><section className="panel quote-workspace">
     <span className="eyebrow">SELEZIONE STATISTICA</span>
     <h2 ref={heading} tabIndex={-1}>Quote selezionate</h2>
-    <p>Apri una partita per confrontare la quota Bet365 con la quota equa stimata dal modello. In Quote migliori trovi le selezioni con EV positivo anche nella stima prudente.</p>
+    <section className="best-quotes" aria-labelledby="best-quotes-heading">
+      <h3 id="best-quotes-heading" ref={bestHeading} tabIndex={-1}>Quote migliori</h3>
+      <p className="fine">Vincente prematch · {soon?'Prossime 2 ore':'Tutti gli orari'} · EV prudente positivo</p>
+      {opportunities.length ? <ul className="best-quotes-list">{opportunities.slice(0,3).map(quote=>
+        <li key={quote.id}><button className="secondary best-quote" onClick={()=>openOpportunity(quote)}>
+          <span><strong>{quote.selection}</strong><small>{quote.match} · {dateTime(quote.startsAt)}</small></span>
+          <span><strong>Bet365 {quote.odds.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:3})}</strong><small>{probabilityText(quote.probability)} · EV prudente {positiveEvText(quote.probabilityLower*quote.odds-1)}</small></span>
+        </button></li>
+      )}</ul> : <p role="status">{values.loading ? 'Aggiornamento quote…' : !selectionReport ? 'Analisi delle quote non disponibile' : 'Nessuna quota supera i criteri con i filtri attivi.'}</p>}
+    </section>
     <div className="selection-notice"><span className="badge">Stime sperimentali</span><span>Vincente partita</span></div>
-    {!tracker && <div className="quote-tabs" role="group" aria-label="Vista partite"><button className={mode === 'value' ? 'primary' : 'secondary'} aria-pressed={mode === 'value'} onClick={() => showMode('value')}>Quote migliori ({soon ? upcomingMatches.filter(match=>byEvent.has(match.id)).length : eligible.length})</button><button className={mode === 'events' ? 'primary' : 'secondary'} aria-pressed={mode === 'events'} onClick={() => showMode('events')}>Eventi e giocatori</button><button className={mode === 'markets' ? 'primary' : 'secondary'} aria-pressed={mode === 'markets'} onClick={() => showMode('markets')}>Altri mercati ({marketsByEvent.size})</button></div>}
+    {!tracker && <div className="quote-tabs" role="group" aria-label="Vista partite"><button className={mode === 'value' ? 'primary' : 'secondary'} aria-pressed={mode === 'value'} onClick={() => showMode('value')}>Quote migliori ({opportunities.length})</button><button className={mode === 'events' ? 'primary' : 'secondary'} aria-pressed={mode === 'events'} onClick={() => showMode('events')}>Eventi e giocatori</button><button className={mode === 'markets' ? 'primary' : 'secondary'} aria-pressed={mode === 'markets'} onClick={() => showMode('markets')}>Altri mercati ({marketsByEvent.size})</button></div>}
     <div className="quote-toolbar" role="group" aria-label="Orario di inizio">
       <button className={soon?'primary':'secondary'} aria-pressed={soon} onClick={()=>changeTimeWindow(true)}>Prossime 2 ore ({upcomingCount})</button>
       <button className={soon?'secondary':'primary'} aria-pressed={!soon} onClick={()=>changeTimeWindow(false)}>Tutti gli orari</button>
@@ -162,17 +183,21 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
       </div> : !matches.length && mode==='markets' ? <div className="empty">
         <h3>{boardLoading ? 'Aggiornamento mercati…' : 'Nessun mercato disponibile con questi filtri'}</h3>
         {marketsByEvent.size>0 && <button className="secondary" onClick={resetMarketFilters}>Azzera filtri</button>}
-      </div> : !matches.length ? <div className="empty"><h3>{values.loading ? 'Analisi statistica in corso…' : 'Nessuna selezione soddisfa i filtri'}</h3><p>Quote migliori seleziona le opportunità prematch con storico sufficiente, prezzo aggiornato ed EV prudente positivo. Le stime live disponibili compaiono nei dettagli della partita.</p>{!tracker && <button className="text-button" onClick={() => showMode('events')}>Consulta eventi e giocatori →</button>}</div> : <div ref={cards} className="match-list">{matches.slice(0, limit).map(m => <SelectedMatch key={m.id} match={m} estimate={board?.matches.some(current=>current.id===m.id) ? eventWinnerEstimate(selectionReport,m,now) : undefined} estimating={values.loading} quote={openEvent===m.id?inspectedQuote:byEvent.get(m.id)} current={!!board?.matches.some(current=>current.id===m.id)} retained={openEvent===m.id&&!rankedMatches.some(row=>row.id===m.id)} token={token} now={now} open={openEvent === m.id} onToggle={() => setOpened(previous=>previous?.match.id===m.id?null:{match:m,index:matches.findIndex(row=>row.id===m.id),selection:byEvent.get(m.id)?.selection??null})} onClose={closeEvent} onRefresh={refresh} busy={busy} boardCheckedAt={board?.checkedAt} marketGroups={filteredMarkets.get(m.id)} showMarketsFirst={mode==='markets'} nearOdds={nearOdds} winnerPricesInRange={winnerPricesInRange.get(m.id)}/>)}</div>}
+      </div> : !matches.length ? <div className="empty"><h3>{values.loading ? 'Analisi statistica in corso…' : 'Nessuna selezione soddisfa i filtri'}</h3><p>Quote migliori seleziona le opportunità prematch con storico sufficiente, prezzo aggiornato ed EV prudente positivo. Le stime live disponibili compaiono nei dettagli della partita.</p>{!tracker && <button className="text-button" onClick={() => showMode('events')}>Consulta eventi e giocatori →</button>}</div> : <div ref={cards} className="match-list">{matches.slice(0, limit).map(m => <SelectedMatch key={m.id} match={m} assessment={matchModelAssessment(board?.matches.some(current=>current.id===m.id) ? values.report : null,m,now,modelChoice==='ensemble')} estimating={values.loading} quote={openEvent===m.id?inspectedQuote:byEvent.get(m.id)} current={!!board?.matches.some(current=>current.id===m.id)} retained={openEvent===m.id&&!rankedMatches.some(row=>row.id===m.id)} token={token} now={now} open={openEvent === m.id} onToggle={() => setOpened(previous=>previous?.match.id===m.id?null:{match:m,index:matches.findIndex(row=>row.id===m.id),selection:byEvent.get(m.id)?.selection??null})} onClose={closeEvent} onRefresh={refresh} busy={busy} boardCheckedAt={board?.checkedAt} marketGroups={filteredMarkets.get(m.id)} showMarketsFirst={mode==='markets'} nearOdds={nearOdds} winnerPricesInRange={winnerPricesInRange.get(m.id)}/>)}</div>}
       {matches.length > limit && <div className="quote-toolbar">
         <button className="primary" onClick={() => setLimit(n => n + 12)}>Mostra altre {Math.min(12,matches.length-limit)} partite</button>
         <button className="secondary" onClick={() => setLimit(Number.POSITIVE_INFINITY)}>Mostra tutte ({matches.length})</button>
       </div>}
     </>}
-    {shown && matches.length > 0 && <div className="quote-dock" role="group" aria-label="Comandi rapidi quote"><button className="primary" disabled={busy} onClick={refresh}>{busy ? 'Aggiornamento…' : openEvent ? '↻ Aggiorna quota' : '↻ Aggiorna quote'}</button><button className="secondary" onClick={openEvent ? closeEvent : closeList}>{openEvent ? '✕ Chiudi quote' : '✕ Chiudi lista'}</button></div>}
+    {shown && matches.length > 0 && <div className="quote-dock" role="group" aria-label="Comandi rapidi quote"><button className="secondary" onClick={showBestQuotes}>Quote migliori · {opportunities.length}</button><button className="primary" disabled={busy} onClick={refresh}>{busy ? 'Aggiornamento…' : openEvent ? '↻ Aggiorna quota' : '↻ Aggiorna quote'}</button><button className="secondary" onClick={openEvent ? closeEvent : closeList}>{openEvent ? '✕ Chiudi quote' : '✕ Chiudi lista'}</button></div>}
     <details className="selection-method"><summary>Come scegliamo e ordiniamo le quote</summary><p>Quota equa = 1 ÷ probabilità stimata. Probabilità implicita = 1 ÷ quota Bet365. EV = probabilità stimata × quota − 1. Per comparire serve anche EV positivo sul limite prudente euristico, almeno 30 precedenti per giocatore e una coppia coerente di quote fresche. Una selezione per partita, ordinata per probabilità decrescente; a parità, EV prudente e vicinanza a quota 2. Minimo 1,30, nessun massimo.</p><p>Percentuali sperimentali, non garanzie. Il test statistico prosegue separatamente.</p></details>
   </section><PredictionRankings report={values.report?.rankings} checkedAt={values.report?.checkedAt}/></>;
 }
-function SelectedMatch({ match: m, estimate, estimating, quote, current,retained,token, now, open, onToggle, onClose, onRefresh, busy,boardCheckedAt,marketGroups=[],showMarketsFirst,nearOdds,winnerPricesInRange }: { match: FeedMatch; nearOdds: boolean; winnerPricesInRange?: ReturnType<typeof bookmakerWinnerPrices>; boardCheckedAt?: string; marketGroups?: BookmakerMarkets; showMarketsFirst: boolean; estimate?: WinnerEstimate; estimating: boolean; quote?: ValueOpportunity;current:boolean;retained:boolean; token?: string; now: number; open: boolean; onToggle: () => void; onClose: () => void; onRefresh: () => void; busy: boolean }) {
+function probabilityText(probability:number) {
+  return probability.toLocaleString('it-IT',{style:'percent',minimumFractionDigits:1,maximumFractionDigits:1});
+}
+function SelectedMatch({ match: m, assessment, estimating, quote, current,retained,token, now, open, onToggle, onClose, onRefresh, busy,boardCheckedAt,marketGroups=[],showMarketsFirst,nearOdds,winnerPricesInRange }: { match: FeedMatch; nearOdds: boolean; winnerPricesInRange?: ReturnType<typeof bookmakerWinnerPrices>; boardCheckedAt?: string; marketGroups?: BookmakerMarkets; showMarketsFirst: boolean; assessment: ReturnType<typeof matchModelAssessment>; estimating: boolean; quote?: ValueOpportunity;current:boolean;retained:boolean; token?: string; now: number; open: boolean; onToggle: () => void; onClose: () => void; onRefresh: () => void; busy: boolean }) {
+  const {estimate,models,agreement} = assessment;
   const live = current&&isFreshLive(m, now);
   const usable=current&&isUpcomingOrLive(m,now);
   const value=!!quote&&hasPositiveValue(quote);
@@ -184,14 +209,16 @@ function SelectedMatch({ match: m, estimate, estimating, quote, current,retained
   };
   const estimateStatus = !current ? 'Evento non più disponibile' : live ? 'Stima live non disponibile'
     : estimating ? 'Pronostico in caricamento…' : 'Stima non disponibile';
+  const agreementText = agreement==='same' ? 'Modelli concordi' : agreement==='different' ? 'Modelli senza un favorito comune'
+    : agreement==='tie' ? 'Entrambi senza preferenza' : null;
   const prices = open && usable ? nearOdds ? winnerPricesInRange ?? [] : bookmakerWinnerPrices(m, now) : [];
   return <details className={`match-card selected-match${live ? ' match-live' : ''}`} data-event-id={m.id} open={open} onKeyDown={e => { if (e.key === 'Escape') { e.stopPropagation(); onClose(); } }}>
-    <summary onClick={e => { e.preventDefault(); onToggle(); }}><span><small>{m.league} · {dateTime(m.kickoff_utc)}</small><strong>{m.home} — {m.away}</strong>{quote ? <span>Vincente partita · {quote.selection}</span> : <span>{!current?'Evento non più nel feed · dati mantenuti aperti':estimate ? (favorite ? `Favorito del modello · ${favorite.name} · ${percent(favorite.probability)}` : 'Modello senza preferenza · 50%–50%') : estimateStatus}</span>}</span><span className="match-badges">{live && <span className="live-badge"><i aria-hidden="true"/>LIVE</span>}{live && m.score && <span className="score-badge">{m.score}</span>}{quote && <span className="summary-price"><b>{(quote.probability * 100).toFixed(1)}%</b><small>Quota equa {fairOddsText(quote.probability)}</small><strong>Bet365 {quote.odds.toFixed(2)}</strong></span>}{nearOdds && !quote && !!winnerPricesInRange?.length && <span className="badge">Bet365 {winnerPricesInRange.map(price=>price.odds_dec.toFixed(2).replace('.',',')).join(' · ')}</span>}{marketGroups.length>0 && <span className="badge">{marketGroups.length} mercati Bet365</span>}<span className="badge">{open ? 'Chiudi ↑' : 'Apri ↓'}</span></span></summary>
+    <summary onClick={e => { e.preventDefault(); onToggle(); }}><span><small>{m.league} · {dateTime(m.kickoff_utc)}</small><strong>{m.home} — {m.away}</strong><span>{!current?'Evento non più nel feed · dati mantenuti aperti':estimate ? (favorite ? `Favorito del modello · ${favorite.name} · ${percent(favorite.probability)}` : 'Modello senza preferenza · 50%–50%') : estimateStatus}</span>{agreementText && <small>{agreementText}</small>}{quote && <small>Quota selezionata · {quote.selection}</small>}</span><span className="match-badges">{live && <span className="live-badge"><i aria-hidden="true"/>LIVE</span>}{live && m.score && <span className="score-badge">{m.score}</span>}{quote && <span className="summary-price"><b>{(quote.probability * 100).toFixed(1)}%</b><small>Quota equa {fairOddsText(quote.probability)}</small><strong>Bet365 {quote.odds.toFixed(2)}</strong></span>}{nearOdds && !quote && !!winnerPricesInRange?.length && <span className="badge">Bet365 {winnerPricesInRange.map(price=>price.odds_dec.toFixed(2).replace('.',',')).join(' · ')}</span>}{marketGroups.length>0 && <span className="badge">{marketGroups.length} mercati Bet365</span>}<span className="badge">{open ? 'Chiudi ↑' : 'Apri ↓'}</span></span></summary>
     {open && <div className="match-content"><div className="match-actions"><button className="primary" disabled={busy} onClick={onRefresh}>{busy ? 'Aggiornamento…' : '↻ Aggiorna quota'}</button><button className="secondary" onClick={onClose}>✕ Chiudi quote</button></div>
       {retained&&<p className="banner" role="status">{!usable?'Evento non più disponibile tra le partite attive. Le statistiche già aperte restano consultabili.':'Partita mantenuta aperta durante gli aggiornamenti.'}</p>}
       <AdditionalMarkets match={m} groups={marketGroups} now={now} available={usable} boardCheckedAt={boardCheckedAt} token={token} initiallyOpen={showMarketsFirst||(nearOdds&&!prices.length)}/>
       {usable && <section aria-label="Pronostico del modello">
-        <h3>Pronostico del modello · {live ? 'Vincente live' : 'Vincente prematch'}</h3>
+        <h3>Valutazione della partita · {live ? 'Vincente live' : 'Vincente prematch'}</h3>
         {estimate && homePercent !== undefined ? <>
           <p><strong>{favorite ? `Favorito: ${favorite.name}` : 'Nessuna preferenza tra i due giocatori'}</strong> · Stima sperimentale</p>
           <ul className="competition-list">
@@ -206,6 +233,13 @@ function SelectedMatch({ match: m, estimate, estimating, quote, current,retained
               </li>;
             })}
           </ul>
+          {models.length===2 && <div className="match-model-comparison">
+            <p><strong>{agreementText}</strong></p>
+            <ul className="competition-list">{models.map(model=><li key={model.modelName}>
+              <span>{model.modelName}</span>
+              <small>{m.home} {probabilityText(model.homeProbability)} · {m.away} {probabilityText(1-model.homeProbability)}</small>
+            </li>)}</ul>
+          </div>}
           <p className="fine">{estimate.modelName} · {estimate.liveScore !== undefined
             ? `Set completati ${estimate.completedSetScore}. Stima riferita all’ultimo set concluso.`
             : `${estimate.sampleSize} precedenti nel campione minimo dei due giocatori.`}</p>

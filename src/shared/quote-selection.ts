@@ -1,4 +1,4 @@
-import type { ValueReport } from './value.js';
+import type { ValueReport, WinnerEstimate } from './value.js';
 import type { ValueOpportunity } from '../domain/value.js';
 import { isUpcomingOrLive, marketIdentity, quoteIdentity, quoteStatus, type FeedMatch } from './board.js';
 
@@ -20,7 +20,7 @@ export function probabilityOrder(a: ValueOpportunity, b: ValueOpportunity) {
     || Math.abs(a.odds - 2) - Math.abs(b.odds - 2) || a.id.localeCompare(b.id);
 }
 
-function freshReport(report: ValueReport | null, now: number): report is ValueReport {
+function freshReport<T extends Pick<ValueReport,'checkedAt'>>(report: T | null, now: number): report is T {
   const age = now - Date.parse(report?.checkedAt ?? '');
   return !!report && Number.isFinite(age) && age >= -60_000 && age <= 120_000;
 }
@@ -29,7 +29,7 @@ function displayedCandidates(report: ValueReport) {
   return [...(report.rankings?.value ?? report.opportunities), ...(report.experimental ?? [])];
 }
 
-export function eventWinnerEstimate(report: ValueReport | null, match: FeedMatch, now: number) {
+export function eventWinnerEstimate(report: Pick<ValueReport,'checkedAt'|'winnerEstimates'> | null, match: FeedMatch, now: number) {
   if (!freshReport(report, now) || !isUpcomingOrLive(match, now)) return;
   if (!report.winnerEstimates || !Object.hasOwn(report.winnerEstimates, match.id)) return;
   const estimate = report.winnerEstimates[match.id];
@@ -38,6 +38,24 @@ export function eventWinnerEstimate(report: ValueReport | null, match: FeedMatch
     if (!estimate.liveScore || estimate.liveScore !== match.score || age > 60_000) return;
   } else if (estimate.liveScore) return;
   return estimate;
+}
+
+function preferredSide(estimate: WinnerEstimate) {
+  const percent = Math.round(estimate.homeProbability * 1000);
+  return percent===500 ? null : percent>500 ? 'home' : 'away';
+}
+
+export function matchModelAssessment(report:ValueReport|null, match:FeedMatch, now:number, preferEnsemble=false) {
+  const score = eventWinnerEstimate(report,match,now);
+  const ensemble = !match.in_play && report?.ensemble
+    ? eventWinnerEstimate({checkedAt:report.checkedAt,winnerEstimates:report.ensemble.winnerEstimates},match,now)
+    : undefined;
+  const estimate = preferEnsemble ? ensemble??score : score??ensemble;
+  const models = [score,ensemble].filter((row):row is WinnerEstimate=>!!row);
+  const sides = models.map(preferredSide);
+  const agreement = models.length!==2 ? null : sides[0]===sides[1]
+    ? sides[0] ? 'same' : 'tie' : 'different';
+  return {estimate,models,agreement};
 }
 
 /** Display policy only: the frozen prospective enrollment rules stay unchanged. */

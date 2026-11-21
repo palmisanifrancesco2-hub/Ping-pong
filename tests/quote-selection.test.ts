@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue,bookmakerWinnerPrices,eventWinnerEstimate,nearOneFifty,oddsInRange } from '../src/shared/quote-selection';
+import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue,bookmakerWinnerPrices,eventWinnerEstimate,nearOneFifty,oddsInRange,matchModelAssessment } from '../src/shared/quote-selection';
 import type { FeedMatch } from '../src/shared/board';
 import { quoteIdentity } from '../src/shared/board';
 import type { ValueOpportunity } from '../src/domain/value';
@@ -34,6 +34,18 @@ it('shows current Bet365 winner prices independently of the prediction filter', 
 });
 
 describe('probability-ranked selected quotes', () => {
+  it('compares available models, preserves the selected model, and ignores stale estimates', () => {
+    const { m } = fixture('a', .6, 2);
+    const study = {homeProbability:.6,sampleSize:40,modelName:'Studio'};
+    const ensemble = {homeProbability:.45,sampleSize:40,modelName:'Ensemble'};
+    const r: ValueReport = {...report(),winnerEstimates:{[m.id]:study},
+      ensemble:{modelName:'Ensemble',opportunities:[],modelValidated:false,winnerEstimates:{[m.id]:ensemble}}};
+    expect(matchModelAssessment(r,m,now)).toEqual({estimate:study,models:[study,ensemble],agreement:'different'});
+    expect(matchModelAssessment(r,m,now,true).estimate).toBe(ensemble);
+    expect(matchModelAssessment({...r,winnerEstimates:{[m.id]:{...study,homeProbability:.4}}},m,now).agreement).toBe('same');
+    expect(matchModelAssessment({...r,ensemble:undefined},m,now,true)).toEqual({estimate:study,models:[study],agreement:null});
+    expect(matchModelAssessment(r,m,now+120_001)).toEqual({estimate:undefined,models:[],agreement:null});
+  });
   it('applies the inclusive 1.40–1.60 range without changing EV eligibility', () => {
     const lower = fixture('lower', .88, 1.4);
     const upper = fixture('upper', .8, 1.6);
