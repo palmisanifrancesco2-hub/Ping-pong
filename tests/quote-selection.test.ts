@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue } from '../src/shared/quote-selection';
+import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue,bookmakerWinnerPrices } from '../src/shared/quote-selection';
 import type { FeedMatch } from '../src/shared/board';
 import { quoteIdentity } from '../src/shared/board';
 import type { ValueOpportunity } from '../src/domain/value';
@@ -14,6 +14,25 @@ function fixture(id: string, p: number, odds: number, lower = p - .04) {
   return { m, o };
 }
 const report = (...rows: ValueOpportunity[]): ValueReport => ({ checkedAt: time, status: 'experimental', modelValidated: false, admVerified: false, reasons: [], opportunities: [], experimental: rows });
+it('shows current Bet365 winner prices independently of the prediction filter', () => {
+  const { m } = fixture('a', .6, 2);
+  const [home] = m.quotes;
+  const away = { ...home, sel_id: 'B', side: 'B', odds_dec: 1.26 };
+  m.quotes = [away, home, { ...home, line: 'Over', sel_id: 'other' }];
+  expect(bookmakerWinnerPrices(m, now)).toEqual([home, away]);
+  expect(selectedQuotes(report(), [m], now)).toEqual([]);
+  expect(bookmakerWinnerPrices({ ...m, quotes: [home, { ...away, market_id: 'other' }] }, now)).toEqual([]);
+  expect(bookmakerWinnerPrices({ ...m, quotes: [home, { ...home, sel_id: 'duplicate' }] }, now)).toEqual([]);
+  expect(bookmakerWinnerPrices({ ...m, quotes: [{ ...home, suspended: true }, away] }, now)).toEqual([away]);
+  expect(bookmakerWinnerPrices({ ...m, quotes: [{ ...home, ts: new Date(now + 1).toISOString() }] }, now)).toEqual([]);
+  expect(bookmakerWinnerPrices({ ...m, kickoff_utc: time }, now)).toEqual([]);
+
+  const liveHome = { ...home, phase: 'inplay' as const };
+  const live = { ...m, in_play: true, polled_at: time, quotes: [liveHome, away] };
+  expect(bookmakerWinnerPrices(live, now)).toEqual([liveHome]);
+  expect(bookmakerWinnerPrices(live, now + 61_000)).toEqual([]);
+});
+
 describe('probability-ranked selected quotes', () => {
   it('filters by conservative value first, then orders by actual model probability', () => {
     const favorite = fixture('favorite', .8, 1.3, .7); // likely, but no prudent value

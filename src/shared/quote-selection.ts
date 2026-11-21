@@ -1,6 +1,6 @@
 import type { ValueReport } from './value.js';
 import type { ValueOpportunity } from '../domain/value.js';
-import { isUpcomingOrLive, quoteIdentity, quoteStatus, type FeedMatch } from './board.js';
+import { isUpcomingOrLive, marketIdentity, quoteIdentity, quoteStatus, type FeedMatch } from './board.js';
 
 /** Recompute both margins from the current price; cached EV fields are not authoritative. */
 export function hasPositiveValue(o:Pick<ValueOpportunity,'probability'|'probabilityLower'|'odds'>){
@@ -30,6 +30,19 @@ export function selectedQuotes(report: ValueReport | null, matches: FeedMatch[],
   }).sort(probabilityOrder);
   const seen = new Set<string>();
   return rows.filter(o => { if (seen.has(o.eventId)) return false; seen.add(o.eventId); return true; });
+}
+
+export function bookmakerWinnerPrices(match: FeedMatch, now: number) {
+  if (!isUpcomingOrLive(match, now)) return [];
+  const prices = match.quotes.filter(q =>
+    q.fixture_id === match.id && q.group_id === '920000' && q.line === 'To Win'
+    && (q.side === match.home || q.side === match.away)
+    && (match.in_play ? q.phase === 'inplay' : q.phase !== 'inplay')
+    && Number.isFinite(q.odds_dec) && Date.parse(q.ts) <= now
+    && quoteStatus(match, q, now) === 'Letta di recente dalla fonte',
+  );
+  if (new Set(prices.map(marketIdentity)).size > 1 || new Set(prices.map(q => q.side)).size !== prices.length) return [];
+  return [...prices].sort((a, b) => Number(b.side === match.home) - Number(a.side === match.home));
 }
 
 export type OpenMatch={match:FeedMatch;index:number;selection:string|null};

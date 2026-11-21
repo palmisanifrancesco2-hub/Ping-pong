@@ -17,7 +17,7 @@ export function FeedStatus({ board, loading, error, refresh,disabled=false,compa
 
 
 import { useValue } from './useValue';
-import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue,type OpenMatch } from './shared/quote-selection';
+import { selectedQuotes,keepOpenMatch,openQuote,hasPositiveValue,bookmakerWinnerPrices,type OpenMatch } from './shared/quote-selection';
 import type { ValueOpportunity } from './domain/value';
 import { RecordPrediction } from './RecordPrediction';
 
@@ -84,10 +84,18 @@ function SelectedMatch({ match: m, quote, current,retained,token, now, open, onT
   const live = current&&isFreshLive(m, now);
   const usable=current&&isUpcomingOrLive(m,now);
   const value=!!quote&&hasPositiveValue(quote);
+  const prices = open && usable ? bookmakerWinnerPrices(m, now) : [];
   return <details className={`match-card selected-match${live ? ' match-live' : ''}`} data-event-id={m.id} open={open} onKeyDown={e => { if (e.key === 'Escape') { e.stopPropagation(); onClose(); } }}>
-    <summary onClick={e => { e.preventDefault(); onToggle(); }}><span><small>{m.league} · {dateTime(m.kickoff_utc)}</small><strong>{m.home} — {m.away}</strong>{quote ? <span>Vincente partita · {quote.selection}</span> : <span>{!current?'Evento non più nel feed · dati mantenuti aperti':live?'Live · statistiche disponibili':'Nessuna quota selezionata attualmente'}</span>}</span><span className="match-badges">{live && <span className="live-badge"><i aria-hidden="true"/>LIVE</span>}{live && m.score && <span className="score-badge">{m.score}</span>}{quote && <span className="summary-price"><b>{(quote.probability * 100).toFixed(1)}%</b><small>Stima modello</small><strong>Quota {quote.odds.toFixed(2)}</strong></span>}<span className="badge">{open ? 'Chiudi ↑' : 'Apri ↓'}</span></span></summary>
+    <summary onClick={e => { e.preventDefault(); onToggle(); }}><span><small>{m.league} · {dateTime(m.kickoff_utc)}</small><strong>{m.home} — {m.away}</strong>{quote ? <span>Vincente partita · {quote.selection}</span> : <span>{!current?'Evento non più nel feed · dati mantenuti aperti':live?'Live · statistiche disponibili':'Nessun pronostico verificato al momento'}</span>}</span><span className="match-badges">{live && <span className="live-badge"><i aria-hidden="true"/>LIVE</span>}{live && m.score && <span className="score-badge">{m.score}</span>}{quote && <span className="summary-price"><b>{(quote.probability * 100).toFixed(1)}%</b><small>Stima modello</small><strong>Quota {quote.odds.toFixed(2)}</strong></span>}<span className="badge">{open ? 'Chiudi ↑' : 'Apri ↓'}</span></span></summary>
     {open && <div className="match-content"><div className="match-actions"><button className="primary" disabled={busy} onClick={onRefresh}>{busy ? 'Aggiornamento…' : '↻ Aggiorna quota'}</button><button className="secondary" onClick={onClose}>✕ Chiudi quote</button></div>
       {retained&&<p className="banner" role="status">{!usable?'Evento non più disponibile tra le partite attive. Le statistiche già aperte restano consultabili.':'Partita mantenuta aperta durante gli aggiornamenti. Quota e stima compaiono solo con dati aggiornati ed EV positivo anche nella stima prudente.'}</p>}{quote&&value ? <SelectedQuote quote={quote} token={token} eligible={value}/> : <p role="status">Nessuna quota con EV positivo disponibile al momento. Il pannello e le statistiche restano aperti.</p>}
+      {usable && <section aria-label="Quote Bet365 del vincente">
+        <h3>Quote Bet365 · Vincente partita</h3>
+        {prices.length ? <ul className="competition-list">{prices.map(price => <li key={price.sel_id}>
+          <span><strong>{price.side}</strong><small>bet365.com.au · {dateTime(price.ts)}</small></span>
+          <strong>{price.odds_dec.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 3 })}</strong>
+        </li>)}</ul> : <p role="status">Quote vincente aggiornate al momento indisponibili.</p>}
+      </section>}
       <SaveChoice token={usable?token:undefined} eventId={m.id}/><PlayerAnalysis token={token} eventId={m.id} showEstimates={false}/>
       <button className="secondary close-bottom" onClick={onClose}>✕ Chiudi questa partita</button>
     </div>}
