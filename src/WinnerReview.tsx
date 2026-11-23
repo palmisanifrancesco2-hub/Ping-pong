@@ -1,5 +1,6 @@
 import type {winnerDiagnostic} from './domain/winner-comparison';
 import type {WinnerShadow} from '../server/winner-shadow';
+import {ValueReliability} from './ValueReliability';
 import {WinnerPricePerformance} from './WinnerPricePerformance';
 type Review=ReturnType<typeof winnerDiagnostic>;
 type Shadow=Awaited<ReturnType<WinnerShadow['report']>>;
@@ -24,6 +25,7 @@ export function WinnerReview({review,shadow}:{review?:Review;shadow?:Shadow}){
       <p>{shadow.captured} partite con quattro previsioni registrate allo stesso istante · {shadow.settled} esiti verificati · {shadow.pending} in attesa · {shadow.invalid} invalidi.</p>
       <p>Nuove statistiche causali identiche per tutti i candidati e quote dei due giocatori salvate per confrontare anche le probabilità del bookmaker. La scelta di un sostituto dipende da questi nuovi dati, separati dalla diagnosi precedente.</p>
       <details><summary>Metriche del confronto futuro</summary><ul className="competition-list">{shadow.models.map(m=><li key={m.id}><span><strong>{m.label}</strong><small>{m.correct} corrette · {m.wrong} sbagliate · {m.undecided} senza preferenza</small><small>Brier {score(m.brier)} · Log Loss {score(m.logLoss)} · {m.n} esiti</small></span></li>)}</ul><p>Bookmaker senza margine: Brier {score(shadow.bookmaker.brier)}. Frequenze della competizione: Brier {score(shadow.league.brier)}.</p></details>
+      {shadow.valueReliability&&<details><summary>Precisione delle quote ad alto EV</summary><ValueReliability report={shadow.valueReliability}/></details>}
       {shadow.pricePerformance&&<details><summary>Quote medie dei pronostici corretti e sbagliati</summary><WinnerPricePerformance report={shadow.pricePerformance}/></details>}
       <p className="fine">Controlli fissi a {shadow.protocol.checkpoints.join(', ')} nuove osservazioni, almeno {shadow.protocol.minimumDays} giorni e confronti corretti per candidati, riferimenti e controlli ripetuti. Nessuna sostituzione automatica o puntata. Questi incontri possono comparire anche nel test originario: i campioni restano separati.</p>
     </>}

@@ -29,6 +29,7 @@ try {
         winnerDisplayVerification:'success',
         scoreEstimates:Object.keys(score.winnerEstimates ?? {}).length,
         scoreValueSelections:selectedQuotes(score, board.matches, now).length,
+        guardedScoreValueSelections:selectedQuotes(score, board.matches, now, 1.3, Infinity, true).length,
         ensembleEstimates:Object.keys(ensemble.winnerEstimates).length,
         ensembleValueSelections:selectedQuotes({...score,...ensemble}, board.matches, now).length,
         prematchEvents:board.matches.filter(match=>!match.in_play).length,

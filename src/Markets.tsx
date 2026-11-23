@@ -27,6 +27,7 @@ import { RecordPrediction } from './RecordPrediction';
 type Props = { board: Board | null; now: number; token?: string; refreshBoard: () => Promise<void>; boardLoading: boolean; tracker?: boolean };
 export function Markets({ board, now, token, refreshBoard, boardLoading, tracker = false }: Props) {
   const values = useValue(token);
+  const [guarded,setGuarded]=useState(true);
   const [modelChoice,setModelChoice]=useState<'study'|'ensemble'>('study');
   const selectionReport=modelChoice==='ensemble'?(values.report?.ensemble?{...values.report,...values.report.ensemble,rankings:undefined}:null):values.report;
   const [search, setSearch] = useState(''), [selectedCompetitions,setSelectedCompetitions] = useState<string[]>([]);
@@ -50,7 +51,7 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
   const busy = boardLoading || values.loading || manualBusy;
   const minimum = nearOdds ? nearOneFifty.minimum : Number(minOdds) || 1.3;
   const maximum = nearOdds ? nearOneFifty.maximum : Infinity;
-  const eligible = useMemo(() => selectedQuotes(selectionReport, board?.matches ?? [], now, minimum, maximum), [selectionReport, board, now, minimum, maximum]);
+  const eligible = useMemo(() => selectedQuotes(selectionReport, board?.matches ?? [], now, minimum, maximum, guarded), [selectionReport, board, now, minimum, maximum,guarded]);
   const winnerPricesInRange = useMemo(()=>{
     const byMatch = new Map<string,ReturnType<typeof bookmakerWinnerPrices>>();
     if (nearOdds) for (const match of board?.matches ?? []) {
@@ -100,7 +101,7 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
       .sort((a,b)=>Number(b.in_play)-Number(a.in_play)||Date.parse(a.kickoff_utc??'')-Date.parse(b.kickoff_utc??'')||a.id.localeCompare(b.id));
   const matches=keepOpenMatch(rankedMatches,opened,board?.matches??[]);
   const currentOpen=board?.matches.find(m=>m.id===openEvent);
-  const refreshedQuote=openQuote(selectionReport,currentOpen,opened?.selection??(openEvent ? byEvent.get(openEvent)?.selection ?? null : null),now);
+  const refreshedQuote=openQuote(selectionReport,currentOpen,opened?.selection??(openEvent ? byEvent.get(openEvent)?.selection ?? null : null),now,guarded);
   const inspectedQuote=refreshedQuote && oddsInRange(refreshedQuote.odds,minimum,maximum) ? refreshedQuote : undefined;
   const competitions = [...new Set([...(board?.matches.map(m=>m.league) ?? []),...selectedCompetitions])].sort((a,b)=>a.localeCompare(b,'it'));
   const visibleMatches = mode==='events' ? matches : matches.slice(0,limit);
@@ -200,6 +201,9 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
         <option value="near">Intorno a 1,50 (1,40–1,60)</option>
       </select></label>
     </div>
+    {mode!=='markets' && <label className="model-choice">Filtro delle quote<select value={guarded?'cautious':'original'} aria-label="Filtro delle quote" onChange={event=>{
+      setGuarded(event.target.value==='cautious');changed();
+    }}><option value="cautious">Prudente · favorito condiviso</option><option value="original">EV originale · sperimentale</option></select></label>}
     {mode==='markets' && <label className="model-choice">Mercato Bet365<select value={marketFilter} onChange={e=>{
       setMarketFilter(e.target.value as BookmakerMarketFilter);setOpened(null);changed();
     }}><option value="all">Tutti i mercati</option><option value="totals">Over/Under</option><option value="handicap">Handicap</option><option value="sets">Set</option><option value="exact">Risultato esatto</option></select></label>}
@@ -229,7 +233,7 @@ export function Markets({ board, now, token, refreshBoard, boardLoading, tracker
       </div>}
     </>}
     {shown && matches.length > 0 && <div className="quote-dock" role="group" aria-label="Comandi rapidi quote"><button className="secondary" onClick={showBestQuotes}>Quote migliori · {opportunities.length}</button><button className="primary" disabled={busy} onClick={refresh}>{busy ? 'Aggiornamento…' : openEvent ? '↻ Aggiorna quota' : '↻ Aggiorna quote'}</button><button className="secondary" onClick={openEvent ? closeEvent : closeList}>{openEvent ? '✕ Chiudi quote' : '✕ Chiudi lista'}</button></div>}
-    <details className="selection-method"><summary>Come scegliamo e ordiniamo le quote</summary><p>Quota equa = 1 ÷ probabilità stimata. Probabilità implicita = 1 ÷ quota Bet365. EV = probabilità stimata × quota − 1. Per comparire serve anche EV positivo sul limite prudente euristico, almeno 30 precedenti per giocatore e una coppia coerente di quote fresche. Una selezione per partita, ordinata per probabilità decrescente; a parità, EV prudente e vicinanza a quota 2. Minimo 1,30, nessun massimo.</p><p>Percentuali sperimentali, non garanzie. Il test statistico prosegue separatamente.</p></details>
+    <details className="selection-method"><summary>Come scegliamo e ordiniamo le quote</summary><p>Quota equa = 1 ÷ probabilità stimata. Probabilità implicita = 1 ÷ quota Bet365. EV = probabilità stimata × quota − 1. Servono EV positivo sul limite prudente, almeno 30 precedenti per giocatore e quote fresche. Il filtro prudente aggiunge l’accordo sul favorito e richiede un EV ancora positivo dopo aver combinato il limite del modello con la probabilità Bet365 senza margine. Una selezione per partita, ordinata per probabilità decrescente; a parità, EV prudente e vicinanza a quota 2. Minimo 1,30, nessun massimo.</p><p>Percentuali sperimentali, non garanzie. Il test statistico prosegue separatamente.</p></details>
   </section><PredictionRankings report={values.report?.rankings} checkedAt={values.report?.checkedAt}/></>;
 }
 function probabilityText(probability:number) {

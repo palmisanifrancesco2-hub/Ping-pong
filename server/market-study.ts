@@ -83,6 +83,7 @@ export class MarketStudy{
       console.info(JSON.stringify({winnerReviewStatus:s.protocol.id,cutoff:r.cutoff,expected:r.expected,n:r.n,models:r.models.map(compact),reference:r.reference,validated:false}));
       console.info(JSON.stringify({winnerReviewSlices:s.protocol.id,leagues:r.leagues.map(g=>({league:g.league,n:g.n,correct:g.correct,wrong:g.wrong,brier:g.brier})),confidence:r.confidence.map(g=>({from:g.from,to:g.to,n:g.n,correct:g.correct,wrong:g.wrong,brier:g.brier}))}));
       console.info(JSON.stringify({winnerShadowStatus:s.protocol.id,captured:s.captured,settled:s.settled,pending:s.pending,invalid:s.invalid,observedDays:s.observedDays,models:s.models.map(compact),league:s.league,bookmaker:s.bookmaker,checkpoints:s.checkpoints.map(c=>({size:c.size,consistent:c.consistent,passed:c.result.challengers.filter(x=>x.preliminaryPass).length})),validated:false}));
+      console.info(JSON.stringify({valueReliabilityStatus:s.valueReliability}));
       const prices=s.pricePerformance.windows.find(w=>w.key==='all');
       if(prices)console.info(JSON.stringify({winnerPriceStatus:s.protocol.id,checkedAt:s.pricePerformance.checkedAt,registered:prices.registered,eligibleSettled:prices.eligibleSettled,unavailableQuotes:prices.unavailableQuotes,duplicateSettled:prices.duplicateSettled,models:prices.models.map(m=>({id:m.id,...m.policies.value})),validated:false}));
     }catch{extra.winnerReviewError='Confronto dei candidati temporaneamente non disponibile.';console.error('WINNER_REVIEW_UNAVAILABLE');}

@@ -12,7 +12,7 @@ function prices(values: number[]) {
     median: n ? (sorted[Math.floor((n-1)/2)]+sorted[Math.floor(n/2)])/2 : null};
 }
 
-function quoteIsUsable(c: WinnerCase) {
+export function quoteIsUsable(c: WinnerCase) {
   const f = c.forecast, read = Date.parse(f.readAt), home = Date.parse(f.homeQuoteAt), away = Date.parse(f.awayQuoteAt);
   // Quote change time is not a freshness indicator: a stable price can be old.
   // The original collector separately checked the market's read freshness.

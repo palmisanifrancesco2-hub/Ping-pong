@@ -5,6 +5,7 @@ import {quoteStatus,type Board} from '../src/shared/board.js';
 import {playerKey} from '../src/domain/player-model.js';
 import type {MarketStudyCase} from '../src/domain/market-validation.js';
 import type {Env} from './auth.js';
+import {valueReliability} from '../src/domain/value-reliability.js';
 import {winnerPricePerformance} from '../src/domain/winner-price-performance.js';
 
 type Source={parameters:{case:MarketStudyCase}};
@@ -53,7 +54,7 @@ export class WinnerShadow{
   private async checks(owner:string){const r=await this.store.db().from('model_versions').select('parameters,created_at').eq('name',checkpointName).contains('parameters',{studyId:protocol.id,userId:owner}).order('created_at',{ascending:true}).limit(4);if(r.error)throw Error('WINNER_SHADOW_READ_FAILED');return r.data??[];}
   async report(owner:string){
     const rows=await this.rows(owner),cases=rows.map(r=>r.parameters),summary=winnerSummary(cases),checks=await this.checks(owner),ordered=[...cases].sort((a,b)=>a.forecast.at-b.forecast.at||a.forecast.id.localeCompare(b.forecast.id));
-    return{protocol,...summary,pricePerformance:winnerPricePerformance(cases,this.now()),checkpoints:checks.map(r=>{const p=r.parameters as {size:number;prefixHash:string;result:ReturnType<typeof winnerCheckpoint>};return{size:p.size,result:p.result,consistent:p.prefixHash===marketHash(ordered.slice(0,p.size)),sealedAt:r.created_at};}),automaticPromotion:false};
+    return{protocol,...summary,pricePerformance:winnerPricePerformance(cases,this.now()),valueReliability:valueReliability(cases,this.now()),checkpoints:checks.map(r=>{const p=r.parameters as {size:number;prefixHash:string;result:ReturnType<typeof winnerCheckpoint>};return{size:p.size,result:p.result,consistent:p.prefixHash===marketHash(ordered.slice(0,p.size)),sealedAt:r.created_at};}),automaticPromotion:false};
   }
   async capture(owner:string,candidates:WinnerCase[],deadline:number){
     if(deadline-this.now()<15000)return{captured:0,status:'deadline'};

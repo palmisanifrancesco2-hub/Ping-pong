@@ -1,3 +1,4 @@
+import {guardedValue} from './value-filter.js';
 import type { ValueReport, WinnerEstimate } from './value.js';
 import type { ValueOpportunity } from '../domain/value.js';
 import { isUpcomingOrLive, marketIdentity, quoteIdentity, quoteStatus, type FeedMatch } from './board.js';
@@ -59,14 +60,14 @@ export function matchModelAssessment(report:ValueReport|null, match:FeedMatch, n
 }
 
 /** Display policy only: the frozen prospective enrollment rules stay unchanged. */
-export function selectedQuotes(report: ValueReport | null, matches: FeedMatch[], now: number, minOdds = 1.3, maxOdds = Infinity) {
+export function selectedQuotes(report: ValueReport | null, matches: FeedMatch[], now: number, minOdds = 1.3, maxOdds = Infinity, guard = false) {
   if (!freshReport(report, now)) return [];
   const events = new Map(matches.map(m => [m.id, m]));
   const sourceRows = displayedCandidates(report);
   const rows = sourceRows.filter(o => {
     const m = events.get(o.eventId);
     if (!m || m.in_play || !isUpcomingOrLive(m, now) || !o.fresh || o.sampleSize < 30) return false;
-    if (!hasPositiveValue(o)||!oddsInRange(o.odds,Math.max(1.3,minOdds),maxOdds)) return false;
+    if (!hasPositiveValue(o)||(guard&&!passesGuard(o,m,now))||!oddsInRange(o.odds,Math.max(1.3,minOdds),maxOdds)) return false;
     const q = m.quotes.find(q => quoteIdentity(q) === o.quoteKey);
     return !!q && q.fixture_id === m.id && q.side === o.selection && q.group_id === '920000' && q.line === 'To Win' && q.phase !== 'inplay'
       && q.odds_dec === o.odds && q.ts === o.quoteAt && Date.parse(q.ts) <= now
@@ -89,6 +90,15 @@ export function bookmakerWinnerPrices(match: FeedMatch, now: number) {
   return [...prices].sort((a, b) => Number(b.side === match.home) - Number(a.side === match.home));
 }
 
+function passesGuard(o:ValueOpportunity,m:FeedMatch,now:number) {
+  if(o.modelValidated)return true;
+  const pair=bookmakerWinnerPrices(m,now);
+  const own=pair.find(quote=>quote.side===o.selection);
+  const opposite=pair.find(quote=>quote.side!==o.selection);
+  return !!own&&!!opposite&&own.odds_dec===o.odds&&quoteIdentity(own)===o.quoteKey&&
+    guardedValue(o.probability,o.probabilityLower,o.odds,opposite.odds_dec)!==null;
+}
+
 export type OpenMatch={match:FeedMatch;index:number;selection:string|null};
 /** An open panel stays mounted at the same index, even if its quote loses value. */
 export function keepOpenMatch(rows:FeedMatch[],opened:OpenMatch|null,current:FeedMatch[]):FeedMatch[]{
@@ -96,11 +106,11 @@ export function keepOpenMatch(rows:FeedMatch[],opened:OpenMatch|null,current:Fee
   const latest=current.find(m=>m.id===opened.match.id)??opened.match;
   const rest=rows.filter(m=>m.id!==opened.match.id);rest.splice(Math.min(opened.index,rest.length),0,latest);return rest;
 }
-export function openQuote(report:ValueReport|null,m:FeedMatch|undefined,selection:string|null,now:number){
+export function openQuote(report:ValueReport|null,m:FeedMatch|undefined,selection:string|null,now:number,guard=false){
   if(!freshReport(report,now)||!m||!selection||m.in_play||!isUpcomingOrLive(m,now))return undefined;
   const sourceRows = [...displayedCandidates(report),...(report.estimates??[])];
   return sourceRows.find(o=>{
-    if(o.eventId!==m.id||o.selection!==selection||!o.fresh||o.sampleSize<30||!hasPositiveValue(o))return false;
+    if(o.eventId!==m.id||o.selection!==selection||!o.fresh||o.sampleSize<30||!hasPositiveValue(o)||(guard&&!passesGuard(o,m,now)))return false;
     const q=m.quotes.find(q=>quoteIdentity(q)===o.quoteKey);
     return !!q&&q.fixture_id===m.id&&q.side===selection&&q.group_id==='920000'&&q.line==='To Win'&&q.odds_dec===o.odds&&q.ts===o.quoteAt&&q.phase!=='inplay'&&Date.parse(q.ts)<=now&&quoteStatus(m,q,now)==='Letta di recente dalla fonte';
   });
