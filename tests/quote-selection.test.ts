@@ -81,17 +81,16 @@ describe('probability-ranked selected quotes', () => {
     expect(rows.map(r => r.id)).toEqual(['a', 'b']);
     expect(rows[0].probability).toBe(.65); expect(rows[0].probability).not.toBe(rows[0].impliedProbability);
   });
-  it('keeps the original view but applies the guarded criterion to listings and open cards', () => {
-    const high = fixture('high', .54, 3.2);
-    const safe = fixture('safe', .87, 1.5, .75);
-    const [a,b]=[high,safe].map((item,index)=>({...item.m,quotes:[item.m.quotes[0],
-      {...item.m.quotes[0],sel_id:'B',side:'B',odds_dec:index===0?1.4:2.7}]}));
-    const r=report(high.o,safe.o);
-    expect(selectedQuotes(r,[a,b],now)).toEqual([safe.o,high.o]);
-    expect(selectedQuotes(r,[a,b],now,1.3,Infinity,true)).toEqual([safe.o]);
-    expect(openQuote(r,a,'A',now,true)).toBeUndefined();
-    expect(openQuote(r,a,'A',now)).toEqual(high.o);
-    expect(bookmakerWinnerPrices(a,now)).toHaveLength(2);
+  it('allows market underdogs in listings and opened cards when corrected EV is positive', () => {
+    const outsider=fixture('outsider',.47,3.2,.40), favorite=fixture('favorite',.87,1.5,.75);
+    const weak=fixture('weak',.43,3.2,.314);
+    const [a,b,c]=[outsider,favorite,weak].map((item,index)=>({...item.m,quotes:[item.m.quotes[0],
+      {...item.m.quotes[0],sel_id:'B',side:'B',odds_dec:[1.4,2.7,1.34][index]}]}));
+    const r=report(outsider.o,favorite.o,weak.o);
+    expect(selectedQuotes(r,[a,b,c],now)).toEqual([favorite.o,outsider.o,weak.o]);
+    expect(selectedQuotes(r,[a,b,c],now,1.3,Infinity,true)).toEqual([favorite.o,outsider.o]);
+    expect(openQuote(r,a,'A',now,true)).toEqual(outsider.o);
+    expect(openQuote(r,c,'A',now,true)).toBeUndefined();
   });
   it('rejects changed prices, timestamps, stale markets, insufficient data and live/finished events', () => {
     const { m, o } = fixture('a', .6, 2);

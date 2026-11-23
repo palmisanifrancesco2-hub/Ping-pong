@@ -67,7 +67,7 @@ export function selectedQuotes(report: ValueReport | null, matches: FeedMatch[],
   const rows = sourceRows.filter(o => {
     const m = events.get(o.eventId);
     if (!m || m.in_play || !isUpcomingOrLive(m, now) || !o.fresh || o.sampleSize < 30) return false;
-    if (!hasPositiveValue(o)||(guard&&!passesGuard(o,m,now))||!oddsInRange(o.odds,Math.max(1.3,minOdds),maxOdds)) return false;
+    if (!hasPositiveValue(o)||(guard&&!o.modelValidated&&!quoteGuard(o,m,now))||!oddsInRange(o.odds,Math.max(1.3,minOdds),maxOdds)) return false;
     const q = m.quotes.find(q => quoteIdentity(q) === o.quoteKey);
     return !!q && q.fixture_id === m.id && q.side === o.selection && q.group_id === '920000' && q.line === 'To Win' && q.phase !== 'inplay'
       && q.odds_dec === o.odds && q.ts === o.quoteAt && Date.parse(q.ts) <= now
@@ -90,13 +90,12 @@ export function bookmakerWinnerPrices(match: FeedMatch, now: number) {
   return [...prices].sort((a, b) => Number(b.side === match.home) - Number(a.side === match.home));
 }
 
-function passesGuard(o:ValueOpportunity,m:FeedMatch,now:number) {
-  if(o.modelValidated)return true;
+export function quoteGuard(o:ValueOpportunity,m:FeedMatch,now:number) {
   const pair=bookmakerWinnerPrices(m,now);
   const own=pair.find(quote=>quote.side===o.selection);
   const opposite=pair.find(quote=>quote.side!==o.selection);
-  return !!own&&!!opposite&&own.odds_dec===o.odds&&quoteIdentity(own)===o.quoteKey&&
-    guardedValue(o.probability,o.probabilityLower,o.odds,opposite.odds_dec)!==null;
+  if(!own||!opposite||own.odds_dec!==o.odds||quoteIdentity(own)!==o.quoteKey)return null;
+  return guardedValue(o.probability,o.probabilityLower,o.odds,opposite.odds_dec);
 }
 
 export type OpenMatch={match:FeedMatch;index:number;selection:string|null};
@@ -110,7 +109,7 @@ export function openQuote(report:ValueReport|null,m:FeedMatch|undefined,selectio
   if(!freshReport(report,now)||!m||!selection||m.in_play||!isUpcomingOrLive(m,now))return undefined;
   const sourceRows = [...displayedCandidates(report),...(report.estimates??[])];
   return sourceRows.find(o=>{
-    if(o.eventId!==m.id||o.selection!==selection||!o.fresh||o.sampleSize<30||!hasPositiveValue(o)||(guard&&!passesGuard(o,m,now)))return false;
+    if(o.eventId!==m.id||o.selection!==selection||!o.fresh||o.sampleSize<30||!hasPositiveValue(o)||(guard&&!o.modelValidated&&!quoteGuard(o,m,now)))return false;
     const q=m.quotes.find(q=>quoteIdentity(q)===o.quoteKey);
     return !!q&&q.fixture_id===m.id&&q.side===selection&&q.group_id==='920000'&&q.line==='To Win'&&q.odds_dec===o.odds&&q.ts===o.quoteAt&&q.phase!=='inplay'&&Date.parse(q.ts)<=now&&quoteStatus(m,q,now)==='Letta di recente dalla fonte';
   });

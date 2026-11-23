@@ -4,10 +4,11 @@ import {valueReliability,valuePolicyStartedAt} from '../src/domain/value-reliabi
 import type {WinnerCase} from '../src/domain/winner-comparison';
 
 describe('fixed value guard',()=>{
-  it('requires agreement on the favorite and a positive residual EV',()=>{
+  it('accepts either side and requires a positive residual EV',()=>{
     expect(fairMarketProbability(1.50,3)).toBeCloseTo(2/3);
     expect(fairMarketProbability(2.30,2.30)).toBeNull();
-    expect(guardedValue(.55,.48,3,1.40)).toBeNull();
+    expect(guardedValue(.47,.40,3.2,1.4)?.guardedEv).toBeGreaterThan(0);
+    expect(guardedValue(.43,.314,3.2,1.34)).toBeNull();
     expect(guardedValue(.68,.66,1.53,2.75)).toBeNull();
     expect(guardedValue(.82,.75,1.50,2.7)?.guardedEv).toBeGreaterThan(0);
   });
@@ -27,9 +28,11 @@ describe('fixed value guard',()=>{
     const pending=make('p',at,1.50,2.7,.88,1,'pending');
     const report=valueReliability([prior,fresh,duplicate,duplicate,pending],at+3);
     expect(report.historical.high).toMatchObject({n:1,exact:0,wrong:1});
-    expect(report.historical.guarded.n).toBe(0);
+    expect(report.historical.guarded).toMatchObject({n:1,wrong:1,roi:{mean:-1}});
+    expect(report.historical.guardedUnderdogs).toMatchObject({n:1,wrong:1});
     expect(report.forward.n).toBe(1);
-    expect(report.forward.guarded).toMatchObject({n:1,exact:1});
+    expect(report.forward.guarded).toMatchObject({n:1,exact:1,roi:{mean:.5}});
+    expect(report.forward.guardedUnderdogs.n).toBe(0);
     expect(report.verifiedForUse).toBe(false);
   });
 });

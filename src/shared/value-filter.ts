@@ -14,7 +14,7 @@ export function fairMarketProbability(odds: number, oppositeOdds: number) {
 export function guardedValue(probability:number, lower:number, odds:number, oppositeOdds:number) {
   const market=fairMarketProbability(odds,oppositeOdds);
   if (market===null || ![probability,lower].every(Number.isFinite) ||
-      probability<=.5 || probability>=1 || lower<0 || lower>probability || market<=.5 || odds<1.3) return null;
+      probability<=0 || probability>=1 || lower<0 || lower>probability || odds<1.3) return null;
   const blended=(1-marketWeight)*probability+marketWeight*market;
   const guardedLower=(1-marketWeight)*lower+marketWeight*market;
   if (lower*odds<=1+1e-12 || guardedLower*odds<=1+1e-12) return null;

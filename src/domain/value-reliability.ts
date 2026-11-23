@@ -1,6 +1,7 @@
 import artifact from '../../models/score-runtime-v1.json' with {type:'json'};
 import type {WinnerCase} from './winner-comparison.js';
 import {fairMarketProbability,guardedValue,marketWeight} from '../shared/value-filter.js';
+import {blockInterval} from './study-metrics.js';
 import {modelMetrics} from './player-model.js';
 import {quoteIsUsable} from './winner-price-performance.js';
 
@@ -9,7 +10,7 @@ const DAY=86_400_000;
 const start=Date.parse(valuePolicyStartedAt);
 const ece=artifact.validation.ece;
 type Sample={p:number;y:number;h:number;a:number;n:number;at:number};
-type Pick={p:number;odds:number;ev:number;exact:boolean};
+type Pick={p:number;odds:number;ev:number;exact:boolean;at:number;marketUnderdog:boolean};
 
 function lower(p:number,n:number) {
   return Math.max(0,p-1.96*Math.sqrt(p*(1-p)/Math.min(n,200))-ece);
@@ -22,7 +23,7 @@ function selections(samples:Sample[], guarded:boolean) {
       .flatMap(o=>{
         const corrected=guarded?guardedValue(o.p,lower(o.p,r.n),o.odds,o.opposite):null;
         if(guarded&&!corrected)return [];
-        return [{p:corrected?.blended??o.p,odds:o.odds,ev:o.p*o.odds-1,exact:r.y===o.y}];
+        return [{p:corrected?.blended??o.p,odds:o.odds,ev:o.p*o.odds-1,exact:r.y===o.y,at:r.at,marketUnderdog:o.odds>o.opposite}];
       }).sort((a,b)=>b.p-a.p);
     return options[0]?[options[0]]:[];
   });
@@ -30,8 +31,9 @@ function selections(samples:Sample[], guarded:boolean) {
 
 function counts(picks:Pick[]) {
   const n=picks.length,exact=picks.filter(pick=>pick.exact).length;
+  const roi=blockInterval(picks.map(pick=>({at:pick.at,value:pick.exact?pick.odds-1:-1})));
   return {n,exact,wrong:n-exact,accuracy:n?exact/n:null,expected:n?picks.reduce((sum,pick)=>sum+pick.p,0)/n:null,
-    averageOdds:n?picks.reduce((sum,pick)=>sum+pick.odds,0)/n:null};
+    averageOdds:n?picks.reduce((sum,pick)=>sum+pick.odds,0)/n:null,roi};
 }
 
 export function valueReliability(cases:WinnerCase[],now:number) {
@@ -51,7 +53,7 @@ export function valueReliability(cases:WinnerCase[],now:number) {
       p:name==='blend'?(1-marketWeight)*r.p+marketWeight*r.market:r[name]})));
     const high=baseline.filter(pick=>pick.ev>=.25);
     return {n:samples.length,days:new Set(samples.map(r=>Math.floor(r.at/DAY))).size,
-      original:counts(baseline),guarded:counts(guarded),high:counts(high),metrics:{model:metrics('p'),blend:metrics('blend'),market:metrics('market')}};
+      original:counts(baseline),guarded:counts(guarded),guardedUnderdogs:counts(guarded.filter(pick=>pick.marketUnderdog)),high:counts(high),metrics:{model:metrics('p'),blend:metrics('blend'),market:metrics('market')}};
   }
   return {startedAt:valuePolicyStartedAt,checkedAt:new Date(now).toISOString(),
     historical:compare(usable.filter(row=>row.at<start)),forward:compare(usable.filter(row=>row.at>=start)),
