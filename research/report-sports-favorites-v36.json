@@ -1,0 +1,2435 @@
+{
+  "protocol": {
+    "baseProtocol": "protocol-prematch-20000-v32.json",
+    "testBoundariesUtc": [
+      "2026-10-17",
+      "2026-10-22",
+      "2026-10-27",
+      "2026-11-01",
+      "2026-11-05"
+    ],
+    "eligibilityMinMatchesPerPlayer": 5,
+    "recentHalfLifeDays": 8,
+    "leagueInteractionScale": 0.35,
+    "calibrationTemperatures": [
+      0.5,
+      0.75,
+      1,
+      1.25,
+      1.5
+    ],
+    "minimumOdds": 1.3,
+    "evBuffers": [
+      0,
+      0.03,
+      0.06
+    ],
+    "priceCaches": [
+      "3000-data.json.cache",
+      "5000-data.json.cache",
+      "market-v8-confirmation",
+      "market-v8-extension"
+    ],
+    "bootstrap": {
+      "blockDays": 3,
+      "bootstrapReplicates": 10000,
+      "familyComparisons": 3,
+      "seed": 3601
+    }
+  },
+  "archiveSha256": "63a79a40026de1068aaa6a7bebccd5db86f2d4adf2a1a1dbc32b6a6fc96940bf",
+  "acceptedArchive": 23235,
+  "test": 14261,
+  "folds": [
+    {
+      "from": "2026-10-17",
+      "untilExclusive": "2026-10-22",
+      "trainLocal": 5116,
+      "calibration": 2307,
+      "test": 3472,
+      "temperatures": [
+        0.5,
+        0.5
+      ],
+      "metrics": {
+        "logistica-v32": {
+          "n": 3472,
+          "correct": 1853,
+          "wrong": 1619,
+          "undecided": 0,
+          "accuracy": 0.5336981566820277,
+          "coverage": 1.0,
+          "brier": 0.24703813741452943,
+          "logLoss": 0.6871619187291849,
+          "ece": 0.015673943309785405,
+          "calibration": [
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 44,
+              "probability": 0.3837661595349038,
+              "frequency": 0.3181818181818182
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1166,
+              "probability": 0.4701685321299876,
+              "frequency": 0.4588336192109777
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 2128,
+              "probability": 0.5345240396424854,
+              "frequency": 0.518796992481203
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 134,
+              "probability": 0.6205182438114573,
+              "frequency": 0.6567164179104478
+            }
+          ]
+        },
+        "simmetrica": {
+          "n": 3472,
+          "correct": 1810,
+          "wrong": 1625,
+          "undecided": 37,
+          "accuracy": 0.5269286754002911,
+          "coverage": 0.9893433179723502,
+          "brier": 0.2497059455736311,
+          "logLoss": 0.6926093916206151,
+          "ece": 0.0063955204140442295,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 2,
+              "probability": 0.27052004373794625,
+              "frequency": 0.0
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 88,
+              "probability": 0.3697179133318906,
+              "frequency": 0.4318181818181818
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1585,
+              "probability": 0.47215026953165284,
+              "frequency": 0.47634069400630913
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1713,
+              "probability": 0.5278956100306229,
+              "frequency": 0.527729130180969
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 81,
+              "probability": 0.6314879359971179,
+              "frequency": 0.5308641975308642
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 3,
+              "probability": 0.7072858575793829,
+              "frequency": 0.3333333333333333
+            }
+          ]
+        },
+        "simmetrica-recente-per-lega": {
+          "n": 3472,
+          "correct": 1819,
+          "wrong": 1616,
+          "undecided": 37,
+          "accuracy": 0.5295487627365356,
+          "coverage": 0.9893433179723502,
+          "brier": 0.25096957859601154,
+          "logLoss": 0.6961607990366564,
+          "ece": 0.03414917772189974,
+          "calibration": [
+            {
+              "from": 0.0,
+              "to": 0.1,
+              "n": 8,
+              "probability": 0.08441530283079421,
+              "frequency": 0.375
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "n": 23,
+              "probability": 0.15066819701652084,
+              "frequency": 0.30434782608695654
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 71,
+              "probability": 0.2561828635143833,
+              "frequency": 0.323943661971831
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 263,
+              "probability": 0.3656195248093253,
+              "frequency": 0.4866920152091255
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1371,
+              "probability": 0.46272821235625483,
+              "frequency": 0.4799416484318016
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1424,
+              "probability": 0.5356801926507909,
+              "frequency": 0.5252808988764045
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 219,
+              "probability": 0.6351823996207056,
+              "frequency": 0.5342465753424658
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 65,
+              "probability": 0.7430832965758905,
+              "frequency": 0.5538461538461539
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "n": 22,
+              "probability": 0.8480195447366964,
+              "frequency": 0.7272727272727273
+            },
+            {
+              "from": 0.9,
+              "to": 1.0,
+              "n": 6,
+              "probability": 0.9305915609934007,
+              "frequency": 0.8333333333333334
+            }
+          ]
+        },
+        "media-simmetriche": {
+          "n": 3472,
+          "correct": 1801,
+          "wrong": 1634,
+          "undecided": 37,
+          "accuracy": 0.5243085880640466,
+          "coverage": 0.9893433179723502,
+          "brier": 0.24879625881711218,
+          "logLoss": 0.69075547516538,
+          "ece": 0.019947125755368885,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 25,
+              "probability": 0.2763852549849702,
+              "frequency": 0.36
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 182,
+              "probability": 0.36534892724695783,
+              "frequency": 0.3791208791208791
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1513,
+              "probability": 0.4679789309596557,
+              "frequency": 0.4904163912756114
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1569,
+              "probability": 0.5310886289484729,
+              "frequency": 0.5194391332058637
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 157,
+              "probability": 0.6346668042210006,
+              "frequency": 0.5796178343949044
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 26,
+              "probability": 0.7227281621276725,
+              "frequency": 0.5769230769230769
+            }
+          ]
+        }
+      }
+    },
+    {
+      "from": "2026-10-22",
+      "untilExclusive": "2026-10-27",
+      "trainLocal": 8974,
+      "calibration": 1988,
+      "test": 3880,
+      "temperatures": [
+        0.5,
+        0.5
+      ],
+      "metrics": {
+        "logistica-v32": {
+          "n": 3880,
+          "correct": 2131,
+          "wrong": 1749,
+          "undecided": 0,
+          "accuracy": 0.5492268041237114,
+          "coverage": 1.0,
+          "brier": 0.24549372035701947,
+          "logLoss": 0.6840491037354469,
+          "ece": 0.007223051328427089,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 2,
+              "probability": 0.2926464044735184,
+              "frequency": 0.0
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 154,
+              "probability": 0.36626119311075594,
+              "frequency": 0.35064935064935066
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1755,
+              "probability": 0.4648941545459178,
+              "frequency": 0.4564102564102564
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1829,
+              "probability": 0.5343026153684768,
+              "frequency": 0.5369054127938764
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 140,
+              "probability": 0.6258131079489142,
+              "frequency": 0.6642857142857143
+            }
+          ]
+        },
+        "simmetrica": {
+          "n": 3880,
+          "correct": 2045,
+          "wrong": 1800,
+          "undecided": 35,
+          "accuracy": 0.5318595578673602,
+          "coverage": 0.990979381443299,
+          "brier": 0.2486988688479384,
+          "logLoss": 0.6906380868554308,
+          "ece": 0.0070699220552890105,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 4,
+              "probability": 0.2784400190542111,
+              "frequency": 0.75
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 56,
+              "probability": 0.3743572736453813,
+              "frequency": 0.42857142857142855
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1811,
+              "probability": 0.4730780337891169,
+              "frequency": 0.46438431805632246
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1942,
+              "probability": 0.5279857712920981,
+              "frequency": 0.5283213182286303
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 64,
+              "probability": 0.6236110636460293,
+              "frequency": 0.5625
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 3,
+              "probability": 0.7340018528991813,
+              "frequency": 0.0
+            }
+          ]
+        },
+        "simmetrica-recente-per-lega": {
+          "n": 3880,
+          "correct": 2093,
+          "wrong": 1752,
+          "undecided": 35,
+          "accuracy": 0.5443433029908973,
+          "coverage": 0.990979381443299,
+          "brier": 0.24853432927404626,
+          "logLoss": 0.690389590568022,
+          "ece": 0.01648291430689505,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 8,
+              "probability": 0.2733856054721692,
+              "frequency": 0.5
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 102,
+              "probability": 0.3643966794960938,
+              "frequency": 0.39215686274509803
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1759,
+              "probability": 0.4689491748846899,
+              "frequency": 0.4542353610005685
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1887,
+              "probability": 0.531576641906342,
+              "frequency": 0.5416004239533652
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 109,
+              "probability": 0.6291331419493335,
+              "frequency": 0.5504587155963303
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 15,
+              "probability": 0.7291510563834761,
+              "frequency": 0.3333333333333333
+            }
+          ]
+        },
+        "media-simmetriche": {
+          "n": 3880,
+          "correct": 2070,
+          "wrong": 1775,
+          "undecided": 35,
+          "accuracy": 0.5383615084525357,
+          "coverage": 0.990979381443299,
+          "brier": 0.2483558465676639,
+          "logLoss": 0.68995212310672,
+          "ece": 0.012470529892281241,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 4,
+              "probability": 0.2864522759426754,
+              "frequency": 1.0
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 72,
+              "probability": 0.37465234526250074,
+              "frequency": 0.3611111111111111
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1772,
+              "probability": 0.4715702506214139,
+              "frequency": 0.45936794582392776
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1948,
+              "probability": 0.5287171542690717,
+              "frequency": 0.5354209445585215
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 80,
+              "probability": 0.6246060680572909,
+              "frequency": 0.5375
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 4,
+              "probability": 0.7266357993362479,
+              "frequency": 0.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "from": "2026-10-27",
+      "untilExclusive": "2026-11-01",
+      "trainLocal": 12446,
+      "calibration": 2282,
+      "test": 3820,
+      "temperatures": [
+        0.75,
+        0.5
+      ],
+      "metrics": {
+        "logistica-v32": {
+          "n": 3820,
+          "correct": 2088,
+          "wrong": 1732,
+          "undecided": 0,
+          "accuracy": 0.5465968586387434,
+          "coverage": 1.0,
+          "brier": 0.24551055061834634,
+          "logLoss": 0.6841034046840357,
+          "ece": 0.005902245505281588,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 14,
+              "probability": 0.27988864192473234,
+              "frequency": 0.5
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 267,
+              "probability": 0.365146522243845,
+              "frequency": 0.35580524344569286
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1880,
+              "probability": 0.46086392803616755,
+              "frequency": 0.46702127659574466
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1514,
+              "probability": 0.5361697896293439,
+              "frequency": 0.535667107001321
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 142,
+              "probability": 0.6300985401295672,
+              "frequency": 0.6619718309859155
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 3,
+              "probability": 0.7026710951940749,
+              "frequency": 0.6666666666666666
+            }
+          ]
+        },
+        "simmetrica": {
+          "n": 3820,
+          "correct": 2062,
+          "wrong": 1741,
+          "undecided": 17,
+          "accuracy": 0.5422035235340521,
+          "coverage": 0.9955497382198953,
+          "brier": 0.2471120356304718,
+          "logLoss": 0.6874269021109467,
+          "ece": 0.010089327258617794,
+          "calibration": [
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "n": 1,
+              "probability": 0.19884036191472138,
+              "frequency": 0.0
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 12,
+              "probability": 0.2635712747020909,
+              "frequency": 0.5
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 120,
+              "probability": 0.3649671656705812,
+              "frequency": 0.35
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1726,
+              "probability": 0.4662609606860666,
+              "frequency": 0.45654692931633833
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1784,
+              "probability": 0.5337910565074082,
+              "frequency": 0.5341928251121076
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 163,
+              "probability": 0.6359426877837693,
+              "frequency": 0.5398773006134969
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 14,
+              "probability": 0.7548109813051038,
+              "frequency": 0.7142857142857143
+            }
+          ]
+        },
+        "simmetrica-recente-per-lega": {
+          "n": 3820,
+          "correct": 2054,
+          "wrong": 1749,
+          "undecided": 17,
+          "accuracy": 0.5400999211149092,
+          "coverage": 0.9955497382198953,
+          "brier": 0.24736943162049554,
+          "logLoss": 0.6879518299476133,
+          "ece": 0.008180900935952999,
+          "calibration": [
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "n": 2,
+              "probability": 0.19544616379724042,
+              "frequency": 0.0
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 13,
+              "probability": 0.26735122147175877,
+              "frequency": 0.38461538461538464
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 108,
+              "probability": 0.3702887553848336,
+              "frequency": 0.35185185185185186
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1758,
+              "probability": 0.47210367918107005,
+              "frequency": 0.459613196814562
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1807,
+              "probability": 0.5291129777661516,
+              "frequency": 0.5279468732706143
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 113,
+              "probability": 0.6287000351110913,
+              "frequency": 0.6283185840707964
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 17,
+              "probability": 0.7422807045656823,
+              "frequency": 0.5882352941176471
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "n": 2,
+              "probability": 0.8086173881948712,
+              "frequency": 0.5
+            }
+          ]
+        },
+        "media-simmetriche": {
+          "n": 3820,
+          "correct": 2068,
+          "wrong": 1735,
+          "undecided": 17,
+          "accuracy": 0.5437812253484091,
+          "coverage": 0.9955497382198953,
+          "brier": 0.24690533440105145,
+          "logLoss": 0.6869904391630401,
+          "ece": 0.011289136410496232,
+          "calibration": [
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "n": 1,
+              "probability": 0.19504465965185713,
+              "frequency": 0.0
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 11,
+              "probability": 0.25900427336356374,
+              "frequency": 0.36363636363636365
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 95,
+              "probability": 0.3680861746566257,
+              "frequency": 0.37894736842105264
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1760,
+              "probability": 0.4700852834502733,
+              "frequency": 0.45284090909090907
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1823,
+              "probability": 0.5307347321858342,
+              "frequency": 0.5331870543060888
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 118,
+              "probability": 0.6340892818394235,
+              "frequency": 0.5932203389830508
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 10,
+              "probability": 0.7499512299403133,
+              "frequency": 0.7
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "n": 2,
+              "probability": 0.8019801868310764,
+              "frequency": 0.5
+            }
+          ]
+        }
+      }
+    },
+    {
+      "from": "2026-11-01",
+      "untilExclusive": "2026-11-05",
+      "trainLocal": 16326,
+      "calibration": 2318,
+      "test": 3089,
+      "temperatures": [
+        0.75,
+        0.75
+      ],
+      "metrics": {
+        "logistica-v32": {
+          "n": 3089,
+          "correct": 1708,
+          "wrong": 1381,
+          "undecided": 0,
+          "accuracy": 0.552929750728391,
+          "coverage": 1.0,
+          "brier": 0.24532899214148077,
+          "logLoss": 0.6836244070725341,
+          "ece": 0.03443351938458335,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 13,
+              "probability": 0.280571867021803,
+              "frequency": 0.07692307692307693
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 242,
+              "probability": 0.3685294863078446,
+              "frequency": 0.4049586776859504
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1684,
+              "probability": 0.4591240184975369,
+              "frequency": 0.4821852731591449
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1039,
+              "probability": 0.534576536199807,
+              "frequency": 0.5745909528392685
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 110,
+              "probability": 0.629265806981514,
+              "frequency": 0.7545454545454545
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 1,
+              "probability": 0.7109498236111652,
+              "frequency": 0.0
+            }
+          ]
+        },
+        "simmetrica": {
+          "n": 3089,
+          "correct": 1675,
+          "wrong": 1399,
+          "undecided": 15,
+          "accuracy": 0.5448926480156149,
+          "coverage": 0.9951440595662027,
+          "brier": 0.24581139101423027,
+          "logLoss": 0.6846422374572788,
+          "ece": 0.015151186870089931,
+          "calibration": [
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 89,
+              "probability": 0.3758281879100469,
+              "frequency": 0.3258426966292135
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1390,
+              "probability": 0.46468443870359394,
+              "frequency": 0.479136690647482
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1489,
+              "probability": 0.5356521541238526,
+              "frequency": 0.5439892545332438
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 121,
+              "probability": 0.6293327701973076,
+              "frequency": 0.7107438016528925
+            }
+          ]
+        },
+        "simmetrica-recente-per-lega": {
+          "n": 3089,
+          "correct": 1676,
+          "wrong": 1398,
+          "undecided": 15,
+          "accuracy": 0.5452179570592063,
+          "coverage": 0.9951440595662027,
+          "brier": 0.2460066740219147,
+          "logLoss": 0.6850955168441587,
+          "ece": 0.016437525387143142,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 14,
+              "probability": 0.2716376246477783,
+              "frequency": 0.21428571428571427
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 152,
+              "probability": 0.3689506438679684,
+              "frequency": 0.34868421052631576
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1330,
+              "probability": 0.46621134149349225,
+              "frequency": 0.4864661654135338
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1398,
+              "probability": 0.5355977236718715,
+              "frequency": 0.5472103004291845
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 173,
+              "probability": 0.6333428711239578,
+              "frequency": 0.6358381502890174
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 18,
+              "probability": 0.7253945087818677,
+              "frequency": 0.6111111111111112
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "n": 4,
+              "probability": 0.807502183469331,
+              "frequency": 0.5
+            }
+          ]
+        },
+        "media-simmetriche": {
+          "n": 3089,
+          "correct": 1676,
+          "wrong": 1398,
+          "undecided": 15,
+          "accuracy": 0.5452179570592063,
+          "coverage": 0.9951440595662027,
+          "brier": 0.24556296731698274,
+          "logLoss": 0.684128115098611,
+          "ece": 0.017675502754769902,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 4,
+              "probability": 0.28468938805259636,
+              "frequency": 0.25
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 102,
+              "probability": 0.36839504927800043,
+              "frequency": 0.28431372549019607
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 1374,
+              "probability": 0.4659770144278761,
+              "frequency": 0.48398835516739447
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 1483,
+              "probability": 0.5355862932640315,
+              "frequency": 0.5482130815913688
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 115,
+              "probability": 0.6331900847405701,
+              "frequency": 0.6521739130434783
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 11,
+              "probability": 0.7065158263141943,
+              "frequency": 0.7272727272727273
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "supported": 12283,
+  "quotedSupported": 258,
+  "quotedDays": 16,
+  "models": {
+    "logistica-v32": {
+      "all": {
+        "n": 14261,
+        "correct": 7780,
+        "wrong": 6481,
+        "undecided": 0,
+        "accuracy": 0.5455437907580114,
+        "coverage": 1.0,
+        "brier": 0.24583855326944803,
+        "logLoss": 0.6847295073039295,
+        "ece": 0.004554934718052456,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 29,
+            "probability": 0.2810747609371286,
+            "frequency": 0.27586206896551724
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 707,
+            "probability": 0.3677060705575632,
+            "frequency": 0.36916548797736914
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 6485,
+            "probability": 0.4631757565997685,
+            "frequency": 0.466615265998458
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 6510,
+            "probability": 0.5348529527616865,
+            "frequency": 0.5367127496159754
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 526,
+            "probability": 0.6263431772812708,
+            "frequency": 0.6806083650190115
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 4,
+            "probability": 0.7047407772983475,
+            "frequency": 0.5
+          }
+        ]
+      },
+      "supported": {
+        "n": 12283,
+        "correct": 6758,
+        "wrong": 5525,
+        "undecided": 0,
+        "accuracy": 0.5501913213384353,
+        "coverage": 1.0,
+        "brier": 0.2453288242699668,
+        "logLoss": 0.6836968840682756,
+        "ece": 0.007181721572880152,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 29,
+            "probability": 0.2810747609371286,
+            "frequency": 0.27586206896551724
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 698,
+            "probability": 0.3674712589988424,
+            "frequency": 0.36962750716332377
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 5445,
+            "probability": 0.4617125669527642,
+            "frequency": 0.46611570247933887
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 5581,
+            "probability": 0.536961237772396,
+            "frequency": 0.5429134563698262
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 526,
+            "probability": 0.6263431772812708,
+            "frequency": 0.6806083650190115
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 4,
+            "probability": 0.7047407772983475,
+            "frequency": 0.5
+          }
+        ]
+      },
+      "brierDifferenceVsReference": null,
+      "quoted": {
+        "n": 258,
+        "correct": 138,
+        "wrong": 120,
+        "undecided": 0,
+        "accuracy": 0.5348837209302325,
+        "coverage": 1.0,
+        "brier": 0.24811418852374212,
+        "logLoss": 0.6892422133208939,
+        "ece": 0.021418999933951563,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 2,
+            "probability": 0.27802472694383196,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 16,
+            "probability": 0.3683947817019609,
+            "frequency": 0.3125
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 119,
+            "probability": 0.4634820595647758,
+            "frequency": 0.46218487394957986
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 110,
+            "probability": 0.5368306077234986,
+            "frequency": 0.509090909090909
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 11,
+            "probability": 0.6347366356202391,
+            "frequency": 0.5454545454545454
+          }
+        ]
+      },
+      "priceRules": {
+        "0": {
+          "all": {
+            "n": 93,
+            "correct": 41,
+            "wrong": 52,
+            "accuracy": 0.44086021505376344,
+            "averageOdds": 2.183732486151841,
+            "roiAtRecordedPrices": -0.08600521342456824,
+            "roiBlockInterval": {
+              "lower": -0.33636363636363636,
+              "upper": 0.20655563992459175,
+              "days": 16,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 79,
+            "correct": 32,
+            "wrong": 47,
+            "accuracy": 0.4050632911392405,
+            "averageOdds": 2.257336018411968,
+            "roiAtRecordedPrices": -0.12307249712313001,
+            "roiBlockInterval": {
+              "lower": -0.3656774669559076,
+              "upper": 0.11545534011443197,
+              "days": 15,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 50,
+            "correct": 18,
+            "wrong": 32,
+            "accuracy": 0.36,
+            "averageOdds": 2.4175,
+            "roiAtRecordedPrices": -0.16899999999999998,
+            "roiBlockInterval": {
+              "lower": -0.5153846153846154,
+              "upper": 0.12000000000000002,
+              "days": 13,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        },
+        "0.03": {
+          "all": {
+            "n": 81,
+            "correct": 35,
+            "wrong": 46,
+            "accuracy": 0.43209876543209874,
+            "averageOdds": 2.2318275346053125,
+            "roiAtRecordedPrices": -0.08393191170968946,
+            "roiBlockInterval": {
+              "lower": -0.3573905380333952,
+              "upper": 0.15262455059065405,
+              "days": 15,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 73,
+            "correct": 30,
+            "wrong": 43,
+            "accuracy": 0.410958904109589,
+            "averageOdds": 2.2822229140722294,
+            "roiAtRecordedPrices": -0.10330012453300125,
+            "roiBlockInterval": {
+              "lower": -0.3843866571018651,
+              "upper": 0.13255813953488374,
+              "days": 15,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 50,
+            "correct": 18,
+            "wrong": 32,
+            "accuracy": 0.36,
+            "averageOdds": 2.4175,
+            "roiAtRecordedPrices": -0.16899999999999998,
+            "roiBlockInterval": {
+              "lower": -0.5153846153846154,
+              "upper": 0.12000000000000002,
+              "days": 13,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        },
+        "0.06": {
+          "all": {
+            "n": 70,
+            "correct": 28,
+            "wrong": 42,
+            "accuracy": 0.4,
+            "averageOdds": 2.2813744588744593,
+            "roiAtRecordedPrices": -0.12971861471861468,
+            "roiBlockInterval": {
+              "lower": -0.484375,
+              "upper": 0.16575892857143015,
+              "days": 13,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 66,
+            "correct": 26,
+            "wrong": 40,
+            "accuracy": 0.3939393939393939,
+            "averageOdds": 2.3106404958677684,
+            "roiAtRecordedPrices": -0.1309228650137741,
+            "roiBlockInterval": {
+              "lower": -0.46774193548387094,
+              "upper": 0.12674180327869203,
+              "days": 13,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 49,
+            "correct": 17,
+            "wrong": 32,
+            "accuracy": 0.3469387755102041,
+            "averageOdds": 2.423979591836735,
+            "roiAtRecordedPrices": -0.19489795918367345,
+            "roiBlockInterval": {
+              "lower": -0.5874114583333334,
+              "upper": 0.06041666666666902,
+              "days": 12,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        }
+      }
+    },
+    "simmetrica": {
+      "all": {
+        "n": 14261,
+        "correct": 7592,
+        "wrong": 6565,
+        "undecided": 104,
+        "accuracy": 0.5362718089990818,
+        "coverage": 0.9927073837739289,
+        "brier": 0.24789355705160984,
+        "logLoss": 0.6889591348625761,
+        "ece": 0.0033430641520227396,
+        "calibration": [
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 1,
+            "probability": 0.19884036191472138,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 18,
+            "probability": 0.26764752556210153,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 353,
+            "probability": 0.37037946827708684,
+            "frequency": 0.37677053824362605
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 6512,
+            "probability": 0.4692537291679833,
+            "frequency": 0.46836609336609336
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 6928,
+            "probability": 0.5311060695917068,
+            "frequency": 0.5330542725173211
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 429,
+            "probability": 0.6313975622185105,
+            "frequency": 0.5897435897435898
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 20,
+            "probability": 0.7445608434853574,
+            "frequency": 0.55
+          }
+        ]
+      },
+      "supported": {
+        "n": 12283,
+        "correct": 6623,
+        "wrong": 5660,
+        "undecided": 0,
+        "accuracy": 0.5392005210453472,
+        "coverage": 1.0,
+        "brier": 0.24770660106335884,
+        "logLoss": 0.6885929693773835,
+        "ece": 0.005874030290833753,
+        "calibration": [
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 1,
+            "probability": 0.19884036191472138,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 18,
+            "probability": 0.26764752556210153,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 347,
+            "probability": 0.37049633661579795,
+            "frequency": 0.37752161383285304
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 5573,
+            "probability": 0.4674112405805797,
+            "frequency": 0.46922662838686524
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 5900,
+            "probability": 0.5332723069812074,
+            "frequency": 0.5388135593220339
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 424,
+            "probability": 0.6312028208518474,
+            "frequency": 0.5872641509433962
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 20,
+            "probability": 0.7445608434853574,
+            "frequency": 0.55
+          }
+        ]
+      },
+      "brierDifferenceVsReference": {
+        "lower": 0.0011761497843616189,
+        "upper": 0.003108637420204126,
+        "days": 19,
+        "blockDays": 3,
+        "familyComparisons": 3
+      },
+      "quoted": {
+        "n": 258,
+        "correct": 140,
+        "wrong": 118,
+        "undecided": 0,
+        "accuracy": 0.5426356589147286,
+        "coverage": 1.0,
+        "brier": 0.24724477671155615,
+        "logLoss": 0.6877112789514559,
+        "ece": 0.03919093663353026,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 1,
+            "probability": 0.24833353214731263,
+            "frequency": 1.0
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 7,
+            "probability": 0.3541668045572743,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 115,
+            "probability": 0.46507883835957714,
+            "frequency": 0.45217391304347826
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 122,
+            "probability": 0.5373412130697001,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 13,
+            "probability": 0.6276359118582753,
+            "frequency": 0.6923076923076923
+          }
+        ]
+      },
+      "priceRules": {
+        "0": {
+          "all": {
+            "n": 108,
+            "correct": 52,
+            "wrong": 56,
+            "accuracy": 0.48148148148148145,
+            "averageOdds": 2.1852503206669875,
+            "roiAtRecordedPrices": -0.0031194885361551755,
+            "roiBlockInterval": {
+              "lower": -0.1436145658776707,
+              "upper": 0.26865671641791045,
+              "days": 15,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 93,
+            "correct": 41,
+            "wrong": 52,
+            "accuracy": 0.44086021505376344,
+            "averageOdds": 2.2584799608993156,
+            "roiAtRecordedPrices": -0.04880254154447701,
+            "roiBlockInterval": {
+              "lower": -0.18192583732057413,
+              "upper": 0.149633330053785,
+              "days": 15,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 64,
+            "correct": 25,
+            "wrong": 39,
+            "accuracy": 0.390625,
+            "averageOdds": 2.385546875,
+            "roiAtRecordedPrices": -0.11210937499999997,
+            "roiBlockInterval": {
+              "lower": -0.35178571428571426,
+              "upper": 0.18670833333333875,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        },
+        "0.03": {
+          "all": {
+            "n": 91,
+            "correct": 43,
+            "wrong": 48,
+            "accuracy": 0.4725274725274725,
+            "averageOdds": 2.2475964511678796,
+            "roiAtRecordedPrices": -0.0006719471005185099,
+            "roiBlockInterval": {
+              "lower": -0.17763777838015646,
+              "upper": 0.25847613351560733,
+              "days": 15,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 84,
+            "correct": 37,
+            "wrong": 47,
+            "accuracy": 0.44047619047619047,
+            "averageOdds": 2.2894209956709957,
+            "roiAtRecordedPrices": -0.04104437229437229,
+            "roiBlockInterval": {
+              "lower": -0.20026469435736677,
+              "upper": 0.15349650349650348,
+              "days": 15,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 64,
+            "correct": 25,
+            "wrong": 39,
+            "accuracy": 0.390625,
+            "averageOdds": 2.385546875,
+            "roiAtRecordedPrices": -0.11210937499999997,
+            "roiBlockInterval": {
+              "lower": -0.35178571428571426,
+              "upper": 0.18670833333333875,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        },
+        "0.06": {
+          "all": {
+            "n": 83,
+            "correct": 36,
+            "wrong": 47,
+            "accuracy": 0.43373493975903615,
+            "averageOdds": 2.285094925155166,
+            "roiAtRecordedPrices": -0.061400146038700226,
+            "roiBlockInterval": {
+              "lower": -0.23187878787878788,
+              "upper": 0.15885438689217826,
+              "days": 15,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 80,
+            "correct": 33,
+            "wrong": 47,
+            "accuracy": 0.4125,
+            "averageOdds": 2.303778409090909,
+            "roiAtRecordedPrices": -0.09321022727272725,
+            "roiBlockInterval": {
+              "lower": -0.258483734402852,
+              "upper": 0.08436920222634506,
+              "days": 15,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 63,
+            "correct": 24,
+            "wrong": 39,
+            "accuracy": 0.38095238095238093,
+            "averageOdds": 2.390079365079365,
+            "roiAtRecordedPrices": -0.13134920634920633,
+            "roiBlockInterval": {
+              "lower": -0.35178571428571426,
+              "upper": 0.18670833333333875,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        }
+      }
+    },
+    "simmetrica-recente-per-lega": {
+      "all": {
+        "n": 14261,
+        "correct": 7642,
+        "wrong": 6515,
+        "undecided": 104,
+        "accuracy": 0.5398036307127216,
+        "coverage": 0.9927073837739289,
+        "brier": 0.24826768244251027,
+        "logLoss": 0.6899949475906798,
+        "ece": 0.008529599246945177,
+        "calibration": [
+          {
+            "from": 0.0,
+            "to": 0.1,
+            "n": 8,
+            "probability": 0.08441530283079421,
+            "frequency": 0.375
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 25,
+            "probability": 0.1542504343589784,
+            "frequency": 0.28
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 106,
+            "probability": 0.2608920828066069,
+            "frequency": 0.330188679245283
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 625,
+            "probability": 0.3670369276527158,
+            "frequency": 0.4144
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 6218,
+            "probability": 0.4678837777338792,
+            "frequency": 0.4683177870697974
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 6516,
+            "probability": 0.5326529291173582,
+            "frequency": 0.535451197053407
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 614,
+            "probability": 0.6323971965169543,
+            "frequency": 0.5830618892508144
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 115,
+            "probability": 0.7383787239902194,
+            "frequency": 0.5391304347826087
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 28,
+            "probability": 0.8394169105169424,
+            "frequency": 0.6785714285714286
+          },
+          {
+            "from": 0.9,
+            "to": 1.0,
+            "n": 6,
+            "probability": 0.9305915609934007,
+            "frequency": 0.8333333333333334
+          }
+        ]
+      },
+      "supported": {
+        "n": 12283,
+        "correct": 6608,
+        "wrong": 5675,
+        "undecided": 0,
+        "accuracy": 0.5379793210127819,
+        "coverage": 1.0,
+        "brier": 0.24848366369005984,
+        "logLoss": 0.6904905145487049,
+        "ece": 0.012580047188697438,
+        "calibration": [
+          {
+            "from": 0.0,
+            "to": 0.1,
+            "n": 8,
+            "probability": 0.08441530283079421,
+            "frequency": 0.375
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 25,
+            "probability": 0.1542504343589784,
+            "frequency": 0.28
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 104,
+            "probability": 0.26094543524627667,
+            "frequency": 0.33653846153846156
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 596,
+            "probability": 0.3667788464442611,
+            "frequency": 0.41778523489932884
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 5309,
+            "probability": 0.467099430058867,
+            "frequency": 0.47466566208325484
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 5517,
+            "probability": 0.5341628723228048,
+            "frequency": 0.5365234729019395
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 577,
+            "probability": 0.6327231365737006,
+            "frequency": 0.5823223570190641
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 113,
+            "probability": 0.7383167147855115,
+            "frequency": 0.5309734513274337
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 28,
+            "probability": 0.8394169105169424,
+            "frequency": 0.6785714285714286
+          },
+          {
+            "from": 0.9,
+            "to": 1.0,
+            "n": 6,
+            "probability": 0.9305915609934007,
+            "frequency": 0.8333333333333334
+          }
+        ]
+      },
+      "brierDifferenceVsReference": {
+        "lower": 0.0012534128095678743,
+        "upper": 0.0040261264849124285,
+        "days": 19,
+        "blockDays": 3,
+        "familyComparisons": 3
+      },
+      "quoted": {
+        "n": 258,
+        "correct": 139,
+        "wrong": 119,
+        "undecided": 0,
+        "accuracy": 0.5387596899224806,
+        "coverage": 1.0,
+        "brier": 0.25074334023174916,
+        "logLoss": 0.6948007198256009,
+        "ece": 0.035047749536228724,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 3,
+            "probability": 0.2803384554812221,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 8,
+            "probability": 0.37435616781565595,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 123,
+            "probability": 0.4667258925760335,
+            "frequency": 0.43902439024390244
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 108,
+            "probability": 0.5383532979549975,
+            "frequency": 0.5092592592592593
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 14,
+            "probability": 0.6335589975425868,
+            "frequency": 0.5714285714285714
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 2,
+            "probability": 0.7294585788639314,
+            "frequency": 0.5
+          }
+        ]
+      },
+      "priceRules": {
+        "0": {
+          "all": {
+            "n": 100,
+            "correct": 44,
+            "wrong": 56,
+            "accuracy": 0.44,
+            "averageOdds": 2.1969563492063493,
+            "roiAtRecordedPrices": -0.0702099567099567,
+            "roiBlockInterval": {
+              "lower": -0.23647065988164473,
+              "upper": 0.23598733924716064,
+              "days": 16,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 86,
+            "correct": 37,
+            "wrong": 49,
+            "accuracy": 0.43023255813953487,
+            "averageOdds": 2.272330866807611,
+            "roiAtRecordedPrices": -0.06062367864693447,
+            "roiBlockInterval": {
+              "lower": -0.31534149701001146,
+              "upper": 0.19174901185770754,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 59,
+            "correct": 21,
+            "wrong": 38,
+            "accuracy": 0.3559322033898305,
+            "averageOdds": 2.4046610169491527,
+            "roiAtRecordedPrices": -0.1669491525423729,
+            "roiBlockInterval": {
+              "lower": -0.486,
+              "upper": 0.10344827586206898,
+              "days": 13,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        },
+        "0.03": {
+          "all": {
+            "n": 87,
+            "correct": 37,
+            "wrong": 50,
+            "accuracy": 0.42528735632183906,
+            "averageOdds": 2.245070989036506,
+            "roiAtRecordedPrices": -0.08035278897347861,
+            "roiBlockInterval": {
+              "lower": -0.34694891138273487,
+              "upper": 0.21125693555271022,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 79,
+            "correct": 34,
+            "wrong": 45,
+            "accuracy": 0.43037974683544306,
+            "averageOdds": 2.2976121979286535,
+            "roiAtRecordedPrices": -0.052186421173762924,
+            "roiBlockInterval": {
+              "lower": -0.37343195455859934,
+              "upper": 0.1944155844155854,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 59,
+            "correct": 21,
+            "wrong": 38,
+            "accuracy": 0.3559322033898305,
+            "averageOdds": 2.4046610169491527,
+            "roiAtRecordedPrices": -0.1669491525423729,
+            "roiBlockInterval": {
+              "lower": -0.486,
+              "upper": 0.10344827586206898,
+              "days": 13,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        },
+        "0.06": {
+          "all": {
+            "n": 79,
+            "correct": 32,
+            "wrong": 47,
+            "accuracy": 0.4050632911392405,
+            "averageOdds": 2.283748424571209,
+            "roiAtRecordedPrices": -0.10951011014302153,
+            "roiBlockInterval": {
+              "lower": -0.3530071119356833,
+              "upper": 0.20513833992094865,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 75,
+            "correct": 31,
+            "wrong": 44,
+            "accuracy": 0.41333333333333333,
+            "averageOdds": 2.3121515151515153,
+            "roiAtRecordedPrices": -0.08296969696969693,
+            "roiBlockInterval": {
+              "lower": -0.3655885780885781,
+              "upper": 0.2374458874458875,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 58,
+            "correct": 20,
+            "wrong": 38,
+            "accuracy": 0.3448275862068966,
+            "averageOdds": 2.409913793103448,
+            "roiAtRecordedPrices": -0.18879310344827585,
+            "roiBlockInterval": {
+              "lower": -0.486,
+              "upper": 0.10344827586206898,
+              "days": 13,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        }
+      }
+    },
+    "media-simmetriche": {
+      "all": {
+        "n": 14261,
+        "correct": 7615,
+        "wrong": 6542,
+        "undecided": 104,
+        "accuracy": 0.5378964469873561,
+        "coverage": 0.9927073837739289,
+        "brier": 0.24746957988568305,
+        "logLoss": 0.6880928737515389,
+        "ece": 0.004395754672336139,
+        "calibration": [
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 1,
+            "probability": 0.19504465965185713,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 44,
+            "probability": 0.27371011449101235,
+            "frequency": 0.4090909090909091
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 451,
+            "probability": 0.36809967901681123,
+            "frequency": 0.35476718403547675
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 6419,
+            "probability": 0.4691193524442261,
+            "frequency": 0.470166692631251
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 6823,
+            "probability": 0.5312945866952425,
+            "frequency": 0.5339293565880111
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 470,
+            "probability": 0.6324480185308465,
+            "frequency": 0.5936170212765958
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 51,
+            "probability": 0.7248757215985049,
+            "frequency": 0.5882352941176471
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 2,
+            "probability": 0.8019801868310764,
+            "frequency": 0.5
+          }
+        ]
+      },
+      "supported": {
+        "n": 12283,
+        "correct": 6601,
+        "wrong": 5682,
+        "undecided": 0,
+        "accuracy": 0.5374094276642514,
+        "coverage": 1.0,
+        "brier": 0.2474165244260805,
+        "logLoss": 0.6879954988178695,
+        "ece": 0.007612793151103994,
+        "calibration": [
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 1,
+            "probability": 0.19504465965185713,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 43,
+            "probability": 0.2736756537257684,
+            "frequency": 0.4186046511627907
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 438,
+            "probability": 0.36803011748047937,
+            "frequency": 0.3561643835616438
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 5489,
+            "probability": 0.4676572453079023,
+            "frequency": 0.4751320823465112
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 5803,
+            "probability": 0.5331722655851205,
+            "frequency": 0.5359296915388592
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 457,
+            "probability": 0.6323965379695069,
+            "frequency": 0.5951859956236324
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 50,
+            "probability": 0.724877074578405,
+            "frequency": 0.58
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 2,
+            "probability": 0.8019801868310764,
+            "frequency": 0.5
+          }
+        ]
+      },
+      "brierDifferenceVsReference": {
+        "lower": 0.0007700184387288632,
+        "upper": 0.002730185225147852,
+        "days": 19,
+        "blockDays": 3,
+        "familyComparisons": 3
+      },
+      "quoted": {
+        "n": 258,
+        "correct": 136,
+        "wrong": 122,
+        "undecided": 0,
+        "accuracy": 0.5271317829457365,
+        "coverage": 1.0,
+        "brier": 0.2486150566101248,
+        "logLoss": 0.6904547455195604,
+        "ece": 0.04670553863514452,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 2,
+            "probability": 0.273464489943283,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 6,
+            "probability": 0.36344789410059225,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 115,
+            "probability": 0.4653249139785059,
+            "frequency": 0.46956521739130436
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 124,
+            "probability": 0.5366681075476953,
+            "frequency": 0.4838709677419355
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 10,
+            "probability": 0.6325819234237958,
+            "frequency": 0.8
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 1,
+            "probability": 0.7076095890022127,
+            "frequency": 0.0
+          }
+        ]
+      },
+      "priceRules": {
+        "0": {
+          "all": {
+            "n": 95,
+            "correct": 41,
+            "wrong": 54,
+            "accuracy": 0.43157894736842106,
+            "averageOdds": 2.184202172096909,
+            "roiAtRecordedPrices": -0.10337890179995442,
+            "roiBlockInterval": {
+              "lower": -0.24567941317941316,
+              "upper": 0.09154077540107057,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 83,
+            "correct": 35,
+            "wrong": 48,
+            "accuracy": 0.42168674698795183,
+            "averageOdds": 2.246933187294633,
+            "roiAtRecordedPrices": -0.1001642935377875,
+            "roiBlockInterval": {
+              "lower": -0.2772312308478039,
+              "upper": 0.025365418894830793,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 57,
+            "correct": 19,
+            "wrong": 38,
+            "accuracy": 0.3333333333333333,
+            "averageOdds": 2.367543859649123,
+            "roiAtRecordedPrices": -0.24473684210526314,
+            "roiBlockInterval": {
+              "lower": -0.5564516129032258,
+              "upper": -0.0990384615384615,
+              "days": 13,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        },
+        "0.03": {
+          "all": {
+            "n": 85,
+            "correct": 37,
+            "wrong": 48,
+            "accuracy": 0.43529411764705883,
+            "averageOdds": 2.2253144894321366,
+            "roiAtRecordedPrices": -0.08577285459638398,
+            "roiBlockInterval": {
+              "lower": -0.3205155135725788,
+              "upper": 0.07388916589363129,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 79,
+            "correct": 33,
+            "wrong": 46,
+            "accuracy": 0.4177215189873418,
+            "averageOdds": 2.2605868814729577,
+            "roiAtRecordedPrices": -0.10408515535097816,
+            "roiBlockInterval": {
+              "lower": -0.3445141065830721,
+              "upper": 0.023997478372736233,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 57,
+            "correct": 19,
+            "wrong": 38,
+            "accuracy": 0.3333333333333333,
+            "averageOdds": 2.367543859649123,
+            "roiAtRecordedPrices": -0.24473684210526314,
+            "roiBlockInterval": {
+              "lower": -0.5564516129032258,
+              "upper": -0.0990384615384615,
+              "days": 13,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        },
+        "0.06": {
+          "all": {
+            "n": 75,
+            "correct": 31,
+            "wrong": 44,
+            "accuracy": 0.41333333333333333,
+            "averageOdds": 2.2655151515151513,
+            "roiAtRecordedPrices": -0.11727272727272726,
+            "roiBlockInterval": {
+              "lower": -0.34576414703717334,
+              "upper": 0.08795471392951158,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "bet365Underdogs": {
+            "n": 73,
+            "correct": 29,
+            "wrong": 44,
+            "accuracy": 0.3972602739726027,
+            "averageOdds": 2.2792652552926524,
+            "roiAtRecordedPrices": -0.14140722291407223,
+            "roiBlockInterval": {
+              "lower": -0.3621990411931818,
+              "upper": 0.022271005509644275,
+              "days": 14,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          },
+          "aboveTwo": {
+            "n": 55,
+            "correct": 18,
+            "wrong": 37,
+            "accuracy": 0.32727272727272727,
+            "averageOdds": 2.3772727272727274,
+            "roiAtRecordedPrices": -0.25545454545454543,
+            "roiBlockInterval": {
+              "lower": -0.5564516129032258,
+              "upper": -0.09903846153846153,
+              "days": 13,
+              "blockDays": 3,
+              "familyComparisons": 3
+            }
+          }
+        }
+      }
+    }
+  },
+  "marketNoVig": {
+    "n": 258,
+    "correct": 141,
+    "wrong": 100,
+    "undecided": 17,
+    "accuracy": 0.5850622406639004,
+    "coverage": 0.9341085271317829,
+    "brier": 0.24121278289320272,
+    "logLoss": 0.6751760433801868,
+    "ece": 0.042230377306720766,
+    "calibration": [
+      {
+        "from": 0.1,
+        "to": 0.2,
+        "n": 2,
+        "probability": 0.1711482558139535,
+        "frequency": 0.0
+      },
+      {
+        "from": 0.2,
+        "to": 0.3,
+        "n": 12,
+        "probability": 0.27272655099743065,
+        "frequency": 0.3333333333333333
+      },
+      {
+        "from": 0.3,
+        "to": 0.4,
+        "n": 26,
+        "probability": 0.3636656878962738,
+        "frequency": 0.2692307692307692
+      },
+      {
+        "from": 0.4,
+        "to": 0.5,
+        "n": 82,
+        "probability": 0.4465572236658613,
+        "frequency": 0.45121951219512196
+      },
+      {
+        "from": 0.5,
+        "to": 0.6,
+        "n": 86,
+        "probability": 0.540078604528447,
+        "frequency": 0.5465116279069767
+      },
+      {
+        "from": 0.6,
+        "to": 0.7,
+        "n": 39,
+        "probability": 0.640091023861537,
+        "frequency": 0.5128205128205128
+      },
+      {
+        "from": 0.7,
+        "to": 0.8,
+        "n": 10,
+        "probability": 0.7342499528752867,
+        "frequency": 0.8
+      },
+      {
+        "from": 0.8,
+        "to": 0.9,
+        "n": 1,
+        "probability": 0.8139534883720931,
+        "frequency": 0.0
+      }
+    ]
+  },
+  "retrospective": true,
+  "executablePricesVerified": false,
+  "operationallyValidated": false
+}

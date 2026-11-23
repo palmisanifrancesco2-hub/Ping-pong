@@ -167,3 +167,7 @@ Il v34 confronta 2.015 partite WTT distinte e 396 incontri MoviOdds con almeno u
 ## Vincente prematch su 41.216 partite
 
 Il v35 aggiunge 11.875 partite MoviOdds successive al v32 e ricalcola su altre coorti 4.223 casi Setka e 4.669 WTT. Sul nuovo campione, logistica con riferimento di riserva 6.409 corretti e Brier 0,24667 contro 0,24967 della frequenza. Su 7.607 gare con storico sufficiente, logistica 4.179 corretti contro 4.066 di Elo. La UI mostra quota Bet365 e quota equa affiancate. [Rapporto](STUDIO-40000-PARTITE-V35.md).
+
+## Favoriti sportivi e quote Bet365 v36
+
+Nuovo benchmark sport-only su 14.261 incontri storici già presenti nell’archivio. La logistica v32 conserva il miglior Brier. Su 258 match con storico e prezzi Bet365 verificati, la variante simmetrica porta le selezioni con EV positivo da 93 a 108 e gli esiti esatti da 41 a 52. Il rendimento teorico alle quote registrate passa da −8,60% a −0,31%, con intervallo ampio. Nessuna promozione operativa. [Studio e riproduzione](STUDIO-FAVORITI-SPORTIVI-V36.md).
