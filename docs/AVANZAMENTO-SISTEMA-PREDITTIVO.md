@@ -171,3 +171,7 @@ Il v35 aggiunge 11.875 partite MoviOdds successive al v32 e ricalcola su altre c
 ## Favoriti sportivi e quote Bet365 v36
 
 Nuovo benchmark sport-only su 14.261 incontri storici già presenti nell’archivio. La logistica v32 conserva il miglior Brier. Su 258 match con storico e prezzi Bet365 verificati, la variante simmetrica porta le selezioni con EV positivo da 93 a 108 e gli esiti esatti da 41 a 52. Il rendimento teorico alle quote registrate passa da −8,60% a −0,31%, con intervallo ampio. Nessuna promozione operativa. [Studio e riproduzione](STUDIO-FAVORITI-SPORTIVI-V36.md).
+
+## Vantaggio atteso, margine e confronto con la chiusura v37
+
+Metodo potenza e calibrazione dello scarto sportivo valutati su quote Bet365 già archiviate. La normalizzazione proporzionale ottiene il Brier migliore. Sui 156 casi cronologicamente testabili lo scarto sportivo riceve peso zero nei quattro giorni e il filtro aggiuntivo mantiene solo quattro selezioni, una esatta. Aggiunta la rilevazione prospettica della coppia prematch successiva durante la verifica dell’esito, con confronto aggregato rispetto alle quote iniziali. [Studio e riproduzione](STUDIO-ERRORI-QUOTA-V37.md).

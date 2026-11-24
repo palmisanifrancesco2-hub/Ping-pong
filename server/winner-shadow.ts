@@ -24,7 +24,11 @@ export function settleWinnerCase(c:WinnerCase,source:MarketStudyCase,registeredA
   if(source.outcome.status!=='settled'||source.outcome.y?.length!==14||source.outcome.actualStart===undefined)return c;
   if(!Number.isFinite(source.outcome.actualStart)||source.outcome.actualStart>now||!Number.isFinite(Date.parse(source.outcome.availableAt??''))||Date.parse(source.outcome.availableAt!)>now)return c;
   if(!Number.isFinite(registeredAt)||Math.max(f.at,registeredAt)>=source.outcome.actualStart-60000)return{...c,outcome:{status:'invalid',reason:'shadow_registered_too_late',sourceHash:marketHash(source.outcome)}};
-  return{...c,outcome:{status:'settled',y:source.outcome.y[0],sourceHash:marketHash(source.outcome)}};
+  const closing=source.outcome.closing;
+  const comparable=f.marketId==='920000'&&closing
+    &&Math.min(closing.homeAt,closing.awayAt)>Math.max(f.at,registeredAt,Date.parse(f.readAt))
+    &&Math.max(closing.homeAt,closing.awayAt)<=source.outcome.actualStart-60000;
+  return{...c,outcome:{status:'settled',y:source.outcome.y[0],sourceHash:marketHash(source.outcome),...(comparable?{closing}:{})}};
 }
 
 /** Every candidate is recorded at one instant on one causal feature vector. */
@@ -38,7 +42,7 @@ export function winnerCandidates(candidates:MarketStudyCase[],sources:Source[],b
     const pair=m.quotes.filter(q=>q.fixture_id===m.id&&q.group_id==='920000'&&q.line==='To Win'&&(q.side===m.home||q.side===m.away)&&q.phase!=='inplay'&&Number.isFinite(q.odds_dec)&&q.odds_dec>1&&Date.parse(q.ts)<=at&&quoteStatus(m,q,at)==='Letta di recente dalla fonte');
     if(pair.length!==2||new Set(pair.map(q=>q.side)).size!==2||pair[0].market_id!==pair[1].market_id||pair[0].period!==pair[1].period||pair[0].market_key!==pair[1].market_key)return[];
     const home=pair.find(q=>q.side===m.home)!,away=pair.find(q=>q.side===m.away)!;
-    const forecast={id:f.id,userId:owner,studyId:protocol.id,protocolHash,sourceHash:source.forecastHash,at,kickoff:f.kickoff,featuresAvailable:f.featuresAvailable,sampleSize:f.sampleSize,x:f.x,leagueProbability:f.baseline[0],probabilities:winnerProbabilities(f),bookmakerProbability:(1/home.odds_dec)/(1/home.odds_dec+1/away.odds_dec),homeOdds:home.odds_dec,awayOdds:away.odds_dec,homeQuoteAt:home.ts,awayQuoteAt:away.ts,readAt:board.checkedAt};
+    const forecast={id:f.id,userId:owner,studyId:protocol.id,protocolHash,sourceHash:source.forecastHash,at,kickoff:f.kickoff,featuresAvailable:f.featuresAvailable,sampleSize:f.sampleSize,x:f.x,leagueProbability:f.baseline[0],probabilities:winnerProbabilities(f),bookmakerProbability:(1/home.odds_dec)/(1/home.odds_dec+1/away.odds_dec),homeOdds:home.odds_dec,awayOdds:away.odds_dec,homeQuoteAt:home.ts,awayQuoteAt:away.ts,readAt:board.checkedAt,...(home.market_id&&!home.period?{marketId:home.market_id}:{})};
     return[{forecast,forecastHash:marketHash(forecast),outcome:{status:'pending' as const}}];
   }).sort((a,b)=>marketHash(`${protocol.id}:${a.forecast.id}`).localeCompare(marketHash(`${protocol.id}:${b.forecast.id}`)));
 }

@@ -10,7 +10,7 @@ import {MarketContext,marketOutcomes} from '../src/domain/market-context.js';
 import {predictMarkets,marketRuntimeVersion} from '../src/domain/market-runtime.js';
 import {marketStudyProtocol as protocol,marketCheckpoint,marketDescriptive,type MarketStudyCase} from '../src/domain/market-validation.js';
 import {playerKey,type MatchResult} from '../src/domain/player-model.js';
-import {verifiedStart} from '../src/domain/research-source.js';
+import {prematchBenchmark,verifiedStart} from '../src/domain/research-source.js';
 import {movioddsRequest} from './moviodds-request.js';
 import type {Board} from '../src/shared/board.js';
 import type {Env} from './auth.js';
@@ -46,7 +46,8 @@ export function settleMarketCase(c:MarketStudyCase,r:MatchResult,payload:unknown
   const wins=Math.max(r.sets.filter(s=>s[0]>s[1]).length,r.sets.filter(s=>s[0]<s[1]).length);
   if(wins!==3)return invalid('not_complete_best_of_five');
   if(Date.parse(r.finishedAt)<=Math.max(f.at,recordedAt))return invalid('result_predates_registration');
-  return{...c,outcome:{status:'settled',y:marketOutcomes(r),availableAt:r.availableAt,actualStart:at+60000,closingHash:marketHash(payload)}};
+  const closing=prematchBenchmark(payload,r,at);
+  return{...c,outcome:{status:'settled',y:marketOutcomes(r),availableAt:r.availableAt,actualStart:at+60000,closingHash:marketHash(payload),...(closing?{closing}:{})}};
 }
 
 type Stored={id:string;created_at:string;parameters:{studyId:string;userId:string;case:MarketStudyCase}};

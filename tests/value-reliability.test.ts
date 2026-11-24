@@ -24,6 +24,7 @@ describe('fixed value guard',()=>{
     };
     const prior=make('a',at-1,3.1,1.45,.55,0);
     const fresh=make('b',at,1.50,2.7,.87,1);
+    fresh.outcome.closing={homeOdds:1.35,awayOdds:3.5,homeAt:at+300_000,awayAt:at+301_000,probability:3.5/4.85};
     const duplicate=make('d',at,1.50,2.7,.88,1);
     const pending=make('p',at,1.50,2.7,.88,1,'pending');
     const report=valueReliability([prior,fresh,duplicate,duplicate,pending],at+3);
@@ -33,6 +34,8 @@ describe('fixed value guard',()=>{
     expect(report.forward.n).toBe(1);
     expect(report.forward.guarded).toMatchObject({n:1,exact:1,roi:{mean:.5}});
     expect(report.forward.guardedUnderdogs.n).toBe(0);
+    expect(report.forward.closingValue).toMatchObject({n:1,positive:1,shortened:1});
+    expect(report.forward.closingValue.mean).toBeCloseTo(1.5*3.5/4.85-1);
     expect(report.verifiedForUse).toBe(false);
   });
 });

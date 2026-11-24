@@ -1,12 +1,14 @@
 import protocol from '../../research/prospective-markets-v9.json' with {type:'json'};
 import {modelMetrics} from './player-model.js';
+import type {prematchBenchmark} from './research-source.js';
 export {protocol as marketStudyProtocol};
 export type MarketObservation={
   studyId:string;userId:string;id:string;home:string;away:string;league:string;at:number;kickoff:number;
   observedBoard:string;modelVersion:string;modelHash:string;protocolHash:string;featuresAvailable:number;
   x:number[];baseline:number[];eb:number[];p:number[];sampleSize:number;
 };
-export type MarketOutcome={status:'pending'|'settled'|'invalid';y?:number[];availableAt?:string;closingHash?:string;actualStart?:number;reason?:string};
+export type ClosingPair=NonNullable<ReturnType<typeof prematchBenchmark>>;
+export type MarketOutcome={status:'pending'|'settled'|'invalid';y?:number[];availableAt?:string;closingHash?:string;actualStart?:number;reason?:string;closing?:ClosingPair};
 export type MarketStudyCase={forecast:MarketObservation;forecastHash:string;outcome:MarketOutcome;attempts:number;lastAttempt?:number};
 
 export function marketInterval(rows:{at:number;value:number}[],replicates=protocol.bootstrapReplicates,familyComparisons=protocol.targets.length*protocol.checkpoints.length){

@@ -52,6 +52,19 @@ describe('winner alternatives without changing the original trial',()=>{
   expect(settleWinnerCase(c,{...s,outcome:{status:'invalid',reason:'source_revised'}},at,now).outcome.status).toBe('invalid');
   expect(()=>assertWinnerCase({...c,forecast:{...c.forecast,homeOdds:100}})).toThrow('WINNER_SHADOW_CORRUPT');
  });
+ it('records a later comparable pair without changing the frozen forecast',()=>{
+  const c=captured(),s=source(),closing={homeOdds:1.8,awayOdds:2.1,probability:2.1/3.9,homeAt:at+3540000,awayAt:at+3530000};
+  const done={...s,outcome:{status:'settled' as const,y:Array(14).fill(1),actualStart:at+3600000,availableAt:new Date(at+7200000).toISOString(),closing}};
+  const now=at+8000000;
+  const settled=settleWinnerCase(c,done,at+1000,now);
+  expect(settled.forecastHash).toBe(c.forecastHash);
+  expect(settled.outcome.closing).toEqual(closing);
+  for(const homeAt of [at,at+3600000]){
+   const invalidPair={...done,outcome:{...done.outcome,closing:{...closing,homeAt}}};
+   expect(settleWinnerCase(c,invalidPair,at+1000,now).outcome).toMatchObject({status:'settled',y:1});
+   expect(settleWinnerCase(c,invalidPair,at+1000,now).outcome.closing).toBeUndefined();
+  }
+ });
  it('requires fixed future checkpoints and improvement versus three references, not the best replay accuracy',()=>{
   const base=captured();
   const rows:WinnerCase[]=Array.from({length:500},(_,i)=>({...base,forecast:{...base.forecast,id:String(i),at:at+Math.floor(i/35)*86400000,kickoff:at+Math.floor(i/35)*86400000+3600000,leagueProbability:.5,bookmakerProbability:.5,probabilities:{'current-eb':.5,'full-logistic':.95,'scores-logistic':.95,'context-logistic':.95}},outcome:{status:'settled',y:1}}));

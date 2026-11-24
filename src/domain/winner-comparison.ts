@@ -4,7 +4,7 @@ import context from '../../models/winner-context-v8.json' with {type:'json'};
 import protocol from '../../research/winner-challengers-v10.json' with {type:'json'};
 import {predictScore} from './score-model.js';
 import {modelMetrics} from './player-model.js';
-import {marketInterval,type MarketStudyCase} from './market-validation.js';
+import {marketInterval,type ClosingPair,type MarketStudyCase} from './market-validation.js';
 export {protocol as winnerProtocol};
 export const winnerLabels:Record<string,string>={'current-eb':'Frequenze regolarizzate · candidato attuale','full-logistic':'Logistica completa · modello delle quote','scores-logistic':'Logistica su punti e set','context-logistic':'Logistica con statistiche specifiche'};
 export type WinnerProbabilities=Record<string,number>;
@@ -41,8 +41,8 @@ export function winnerDiagnostic(cases:MarketStudyCase[]){
     })};
 }
 
-export type WinnerObservation={id:string;userId:string;studyId:string;protocolHash:string;sourceHash:string;at:number;kickoff:number;featuresAvailable:number;sampleSize:number;x:number[];leagueProbability:number;probabilities:WinnerProbabilities;bookmakerProbability:number;homeOdds:number;awayOdds:number;homeQuoteAt:string;awayQuoteAt:string;readAt:string};
-export type WinnerCase={forecast:WinnerObservation;forecastHash:string;outcome:{status:'pending'|'settled'|'invalid';y?:number;reason?:string;sourceHash?:string}};
+export type WinnerObservation={id:string;userId:string;studyId:string;protocolHash:string;sourceHash:string;at:number;kickoff:number;featuresAvailable:number;sampleSize:number;x:number[];leagueProbability:number;probabilities:WinnerProbabilities;bookmakerProbability:number;homeOdds:number;awayOdds:number;homeQuoteAt:string;awayQuoteAt:string;readAt:string;marketId?:string};
+export type WinnerCase={forecast:WinnerObservation;forecastHash:string;outcome:{status:'pending'|'settled'|'invalid';y?:number;reason?:string;sourceHash?:string;closing?:ClosingPair}};
 export function winnerSummary(cases:WinnerCase[]){
   const settled=cases.filter(c=>c.outcome.status==='settled'&&[0,1].includes(c.outcome.y!));
   return{captured:cases.length,settled:settled.length,pending:cases.filter(c=>c.outcome.status==='pending').length,invalid:cases.filter(c=>c.outcome.status==='invalid').length,observedDays:new Set(cases.map(c=>new Date(c.forecast.at).toISOString().slice(0,10))).size,

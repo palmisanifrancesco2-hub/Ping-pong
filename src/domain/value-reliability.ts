@@ -9,7 +9,7 @@ export const valuePolicyStartedAt='2026-11-24T00:00:00Z';
 const DAY=86_400_000;
 const start=Date.parse(valuePolicyStartedAt);
 const ece=artifact.validation.ece;
-type Sample={p:number;y:number;h:number;a:number;n:number;at:number};
+type Sample={p:number;y:number;h:number;a:number;n:number;at:number;closing?:WinnerCase['outcome']['closing']};
 type Pick={p:number;odds:number;ev:number;exact:boolean;at:number;marketUnderdog:boolean};
 
 function lower(p:number,n:number) {
@@ -36,6 +36,20 @@ function counts(picks:Pick[]) {
     averageOdds:n?picks.reduce((sum,pick)=>sum+pick.odds,0)/n:null,roi};
 }
 
+function closingValue(samples:Sample[]) {
+  const moves=samples.flatMap(({p,h,a,at,closing})=>{
+    if(!closing||p===.5) return [];
+    const home=p>.5;
+    const offered=home?h:a;
+    const fair=fairMarketProbability(closing.homeOdds,closing.awayOdds);
+    if(offered<1.3||Math.max(p,1-p)*offered<=1+1e-12||fair===null) return [];
+    const later=home?closing.homeOdds:closing.awayOdds;
+    return [{at,value:offered*(home?fair:1-fair)-1,shortened:later<offered}];
+  });
+  return {...blockInterval(moves),positive:moves.filter(move=>move.value>1e-12).length,
+    shortened:moves.filter(move=>move.shortened).length};
+}
+
 export function valueReliability(cases:WinnerCase[],now:number) {
   const dates=new Map<string,number>();
   for(const row of cases) dates.set(row.forecast.id,(dates.get(row.forecast.id)??0)+1);
@@ -44,7 +58,7 @@ export function valueReliability(cases:WinnerCase[],now:number) {
     if(dates.get(f.id)!==1 || o.status!=='settled'||(o.y!==0&&o.y!==1)||!quoteIsUsable(row)
       ||!Number.isFinite(f.at)||f.at>now||!Number.isFinite(p)||p<=0||p>=1||!Number.isFinite(f.sampleSize)||f.sampleSize<30
       ||fairMarketProbability(f.homeOdds,f.awayOdds)===null)return [];
-    return [{p,y:o.y,h:f.homeOdds,a:f.awayOdds,n:f.sampleSize,at:f.at}];
+    return [{p,y:o.y,h:f.homeOdds,a:f.awayOdds,n:f.sampleSize,at:f.at,closing:o.closing}];
   });
   function compare(samples:Sample[]) {
     const baseline=selections(samples,false), guarded=selections(samples,true);
@@ -53,7 +67,8 @@ export function valueReliability(cases:WinnerCase[],now:number) {
       p:name==='blend'?(1-marketWeight)*r.p+marketWeight*r.market:r[name]})));
     const high=baseline.filter(pick=>pick.ev>=.25);
     return {n:samples.length,days:new Set(samples.map(r=>Math.floor(r.at/DAY))).size,
-      original:counts(baseline),guarded:counts(guarded),guardedUnderdogs:counts(guarded.filter(pick=>pick.marketUnderdog)),high:counts(high),metrics:{model:metrics('p'),blend:metrics('blend'),market:metrics('market')}};
+      original:counts(baseline),guarded:counts(guarded),guardedUnderdogs:counts(guarded.filter(pick=>pick.marketUnderdog)),high:counts(high),
+      closingValue:closingValue(samples),metrics:{model:metrics('p'),blend:metrics('blend'),market:metrics('market')}};
   }
   return {startedAt:valuePolicyStartedAt,checkedAt:new Date(now).toISOString(),
     historical:compare(usable.filter(row=>row.at<start)),forward:compare(usable.filter(row=>row.at>=start)),

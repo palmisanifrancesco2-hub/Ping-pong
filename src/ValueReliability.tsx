@@ -25,6 +25,8 @@ export function ValueReliability({report}:{report:Report}) {
         </ul>
       </>}
     </div>)}
+    <h4>Quota salvata e quota prematch successiva</h4>
+    {report.forward.closingValue?.n>0?<p>La quota Bet365 è scesa per {report.forward.closingValue.shortened} su {report.forward.closingValue.n} favoriti del modello. Per {report.forward.closingValue.positive} la quota iniziale superava anche la quota equa successiva. Scarto medio {percent(report.forward.closingValue.mean)}.</p>:<p>In attesa di quote prematch successive verificabili per i favoriti del modello con EV positivo.</p>}
     <p className="fine">Rendimento calcolato con una unità teorica per selezione ai prezzi salvati. Il test futuro misura sia la precisione delle probabilità sia il rendimento.</p>
   </section>;
 }

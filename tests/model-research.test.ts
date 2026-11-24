@@ -50,7 +50,7 @@ import {verifiedStart,prematchBenchmark} from '../src/domain/research-source';
 describe('source benchmark timestamp guards',()=>{
  const target=match('target','2026-10-01T12:30:00Z');
  const at=Date.parse('2026-10-01T11:59:00Z');
- const payload=()=>({closed:true,fixture_id:'target',kickoff_known:true,kickoff_estimated:false,kickoff_utc:'2026-10-01T12:00:00Z',pre_close_basis:'kickoff',selections:['A','B'].map(side=>({side,group_id:'920000',market_id:'920000',line:'To Win',pre_close:{side,market_id:'920000',odds_dec:2,suspended:false,ts:'2026-10-01T11:58:00Z'}}))});
+ const payload=()=>({closed:true,fixture_id:'target',kickoff_known:true,kickoff_estimated:false,kickoff_utc:'2026-10-01T12:00:00Z',pre_close_basis:'kickoff',selections:['A','B'].map(side=>({side,group_id:'920000',market_id:'920000',line:'To Win',pre_close:{side,market_id:'920000',line:'To Win',odds_dec:2,suspended:false,ts:'2026-10-01T11:58:00Z'}}))});
  it('accepts exact identities and strips margin from a coherent pair',()=>{expect(verifiedStart(payload(),target)).toBe(at);expect(prematchBenchmark(payload(),target,at)?.probability).toBe(.5);});
  it('rejects estimated starts and substring player matches',()=>{expect(verifiedStart({...payload(),kickoff_estimated:true},target)).toBeNull();expect(verifiedStart(payload(),{...target,home:'AA'})).toBeNull();});
  it('rejects future and stale closing quote observations',()=>{for(const time of ['2026-10-01T12:00:01Z','2026-10-01T10:00:00Z']){const p=payload();p.selections[0].pre_close.ts=time;expect(prematchBenchmark(p,target,at)).toBeNull();}});

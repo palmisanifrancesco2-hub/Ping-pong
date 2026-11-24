@@ -16,8 +16,8 @@ export function prematchBenchmark(payload:unknown,target:MatchResult,at:number){
  const quotes=selections.filter(s=>s.group_id==='920000'&&s.market_id==='920000'&&s.line==='To Win'&&(s.side===target.home||s.side===target.away)).map(s=>record(s.pre_close));
  if(quotes.length!==2||quotes.some(q=>!q))return null;
  const home=quotes.find(q=>q?.side===target.home),away=quotes.find(q=>q?.side===target.away);
- if(!home||!away||home.market_id!==away.market_id||home.period!==away.period)return null;
+ if(!home||!away||[home,away].some(q=>q.market_id!=='920000'||q.line!=='To Win'||q.period))return null;
  for(const q of [home,away]){const ts=Date.parse(String(q.ts));if(q.suspended!==false||typeof q.odds_dec!=='number'||!Number.isFinite(q.odds_dec)||q.odds_dec<=1||!Number.isFinite(ts)||ts>at||at-ts>300000)return null;}
  const h=home.odds_dec as number,a=away.odds_dec as number;
- return{homeOdds:h,awayOdds:a,probability:(1/h)/(1/h+1/a)};
+ return{homeOdds:h,awayOdds:a,probability:(1/h)/(1/h+1/a),homeAt:Date.parse(String(home.ts)),awayAt:Date.parse(String(away.ts))};
 }

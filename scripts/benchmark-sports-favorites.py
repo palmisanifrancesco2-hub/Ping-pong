@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import os
 from datetime import date, datetime, timezone
 from pathlib import Path
 
@@ -122,7 +123,7 @@ def evaluate_prices(rows, p, y, prices, minimum, buffer, bootstrap):
     return {name: roi_summary(*bucket, bootstrap) for name, bucket in buckets.items()}
 
 
-def main(output):
+def main(output, priced_sample=None):
     protocol_path = ROOT / 'research/protocol-sports-favorites-v36.json'
     plan = json.loads(protocol_path.read_text())
     spec = importlib.util.spec_from_file_location('prematch', Path(__file__).with_name('benchmark-prematch-10000.py'))
@@ -205,9 +206,17 @@ def main(output):
     with output.open('x') as handle:
         json.dump(report, handle, indent=2, allow_nan=False)
         handle.write('\n')
+    if priced_sample is not None:
+        sample = [{'day': row['day'], 'outcome': int(truth[index]), 'prices': price,
+                   'sports': float(reference[index])}
+                  for row, index, price in zip(quoted_rows, quote_indices, prices, strict=True)]
+        with os.fdopen(os.open(priced_sample, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), 'w') as handle:
+            json.dump(sample, handle, allow_nan=False)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=ROOT/'research/report-sports-favorites-v36.json')
-    main(parser.parse_args().output)
+    parser.add_argument('--priced-sample', type=Path, help='Optional private inputs for the price-error benchmark')
+    args = parser.parse_args()
+    main(args.output, args.priced_sample)
