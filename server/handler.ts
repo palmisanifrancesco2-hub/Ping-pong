@@ -6,7 +6,6 @@ import{PlayerProfiles}from'./player-profiles.js';
 import{ProspectiveStudy}from'./prospective-study.js';
 import{MarketStudy}from'./market-study.js';
 import{authorizedStudyCron}from'./cron-auth.js';
-import{authorizedWeeklyStudy}from'./weekly-study-auth.js';
 import{z}from'zod';
 import{ManualBets,betSchema,betUpdateSchema}from'./manual-bets.js';
 import{scoreSignals,scoreValueReport,runtimeModel}from'./score-signals.js';
@@ -30,7 +29,7 @@ import { ForecastStore } from './forecast-store.js';
 import modelData from '../models/elo-v1.json' with {type:'json'};
 import {researchReport,scoreResearchReport,forwardStudy,modelComparison}from'./research-report.js';
 
-type Dependencies = { blindStudy?:Pick<BlindStudy,'run'|'report'>; individualSports?:Pick<IndividualSports,'board'|'event'>; trainer?:Pick<AdaptiveTraining,'run'|'report'>; marketStudy?:Pick<MarketStudy,'run'|'report'>; profiles?:Pick<PlayerProfiles,'forEvent'>; study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
+type Dependencies = { weeklyStudy?:Pick<BlindStudy,'runWeekly'>; blindStudy?:Pick<BlindStudy,'run'|'report'>; individualSports?:Pick<IndividualSports,'board'|'event'>; trainer?:Pick<AdaptiveTraining,'run'|'report'>; marketStudy?:Pick<MarketStudy,'run'|'report'>; profiles?:Pick<PlayerProfiles,'forEvent'>; study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
 export function createHandler(deps: Dependencies = {}) {
   const env = deps.env ?? process.env;
   const provider = deps.provider ?? new OddsApi(oddsApiKey(env));
@@ -42,6 +41,7 @@ export function createHandler(deps: Dependencies = {}) {
   const choices = deps.choices ?? new Choices(env,fetch,now,()=>analyses.results.archive());
   const blindService=new BlindStudy(env,now,feed,analyses.results);
   const blindStudy=deps.blindStudy??blindService;
+  const weeklyStudy=deps.weeklyStudy??blindService;
   const forecasts = deps.forecasts ?? new ForecastStore(env);
   const bets=deps.bets??new ManualBets(env,now);
   const profiles=deps.profiles??new PlayerProfiles(undefined,now,true);
@@ -60,8 +60,8 @@ export function createHandler(deps: Dependencies = {}) {
     const path = url.pathname;
     if(path==='/api/weekly-table-tennis'){
       if(req.method!=='POST'){res.setHeader('Allow','POST');return send(405,{error:'Metodo non consentito.'});}
-      if(!await authorizedWeeklyStudy(req.headers.authorization,now()))return send(401,{error:'Esecuzione non autorizzata.'});
-      try{const result=await blindService.runWeekly();return send(result.status==='disabled'?503:200,{status:result.status});}
+      if(!authorizedStudyCron(req.headers.authorization,env.CRON_SECRET))return send(401,{error:'Esecuzione non autorizzata.'});
+      try{const result=await weeklyStudy.runWeekly();return send(result.status==='disabled'?503:200,{status:result.status});}
       catch{console.error('WEEKLY_PING_PONG_FAILED');return send(503,{status:'failed'});}
     }
     const methods = ['/api/study','/api/market-study','/api/training','/api/blind-study'].includes(path)?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];

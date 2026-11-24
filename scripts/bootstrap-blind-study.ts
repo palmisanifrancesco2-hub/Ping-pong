@@ -10,3 +10,12 @@ if(process.env.VERCEL_ENV==='production'&&blindStudyEnabled(process.env)){
     console.warn(JSON.stringify({blindStudyBootstrap:{status:'failed',code}}));
   }
 } else console.info('Test a risultato coperto: avvio iniziale non richiesto.');
+
+if(process.env.VERCEL_ENV==='production'&&process.env.CRON_SECRET&&blindStudyEnabled(process.env)){
+  try{
+    const result=await new BlindStudy(process.env).runWeekly();
+    console.info(JSON.stringify({weeklyPingPongBootstrap:result.status}));
+  }catch{
+    console.warn('WEEKLY_PING_PONG_BOOTSTRAP_FAILED');
+  }
+}

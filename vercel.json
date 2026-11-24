@@ -38,6 +38,18 @@
       "maxDuration": 300
     }
   },
+  "schedules": {
+    "weekly-table-tennis-november": {
+      "path": "/api/weekly-table-tennis",
+      "requestMethod": "POST",
+      "schedule": "5,35 * 24-30 11 *"
+    },
+    "weekly-table-tennis-december": {
+      "path": "/api/weekly-table-tennis",
+      "requestMethod": "POST",
+      "schedule": "5,35 * 1-3 12 *"
+    }
+  },
   "crons": [
     {
       "path": "/api/study-run",

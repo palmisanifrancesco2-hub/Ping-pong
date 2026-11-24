@@ -15,6 +15,19 @@ async function start(handler: ReturnType<typeof createHandler>) {
   return `http://127.0.0.1:${address.port}`;
 }
 describe('private HTTP API', () => {
+  it('only starts the weekly table-tennis collection from its protected scheduler',async()=>{
+    const CRON_SECRET='synthetic-only-cron-secret-of-sufficient-length';
+    const weeklyStudy={runWeekly:vi.fn(async()=>({status:'completed',captured:12}))};
+    const base=await start(createHandler({env:{CRON_SECRET},weeklyStudy}));
+    const url=base+'/api/weekly-table-tennis';
+    expect((await fetch(url)).status).toBe(405);
+    expect((await fetch(url,{method:'POST'})).status).toBe(401);
+    expect(weeklyStudy.runWeekly).not.toHaveBeenCalled();
+    const response=await fetch(url,{method:'POST',headers:{Authorization:`Bearer ${CRON_SECRET}`}});
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({status:'completed'});
+    expect(weeklyStudy.runWeekly).toHaveBeenCalledOnce();
+  });
   it('protects the blind study and uses the logged-in owner for manual runs',async()=>{
     const blindStudy={run:vi.fn(async user=>{if(user!=='owner')throw Error('BLIND_STUDY_OWNER_ONLY');return {status:'completed'};}),
       report:vi.fn(async()=>({checkedAt:new Date().toISOString(),enabled:true,scheduled:true,canRun:true,sports:[]}))};

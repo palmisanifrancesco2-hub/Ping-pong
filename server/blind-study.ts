@@ -17,13 +17,15 @@ import { movioddsRequest } from './moviodds-request.js';
 import { readSportResults, sportResults } from './sport-training.js';
 import { scoreWinnerEstimate, runtimeVersion } from './score-signals.js';
 import type { Env } from './auth.js';
-import {weeklyStart,weeklyEnd,weeklyFollowup} from './weekly-study-auth.js';
 
 const study='blind-winner-v1';
 const rowName='Blind winner observation v1';
 const sports=['table_tennis',...additionalSports] as const;
 const minute=60_000, hour=60*minute;
 const lead=2*minute, dailyLimit=400, archiveGrace=10*24*hour;
+const weeklyStart=Date.parse('2026-11-24T15:00:00Z');
+const weeklyEnd=Date.parse('2026-12-01T16:00:00Z');
+const weeklyFollowup=weeklyEnd+48*hour;
 const competitionKey=(league:string,name:string)=>playerKey(league,name);
 const normalized=(name:string)=>name.normalize('NFKC').trim().replace(/\s+/g,' ').toLowerCase();
 export const blindStudyEnabled=(env:Env)=>env.APP_BLIND_STUDY_ENABLED===undefined
