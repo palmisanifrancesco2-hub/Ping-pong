@@ -11,4 +11,5 @@ export type BlindStudyReport = {
   enabled:boolean;
   canRun:boolean;
   sports:BlindSportSummary[];
+  weekly?:BlindSportSummary&{until:string;value:number;exactValue:number;theoreticalRoi:number|null;closingPairs:number;betterThanClosing:number};
 };

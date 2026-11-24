@@ -36,6 +36,14 @@ export function BlindStudy({token}:{token?:string}) {
     {!report&&!error&&<p role="status">Caricamento del test…</p>}
     {report&&<>
       <p>{report.scheduled?'Raccolta giornaliera attiva.':'Raccolta giornaliera non configurata.'} Ultimo controllo {dateTime(report.checkedAt)}.</p>
+      {report.weekly&&<div>
+        <h3>Studio settimanale di tennis tavolo</h3>
+        <p>Partite in programma fino al {dateTime(report.weekly.until)}.</p>
+        <p>{report.weekly.recorded} registrate · {report.weekly.withPrice} con quote Bet365 · {report.weekly.pending} in attesa</p>
+        <p>Esatto {report.weekly.exact} · Sbagliato {report.weekly.incorrect}. Con inizio verificato, {report.weekly.verifiedExact} esatti e {report.weekly.verifiedIncorrect} sbagliati.</p>
+        {report.weekly.value>0&&<p>Favoriti del modello con EV positivo e inizio verificato · {report.weekly.exactValue} esatti su {report.weekly.value} · Rendimento teorico {report.weekly.theoreticalRoi?.toLocaleString('it-IT',{style:'percent',maximumFractionDigits:1})}.</p>}
+        {report.weekly.closingPairs>0&&<p>{report.weekly.betterThanClosing} su {report.weekly.closingPairs} con quota iniziale sopra la quota equa successiva.</p>}
+      </div>}
       <ul className="competition-list">{report.sports.map(row=><li key={row.sport}><span>
         <strong>{individualSports[row.sport]}</strong>
         <small>{row.recorded} registrati · {row.withPrice} con quota Bet365 · {row.pending} in attesa</small>

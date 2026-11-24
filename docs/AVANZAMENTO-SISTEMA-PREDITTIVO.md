@@ -175,3 +175,7 @@ Nuovo benchmark sport-only su 14.261 incontri storici già presenti nell’archi
 ## Vantaggio atteso, margine e confronto con la chiusura v37
 
 Metodo potenza e calibrazione dello scarto sportivo valutati su quote Bet365 già archiviate. La normalizzazione proporzionale ottiene il Brier migliore. Sui 156 casi cronologicamente testabili lo scarto sportivo riceve peso zero nei quattro giorni e il filtro aggiuntivo mantiene solo quattro selezioni, una esatta. Aggiunta la rilevazione prospettica della coppia prematch successiva durante la verifica dell’esito, con confronto aggregato rispetto alle quote iniziali. [Studio e riproduzione](STUDIO-ERRORI-QUOTA-V37.md).
+
+## Raccolta settimanale di tennis tavolo
+
+Acquisizione del vincente prematch dal 24 novembre al 1 dicembre 2026 con scansione ogni 30 minuti su GitHub Actions. La raccolta attraversa tutte le competizioni restituite dal feed, riutilizza il test a risultato coperto, deduplica per sport e partita e conserva la prima previsione. Le quote sono salvate quando disponibili. Il controllo degli esiti prosegue per altre 48 ore, al massimo quattro richieste di chiusura per scansione. Il report settimanale separa i risultati forniti dalla fonte da quelli con orario effettivo verificato. Lo studio v9/v10 mantiene i suoi registri e le sue regole. L’endpoint accetta un’identità GitHub OIDC a breve durata vincolata a workflow, repository e branch. I log pubblici del workflow mostrano solo lo stato dell’esecuzione.

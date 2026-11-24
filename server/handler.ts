@@ -6,6 +6,7 @@ import{PlayerProfiles}from'./player-profiles.js';
 import{ProspectiveStudy}from'./prospective-study.js';
 import{MarketStudy}from'./market-study.js';
 import{authorizedStudyCron}from'./cron-auth.js';
+import{authorizedWeeklyStudy}from'./weekly-study-auth.js';
 import{z}from'zod';
 import{ManualBets,betSchema,betUpdateSchema}from'./manual-bets.js';
 import{scoreSignals,scoreValueReport,runtimeModel}from'./score-signals.js';
@@ -39,7 +40,8 @@ export function createHandler(deps: Dependencies = {}) {
   const feed = deps.feed ?? new MoviOddsFeed(fetch,now,env);
   const analyses = deps.analyses ?? new Analyses(new ResultsFeed(fetch,now,env),now);
   const choices = deps.choices ?? new Choices(env,fetch,now,()=>analyses.results.archive());
-  const blindStudy=deps.blindStudy??new BlindStudy(env,now,feed,analyses.results);
+  const blindService=new BlindStudy(env,now,feed,analyses.results);
+  const blindStudy=deps.blindStudy??blindService;
   const forecasts = deps.forecasts ?? new ForecastStore(env);
   const bets=deps.bets??new ManualBets(env,now);
   const profiles=deps.profiles??new PlayerProfiles(undefined,now,true);
@@ -56,6 +58,12 @@ export function createHandler(deps: Dependencies = {}) {
     const send = (status: number, body: unknown) => { res.statusCode = status; res.end(JSON.stringify(body)); };
     const url = new URL(req.url ?? '/', 'http://localhost');
     const path = url.pathname;
+    if(path==='/api/weekly-table-tennis'){
+      if(req.method!=='POST'){res.setHeader('Allow','POST');return send(405,{error:'Metodo non consentito.'});}
+      if(!await authorizedWeeklyStudy(req.headers.authorization,now()))return send(401,{error:'Esecuzione non autorizzata.'});
+      try{const result=await blindService.runWeekly();return send(result.status==='disabled'?503:200,{status:result.status});}
+      catch{console.error('WEEKLY_PING_PONG_FAILED');return send(503,{status:'failed'});}
+    }
     const methods = ['/api/study','/api/market-study','/api/training','/api/blind-study'].includes(path)?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
     if (!methods.includes(req.method ?? '')) { res.setHeader('Allow', methods.join(', ')); return send(405, { error: 'Metodo non consentito.' }); }
     if (path === '/api/health') return send(200, { status: 'ok', version: '0.1.0' });

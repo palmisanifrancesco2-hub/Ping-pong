@@ -10,7 +10,7 @@ export function verifiedStart(payload:unknown,target:Pick<MatchResult,'id'|'home
 }
 /** Closing data can contain observations after the requested prediction instant.
  * Only coherent, non-suspended prematch pairs timestamped before it are usable. */
-export function prematchBenchmark(payload:unknown,target:MatchResult,at:number){
+export function prematchBenchmark(payload:unknown,target:Pick<MatchResult,'id'|'home'|'away'|'finishedAt'>,at:number){
  const p=record(payload);if(!p||verifiedStart(p,target)!==at||p.pre_close_basis!=='kickoff')return null;
  const selections=Array.isArray(p.selections)?p.selections.map(record).filter(x=>x!==null):[];
  const quotes=selections.filter(s=>s.group_id==='920000'&&s.market_id==='920000'&&s.line==='To Win'&&(s.side===target.home||s.side===target.away)).map(s=>record(s.pre_close));
