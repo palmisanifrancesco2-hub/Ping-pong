@@ -13,7 +13,10 @@ PLAN = {'minimumOdds':1.3, 'bootstrap':{'blockDays':3, 'bootstrapReplicates':100
           'familyComparisons':3, 'seed':3801}}
 
 
-def evaluate(rows):
+PRICE_BANDS = ((1.30, 2.00), (2.00, 2.50), (2.50, 3.65), (3.65, None))
+
+
+def evaluate(rows, price_bands=False):
     y = np.asarray([r['outcome'] for r in rows])
     day = [{'at':r['day']*DAY} for r in rows]
     odds = np.asarray([r['prices'] for r in rows])
@@ -29,6 +32,7 @@ def evaluate(rows):
                           'interval':paired_interval(day, difference, PLAN['bootstrap'])}
 
     policies = {}
+    bands = {}
     for name,p,peer in [('reference',reference,reference),('symmetric',symmetric,symmetric),
                         ('consensus',prediction['equalPool'],reference)]:
         home = p>.5
@@ -49,16 +53,31 @@ def evaluate(rows):
             policies[name][label] = {'n':n,'exact':hits,'wrong':n-hits,
                 'theoreticalRoi':float(profit[mask].mean()) if n else None,
                 'interval':paired_interval([day[i] for i in indices],profit[mask],PLAN['bootstrap']) if n else None}
-    return {'n':len(rows),'forecast':forecast,'policies':policies,'retrospective':True,'operationallyValidated':False}
+        if price_bands:
+            bands[name] = []
+            for minimum,maximum in PRICE_BANDS:
+                market_prices = odds.max(axis=1)
+                available = (market_prices >= minimum) & (odds[:,0] != odds[:,1])
+                if maximum is not None:
+                    available &= market_prices < maximum
+                mask = available & selected & (price > opposite)
+                n = int(mask.sum())
+                hits = int(exact[mask].sum())
+                bands[name].append({'minimum':minimum,'maximumExclusive':maximum,'available':int(available.sum()),
+                    'n':n,'exact':hits,'wrong':n-hits,'days':len({day[i]['at'] for i in np.flatnonzero(mask)}),
+                    'theoreticalRoi':float(profit[mask].mean()) if n else None})
+    return {'n':len(rows),'forecast':forecast,'policies':policies,'retrospective':True,'operationallyValidated':False,
+            **({'marketUnderdogPriceBands':bands} if price_bands else {})}
 
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('sample',type=Path)
     parser.add_argument('output',type=Path)
+    parser.add_argument('--price-bands',action='store_true')
     args = parser.parse_args()
     source = args.sample.read_bytes()
-    report = {'policy':PLAN,'sampleSha256':hashlib.sha256(source).hexdigest(),**evaluate(json.loads(source))}
+    report = {'policy':PLAN,'sampleSha256':hashlib.sha256(source).hexdigest(),**evaluate(json.loads(source),args.price_bands)}
     with args.output.open('x') as stream:
         json.dump(report,stream,indent=2,allow_nan=False)
         stream.write('\n')

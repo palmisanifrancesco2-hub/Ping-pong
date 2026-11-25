@@ -183,3 +183,7 @@ Acquisizione del vincente prematch dal 24 novembre al 1 dicembre 2026 con scansi
 ## Recupero automatico e consenso sportivo v38
 
 Il controllo della raccolta settimanale verifica ogni 15 minuti l’ultima scansione completa salvata. Dopo 45 minuti senza successo tenta un recupero con il blocco e la deduplicazione esistenti. Il recupero parziale degli esiti non viene registrato come ripresa delle quote. Gli avvisi leggono i log privati senza accedere alle credenziali del cron. Il benchmark di consenso su 258 quote archiviate ha scelto 73 partite, con 35 esatte e rendimento teorico −2,99%. Bet365 senza margine ha mantenuto un Brier migliore. [Rapporto e riproduzione](STUDIO-CONSENSO-QUOTE-V38.md).
+
+## Fasce di quota negli sfavoriti Bet365 v39
+
+Nel replay v38, il disaccordo con consenso sportivo produce 23 esatti su 45 selezioni a quota da 2,00 a meno di 2,50, per +6,22% teorico. Da 2,50 a meno di 3,65 produce 2 esatti su 10, per −48,75%. Da 3,65 ci sono 8 partite disponibili e due selezioni, entrambe sbagliate. Nessuna modifica al filtro dell’app. [Studio e riproduzione](STUDIO-SFAVORITI-QUOTE-V39.md).
