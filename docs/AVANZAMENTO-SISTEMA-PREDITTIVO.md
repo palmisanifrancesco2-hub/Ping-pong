@@ -187,3 +187,7 @@ Il controllo della raccolta settimanale verifica ogni 15 minuti l’ultima scans
 ## Fasce di quota negli sfavoriti Bet365 v39
 
 Nel replay v38, il disaccordo con consenso sportivo produce 23 esatti su 45 selezioni a quota da 2,00 a meno di 2,50, per +6,22% teorico. Da 2,50 a meno di 3,65 produce 2 esatti su 10, per −48,75%. Da 3,65 ci sono 8 partite disponibili e due selezioni, entrambe sbagliate. Nessuna modifica al filtro dell’app. [Studio e riproduzione](STUDIO-SFAVORITI-QUOTE-V39.md).
+
+## Disaccordo sul favorito nelle nuove partite
+
+Lo studio settimanale misura ora per fascia quando la previsione sportiva già salvata favorisce lo sfavorito Bet365 e l’EV è positivo. Usa solo esiti con inizio effettivo verificato e coppie di prezzi prematch disponibili. Il conteggio comprende disponibilità, selezioni, esatte, sbagliate, giorni e rendimento a puntata unitaria. Il campione iniziato il 25 novembre 2026 alle 13:00 UTC rimane separato dalle previsioni precedenti. Da quell’ora il flusso salva anche la probabilità Elo di lega quando il modello principale è la logistica e sono disponibili entrambe le stime. Il sottotest ammette solo i casi in cui anche Elo favorisce lo stesso atleta e vede un EV positivo. Questo secondo confronto richiede nuove registrazioni. Le fasce servono all’analisi e non promuovono una regola alla classifica operativa.

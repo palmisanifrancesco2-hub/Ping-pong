@@ -43,6 +43,20 @@ export function BlindStudy({token}:{token?:string}) {
         <p>Esatto {report.weekly.exact} · Sbagliato {report.weekly.incorrect}. Con inizio verificato, {report.weekly.verifiedExact} esatti e {report.weekly.verifiedIncorrect} sbagliati.</p>
         {report.weekly.value>0&&<p>Favoriti del modello con EV positivo e inizio verificato · {report.weekly.exactValue} esatti su {report.weekly.value} · Rendimento teorico {report.weekly.theoreticalRoi?.toLocaleString('it-IT',{style:'percent',maximumFractionDigits:1})}.</p>}
         {report.weekly.closingPairs>0&&<p>{report.weekly.betterThanClosing} su {report.weekly.closingPairs} con quota iniziale sopra la quota equa successiva.</p>}
+        {report.weeklyDisagreement&&<div>
+          <h4>Quando modello e Bet365 indicano favoriti diversi</h4>
+          <p>Solo esiti con inizio verificato, entrambe le quote e valore atteso positivo. La quota più alta identifica lo sfavorito Bet365.</p>
+          {[{title:`Nuove previsioni dal ${dateTime(report.weeklyDisagreement.startsAt)}`,rows:report.weeklyDisagreement.forward},
+            {title:'Previsioni raccolte prima di questo test',rows:report.weeklyDisagreement.earlier}].map(({title,rows})=><details key={title}>
+            <summary>{title}</summary>
+            <ul className="competition-list">{rows.map(row=><li key={row.minimum}><span>
+              <strong>Da {row.minimum.toFixed(2).replace('.',',')}{row.maximum===null?' in su':` a meno di ${row.maximum.toFixed(2).replace('.',',')}`}</strong>
+              <small>{row.available} quote confrontabili · {row.n} selezionate · {row.exact} esatte · {row.wrong} sbagliate</small>
+              {row.roi!==null&&<small>Rendimento teorico {row.roi.toLocaleString('it-IT',{style:'percent',maximumFractionDigits:1})} · {row.days} {row.days===1?'giorno':'giorni'}</small>}
+              {row.consensus.available>0&&<small>Confermate anche da Elo · {row.consensus.n} su {row.consensus.available} valutabili · {row.consensus.exact} esatte · {row.consensus.wrong} sbagliate{row.consensus.roi!==null?` · Rendimento teorico ${row.consensus.roi.toLocaleString('it-IT',{style:'percent',maximumFractionDigits:1})}`:''}</small>}
+            </span></li>)}</ul>
+          </details>)}
+        </div>}
       </div>}
       <ul className="competition-list">{report.sports.map(row=><li key={row.sport}><span>
         <strong>{individualSports[row.sport]}</strong>

@@ -1,4 +1,4 @@
-import {BlindStudy,blindStudyEnabled} from '../server/blind-study.js';
+import {BlindStudy,blindStudyEnabled,logWeeklyDisagreement} from '../server/blind-study.js';
 
 if(process.env.VERCEL_ENV==='production'&&blindStudyEnabled(process.env)){
   try{
@@ -13,8 +13,10 @@ if(process.env.VERCEL_ENV==='production'&&blindStudyEnabled(process.env)){
 
 if(process.env.VERCEL_ENV==='production'&&process.env.CRON_SECRET&&blindStudyEnabled(process.env)){
   try{
-    const result=await new BlindStudy(process.env).runWeekly(true);
+    const study=new BlindStudy(process.env);
+    const result=await study.runWeekly(true);
     console.info(JSON.stringify({weeklyPingPongBootstrap:result.status}));
+    logWeeklyDisagreement(await study.disagreementSnapshot());
   }catch{
     console.warn('WEEKLY_PING_PONG_BOOTSTRAP_FAILED');
   }

@@ -7,6 +7,7 @@ import { eloProbability, playerKey } from '../src/domain/player-model.js';
 import { bookmakerWinnerPrices } from '../src/shared/quote-selection.js';
 import { prematchBenchmark, verifiedStart } from '../src/domain/research-source.js';
 import { fairMarketProbability } from '../src/shared/value-filter.js';
+import { disagreementReport, disagreementStartAt } from '../src/domain/underdog-study.js';
 import { individualWinnerOffers, IndividualSports, singles } from './individual-sports.js';
 import { ResultsFeed } from './results.js';
 import { ForecastStore } from './forecast-store.js';
@@ -41,6 +42,7 @@ export type FrozenWinner={
   sport:IndividualSport;id:string;home:string;away:string;league:string;seenAt:number;scheduledAt:number;
   model:string; homeProbability:number; selection:'home'|'away'|null; prices:{home:Price|null;away:Price|null}|null;
   closingComparable?:true;
+  peerHomeProbability?:number;
 };
 type Outcome={winner:'home'|'away';finishedAt:string;availableAt:string;actualGuard:number|null;invalid:boolean;closing?:{homeOdds:number;awayOdds:number}};
 type Row={id:string;created_at:string;parameters:{study:string;userId:string;forecast:FrozenWinner;hash:string;attempts:number;lastAttempt:number;outcome:Outcome|null}};
@@ -151,6 +153,20 @@ function weeklySummary(rows:Row[]) {
     theoreticalRoi:value?units/value-1:null,closingPairs,betterThanClosing};
 }
 
+function weeklyDisagreement(rows:Row[]) {
+  return disagreementReport(rows.flatMap(({parameters:{forecast:f,outcome:o}})=>{
+    if(!o||o.invalid||o.actualGuard===null||!f.prices?.home||!f.prices.away)return [];
+    return [{at:f.seenAt,homeOdds:f.prices.home.odds,awayOdds:f.prices.away.odds,
+      homeProbability:f.homeProbability,peerHomeProbability:f.peerHomeProbability,homeWon:o.winner==='home'}];
+  }));
+}
+
+export function logWeeklyDisagreement(report:ReturnType<typeof disagreementReport>){
+  for(const cohort of ['earlier','forward'] as const){
+    console.info(JSON.stringify({weeklyDisagreement:cohort,startsAt:report.startsAt,bands:report[cohort]}));
+  }
+}
+
 export class BlindStudy {
   private store:ForecastStore;
   private owner:ProspectiveStudy;
@@ -181,7 +197,11 @@ export class BlindStudy {
     const rows=await this.rows(this.store.db(),owner);
     return {enabled,canRun:userId===owner,scheduled:enabled&&this.env.VERCEL_ENV==='production'&&!!this.env.CRON_SECRET,
       checkedAt:new Date(this.now()).toISOString(),sports:sports.map(sport=>blindSummary(rows,sport)),
-      weekly:weeklySummary(weeklyRows(rows))};
+      weekly:weeklySummary(weeklyRows(rows)),weeklyDisagreement:weeklyDisagreement(weeklyRows(rows))};
+  }
+  async disagreementSnapshot(){
+    const owner=await this.owner.ownerId();
+    return weeklyDisagreement(weeklyRows(await this.rows(this.store.db(),owner,new Date(weeklyStart-60_000).toISOString())));
   }
   async run(userId?:string,deadline=this.now()+170_000,bootstrap=false){
     if(!blindStudyEnabled(this.env))return {status:'disabled'};
@@ -299,6 +319,7 @@ export class BlindStudy {
         const prices=sport==='table_tennis'?bookmakerWinnerPrices(match as FeedMatch,at)
           :individualWinnerOffers(match as FeedMatch<Exclude<IndividualSport,'table_tennis'>>,at);
         const f=freezeWinner(match,at,p,ready!==undefined?runtimeVersion:local!==undefined?'elo-league-k24-v1':'elo-tennis-tour-k24-v1',prices);
+        if(f&&sport==='table_tennis'&&at>=disagreementStartAt&&ready!==undefined&&local!==undefined)f.peerHomeProbability=local;
         return f?[f]:[];
       });
     });
@@ -365,6 +386,7 @@ export class BlindStudy {
     if(weekly){
       const all=weeklyRows(await this.rows(db,owner,new Date(weeklyStart-60_000).toISOString()));
       console.info(JSON.stringify({weeklyPingPongRun:summary,weekly:weeklySummary(all)}));
+      logWeeklyDisagreement(weeklyDisagreement(all));
     }else console.info(JSON.stringify({blindStudyRun:summary}));
     return summary;
   }
