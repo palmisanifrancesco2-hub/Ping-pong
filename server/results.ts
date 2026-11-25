@@ -22,14 +22,17 @@ export class ResultsFeed{
  async archive(){if(this.cached&&this.now()-this.cached.at<300_000)return this.cached.data;if(this.failedAt&&this.now()-this.failedAt<30_000)throw new Error('RESULTS_COOLDOWN');if(this.pending)return this.pending;this.pending=this.read();try{return await this.pending;}finally{this.pending=undefined;}}
  private async read():Promise<ResultsArchive>{
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),60_000);
-  try{const response=await movioddsRequest('https://moviodds.com/results?sport=table_tennis',{signal:controller.signal,redirect:'error',headers:{Accept:'application/json'},cache:'no-store'},this.fetcher,this.env);if(!response.ok||!response.body)throw new Error('results');
-   const reader=response.body.getReader(),chunks:Uint8Array[]=[];let bytes=0;try{for(;;){const c=await reader.read();if(c.done)break;bytes+=c.value.byteLength;if(bytes>20_000_000)throw new Error('results_size');chunks.push(c.value);}}finally{await reader.cancel().catch(()=>{});}
+  let failure='RESULTS_NETWORK_ERROR';
+  try{const response=await movioddsRequest('https://moviodds.com/results?sport=table_tennis',{signal:controller.signal,redirect:'error',headers:{Accept:'application/json'},cache:'no-store'},this.fetcher,this.env);
+   failure=response.ok?'RESULTS_INVALID_BODY':`RESULTS_HTTP_${response.status}`;
+   if(!response.ok||!response.body)throw new Error(failure);
+   const reader=response.body.getReader(),chunks:Uint8Array[]=[];let bytes=0;try{for(;;){const c=await reader.read();if(c.done)break;bytes+=c.value.byteLength;if(bytes>20_000_000){failure='RESULTS_PAYLOAD_TOO_LARGE';throw new Error(failure);}chunks.push(c.value);}}finally{await reader.cancel().catch(()=>{});}
    const payload=z.object({source:z.enum(['postgres','memory']),results:z.array(z.unknown()).max(100_000)}).parse(JSON.parse(Buffer.concat(chunks).toString('utf8')));
    const byId=new Map<string,MatchResult>();const conflicts=new Set<string>();let rejected=0;
    for(const input of payload.results){const m=parseResult(input,this.now());if(!m){rejected++;continue;}const old=byId.get(m.id);if(old&&JSON.stringify(old)!==JSON.stringify(m)){conflicts.add(m.id);rejected++;}else byId.set(m.id,m);}
    const results=[...byId.values()].filter(m=>!conflicts.has(m.id)).sort((a,b)=>Date.parse(a.availableAt)-Date.parse(b.availableAt));
    const dates=results.map(r=>r.finishedAt).sort();const data={results,checkedAt:new Date(this.now()).toISOString(),source:payload.source,rejected,from:dates[0]??null,to:dates.at(-1)??null};
    this.cached={at:this.now(),data};this.failedAt=undefined;return data;
-  }catch{this.failedAt=this.now();throw new Error('RESULTS_UNAVAILABLE');}finally{clearTimeout(timer);controller.abort();}
+  }catch{this.failedAt=this.now();throw new Error('RESULTS_UNAVAILABLE',{cause:controller.signal.aborted?'RESULTS_TIMEOUT':failure});}finally{clearTimeout(timer);controller.abort();}
  }
 }

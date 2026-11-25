@@ -61,6 +61,6 @@ describe('private MoviOdds authentication', () => {
     await expect(feed.board()).rejects.toThrow(/^MOVIODDS_HTTP_403$/);
     await expect(feed.board()).rejects.toThrow('MOVIODDS_COOLDOWN');
     expect(fetcher).toHaveBeenCalledTimes(1);
-    await expect(new ResultsFeed(fetcher, Date.now, env).archive()).rejects.toThrow('RESULTS_UNAVAILABLE');
+    await expect(new ResultsFeed(fetcher, Date.now, env).archive()).rejects.toMatchObject({message:'RESULTS_UNAVAILABLE',cause:'RESULTS_HTTP_403'});
   });
 });

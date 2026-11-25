@@ -41,7 +41,12 @@ export type FrozenWinner={
 type Outcome={winner:'home'|'away';finishedAt:string;availableAt:string;actualGuard:number|null;invalid:boolean;closing?:{homeOdds:number;awayOdds:number}};
 type Row={id:string;created_at:string;parameters:{study:string;userId:string;forecast:FrozenWinner;hash:string;attempts:number;lastAttempt:number;outcome:Outcome|null}};
 type Db=ReturnType<ForecastStore['db']>;
-type Source={board:Board<IndividualSport>;results:History[];score?: (m:Match)=>number|undefined};
+type Source={board:Board<IndividualSport>|null;results:History[];score?: (m:Match)=>number|undefined};
+
+function sourceFailure(error:unknown) {
+  const code=error instanceof Error?(typeof error.cause==='string'?error.cause:error.message):'';
+  return /^(MOVIODDS|RESULTS|BLIND)_[A-Z0-9_]+$/.test(code)?code:'UNKNOWN';
+}
 
 function pairedPrices(m:Match,quotes:FeedQuote[],now:number):FrozenWinner['prices'] {
   if(!quotes.length||quotes.length>2||quotes.some(q=>marketIdentity(q)!==marketIdentity(quotes[0])))return null;
@@ -187,11 +192,23 @@ export class BlindStudy {
     const owner=await this.owner.ownerId();
     return this.execute(owner,this.now()+120_000,false,true);
   }
-  private async source(sport:IndividualSport):Promise<Source>{
+  private async source(sport:IndividualSport,weekly=false):Promise<Source>{
     if(sport==='table_tennis'){
-      const [board,archive]=await Promise.all([this.feed.board(),this.results.archive()]);
-      if(archive.source!=='postgres')throw Error('BLIND_ARCHIVE_INCOMPLETE');
-      return {board,results:archive.results,score:m=>scoreWinnerEstimate(m as FeedMatch,archive,this.now())?.homeProbability};
+      const [board,results]=await Promise.allSettled([this.feed.board(),this.results.archive()]);
+      if(board.status==='rejected')console.warn(JSON.stringify({weeklyStudyFeed:'board',code:sourceFailure(board.reason)}));
+      if(results.status==='rejected'){
+        console.warn(JSON.stringify({weeklyStudyFeed:'results',code:sourceFailure(results.reason)}));
+        throw results.reason;
+      }
+      if(board.status==='rejected'&&!weekly)throw board.reason;
+      const archive=results.value;
+      if(archive.source!=='postgres'){
+        if(!weekly||archive.source!=='memory')throw Error('BLIND_ARCHIVE_INCOMPLETE');
+        console.warn(JSON.stringify({weeklyStudyFeed:'results',code:'BLIND_ARCHIVE_INCOMPLETE'}));
+        return {board:null,results:archive.results};
+      }
+      return {board:board.status==='fulfilled'?board.value:null,results:archive.results,
+        score:m=>scoreWinnerEstimate(m as FeedMatch,archive,this.now())?.homeProbability};
     }
     const [board,raw]=await Promise.all([this.additional.activeBoard(sport),readSportResults(sport,this.env,this.fetcher)]);
     const archive=sportResults(sport,raw,this.now());
@@ -227,7 +244,7 @@ export class BlindStudy {
     const bySport=new Map<IndividualSport,Source>();
     const feeds=weekly?(['table_tennis'] as const):sports;
     await Promise.all(feeds.map(async sport=>{
-      try{bySport.set(sport,await this.source(sport));}catch{console.warn(JSON.stringify({blindStudySource:'unavailable',sport}));}
+      try{bySport.set(sport,await this.source(sport,weekly));}catch(error){console.warn(JSON.stringify({blindStudySource:'unavailable',sport,code:sourceFailure(error)}));}
     }));
     const seen=new Set(prior.map(r=>JSON.stringify([r.parameters.forecast.sport,r.parameters.forecast.id])));
     if(weekly&&!bySport.has('table_tennis'))throw Error('WEEKLY_STUDY_SOURCE_UNAVAILABLE');
@@ -236,7 +253,7 @@ export class BlindStudy {
     // Round-robin across feeds, then earliest kickoff within each sport.
     const groups=feeds.map(sport=>{
       const source=bySport.get(sport);
-      if(!source)return [];
+      if(!source?.board)return [];
       const at=this.now(), elo=buildElo(source.results,at);
       const tennisElo=sport==='tennis' ? buildElo(source.results,at,tennisIdentity) : undefined;
       const finished=new Set(source.results.map(r=>r.id));
@@ -314,7 +331,7 @@ export class BlindStudy {
       if(result.error)throw Error('BLIND_STUDY_SETTLEMENT_FAILED');
       if(result.data?.length){if(!p.outcome&&!outcome.invalid)reported++;if(outcome.actualGuard!==null&&!outcome.invalid)verified++;}
     }
-    const summary={status:'completed',captured,reported,verified,capturedBySport,capturedWithPrice,feeds:bySport.size,closingQueries:calls,checkedAt:new Date(started).toISOString()};
+    const summary={status:weekly&&!bySport.get('table_tennis')?.board?'settlement_only':'completed',captured,reported,verified,capturedBySport,capturedWithPrice,feeds:bySport.size,closingQueries:calls,checkedAt:new Date(started).toISOString()};
     if(weekly){
       const all=weeklyRows(await this.rows(db,owner,new Date(weeklyStart-60_000).toISOString()));
       console.info(JSON.stringify({weeklyPingPongRun:summary,weekly:weeklySummary(all)}));
