@@ -95,12 +95,12 @@ describe('all-market foreign board', () => {
   });
   it('bounds decompressed responses and sanitizes HTML, invalid JSON and errors', async () => {
     for (const [response, code] of [
-      [new Response('x'.repeat(3_500_001)), 'MOVIODDS_PAYLOAD_TOO_LARGE'],
-      [new Response('<html>error</html>'), 'MOVIODDS_INVALID_BODY'],
-      [Response.json({}), 'MOVIODDS_INVALID_BODY'],
-      [Response.json({...payload, server_time: new Date(now - 120_001).toISOString()}), 'MOVIODDS_INVALID_TIME'],
+      [() => new Response('x'.repeat(3_500_001)), 'MOVIODDS_PAYLOAD_TOO_LARGE'],
+      [() => new Response('<html>error</html>'), 'MOVIODDS_INVALID_BODY'],
+      [() => Response.json({}), 'MOVIODDS_INVALID_BODY'],
+      [() => Response.json({...payload, server_time: new Date(now - 120_001).toISOString()}), 'MOVIODDS_INVALID_TIME'],
     ] as const) {
-      await expect(new MoviOddsFeed(vi.fn(async()=>response.clone()), () => now).board()).rejects.toThrow(new RegExp(`^${code}$`));
+      await expect(new MoviOddsFeed(vi.fn(async()=>response()), () => now).board()).rejects.toThrow(new RegExp(`^${code}$`));
     }
   });
   it('recovers an oversized table-tennis board using the documented winner group',async()=>{
