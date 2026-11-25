@@ -27,6 +27,10 @@ describe('private HTTP API', () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({status:'completed'});
     expect(weeklyStudy.runWeekly).toHaveBeenCalledOnce();
+    expect(weeklyStudy.runWeekly).toHaveBeenLastCalledWith(false);
+    expect((await fetch(url+'-recovery',{method:'POST'})).status).toBe(401);
+    expect((await fetch(url+'-recovery',{method:'POST',headers:{Authorization:`Bearer ${CRON_SECRET}`}})).status).toBe(200);
+    expect(weeklyStudy.runWeekly).toHaveBeenLastCalledWith(true);
   });
   it('protects the blind study and uses the logged-in owner for manual runs',async()=>{
     const blindStudy={run:vi.fn(async user=>{if(user!=='owner')throw Error('BLIND_STUDY_OWNER_ONLY');return {status:'completed'};}),

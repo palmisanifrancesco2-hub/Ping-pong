@@ -13,7 +13,7 @@ if(process.env.VERCEL_ENV==='production'&&blindStudyEnabled(process.env)){
 
 if(process.env.VERCEL_ENV==='production'&&process.env.CRON_SECRET&&blindStudyEnabled(process.env)){
   try{
-    const result=await new BlindStudy(process.env).runWeekly();
+    const result=await new BlindStudy(process.env).runWeekly(true);
     console.info(JSON.stringify({weeklyPingPongBootstrap:result.status}));
   }catch{
     console.warn('WEEKLY_PING_PONG_BOOTSTRAP_FAILED');

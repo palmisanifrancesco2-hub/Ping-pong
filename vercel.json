@@ -48,6 +48,16 @@
       "path": "/api/weekly-table-tennis",
       "requestMethod": "POST",
       "schedule": "5,35 * 1-3 12 *"
+    },
+    "weekly-recovery-november": {
+      "path": "/api/weekly-table-tennis-recovery",
+      "requestMethod": "POST",
+      "schedule": "*/15 * 24-30 11 *"
+    },
+    "weekly-recovery-december": {
+      "path": "/api/weekly-table-tennis-recovery",
+      "requestMethod": "POST",
+      "schedule": "*/15 * 1-3 12 *"
     }
   },
   "crons": [

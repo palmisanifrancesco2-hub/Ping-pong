@@ -123,7 +123,7 @@ def evaluate_prices(rows, p, y, prices, minimum, buffer, bootstrap):
     return {name: roi_summary(*bucket, bootstrap) for name, bucket in buckets.items()}
 
 
-def main(output, priced_sample=None):
+def main(output, priced_sample=None, include_challenger=False):
     protocol_path = ROOT / 'research/protocol-sports-favorites-v36.json'
     plan = json.loads(protocol_path.read_text())
     spec = importlib.util.spec_from_file_location('prematch', Path(__file__).with_name('benchmark-prematch-10000.py'))
@@ -208,7 +208,8 @@ def main(output, priced_sample=None):
         handle.write('\n')
     if priced_sample is not None:
         sample = [{'day': row['day'], 'outcome': int(truth[index]), 'prices': price,
-                   'sports': float(reference[index])}
+                   'sports': float(reference[index]),
+                   **({'symmetric': float(predictions['simmetrica'][index])} if include_challenger else {})}
                   for row, index, price in zip(quoted_rows, quote_indices, prices, strict=True)]
         with os.fdopen(os.open(priced_sample, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), 'w') as handle:
             json.dump(sample, handle, allow_nan=False)
@@ -218,5 +219,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=ROOT/'research/report-sports-favorites-v36.json')
     parser.add_argument('--priced-sample', type=Path, help='Optional private inputs for the price-error benchmark')
+    parser.add_argument('--include-challenger',action='store_true',help='Include symmetric estimates in the private sample')
     args = parser.parse_args()
-    main(args.output, args.priced_sample)
+    main(args.output, args.priced_sample, args.include_challenger)

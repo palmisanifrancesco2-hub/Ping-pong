@@ -1,5 +1,5 @@
 import {describe,expect,it} from 'vitest';
-import {blindSummary,buildElo,freezeWinner,settleObserved} from '../server/blind-study';
+import {blindSummary,buildElo,freezeWinner,settleObserved,weeklyScanOverdue} from '../server/blind-study';
 import type {FeedMatch,FeedQuote} from '../src/shared/board';
 
 const now=Date.parse('2026-11-21T18:00:00Z');
@@ -11,6 +11,11 @@ const opponent={...quote,sel_id:'b',label:'B',odds_dec:1.7};
 const result={id:'1',home:'A',away:'B',league:'ATP Test',homeWon:true,availableAt:iso(now+800_000),finishedAt:iso(now+700_000)};
 
 describe('winner observation frozen before outcome',()=>{
+  it('only retries after a missing heartbeat or a 45 minute gap',()=>{
+    expect(weeklyScanOverdue(now,now+44*60_000)).toBe(false);
+    expect(weeklyScanOverdue(now,now+45*60_000)).toBe(true);
+    expect(weeklyScanOverdue(0,now)).toBe(true);
+  });
   it('preserves prediction and optional coherent fresh price, independently of value',()=>{
     expect(freezeWinner(m,now,.6,'test',[quote,opponent])).toMatchObject({selection:'home',homeProbability:.6,prices:{home:{odds:2.2},away:{odds:1.7}}});
     expect(freezeWinner(m,now,.4,'test',[quote])?.prices).toEqual({home:{odds:2.2,quoteAt:quote.ts},away:null});

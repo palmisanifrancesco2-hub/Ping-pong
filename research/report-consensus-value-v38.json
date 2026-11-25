@@ -1,0 +1,395 @@
+{
+  "policy": {
+    "minimumOdds": 1.3,
+    "bootstrap": {
+      "blockDays": 3,
+      "bootstrapReplicates": 10000,
+      "familyComparisons": 3,
+      "seed": 3801
+    }
+  },
+  "sampleSha256": "0bb2d17f1eafdfc34a44865f1157d454f460fc2d867873173b765d793a30bd9a",
+  "n": 258,
+  "forecast": {
+    "reference": {
+      "score": {
+        "n": 258,
+        "correct": 138,
+        "wrong": 120,
+        "undecided": 0,
+        "accuracy": 0.5348837209302325,
+        "coverage": 1.0,
+        "brier": 0.24811418852374212,
+        "logLoss": 0.6892422133208939,
+        "ece": 0.021418999933951563,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 2,
+            "probability": 0.27802472694383196,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 16,
+            "probability": 0.3683947817019609,
+            "frequency": 0.3125
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 119,
+            "probability": 0.4634820595647758,
+            "frequency": 0.46218487394957986
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 110,
+            "probability": 0.5368306077234986,
+            "frequency": 0.509090909090909
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 11,
+            "probability": 0.6347366356202391,
+            "frequency": 0.5454545454545454
+          }
+        ]
+      },
+      "brierDifferenceVsMarket": 0.006901405630539437,
+      "interval": {
+        "lower": -0.006684492109787474,
+        "upper": 0.023323918309934192,
+        "days": 16,
+        "blockDays": 3,
+        "familyComparisons": 3
+      }
+    },
+    "symmetric": {
+      "score": {
+        "n": 258,
+        "correct": 140,
+        "wrong": 118,
+        "undecided": 0,
+        "accuracy": 0.5426356589147286,
+        "coverage": 1.0,
+        "brier": 0.24724477671155615,
+        "logLoss": 0.6877112789514559,
+        "ece": 0.03919093663353026,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 1,
+            "probability": 0.24833353214731263,
+            "frequency": 1.0
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 7,
+            "probability": 0.3541668045572743,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 115,
+            "probability": 0.46507883835957714,
+            "frequency": 0.45217391304347826
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 122,
+            "probability": 0.5373412130697001,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 13,
+            "probability": 0.6276359118582753,
+            "frequency": 0.6923076923076923
+          }
+        ]
+      },
+      "brierDifferenceVsMarket": 0.006031993818353441,
+      "interval": {
+        "lower": -0.016306012068303625,
+        "upper": 0.01912877553930786,
+        "days": 16,
+        "blockDays": 3,
+        "familyComparisons": 3
+      }
+    },
+    "equalPool": {
+      "score": {
+        "n": 258,
+        "correct": 138,
+        "wrong": 120,
+        "undecided": 0,
+        "accuracy": 0.5348837209302325,
+        "coverage": 1.0,
+        "brier": 0.24724386657493766,
+        "logLoss": 0.6876429002638842,
+        "ece": 0.02683791795118277,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 2,
+            "probability": 0.27709998374319195,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 9,
+            "probability": 0.3745112870143125,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 122,
+            "probability": 0.46613456338946585,
+            "frequency": 0.45081967213114754
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 114,
+            "probability": 0.53608981515577,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 11,
+            "probability": 0.6249885859554447,
+            "frequency": 0.6363636363636364
+          }
+        ]
+      },
+      "brierDifferenceVsMarket": 0.006031083681734956,
+      "interval": {
+        "lower": -0.011416526630952915,
+        "upper": 0.019915086212839054,
+        "days": 16,
+        "blockDays": 3,
+        "familyComparisons": 3
+      }
+    },
+    "market": {
+      "score": {
+        "n": 258,
+        "correct": 141,
+        "wrong": 100,
+        "undecided": 17,
+        "accuracy": 0.5850622406639004,
+        "coverage": 0.9341085271317829,
+        "brier": 0.24121278289320272,
+        "logLoss": 0.6751760433801868,
+        "ece": 0.042230377306720794,
+        "calibration": [
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "n": 2,
+            "probability": 0.1711482558139535,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 12,
+            "probability": 0.27272655099743065,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 26,
+            "probability": 0.3636656878962739,
+            "frequency": 0.2692307692307692
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 82,
+            "probability": 0.4465572236658613,
+            "frequency": 0.45121951219512196
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 86,
+            "probability": 0.540078604528447,
+            "frequency": 0.5465116279069767
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 39,
+            "probability": 0.6400910238615372,
+            "frequency": 0.5128205128205128
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 10,
+            "probability": 0.7342499528752867,
+            "frequency": 0.8
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 1,
+            "probability": 0.813953488372093,
+            "frequency": 0.0
+          }
+        ]
+      },
+      "brierDifferenceVsMarket": 0.0,
+      "interval": {
+        "lower": 0.0,
+        "upper": 0.0,
+        "days": 16,
+        "blockDays": 3,
+        "familyComparisons": 3
+      }
+    }
+  },
+  "policies": {
+    "reference": {
+      "all": {
+        "n": 93,
+        "exact": 41,
+        "wrong": 52,
+        "theoreticalRoi": -0.08600521342456824,
+        "interval": {
+          "lower": -0.3411363636363636,
+          "upper": 0.20788532433916576,
+          "days": 16,
+          "blockDays": 3,
+          "familyComparisons": 3
+        }
+      },
+      "marketUnderdogs": {
+        "n": 79,
+        "exact": 32,
+        "wrong": 47,
+        "theoreticalRoi": -0.12307249712313001,
+        "interval": {
+          "lower": -0.3660993609251369,
+          "upper": 0.12146665539649146,
+          "days": 15,
+          "blockDays": 3,
+          "familyComparisons": 3
+        }
+      },
+      "aboveTwo": {
+        "n": 50,
+        "exact": 18,
+        "wrong": 32,
+        "theoreticalRoi": -0.16899999999999998,
+        "interval": {
+          "lower": -0.5180080213903744,
+          "upper": 0.11808638443936038,
+          "days": 13,
+          "blockDays": 3,
+          "familyComparisons": 3
+        }
+      }
+    },
+    "symmetric": {
+      "all": {
+        "n": 108,
+        "exact": 52,
+        "wrong": 56,
+        "theoreticalRoi": -0.0031194885361551755,
+        "interval": {
+          "lower": -0.14379039948333427,
+          "upper": 0.27907201397375414,
+          "days": 15,
+          "blockDays": 3,
+          "familyComparisons": 3
+        }
+      },
+      "marketUnderdogs": {
+        "n": 93,
+        "exact": 41,
+        "wrong": 52,
+        "theoreticalRoi": -0.04880254154447701,
+        "interval": {
+          "lower": -0.18011265673981192,
+          "upper": 0.16166457060726014,
+          "days": 15,
+          "blockDays": 3,
+          "familyComparisons": 3
+        }
+      },
+      "aboveTwo": {
+        "n": 64,
+        "exact": 25,
+        "wrong": 39,
+        "theoreticalRoi": -0.11210937499999997,
+        "interval": {
+          "lower": -0.3526205357142857,
+          "upper": 0.18172297297297832,
+          "days": 14,
+          "blockDays": 3,
+          "familyComparisons": 3
+        }
+      }
+    },
+    "consensus": {
+      "all": {
+        "n": 73,
+        "exact": 35,
+        "wrong": 38,
+        "theoreticalRoi": -0.02991905354919053,
+        "interval": {
+          "lower": -0.21968148395721923,
+          "upper": 0.34985337243401765,
+          "days": 14,
+          "blockDays": 3,
+          "familyComparisons": 3
+        }
+      },
+      "marketUnderdogs": {
+        "n": 63,
+        "exact": 28,
+        "wrong": 35,
+        "theoreticalRoi": -0.06901154401154398,
+        "interval": {
+          "lower": -0.2405080213903743,
+          "upper": 0.2622377622377623,
+          "days": 12,
+          "blockDays": 3,
+          "familyComparisons": 3
+        }
+      },
+      "aboveTwo": {
+        "n": 39,
+        "exact": 14,
+        "wrong": 25,
+        "theoreticalRoi": -0.20705128205128204,
+        "interval": {
+          "lower": -0.8090909090909091,
+          "upper": 0.12352941176470594,
+          "days": 11,
+          "blockDays": 3,
+          "familyComparisons": 3
+        }
+      }
+    }
+  },
+  "retrospective": true,
+  "operationallyValidated": false
+}

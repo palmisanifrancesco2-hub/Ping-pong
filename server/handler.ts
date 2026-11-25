@@ -58,10 +58,11 @@ export function createHandler(deps: Dependencies = {}) {
     const send = (status: number, body: unknown) => { res.statusCode = status; res.end(JSON.stringify(body)); };
     const url = new URL(req.url ?? '/', 'http://localhost');
     const path = url.pathname;
-    if(path==='/api/weekly-table-tennis'){
+    const recovery=path==='/api/weekly-table-tennis-recovery';
+    if(path==='/api/weekly-table-tennis'||recovery){
       if(req.method!=='POST'){res.setHeader('Allow','POST');return send(405,{error:'Metodo non consentito.'});}
       if(!authorizedStudyCron(req.headers.authorization,env.CRON_SECRET))return send(401,{error:'Esecuzione non autorizzata.'});
-      try{const result=await weeklyStudy.runWeekly();return send(result.status==='disabled'?503:200,{status:result.status});}
+      try{const result=await weeklyStudy.runWeekly(recovery);return send(result.status==='disabled'?503:200,{status:result.status});}
       catch{console.error('WEEKLY_PING_PONG_FAILED');return send(503,{status:'failed'});}
     }
     const methods = ['/api/study','/api/market-study','/api/training','/api/blind-study'].includes(path)?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];

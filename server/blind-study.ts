@@ -26,6 +26,10 @@ const lead=2*minute, dailyLimit=400, archiveGrace=10*24*hour;
 const weeklyStart=Date.parse('2026-11-24T15:00:00Z');
 const weeklyEnd=Date.parse('2026-12-01T16:00:00Z');
 const weeklyFollowup=weeklyEnd+48*hour;
+
+export function weeklyScanOverdue(lastSuccess:number, now:number) {
+  return !Number.isFinite(lastSuccess)||lastSuccess<=0||now-lastSuccess>=45*minute;
+}
 const competitionKey=(league:string,name:string)=>playerKey(league,name);
 const normalized=(name:string)=>name.normalize('NFKC').trim().replace(/\s+/g,' ').toLowerCase();
 export const blindStudyEnabled=(env:Env)=>env.APP_BLIND_STUDY_ENABLED===undefined
@@ -187,11 +191,23 @@ export class BlindStudy {
     this.running=this.execute(owner,deadline,bootstrap);
     try{return await this.running;}finally{this.running=undefined;}
   }
-  async runWeekly(){
+  async runWeekly(recovery=false){
     if(this.env.VERCEL_ENV!=='production'||!blindStudyEnabled(this.env))return {status:'disabled'};
     if(this.now()<weeklyStart||this.now()>=weeklyFollowup)return {status:'window_closed'};
     const owner=await this.owner.ownerId();
-    return this.execute(owner,this.now()+120_000,false,true);
+    const started=this.now(),db=this.store.db();
+    const heartbeat=studyUuid(`${study}:${owner}:weekly-heartbeat`);
+    if(recovery){
+      const previous=await db.from('model_versions').select('parameters').eq('id',heartbeat).maybeSingle();
+      if(previous.error)throw Error('WEEKLY_STUDY_HEARTBEAT_READ_FAILED');
+      const last=Number(previous.data?.parameters?.completedAt);
+      if(!weeklyScanOverdue(last,started))return {status:'healthy'};
+      console.warn(JSON.stringify({weeklyStudyWatchdog:'retry',lastSuccessAt:last>0?new Date(last).toISOString():null,
+        incident:last>0?String(last):'first-heartbeat',checkedAt:new Date(started).toISOString()}));
+    }
+    const result=await this.execute(owner,started+120_000,false,true,recovery,heartbeat);
+    if(recovery&&result.status==='completed')console.info(JSON.stringify({weeklyStudyWatchdog:'restored',checkedAt:new Date(this.now()).toISOString()}));
+    return result;
   }
   private async source(sport:IndividualSport,weekly=false):Promise<Source>{
     if(sport==='table_tennis'){
@@ -208,6 +224,10 @@ export class BlindStudy {
         console.warn(JSON.stringify({weeklyStudyFeed:'results',code:'BLIND_ARCHIVE_INCOMPLETE'}));
         return {board:null,results:archive.results};
       }
+      if(weekly&&board.status==='fulfilled'&&(board.value.warming||this.now()-Date.parse(board.value.checkedAt)>30_000)){
+        console.warn(JSON.stringify({weeklyStudyFeed:'board',code:'BLIND_BOARD_NOT_CURRENT'}));
+        return {board:null,results:archive.results};
+      }
       return {board:board.status==='fulfilled'?board.value:null,results:archive.results,
         score:m=>scoreWinnerEstimate(m as FeedMatch,archive,this.now())?.homeProbability};
     }
@@ -217,10 +237,10 @@ export class BlindStudy {
     return {board,results:archive.rows.map(r=>({id:r.id,home:r.home,away:r.away,league:r.league,
       finishedAt:new Date(r.finished).toISOString(),availableAt:new Date(r.available).toISOString(),homeWon:r.won===1}))};
   }
-  private async execute(owner:string,deadline:number,bootstrap:boolean,weekly=false){
+  private async execute(owner:string,deadline:number,bootstrap:boolean,weekly=false,recovery=false,heartbeat?:string){
     const db=this.store.db(), started=this.now(), isoStart=new Date(started).toISOString();
-    const day=isoStart.slice(0,10), bucket=weekly?30:10;
-    const slot=bootstrap?'bootstrap':`${weekly?'weekly:':''}${Math.floor(started/(bucket*minute))}`;
+    const day=isoStart.slice(0,10), bucket=recovery?15:weekly?30:10;
+    const slot=bootstrap?'bootstrap':`${recovery?'weekly-recovery:':weekly?'weekly:':''}${Math.floor(started/(bucket*minute))}`;
     const id=studyUuid(`${study}:${owner}:run:${slot}`);
     const claim=await db.from('model_versions').upsert({id,name:'Blind winner batch v1',version:`${study}:run:${owner}:${slot}`,
       training_cutoff:isoStart,validated:false,parameters:{study,userId:owner,started:isoStart}},{onConflict:'id',ignoreDuplicates:true}).select('id');
@@ -234,7 +254,16 @@ export class BlindStudy {
       .lte('parameters->>until',String(this.now())).select('id');
     if(locked.error)throw Error('BLIND_STUDY_LEASE_FAILED');
     if(!locked.data?.length)return {status:'running'};
-    try { return await this.collect(db,owner,deadline,started,day,weekly); }
+    try {
+      const result=await this.collect(db,owner,deadline,started,day,weekly);
+      if(heartbeat&&result.status==='completed'){
+        const completedAt=this.now();
+        const saved=await db.from('model_versions').upsert({id:heartbeat,name:'Blind weekly heartbeat v1',
+          version:`${study}:weekly-heartbeat:${owner}`,training_cutoff:isoStart,validated:false,parameters:{completedAt}},{onConflict:'id'});
+        if(saved.error)throw Error('WEEKLY_STUDY_HEARTBEAT_WRITE_FAILED');
+      }
+      return result;
+    }
     finally {
       const released=await db.from('model_versions').update({parameters:{until:0}}).eq('id',leaseId).eq('parameters->>token',token);
       if(released.error)console.warn('BLIND_STUDY_LEASE_RELEASE_FAILED');
