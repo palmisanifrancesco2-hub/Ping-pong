@@ -100,7 +100,21 @@ describe('all-market foreign board', () => {
       [Response.json({}), 'MOVIODDS_INVALID_BODY'],
       [Response.json({...payload, server_time: new Date(now - 120_001).toISOString()}), 'MOVIODDS_INVALID_TIME'],
     ] as const) {
-      await expect(new MoviOddsFeed(vi.fn().mockResolvedValue(response), () => now).board()).rejects.toThrow(new RegExp(`^${code}$`));
+      await expect(new MoviOddsFeed(vi.fn(async()=>response.clone()), () => now).board()).rejects.toThrow(new RegExp(`^${code}$`));
     }
+  });
+  it('recovers an oversized table-tennis board using the documented winner group',async()=>{
+    const fetcher=vi.fn(async(input:string|URL|Request)=>{
+      const url=new URL(String(input));
+      return url.searchParams.get('groups')==='920000' ? Response.json(payload) : new Response('x'.repeat(3_500_001));
+    });
+    const feed=new MoviOddsFeed(fetcher,()=>now);
+    const board=await feed.board();
+    expect(board.mainLinesOnly).toBe(true);
+    expect(board.matches).toHaveLength(1);
+    expect(fetcher).toHaveBeenCalledTimes(2);
+    const weekly=new MoviOddsFeed(fetcher,()=>now,{},undefined,'920000');
+    await weekly.board();
+    expect(fetcher).toHaveBeenCalledTimes(3);
   });
 });

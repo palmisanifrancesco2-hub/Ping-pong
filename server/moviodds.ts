@@ -6,6 +6,7 @@ import {movioddsRequest} from './moviodds-request.js';
 import type {Env} from './auth.js';
 
 const text = z.string().max(500);
+export const tableTennisWinnerGroup = '920000';
 const time = z.iso.datetime({ offset: true });
 const quote = z.object({
   fixture_id: text, group_id: text, group_name: text.optional(), market_id: text.optional(),
@@ -50,7 +51,7 @@ export class MoviOddsFeed<S extends string = 'table_tennis'> {
   private cached?: { at: number; board: Board<S> };
   private pending?: Promise<Board<S>>;
   private failedAt?: number;
-  constructor(private fetcher: typeof fetch = fetch, private now: () => number = Date.now, private env: Env = process.env, private sport?:S) {}
+  constructor(private fetcher: typeof fetch = fetch, private now: () => number = Date.now, private env: Env = process.env, private sport?:S, private groups?:string) {}
   async board(force = false): Promise<Board<S>> {
     const board = await this.rawBoard(force);
     return { ...board, matches: board.matches.filter(m => isUpcomingOrLive(m, this.now())) };
@@ -59,16 +60,22 @@ export class MoviOddsFeed<S extends string = 'table_tennis'> {
     if (this.cached && this.now() - this.cached.at < (force ? 10_000 : 30_000)) return this.cached.board;
     if (this.failedAt !== undefined && this.now() - this.failedAt < 30_000) throw new Error('MOVIODDS_COOLDOWN');
     if (this.pending) return this.pending;
-    this.pending = this.read();
+    this.pending = this.read(this.groups).catch(error=>{
+      if(!this.groups&&(!this.sport||this.sport==='table_tennis')&&error instanceof Error&&error.message==='MOVIODDS_PAYLOAD_TOO_LARGE'){
+        return this.read(tableTennisWinnerGroup);
+      }
+      throw error;
+    });
     try { return await this.pending; } finally { this.pending = undefined; }
   }
-  private async read(): Promise<Board<S>> {
+  private async read(groups?:string): Promise<Board<S>> {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 15_000);
     let failure = 'MOVIODDS_NETWORK_ERROR';
     try {
       const url = new URL(MOVIODDS_URL);
       if (this.sport) url.searchParams.set('sport',this.sport);
+      if (groups) url.searchParams.set('groups',groups);
       if (this.sport==='tennis'||this.sport==='darts') url.searchParams.set('stats','1');
       const response = await movioddsRequest(url.href, {
         signal: controller.signal, redirect: 'error', cache: 'no-store', headers: { Accept: 'application/json' },
@@ -95,6 +102,7 @@ export class MoviOddsFeed<S extends string = 'table_tennis'> {
         }
       } finally { await reader.cancel().catch(() => {}); }
       const board = parseBoard(JSON.parse(Buffer.concat(chunks).toString('utf8')), new Date(this.now()).toISOString(),this.sport ?? 'table_tennis' as S);
+      if(groups)board.mainLinesOnly=true;
       this.cached = { at: this.now(), board }; this.failedAt = undefined;
       return board;
     } catch (error) {

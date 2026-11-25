@@ -10,7 +10,7 @@ import { fairMarketProbability } from '../src/shared/value-filter.js';
 import { individualWinnerOffers, IndividualSports, singles } from './individual-sports.js';
 import { ResultsFeed } from './results.js';
 import { ForecastStore } from './forecast-store.js';
-import { MoviOddsFeed } from './moviodds.js';
+import { MoviOddsFeed, tableTennisWinnerGroup } from './moviodds.js';
 import { ProspectiveStudy } from './prospective-study.js';
 import { marketHash, studyUuid } from './research-integrity.js';
 import { movioddsRequest } from './moviodds-request.js';
@@ -152,7 +152,8 @@ export class BlindStudy {
   private owner:ProspectiveStudy;
   private running?:Promise<unknown>;
   constructor(private env:Env,private now=Date.now,private feed:Pick<MoviOddsFeed,'board'>=new MoviOddsFeed(fetch,now,env),
-    private results=new ResultsFeed(fetch,now,env),private additional=new IndividualSports(env,now),private fetcher=fetch){
+    private results=new ResultsFeed(fetch,now,env),private additional=new IndividualSports(env,now),private fetcher=fetch,
+    private weeklyFeed:Pick<MoviOddsFeed,'board'>=new MoviOddsFeed<'table_tennis'>(fetcher,now,env,undefined,tableTennisWinnerGroup)){
     this.store=new ForecastStore(env,now);
     this.owner=new ProspectiveStudy(env,now);
   }
@@ -194,7 +195,7 @@ export class BlindStudy {
   }
   private async source(sport:IndividualSport,weekly=false):Promise<Source>{
     if(sport==='table_tennis'){
-      const [board,results]=await Promise.allSettled([this.feed.board(),this.results.archive()]);
+      const [board,results]=await Promise.allSettled([(weekly?this.weeklyFeed:this.feed).board(),this.results.archive()]);
       if(board.status==='rejected')console.warn(JSON.stringify({weeklyStudyFeed:'board',code:sourceFailure(board.reason)}));
       if(results.status==='rejected'){
         console.warn(JSON.stringify({weeklyStudyFeed:'results',code:sourceFailure(results.reason)}));
