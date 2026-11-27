@@ -1,5 +1,5 @@
 import {useEffect,useState} from 'react';
-import type {BlindAudit, BlindHistory, BlindStudyReport, PricingReport} from './shared/blind-study';
+import {blindEvBands,type BlindAudit,type BlindHistory,type BlindStudyReport,type PricingReport} from './shared/blind-study';
 import {individualSports} from './shared/individual-sports';
 import {dateTime} from './shared/format';
 
@@ -121,8 +121,8 @@ function FullWinnerArchive({token}:{token:string}){
     finally{setBusy(null);}
   }
   return <details>
-    <summary>Archivio completo e selezioni con EV sopra +50%</summary>
-    <p>EV = probabilità del modello × quota Bet365 − 1. Consideriamo la selezione con EV più alto per partita, con quota minima 1,30. Esatto e Sbagliato richiedono inizio verificato.</p>
+    <summary>Archivio completo e studio per soglie EV</summary>
+    <p>EV = probabilità del modello × quota Bet365 − 1. Per ciascuna soglia consideriamo una selezione per partita e applichiamo la quota minima del gruppo. Esatto e Sbagliato richiedono inizio verificato.</p>
     <div className="quote-toolbar">
       <button className="secondary" disabled={busy!==null} onClick={()=>load('summary')}>Aggiorna riepilogo</button>
       <button className="secondary" disabled={busy!==null} onClick={()=>load('csv')}>Scarica tutte le partite (CSV)</button>
@@ -132,10 +132,17 @@ function FullWinnerArchive({token}:{token:string}){
     {audit&&<>
       <p>{audit.recorded} partite registrate · {audit.withPrice} con quota · da {dateTime(audit.from??undefined)} a {dateTime(audit.until??undefined)}.</p>
       {audit.paired>0&&<p>Brier su {audit.paired} partite · Modello {audit.brier?.toFixed(4)} · Bet365 {audit.marketBrier?.toFixed(4)}.</p>}
-      <p><strong>{audit.highEv.registered} selezioni sopra +50%</strong> su {audit.highEv.eligible} osservazioni con quota idonea · {audit.highEv.exact} esatte · {audit.highEv.wrong} sbagliate · {audit.highEv.pending} in attesa · {audit.highEv.unverified} senza inizio verificato · {audit.highEv.invalid} escluse.</p>
-      <p>{audit.highEv.favorites} erano anche il favorito del modello · {audit.highEv.favoritesExact} esatte · {audit.highEv.favoritesWrong} sbagliate.{audit.highEv.roi!==null&&` Rendimento simulato sui soli esiti verificati ${probability.format(audit.highEv.roi)}.`}</p>
+      <ul className="competition-list">{blindEvBands.map(({key,label})=>{
+        const row=audit.bands[key],peer=audit.peerConfirmed[key],baseline=audit.peerBaseline[key],settled=row.exact+row.wrong;
+        return <li key={key}><span>
+          <strong>{label}</strong>
+          <small>{row.registered} selezioni · {row.exact} esatte · {row.wrong} sbagliate · {settled?probability.format(row.exact/settled)+' esatte sui verificati':'nessun esito verificato'}</small>
+          <small>{row.pending} in attesa · {row.unverified} con inizio da verificare · {row.invalid} escluse{row.roi!==null?' · ROI simulato '+probability.format(row.roi):''}</small>
+          {peer.eligible>0&&<small>Su {peer.eligible} partite valutabili con entrambi i modelli · solo modello {baseline.exact} esatte e {baseline.wrong} sbagliate · entrambi oltre soglia {peer.exact} esatte e {peer.wrong} sbagliate</small>}
+        </span></li>;
+      })}</ul>
       <details><summary>Per versione del modello</summary><ul className="competition-list">{audit.models.map(row=><li key={row.model}>
-        <span><strong>{row.model}</strong><small>{row.n} partite · {row.highEv.registered} oltre +50% · {row.highEv.exact} esatte · {row.highEv.wrong} sbagliate</small></span>
+        <span><strong>{row.model} · {row.n} partite</strong>{blindEvBands.map(({key,label})=><small key={key}>{label} · {row.bands[key].registered} selezioni · {row.bands[key].exact} esatte · {row.bands[key].wrong} sbagliate</small>)}</span>
       </li>)}</ul></details>
     </>}
   </details>;

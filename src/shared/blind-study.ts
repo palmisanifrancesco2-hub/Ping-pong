@@ -48,10 +48,17 @@ export type PricingReport = {
   summary:{market:string;records:number;settled:number;exact:number;simulatedRoi:number|null;roiLower:number|null;roiUpper:number|null;drawdown:number|null;closing:number;clv:number|null;delay:number;delayedRoi:number|null;brier:number|null;logLoss:number|null;ece:number|null}[];
 };
 
+export const blindEvBands=[
+  {key:'above50',minimumOdds:1.30,minimumEv:.50,label:'EV sopra +50%'},
+  {key:'above60',minimumOdds:1.30,minimumEv:.60,label:'EV sopra +60%'},
+  {key:'odds2Above50',minimumOdds:2,minimumEv:.50,label:'Quota da 2,00 · EV sopra +50%'},
+] as const;
+export type BlindEvBandKey=typeof blindEvBands[number]['key'];
 export type BlindHighEv = {
   eligible:number;registered:number;favorites:number;favoritesExact:number;favoritesWrong:number;exact:number;wrong:number;pending:number;unverified:number;invalid:number;roi:number|null;
 };
+export type BlindEvBands=Record<BlindEvBandKey,BlindHighEv>;
 export type BlindAudit = BlindSportSummary & {
-  from:string|null;until:string|null;highEv:BlindHighEv;
-  models:{model:string;n:number;highEv:BlindHighEv}[];
+  from:string|null;until:string|null;highEv:BlindHighEv;bands:BlindEvBands;peerConfirmed:BlindEvBands;peerBaseline:BlindEvBands;
+  models:{model:string;n:number;highEv:BlindHighEv;bands:BlindEvBands}[];
 };

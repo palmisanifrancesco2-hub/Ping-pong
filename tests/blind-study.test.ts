@@ -99,6 +99,15 @@ describe('winner observation frozen before outcome',()=>{
     const a=blindAudit([row,boundary,pending,unverified]);
     expect(a.highEv).toMatchObject({eligible:4,registered:3,favorites:0,exact:1,wrong:0,pending:1,unverified:1,roi:3});
     expect(a.models).toMatchObject([{model:'test',n:4,highEv:{registered:3}}]);
+    expect(a.bands.above60).toMatchObject({eligible:4,registered:0});
+    expect(a.bands.odds2Above50).toMatchObject({eligible:4,registered:3,exact:1});
+    expect(a.peerConfirmed.above50.eligible).toBe(0);
+    const peerForecast={...forecast,peerHomeProbability:.64,prices:{...forecast.prices,away:{...forecast.prices.away,odds:4.1}}};
+    const paired=blindAudit([{...row,parameters:{...row.parameters,forecast:peerForecast}}]);
+    expect(paired.peerBaseline.above60).toMatchObject({registered:1,exact:1});
+    expect(paired.peerConfirmed.above60).toMatchObject({registered:0,exact:0});
+    const oddsBoundary={...forecast,homeProbability:.8,prices:{home:{odds:2,quoteAt:iso(now)},away:null}};
+    expect(blindAudit([{...row,parameters:{...row.parameters,forecast:oddsBoundary}}]).bands.odds2Above50.registered).toBe(1);
     const csv=blindArchiveCsv([row,pending]);
     expect(csv.split('\r\n')).toHaveLength(4);
     expect(csv).toContain("home_fair_odds");

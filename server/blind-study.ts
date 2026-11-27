@@ -1,6 +1,7 @@
 import {randomUUID} from 'node:crypto';
 import { additionalSports, type IndividualSport } from '../src/shared/individual-sports.js';
-import type { BlindAudit, BlindHistory, BlindHistoryWeek, BlindSportSummary, BlindStudyReport } from '../src/shared/blind-study.js';
+import {blindEvBands,type BlindAudit,type BlindEvBands,type BlindHistory,type BlindHistoryWeek,
+  type BlindHighEv,type BlindSportSummary,type BlindStudyReport} from '../src/shared/blind-study.js';
 import type { Board, FeedMatch, FeedQuote } from '../src/shared/board.js';
 import { marketIdentity, quoteStatus } from '../src/shared/board.js';
 import { eloProbability, playerKey } from '../src/domain/player-model.js';
@@ -167,16 +168,16 @@ export function blindSummary(rows:Row[], sport:IndividualSport):BlindSportSummar
     verifiedExact,verifiedIncorrect,invalid,brier:paired?brier/paired:null,marketBrier:paired?marketBrier/paired:null,paired};
 }
 
-const highEvThreshold=.5;
-
-function bestArchivedValue(f:FrozenWinner) {
+function bestArchivedValue(f:FrozenWinner,minimumOdds:number,peerRequired=false) {
   // A coherent two-way book admits a single high-EV side in ordinary cases.
   // Rank eligible sides explicitly and make equal estimates deterministic.
+  if(peerRequired&&f.peerHomeProbability===undefined)return;
   return (['home','away'] as const).flatMap(side=>{
     const price=f.prices?.[side];
-    if(!price||!Number.isFinite(price.odds)||price.odds<1.30)return [];
+    if(!price||!Number.isFinite(price.odds)||price.odds<minimumOdds)return [];
     const probability=side==='home'?f.homeProbability:1-f.homeProbability;
-    return [{side,odds:price.odds,ev:probability*price.odds-1}];
+    const peer=f.peerHomeProbability===undefined?probability:side==='home'?f.peerHomeProbability:1-f.peerHomeProbability;
+    return [{side,odds:price.odds,ev:(peerRequired?Math.min(probability,peer):probability)*price.odds-1}];
   }).sort((a,b)=>b.ev-a.ev)[0];
 }
 
@@ -184,13 +185,13 @@ export function blindAudit(rows:Row[]):BlindAudit {
   const cases=rows.filter(row=>row.parameters.forecast.sport==='table_tennis');
   const groups=new Map<string,Row[]>();
   let from=Infinity,to=-Infinity;
-  const summarize=(observations:Row[])=>{
+  const summarize=(observations:Row[],minimumOdds:number,minimumEv:number,peerRequired:boolean):BlindHighEv=>{
     let eligible=0,registered=0,favorites=0,favoritesExact=0,favoritesWrong=0,exact=0,wrong=0,pending=0,unverified=0,invalid=0,winsAtOdds=0;
     for(const {parameters:{forecast:f,outcome:o}} of observations){
-      const selection=bestArchivedValue(f);
+      const selection=bestArchivedValue(f,minimumOdds,peerRequired);
       if(!selection)continue;
       eligible++;
-      if(selection.ev<=highEvThreshold+1e-12)continue;
+      if(selection.ev<=minimumEv+1e-12)continue;
       registered++;
       const favorite=selection.side===f.selection;
       if(favorite)favorites++;
@@ -209,30 +210,41 @@ export function blindAudit(rows:Row[]):BlindAudit {
     group.push(row);groups.set(f.model,group);
     from=Math.min(from,f.seenAt);to=Math.max(to,f.seenAt);
   }
+  const summarizeBands=(group:Row[],peerRequired=false)=>Object.fromEntries(blindEvBands.map(({key,minimumOdds,minimumEv})=>
+    [key,summarize(group,minimumOdds,minimumEv,peerRequired)])) as BlindEvBands;
+  const bands=summarizeBands(cases);
   return {...blindSummary(cases,'table_tennis'),from:Number.isFinite(from)?new Date(from).toISOString():null,
     until:Number.isFinite(to)?new Date(to).toISOString():null,
-    highEv:summarize(cases),models:[...groups].map(([model,group])=>({model,n:group.length,highEv:summarize(group)}))};
+    highEv:bands.above50,bands,peerConfirmed:summarizeBands(cases,true),
+    peerBaseline:summarizeBands(cases.filter(row=>row.parameters.forecast.peerHomeProbability!==undefined)),models:[...groups].map(([model,group])=>{
+      const byBand=summarizeBands(group);
+      return {model,n:group.length,highEv:byBand.above50,bands:byBand};
+    })};
 }
 
 export function blindArchiveCsv(rows:Row[]) {
   const header=['event_id','competition','home','away','model','forecast_utc','kickoff_utc','result_utc','result_state','winner','sets','model_favorite',
     'home_model_p','away_model_p','home_fair_odds','away_fair_odds','home_bet365_au','away_bet365_au','home_quote_utc','away_quote_utc',
-    'home_ev','away_ev','ev_above_50_selection','ev_above_50_outcome','verified_start_guard_utc','home_market_no_vig_p','home_elo_p','home_blend25_p','home_elo_external_calibrated_v42_p','home_agreement_blend_v43_p'];
+    'home_ev','away_ev','ev_above_50_selection','ev_above_50_outcome','verified_start_guard_utc','home_market_no_vig_p','home_elo_p','home_blend25_p','home_elo_external_calibrated_v42_p','home_agreement_blend_v43_p','ev_above_60_selection','ev_above_60_outcome','odds_ge_2_ev_above_50_selection','odds_ge_2_ev_above_50_outcome'];
   const cell=(value:string|number|null|undefined)=>{
     if(typeof value==='number')return String(value);
     const clean=value??'';
     return '"'+(/^[\s]*[=+@-]/.test(clean)?"'":'')+clean.replaceAll('"','""')+'"';
   };
   const records=rows.filter(r=>r.parameters.forecast.sport==='table_tennis').map(({parameters:{forecast:f,outcome:o}})=>{
-    const home=f.prices?.home,away=f.prices?.away,selection=bestArchivedValue(f);
-    const high=selection&&selection.ev>highEvThreshold+1e-12?selection.side:null;
+    const home=f.prices?.home,away=f.prices?.away;
     const status=!o?'pending':o.invalid?'invalid':o.actualGuard===null?'reported':'verified';
+    const byBand=blindEvBands.map(({minimumOdds,minimumEv})=>{
+      const selection=bestArchivedValue(f,minimumOdds);
+      const side=selection&&selection.ev>minimumEv+1e-12?selection.side:null;
+      return [side,side&&status==='verified'&&o?(side===o.winner?'exact':'wrong'):null];
+    });
     return [f.id,f.league,f.home,f.away,f.model,new Date(f.seenAt).toISOString(),new Date(f.scheduledAt).toISOString(),o?.finishedAt,status,
       o?.winner,o?.sets?.map(([a,b])=>a+'-'+b).join(' | '),f.selection,
       f.homeProbability,1-f.homeProbability,1/f.homeProbability,1/(1-f.homeProbability),home?.odds,away?.odds,home?.quoteAt,away?.quoteAt,
-      home?f.homeProbability*home.odds-1:null,away?(1-f.homeProbability)*away.odds-1:null,high,
-      high&&status==='verified'&&o?(high===o.winner?'exact':'wrong'):null,o?.actualGuard!=null?new Date(o.actualGuard).toISOString():null,
-      home&&away?fairMarketProbability(home.odds,away.odds):null,f.peerHomeProbability,f.marketBlend25HomeProbability,f.externalEloCalibratedHomeProbability,f.agreementBlendHomeProbability].map(cell).join(',');
+      home?f.homeProbability*home.odds-1:null,away?(1-f.homeProbability)*away.odds-1:null,...byBand[0],
+      o?.actualGuard!=null?new Date(o.actualGuard).toISOString():null,
+      home&&away?fairMarketProbability(home.odds,away.odds):null,f.peerHomeProbability,f.marketBlend25HomeProbability,f.externalEloCalibratedHomeProbability,f.agreementBlendHomeProbability,...byBand[1],...byBand[2]].map(cell).join(',');
   });
   return [header.join(','),...records].join('\r\n')+'\r\n';
 }
@@ -658,7 +670,7 @@ export class BlindStudy {
     const summary={status:tableOnly&&!bySport.get('table_tennis')?.board?'settlement_only':'completed',captured,reported,verified,pricingCaptured,capturedBySport,capturedWithPrice,feeds:bySport.size,closingQueries:calls,checkedAt:new Date(started).toISOString()};
     if(weekly){
       const all=weeklyRows(await this.rows(db,owner,new Date(weeklyStart-60_000).toISOString(),new Date(weeklyEnd+hour).toISOString()));
-      console.info(JSON.stringify({weeklyPingPongRun:summary,weekly:weeklySummary(all),highEv:blindAudit(all).highEv}));
+      console.info(JSON.stringify({weeklyPingPongRun:summary,weekly:weeklySummary(all),evBands:blindAudit(all).bands}));
       logWeeklyDisagreement(weeklyDisagreement(all));
     }else if(tableOnly)console.info(JSON.stringify({longitudinalPingPongRun:summary}));
     else console.info(JSON.stringify({blindStudyRun:summary}));
