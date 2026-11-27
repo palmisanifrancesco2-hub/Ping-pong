@@ -47,3 +47,7 @@
 
 .sport-training { margin-top: 24px; padding-top: 18px; border-top: 1px solid #29374b; }
 .sport-training dd { overflow-wrap: anywhere; }
+
+.pricing-table{max-width:100%;overflow:auto;margin:12px 0}
+.pricing-table table{border-collapse:collapse;font-size:.85rem;min-width:49rem}
+.pricing-table td,.pricing-table th{border-bottom:1px solid #344159;text-align:left;padding:.6rem;vertical-align:top}

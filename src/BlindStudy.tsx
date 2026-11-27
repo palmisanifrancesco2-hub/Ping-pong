@@ -1,5 +1,5 @@
 import {useEffect,useState} from 'react';
-import type {BlindHistory, BlindStudyReport} from './shared/blind-study';
+import type {BlindHistory, BlindStudyReport, PricingReport} from './shared/blind-study';
 import {individualSports} from './shared/individual-sports';
 import {dateTime} from './shared/format';
 
@@ -45,6 +45,58 @@ function StudyHistory({history,scheduled,checkedAt,selectWeek}:{history:BlindHis
       </span></li>)}</ul>
     </details>
   </div>;
+}
+
+const marketLabel=(key:string)=>{
+  if(key==='winner')return 'Vincente partita';
+  if(key==='first-set')return 'Vincente primo set';
+  if(key==='first-set-points-over-19.5')return 'Punti primo set · 19,5';
+  const line=key.match(/\d+(\.\d+)?$/)?.[0]?.replace('.',',')??'';
+  if(key.startsWith('sets-over-'))return 'Totale set · '+line;
+  if(key.startsWith('points-over-'))return 'Totale punti · '+line;
+  if(key.startsWith('home-set-handicap-'))return 'Handicap set A · '+(key.includes('minus')?'−':'+')+line;
+  if(key.startsWith('home-point-handicap-'))return 'Handicap punti A · '+(key.includes('minus')?'−':'+')+line;
+  return key;
+};
+
+function PricingResearch({report}:{report:PricingReport|null}){
+  const [minimum,setMinimum]=useState('1.30');
+  const [preferTwo,setPreferTwo]=useState(false);
+  const rows=(report?.recent??[]).filter(row=>row.odds>=(Number(minimum)||1.30))
+    .sort((a,b)=>preferTwo?(Math.abs(a.odds-2)-Math.abs(b.odds-2)||b.stressed-a.stressed):b.stressed-a.stressed);
+  return <details>
+    <summary>Studio prezzi Setka Cup</summary>
+    <h3>Opportunità ADM verificate</h3>
+    <p>Nessuna disponibile. MoviOdds legge bet365.com.au e la disponibilità su bet365.it resta da confermare. Operatori indipendenti nel consenso: 0.</p>
+    <h4>Prezzi osservati · Simulazione</h4>
+    <p>Quote del feed archiviate agli orari indicati. Il test di tenuta sottrae 5 punti alla probabilità e riduce del 5% l’incasso netto della quota. È un’analisi di sensibilità.</p>
+    <label>Quota minima <input type="number" min="1.01" step=".01" value={minimum} onChange={e=>setMinimum(e.target.value)}/></label>{' '}
+    <label><input type="checkbox" checked={preferTwo} onChange={e=>setPreferTwo(e.target.checked)}/> Preferisci quote vicino a 2,00</label>
+    {report===null?<p>Registro dei prezzi temporaneamente indisponibile.</p>:rows.length===0?<p>Nessuna osservazione con EV nominale positivo per il filtro scelto.</p>:
+      <div className="pricing-table"><table>
+        <thead><tr>{['Partita','Mercato e selezione','Fonte e orario','Quota','Mercato senza margine','Modello','Quota equa','EV e sensibilità'].map(title=><th scope="col" key={title}>{title}</th>)}</tr></thead>
+        <tbody>{rows.map(row=><tr key={JSON.stringify([row.eventId,row.marketKey,row.side])}>
+          <th scope="row">{row.event}</th>
+          <td>{marketLabel(row.market)}<br/>{row.side} · {row.line==='To Win'?'Vincente':row.line}</td>
+          <td>{row.source} · {row.site}<br/>Prezzo {dateTime(row.quotedAt)}<br/>Rilevato {dateTime(row.observedAt)}</td>
+          <td>{odds.format(row.odds)}</td>
+          <td>{probability.format(row.marketProbability)}<br/><small>Metodo potenza {probability.format(row.power)}</small></td>
+          <td>{probability.format(row.model)}</td>
+          <td>{odds.format(row.fair)}</td>
+          <td>{probability.format(row.ev)}<br/>{probability.format(row.stressed)} sotto stress<br/><small>{row.trial?'Candidato simulato':'Fuori dalla regola di simulazione'}</small></td>
+        </tr>)}</tbody>
+      </table></div>}
+    {!!report?.coverage.length&&<p>Copertura nelle ultime 150 osservazioni del registro<br/>{report.coverage.map(row=><span key={row.market}>{marketLabel(row.market)} · {row.fixtures} incontri, {row.withModel} stime su {row.snapshots} letture<br/></span>)}</p>}
+    {!!report?.summary.length&&<ul className="competition-list">{report.summary.map(row=><li key={row.market}><span>
+      <strong>{marketLabel(row.market)} · Registro simulato recente</strong>
+      <small>{row.records} selezioni · {row.settled} verificate · {row.exact} esatte · Chiusura confrontabile {row.closing} · Quota dopo 60–180 s {row.delay}</small>
+      {row.simulatedRoi!==null&&<small>ROI teorico sul sottoinsieme verificato {probability.format(row.simulatedRoi)} · Drawdown {row.drawdown?.toFixed(2)} unità</small>}
+      {row.roiLower!==null&&row.roiUpper!==null&&<small>Intervallo ROI {probability.format(row.roiLower)} – {probability.format(row.roiUpper)}</small>}
+      {row.brier!==null&&<small>Brier {row.brier.toFixed(4)} · Log loss {row.logLoss?.toFixed(4)} · Errore di calibrazione {row.ece?.toFixed(4)}</small>}
+      {row.clv!==null&&<small>Vantaggio medio rispetto alla probabilità equa di chiusura {probability.format(row.clv)}</small>}
+      {row.delayedRoi!==null&&<small>ROI teorico dopo ritardo {probability.format(row.delayedRoi)}</small>}
+    </span></li>)}</ul>}
+  </details>;
 }
 
 export function BlindStudy({token}:{token?:string}) {
@@ -105,6 +157,7 @@ export function BlindStudy({token}:{token?:string}) {
         </div>}
       </div>}
       {report.history&&<StudyHistory history={report.history} scheduled={report.scheduled} checkedAt={report.checkedAt} selectWeek={setHistoryWeek}/>}
+      {report.pricing!==undefined&&<PricingResearch report={report.pricing}/>}
       <h3>Riepilogo per sport nel periodo mostrato</h3>
       <ul className="competition-list">{report.sports.map(row=><li key={row.sport}><span>
         <strong>{individualSports[row.sport]}</strong>

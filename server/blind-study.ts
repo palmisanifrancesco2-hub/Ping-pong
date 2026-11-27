@@ -9,6 +9,9 @@ import { prematchBenchmark, verifiedStart } from '../src/domain/research-source.
 import { fairMarketProbability } from '../src/shared/value-filter.js';
 import { disagreementReport, disagreementStartAt } from '../src/domain/underdog-study.js';
 import { individualWinnerOffers, IndividualSports, singles } from './individual-sports.js';
+import {marketEstimateReport,marketTarget} from './market-estimates.js';
+import {archivedPricingPairs,confirmedBestOfFive,isSetka,pricingCoverage,pricingReport,pricingSnapshot,savePricingSnapshots,type PricingSnapshot} from './pricing-study.js';
+import {marketPriceKey} from '../src/shared/additional-markets.js';
 import { ResultsFeed } from './results.js';
 import { ForecastStore } from './forecast-store.js';
 import { MoviOddsFeed, tableTennisWinnerGroup } from './moviodds.js';
@@ -49,10 +52,10 @@ export type FrozenWinner={
   peerHomeProbability?:number;
   marketBlend25HomeProbability?:number;
 };
-type Outcome={winner:'home'|'away';finishedAt:string;availableAt:string;actualGuard:number|null;invalid:boolean;sets?:[number,number][];closing?:{homeOdds:number;awayOdds:number}};
+type Outcome={winner:'home'|'away';finishedAt:string;availableAt:string;actualGuard:number|null;invalid:boolean;sets?:[number,number][];pricingClosing?:ReturnType<typeof archivedPricingPairs>;closing?:{homeOdds:number;awayOdds:number}};
 type Row={id:string;created_at:string;parameters:{study:string;userId:string;forecast:FrozenWinner;hash:string;attempts:number;lastAttempt:number;outcome:Outcome|null}};
 type Db=ReturnType<ForecastStore['db']>;
-type Source={board:Board<IndividualSport>|null;results:History[];score?: (m:Match)=>number|undefined};
+type Source={board:Board<IndividualSport>|null;results:History[];archive?:Awaited<ReturnType<ResultsFeed['archive']>>;score?: (m:Match)=>number|undefined};
 
 function sourceFailure(error:unknown) {
   const code=error instanceof Error?(typeof error.cause==='string'?error.cause:error.message):'';
@@ -260,7 +263,8 @@ export class BlindStudy {
   private running?:Promise<unknown>;
   constructor(private env:Env,private now=Date.now,private feed:Pick<MoviOddsFeed,'board'>=new MoviOddsFeed(fetch,now,env),
     private results=new ResultsFeed(fetch,now,env),private additional=new IndividualSports(env,now),private fetcher=fetch,
-    private weeklyFeed:Pick<MoviOddsFeed,'board'>=new MoviOddsFeed<'table_tennis'>(fetcher,now,env,undefined,tableTennisWinnerGroup)){
+    private weeklyFeed:Pick<MoviOddsFeed,'board'>=new MoviOddsFeed<'table_tennis'>(fetcher,now,env,undefined,tableTennisWinnerGroup),
+    private historyFeed:Pick<MoviOddsFeed,'board'>=new MoviOddsFeed(fetcher,now,env,'table_tennis')){
     this.store=new ForecastStore(env,now);
     this.owner=new ProspectiveStudy(env,now);
   }
@@ -286,14 +290,16 @@ export class BlindStudy {
     const last=Number.isFinite(requested)?Math.max(historyStart,Math.min(utcWeek(requested),utcWeek(now))):utcWeek(now);
     const until=last+week,first=until-historyWindow;
     const containsPilot=first<=weeklyStart&&until>=weeklyEnd+hour;
-    const [rows,pilot]=await Promise.all([
+    const [rows,pilot,pricing]=await Promise.all([
       this.rows(db,owner,new Date(first).toISOString(),new Date(until+hour).toISOString()),
       containsPilot?[]:this.rows(db,owner,new Date(weeklyStart).toISOString(),new Date(weeklyEnd+hour).toISOString()),
+      last===utcWeek(now)?pricingCoverage(db,owner).catch(()=>null):undefined,
     ]);
     const collected=weeklyRows(containsPilot?rows:pilot);
     return {enabled,canRun:userId===owner,scheduled:enabled&&this.env.VERCEL_ENV==='production'&&!!this.env.CRON_SECRET,
       checkedAt:new Date(now).toISOString(),sports:sports.map(sport=>blindSummary(rows.filter(r=>r.parameters.forecast.seenAt<until),sport)),
-      weekly:weeklySummary(collected),weeklyDisagreement:weeklyDisagreement(collected),history:blindHistory(rows,now,last)};
+      weekly:weeklySummary(collected),weeklyDisagreement:weeklyDisagreement(collected),pricing:pricing?pricingReport(pricing,new Map(rows.flatMap(({parameters:{forecast,outcome}})=>
+        forecast.sport==='table_tennis'&&outcome?[[forecast.id,{...outcome,home:forecast.home,away:forecast.away,league:forecast.league}]]:[])),now):pricing,history:blindHistory(rows,now,last)};
   }
   async disagreementSnapshot(){
     const owner=await this.owner.ownerId();
@@ -331,9 +337,10 @@ export class BlindStudy {
     const owner=await this.owner.ownerId();
     return this.execute(owner,this.now()+120_000,false,'history');
   }
-  private async source(sport:IndividualSport,weekly=false):Promise<Source>{
+  private async source(sport:IndividualSport,mode:CollectionMode):Promise<Source>{
+    const weekly=mode!=='daily';
     if(sport==='table_tennis'){
-      const [board,results]=await Promise.allSettled([(weekly?this.weeklyFeed:this.feed).board(),this.results.archive()]);
+      const [board,results]=await Promise.allSettled([(mode==='weekly'?this.weeklyFeed:mode==='history'?this.historyFeed:this.feed).board(),this.results.archive()]);
       if(board.status==='rejected')console.warn(JSON.stringify({weeklyStudyFeed:'board',code:sourceFailure(board.reason)}));
       if(results.status==='rejected'){
         console.warn(JSON.stringify({weeklyStudyFeed:'results',code:sourceFailure(results.reason)}));
@@ -350,7 +357,7 @@ export class BlindStudy {
         console.warn(JSON.stringify({weeklyStudyFeed:'board',code:'BLIND_BOARD_NOT_CURRENT'}));
         return {board:null,results:archive.results};
       }
-      return {board:board.status==='fulfilled'?board.value:null,results:archive.results,
+      return {board:board.status==='fulfilled'?board.value:null,results:archive.results,archive,
         score:m=>scoreWinnerEstimate(m as FeedMatch,archive,this.now())?.homeProbability};
     }
     const [board,raw]=await Promise.all([this.additional.activeBoard(sport),readSportResults(sport,this.env,this.fetcher)]);
@@ -398,7 +405,7 @@ export class BlindStudy {
     const bySport=new Map<IndividualSport,Source>();
     const feeds=tableOnly?(['table_tennis'] as const):sports;
     await Promise.all(feeds.map(async sport=>{
-      try{bySport.set(sport,await this.source(sport,tableOnly));}catch(error){console.warn(JSON.stringify({blindStudySource:'unavailable',sport,code:sourceFailure(error)}));}
+      try{bySport.set(sport,await this.source(sport,mode));}catch(error){console.warn(JSON.stringify({blindStudySource:'unavailable',sport,code:sourceFailure(error)}));}
     }));
     const seen=new Set(prior.map(r=>JSON.stringify([r.parameters.forecast.sport,r.parameters.forecast.id])));
     if(tableOnly&&!bySport.has('table_tennis'))throw Error('BLIND_STUDY_SOURCE_UNAVAILABLE');
@@ -455,6 +462,30 @@ export class BlindStudy {
         if(f.prices)capturedWithPrice++;
       }
     }
+    let pricingCaptured=0;
+    const pricing=bySport.get('table_tennis'),board=pricing?.board as Board|undefined,pricingAt=this.now();
+    if(board&&pricing?.archive&&pricingAt<deadline-30_000){
+      try{
+        const matches=board.matches.filter(m=>isSetka(m.league)&&!m.in_play&&
+          Date.parse(m.kickoff_utc??'')-pricingAt>=lead&&Date.parse(m.kickoff_utc??'')-pricingAt<=2*hour)
+          .sort((a,b)=>a.kickoff_utc!.localeCompare(b.kickoff_utc!)||a.id.localeCompare(b.id)).slice(0,40);
+        const candidatesById=new Map(candidates.filter(f=>f.sport==='table_tennis').map(f=>[f.id,f]));
+        const snapshots=matches.flatMap(match=>{
+          const values:Partial<Record<PricingSnapshot['markets'][number]['target'],number>>={};
+          const winner=candidatesById.get(match.id);
+          const score=winner?.homeProbability??pricing.score?.(match);
+          if(score!==undefined)values.winner=score;
+          const report=marketEstimateReport(match,pricing.archive!,pricingAt,confirmedBestOfFive(match,pricingAt));
+          for(const quote of match.quotes){
+            const p=report.estimates[marketPriceKey(quote)],target=marketTarget(match,quote);
+            if(p!==undefined&&target&&!target.invert)values[target.target]=p;
+          }
+          const snapshot=pricingSnapshot(board,match,pricingAt,values);
+          return snapshot?[snapshot]:[];
+        });
+        pricingCaptured=await savePricingSnapshots(db,owner,snapshots);
+      }catch{console.warn('PRICING_CAPTURE_FAILED');}
+    }
     const resultMaps=new Map([...bySport].map(([sport,data])=>[sport,new Map(data.results.map(result=>[result.id,result]))]));
     let calls=0, next=0, closingAvailable=true;
     const oldestFirst=(weekly?weeklyRows(prior):tableOnly?prior.filter(r=>r.parameters.forecast.sport==='table_tennis'):prior).reverse();
@@ -489,6 +520,11 @@ export class BlindStudy {
             if(at!==null){
               outcome.actualGuard=at;outcome.invalid=recordedAt>=at;
               const closing=f.closingComparable&&!outcome.invalid?prematchBenchmark(payload,target,at):null;
+              if(f.sport==='table_tennis'&&isSetka(f.league)&&!outcome.invalid){
+                const priceMatch={id:f.id,sport:'table_tennis' as const,home:f.home,away:f.away,league:f.league,in_play:false,quotes:[]};
+                const marketCloses=archivedPricingPairs(payload,priceMatch,at);
+                if(marketCloses.length)outcome.pricingClosing=marketCloses;
+              }
               if(closing&&Math.min(closing.homeAt,closing.awayAt)>recordedAt){
                 outcome.closing={homeOdds:closing.homeOdds,awayOdds:closing.awayOdds};
               }
@@ -502,7 +538,7 @@ export class BlindStudy {
       if(result.error)throw Error('BLIND_STUDY_SETTLEMENT_FAILED');
       if(result.data?.length){if(!p.outcome&&!outcome.invalid)reported++;if(outcome.actualGuard!==null&&!outcome.invalid)verified++;}
     }
-    const summary={status:tableOnly&&!bySport.get('table_tennis')?.board?'settlement_only':'completed',captured,reported,verified,capturedBySport,capturedWithPrice,feeds:bySport.size,closingQueries:calls,checkedAt:new Date(started).toISOString()};
+    const summary={status:tableOnly&&!bySport.get('table_tennis')?.board?'settlement_only':'completed',captured,reported,verified,pricingCaptured,capturedBySport,capturedWithPrice,feeds:bySport.size,closingQueries:calls,checkedAt:new Date(started).toISOString()};
     if(weekly){
       const all=weeklyRows(await this.rows(db,owner,new Date(weeklyStart-60_000).toISOString(),new Date(weeklyEnd+hour).toISOString()));
       console.info(JSON.stringify({weeklyPingPongRun:summary,weekly:weeklySummary(all)}));

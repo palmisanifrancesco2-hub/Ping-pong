@@ -46,8 +46,8 @@ export function marketTarget(match:FeedMatch,q:FeedQuote):{target:Target;invert:
   }
 }
 
-export function marketEstimateSelections(match:FeedMatch,now:number) {
-  if (match.in_play || !isUpcomingOrLive(match,now) || !hasBestOfFiveMarket(match,now)) return [];
+export function marketEstimateSelections(match:FeedMatch,now:number,confirmedFormat=hasBestOfFiveMarket(match,now)) {
+  if (match.in_play || !isUpcomingOrLive(match,now) || !confirmedFormat) return [];
   return match.quotes.flatMap(q=>{
     if (!freshMatchQuote(match,q,now)) return [];
     const target = marketTarget(match,q);
@@ -57,10 +57,10 @@ export function marketEstimateSelections(match:FeedMatch,now:number) {
 
 let cached: {archive:ResultsArchive;history:MarketContext;validAfter:number;validThrough:number} | undefined;
 
-export function marketEstimateReport(match:FeedMatch,archive:ResultsArchive|null,now:number):MarketEstimateReport {
+export function marketEstimateReport(match:FeedMatch,archive:ResultsArchive|null,now:number,confirmedFormat?:boolean):MarketEstimateReport {
   const report:MarketEstimateReport={checkedAt:new Date(now).toISOString(),estimates:{}};
   if (archive?.source!=='postgres' || now<Date.parse(marketStudyProtocol.createdAt)) return report;
-  const selected=marketEstimateSelections(match,now);
+  const selected=marketEstimateSelections(match,now,confirmedFormat);
   if (!selected.length || archive.results.some(r=>r.id===match.id)) return report;
 
   if (cached?.archive!==archive || !withinWindow(cached,now)) {

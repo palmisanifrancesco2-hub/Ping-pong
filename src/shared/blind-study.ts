@@ -34,4 +34,13 @@ export type BlindStudyReport = {
   weekly?:BlindSportSummary&{until:string;value:number;exactValue:number;theoreticalRoi:number|null;closingPairs:number;betterThanClosing:number};
   weeklyDisagreement?:ReturnType<typeof disagreementReport>;
   history:BlindHistory;
+  pricing?:PricingReport|null;
+};
+
+export type PricingReport = {
+  coverage:{market:string;fixtures:number;snapshots:number;withModel:number}[];
+  admOpportunities:unknown[];
+  recent:{event:string;eventId:string;market:string;marketKey:string;side:string;line:string;source:string;site:string;observedAt:string;quotedAt:string;
+    odds:number;marketProbability:number;power:number;model:number;fair:number;ev:number;stressed:number;trial:boolean}[];
+  summary:{market:string;records:number;settled:number;exact:number;simulatedRoi:number|null;roiLower:number|null;roiUpper:number|null;drawdown:number|null;closing:number;clv:number|null;delay:number;delayedRoi:number|null;brier:number|null;logLoss:number|null;ece:number|null}[];
 };
