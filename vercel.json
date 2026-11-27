@@ -58,6 +58,11 @@
       "path": "/api/weekly-table-tennis-recovery",
       "requestMethod": "POST",
       "schedule": "*/15 * 1-3 12 *"
+    },
+    "table-tennis-history": {
+      "path": "/api/table-tennis-history",
+      "requestMethod": "POST",
+      "schedule": "20 */2 * * *"
     }
   },
   "crons": [

@@ -24,12 +24,15 @@ export function disagreementReport(cases:Case[],start=disagreementStartAt){
       const available=paired.filter(c=>c.odds>=band.minimum&&(band.maximum===null||c.odds<band.maximum));
       const selected=available.filter(c=>c.probability>.5&&c.probability*c.odds>1+1e-12);
       const n=selected.length,exact=selected.filter(c=>c.exact).length;
+      const wonOdds=selected.reduce((sum,c)=>sum+(c.exact?c.odds:0),0);
+      const lostOdds=selected.reduce((sum,c)=>sum+(c.exact?0:c.odds),0);
       const comparable=selected.filter(c=>c.peer!==null);
       const consensus=comparable.filter(c=>c.peer!>.5&&c.peer!*c.odds>1+1e-12);
       const consensusExact=consensus.filter(c=>c.exact).length;
       return {...band,available:available.length,n,exact,wrong:n-exact,
         days:new Set(selected.map(c=>Math.floor(c.at/86_400_000))).size,
-        roi:n?selected.reduce((sum,c)=>sum+(c.exact?c.odds-1:-1),0)/n:null,
+        roi:n?wonOdds/n-1:null,
+        meanExactOdds:exact?wonOdds/exact:null,meanWrongOdds:n>exact?lostOdds/(n-exact):null,
         consensus:{available:comparable.length,n:consensus.length,exact:consensusExact,wrong:consensus.length-consensusExact,
           roi:consensus.length?consensus.reduce((sum,c)=>sum+(c.exact?c.odds-1:-1),0)/consensus.length:null},
         brier:n?selected.reduce((sum,c)=>sum+(c.probability-Number(c.exact))**2,0)/n:null,

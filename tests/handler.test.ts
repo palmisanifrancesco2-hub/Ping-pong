@@ -32,14 +32,30 @@ describe('private HTTP API', () => {
     expect((await fetch(url+'-recovery',{method:'POST',headers:{Authorization:`Bearer ${CRON_SECRET}`}})).status).toBe(200);
     expect(weeklyStudy.runWeekly).toHaveBeenLastCalledWith(true);
   });
+  it('protects continuous collection and returns only its status',async()=>{
+    const CRON_SECRET='synthetic-only-cron-secret-of-sufficient-length';
+    const historyStudy={runHistory:vi.fn(async()=>({status:'window_closed'}))};
+    const base=await start(createHandler({env:{CRON_SECRET},historyStudy}));
+    const url=base+'/api/table-tennis-history';
+    expect((await fetch(url)).status).toBe(405);
+    expect((await fetch(url,{method:'POST'})).status).toBe(401);
+    expect(historyStudy.runHistory).not.toHaveBeenCalled();
+    const response=await fetch(url,{method:'POST',headers:{Authorization:`Bearer ${CRON_SECRET}`}});
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({status:'window_closed'});
+    expect(historyStudy.runHistory).toHaveBeenCalledOnce();
+  });
   it('protects the blind study and uses the logged-in owner for manual runs',async()=>{
     const blindStudy={run:vi.fn(async user=>{if(user!=='owner')throw Error('BLIND_STUDY_OWNER_ONLY');return {status:'completed'};}),
-      report:vi.fn(async()=>({checkedAt:new Date().toISOString(),enabled:true,scheduled:true,canRun:true,sports:[]}))};
+      report:vi.fn(async()=>({checkedAt:new Date().toISOString(),enabled:true,scheduled:true,canRun:true,sports:[],
+        history:{startsAt:'2026-12-01T16:00:00Z',older:null,newer:null,weeks:[],recent:[]}}))};
     const base=await start(createHandler({env:{},blindStudy,authorize:async t=>['owner','member'].includes(t)?t:null}));
     expect((await fetch(base+'/api/blind-study')).status).toBe(401);
     expect((await fetch(base+'/api/blind-study',{method:'POST',headers:{Authorization:'Bearer member'}})).status).toBe(403);
     expect((await fetch(base+'/api/blind-study',{method:'POST',headers:{Authorization:'Bearer owner'}})).status).toBe(200);
     expect(blindStudy.run).toHaveBeenLastCalledWith('owner');
+    expect((await fetch(base+'/api/blind-study?historyWeek=2026-11-23',{headers:{Authorization:'Bearer member'}})).status).toBe(200);
+    expect(blindStudy.report).toHaveBeenLastCalledWith('member','2026-11-23');
   });
   it('keeps sport prices private and rejects team sports or invalid event IDs',async()=>{
     const individualSports={board:vi.fn(async()=>({sport:'tennis' as const,checkedAt:new Date().toISOString(),events:[],warming:false,mainLinesOnly:false})),

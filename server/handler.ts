@@ -29,7 +29,7 @@ import { ForecastStore } from './forecast-store.js';
 import modelData from '../models/elo-v1.json' with {type:'json'};
 import {researchReport,scoreResearchReport,forwardStudy,modelComparison}from'./research-report.js';
 
-type Dependencies = { weeklyStudy?:Pick<BlindStudy,'runWeekly'>; blindStudy?:Pick<BlindStudy,'run'|'report'>; individualSports?:Pick<IndividualSports,'board'|'event'>; trainer?:Pick<AdaptiveTraining,'run'|'report'>; marketStudy?:Pick<MarketStudy,'run'|'report'>; profiles?:Pick<PlayerProfiles,'forEvent'>; study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
+type Dependencies = { historyStudy?:Pick<BlindStudy,'runHistory'>; weeklyStudy?:Pick<BlindStudy,'runWeekly'>; blindStudy?:Pick<BlindStudy,'run'|'report'>; individualSports?:Pick<IndividualSports,'board'|'event'>; trainer?:Pick<AdaptiveTraining,'run'|'report'>; marketStudy?:Pick<MarketStudy,'run'|'report'>; profiles?:Pick<PlayerProfiles,'forEvent'>; study?:Pick<ProspectiveStudy,'run'|'report'>; bets?:Pick<ManualBets,'list'|'save'|'update'>; env?: Env; authorize?: typeof authorize; provider?: OddsApi; now?: () => number; feed?: Pick<MoviOddsFeed, 'board'>; history?: typeof readHistory; choices?: Pick<Choices,'list'|'save'|'update'>; analyses?: Pick<Analyses,'analyse'|'results'>; forecasts?: Pick<ForecastStore,'record'|'settle'> };
 export function createHandler(deps: Dependencies = {}) {
   const env = deps.env ?? process.env;
   const provider = deps.provider ?? new OddsApi(oddsApiKey(env));
@@ -59,11 +59,15 @@ export function createHandler(deps: Dependencies = {}) {
     const url = new URL(req.url ?? '/', 'http://localhost');
     const path = url.pathname;
     const recovery=path==='/api/weekly-table-tennis-recovery';
-    if(path==='/api/weekly-table-tennis'||recovery){
+    const historyScan=path==='/api/table-tennis-history';
+    if(path==='/api/weekly-table-tennis'||recovery||historyScan){
       if(req.method!=='POST'){res.setHeader('Allow','POST');return send(405,{error:'Metodo non consentito.'});}
       if(!authorizedStudyCron(req.headers.authorization,env.CRON_SECRET))return send(401,{error:'Esecuzione non autorizzata.'});
-      try{const result=await weeklyStudy.runWeekly(recovery);return send(result.status==='disabled'?503:200,{status:result.status});}
-      catch{console.error('WEEKLY_PING_PONG_FAILED');return send(503,{status:'failed'});}
+      try{
+        const result=historyScan?await (deps.historyStudy??blindService).runHistory():await weeklyStudy.runWeekly(recovery);
+        return send(result.status==='disabled'?503:200,{status:result.status});
+      }
+      catch{console.error(historyScan?'TABLE_TENNIS_HISTORY_FAILED':'WEEKLY_PING_PONG_FAILED');return send(503,{status:'failed'});}
     }
     const methods = ['/api/study','/api/market-study','/api/training','/api/blind-study'].includes(path)?['GET','POST']:['/api/choices','/api/bets'].includes(path) ? ['GET','POST','PATCH'] : ['/api/analysis','/api/settle','/api/predictions'].includes(path)?['POST']:['GET'];
     if (!methods.includes(req.method ?? '')) { res.setHeader('Allow', methods.join(', ')); return send(405, { error: 'Metodo non consentito.' }); }
@@ -83,7 +87,7 @@ export function createHandler(deps: Dependencies = {}) {
     if (!match || !userId) return send(401, { error: 'Accesso riservato agli utenti autorizzati.' });
     try {
       if(path==='/api/blind-study'){
-        try { return send(200,req.method==='POST'?await blindStudy.run(userId):await blindStudy.report(userId)); }
+        try { return send(200,req.method==='POST'?await blindStudy.run(userId):await blindStudy.report(userId,url.searchParams.get('historyWeek'))); }
         catch(error) { if(error instanceof Error&&error.message==='BLIND_STUDY_OWNER_ONLY')return send(403,{error:'Raccolta riservata al proprietario.'});throw error; }
       }
       if(path==='/api/sport-odds'){
