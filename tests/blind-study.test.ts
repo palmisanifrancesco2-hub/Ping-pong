@@ -1,5 +1,5 @@
 import {describe,expect,it} from 'vitest';
-import {BlindStudy,agreementBlend,blindArchiveCsv,blindAudit,blindHistory,blindSummary,buildElo,freezeWinner,marketBlend25,settleObserved,weeklyClosingOrder,weeklyScanOverdue} from '../server/blind-study';
+import {BlindStudy,agreementBlend,blindArchiveCsv,blindAudit,blindHistory,blindSummary,buildElo,freezeWinner,marketBlend25,settleObserved,tournamentDay,weeklyClosingOrder,weeklyScanOverdue} from '../server/blind-study';
 import {disagreementStartAt} from '../src/domain/underdog-study';
 import type {FeedMatch,FeedQuote} from '../src/shared/board';
 
@@ -115,6 +115,22 @@ describe('winner observation frozen before outcome',()=>{
     expect(csv).toContain(`"'=A"`);
     expect(csv).toContain('"away","exact"');
     expect(csv).toContain('"pending"');
+  });
+  it('groups every tournament on the Italian kickoff day, even for forecasts from the previous day',()=>{
+    const at=Date.parse('2026-11-27T09:00:00Z');
+    const forecast={sport:'table_tennis' as const,id:'setka',home:'A',away:'B',league:'Setka Cup',model:'test',
+      homeProbability:.6,agreementBlendHomeProbability:.55,selection:'home' as const,
+      seenAt:Date.parse('2026-11-26T19:00:00Z'),scheduledAt:Date.parse('2026-11-26T23:30:00Z'),
+      prices:{home:{odds:2,quoteAt:iso(at-86400000)},away:{odds:1.9,quoteAt:iso(at-86400000)}}};
+    const outcome={winner:'home' as const,finishedAt:iso(at-240000),availableAt:iso(at-200000),
+      actualGuard:forecast.scheduledAt,invalid:false};
+    const row={id:'setka',created_at:iso(forecast.seenAt+1),parameters:{study:'blind-winner-v1',userId:'owner',forecast,
+      hash:'test',attempts:0,lastAttempt:0,outcome}};
+    const cup={...row,id:'tt',parameters:{...row.parameters,outcome:null,forecast:{...forecast,id:'tt',league:'TT Cup',scheduledAt:at+3600000}}};
+    const tomorrow={...row,id:'tomorrow',parameters:{...row.parameters,forecast:{...forecast,id:'tomorrow',scheduledAt:Date.parse('2026-11-27T23:00:00Z')}}};
+    const result=tournamentDay([row,cup,tomorrow],at);
+    expect(result).toMatchObject({date:'2026-11-27',recorded:2,withPrice:2,
+      tournaments:[{league:'Setka Cup',verified:1,variantRegistered:1,variant:{count:1}},{league:'TT Cup',pending:1,variant:null}]});
   });
   it('uses market alone on disagreement and only applies the sports correction on agreement',()=>{
     const prices={home:{odds:2.5,quoteAt:iso(now)},away:{odds:1.6,quoteAt:iso(now)}};

@@ -206,6 +206,19 @@ export function BlindStudy({token}:{token?:string}) {
     {!report&&!error&&<p role="status">Caricamento del test…</p>}
     {report&&<>
       <p>{report.scheduled?'Raccolta giornaliera attiva.':'Raccolta giornaliera non configurata.'} Ultimo controllo {dateTime(report.checkedAt)}.</p>
+      {report.today&&<details open>
+        <summary>Partite di oggi per torneo · {report.today.recorded}</summary>
+        <p>{weekDate.format(new Date(report.today.date))} · {report.today.withPrice} con quote. Giorno italiano, in base all’orario d’inizio registrato.</p>
+        <ul className="competition-list">{report.today.tournaments.map(row=><li key={row.league}><span>
+          <strong>{row.league} · {row.recorded} partite</strong>
+          <small>Con quote {row.withPrice} · In attesa {row.pending} · Inizio verificato {row.verified}</small>
+          <small>Esatti {row.exact} · Sbagliati {row.incorrect} secondo gli esiti ricevuti</small>
+          {row.paired>0&&<small>Brier su {row.paired} partite · Modello {row.brier?.toFixed(4)} · Bet365 {row.marketBrier?.toFixed(4)}</small>}
+          <small>Variante salvata per {row.variantRegistered} partite{row.variant
+            ? ` · Brier su ${row.variant.count} confronti comuni · Variante ${row.variant.brier.toFixed(4)} · Modello ${row.variant.sportsBrier.toFixed(4)} · Bet365 ${row.variant.marketBrier.toFixed(4)}`
+            : ' · Confronto in attesa di esiti con inizio verificato'}</small>
+        </span></li>)}</ul>
+      </details>}
       {token&&<FullWinnerArchive token={token}/>}
       {report.weekly&&<div>
         <h3>Studio settimanale di tennis tavolo</h3>

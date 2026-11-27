@@ -29,6 +29,16 @@ export type BlindHistory = {
     status:'verified'|'reported';prediction:'exact'|'wrong'|null;
   }[];
 };
+export type BlindTournamentDay = {
+  date:string;
+  recorded:number;
+  withPrice:number;
+  tournaments:{
+    league:string;recorded:number;withPrice:number;pending:number;
+    exact:number;incorrect:number;verified:number;paired:number;brier:number|null;marketBrier:number|null;
+    variantRegistered:number;variant:AgreementBenchmark|null;
+  }[];
+};
 export type BlindStudyReport = {
   checkedAt:string;
   scheduled:boolean;
@@ -38,6 +48,7 @@ export type BlindStudyReport = {
   weekly?:BlindSportSummary&{until:string;value:number;exactValue:number;theoreticalRoi:number|null;closingPairs:number;betterThanClosing:number;agreement?:AgreementBenchmark|null};
   weeklyDisagreement?:ReturnType<typeof disagreementReport>;
   history:BlindHistory;
+  today?:BlindTournamentDay;
   pricing?:PricingReport|null;
 };
 
@@ -60,6 +71,6 @@ export type BlindHighEv = {
 };
 export type BlindEvBands=Record<BlindEvBandKey,BlindHighEv>;
 export type BlindAudit = BlindSportSummary & {
-  from:string|null;until:string|null;calibration:ReturnType<typeof oddsCalibration>;highEv:BlindHighEv;bands:BlindEvBands;peerConfirmed:BlindEvBands;peerBaseline:BlindEvBands;
+  from:string|null;until:string|null;today?:BlindTournamentDay;calibration:ReturnType<typeof oddsCalibration>;highEv:BlindHighEv;bands:BlindEvBands;peerConfirmed:BlindEvBands;peerBaseline:BlindEvBands;
   models:{model:string;n:number;highEv:BlindHighEv;bands:BlindEvBands}[];
 };

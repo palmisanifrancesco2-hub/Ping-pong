@@ -1,7 +1,7 @@
 import {randomUUID} from 'node:crypto';
 import { additionalSports, type IndividualSport } from '../src/shared/individual-sports.js';
 import {blindEvBands,type BlindAudit,type BlindEvBands,type BlindHistory,type BlindHistoryWeek,
-  type BlindHighEv,type BlindSportSummary,type BlindStudyReport} from '../src/shared/blind-study.js';
+  type BlindHighEv,type BlindSportSummary,type BlindStudyReport,type BlindTournamentDay} from '../src/shared/blind-study.js';
 import type { Board, FeedMatch, FeedQuote } from '../src/shared/board.js';
 import { marketIdentity, quoteStatus } from '../src/shared/board.js';
 import { eloProbability, playerKey } from '../src/domain/player-model.js';
@@ -271,6 +271,42 @@ function agreementBenchmark(rows:Row[]) {
   return count?{count,disagreements,brier:candidate/count,marketBrier:marketScore/count,sportsBrier:sports/count}:null;
 }
 
+const romeDate=new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Rome',year:'numeric',month:'2-digit',day:'2-digit'});
+
+export function tournamentDay(rows:Row[],at:number):BlindTournamentDay {
+  const date=romeDate.format(at), groups=new Map<string,Row[]>();
+  let recorded=0,withPrice=0;
+  for(const row of rows){
+    const {forecast}=row.parameters;
+    if(forecast.sport!=='table_tennis'||romeDate.format(forecast.scheduledAt)!==date)continue;
+    const group=groups.get(forecast.league)??[];
+    group.push(row);groups.set(forecast.league,group);
+    recorded++;
+    if(forecast.prices)withPrice++;
+  }
+  const tournaments=[...groups].map(([league,group])=>{
+    const s=blindSummary(group,'table_tennis');
+    return {league,recorded:s.recorded,withPrice:s.withPrice,pending:s.pending,exact:s.exact,incorrect:s.incorrect,
+      verified:s.verifiedExact+s.verifiedIncorrect,paired:s.paired,brier:s.brier,marketBrier:s.marketBrier,
+      variantRegistered:group.filter(row=>row.parameters.forecast.agreementBlendHomeProbability!==undefined).length,
+      variant:agreementBenchmark(group)};
+  }).sort((a,b)=>b.recorded-a.recorded||a.league.localeCompare(b.league,'it'));
+  return {date,recorded,withPrice,tournaments};
+}
+
+function prioritizeToday(rows:Row[],at:number) {
+  const today=romeDate.format(at), available=new Map<string,Row>();
+  for(const row of rows){
+    const {forecast}=row.parameters;
+    if(forecast.agreementBlendHomeProbability===undefined||romeDate.format(forecast.scheduledAt)!==today)continue;
+    if(!available.has(forecast.league))available.set(forecast.league,row);
+  }
+  const leagues=[...available.keys()].sort();
+  if(!leagues.length)return rows;
+  const priority=available.get(leagues[Math.floor(at/(30*minute))%leagues.length])!;
+  return [priority,...rows.filter(row=>row.id!==priority.id)];
+}
+
 function weeklyRows(rows:Row[]) {
   return rows.filter(({parameters:{forecast:f}})=>f.sport==='table_tennis'&&f.seenAt>=weeklyStart&&f.seenAt<weeklyEnd&&f.scheduledAt<weeklyEnd);
 }
@@ -424,13 +460,15 @@ export class BlindStudy {
       last===utcWeek(now)?pricingCoverage(db,owner).catch(()=>null):undefined,
     ]);
     const collected=weeklyRows(containsPilot?rows:pilot);
+    const today=last===utcWeek(now)?tournamentDay(rows,now):undefined;
     return {enabled,canRun:userId===owner,scheduled:enabled&&this.env.VERCEL_ENV==='production'&&!!this.env.CRON_SECRET,
-      checkedAt:new Date(now).toISOString(),sports:sports.map(sport=>blindSummary(rows.filter(r=>r.parameters.forecast.seenAt<until),sport)),
+      checkedAt:new Date(now).toISOString(),today,sports:sports.map(sport=>blindSummary(rows.filter(r=>r.parameters.forecast.seenAt<until),sport)),
       weekly:weeklySummary(collected),weeklyDisagreement:weeklyDisagreement(collected),pricing:pricing?pricingReport(pricing,new Map(rows.flatMap(({parameters:{forecast,outcome}})=>
         forecast.sport==='table_tennis'&&outcome?[[forecast.id,{...outcome,home:forecast.home,away:forecast.away,league:forecast.league}]]:[])),now):pricing,history:blindHistory(rows,now,last)};
   }
   async audit():Promise<BlindAudit>{
-    return blindAudit(await this.rows(this.store.db(),await this.owner.ownerId()));
+    const rows=await this.rows(this.store.db(),await this.owner.ownerId());
+    return {...blindAudit(rows),today:tournamentDay(rows,this.now())};
   }
   async archiveCsv():Promise<string>{
     return blindArchiveCsv(await this.rows(this.store.db(),await this.owner.ownerId()));
@@ -631,8 +669,9 @@ export class BlindStudy {
       return !p.outcome?.invalid&&p.outcome?.actualGuard==null&&p.attempts<2
         &&started-p.lastAttempt>12*hour&&resultMaps.get(p.forecast.sport)?.has(p.forecast.id);
     };
+    const queue=tableOnly?weeklyClosingOrder(oldestFirst.filter(closingEligible)):[];
     const rows=tableOnly?[
-      ...weeklyClosingOrder(oldestFirst.filter(closingEligible)),
+      ...(weekly?prioritizeToday(queue,started):queue),
       ...oldestFirst.filter(row=>!closingEligible(row)),
     ]:oldestFirst;
     for(const row of rows){
@@ -678,6 +717,7 @@ export class BlindStudy {
       const all=weeklyRows(await this.rows(db,owner,new Date(weeklyStart-60_000).toISOString(),new Date(weeklyEnd+hour).toISOString()));
       console.info(JSON.stringify({weeklyPingPongRun:summary,weekly:weeklySummary(all),evBands:blindAudit(all).bands}));
       logWeeklyDisagreement(weeklyDisagreement(all));
+      console.info(JSON.stringify({weeklyDayCohort:tournamentDay(all,started)}));
     }else if(tableOnly)console.info(JSON.stringify({longitudinalPingPongRun:summary}));
     else console.info(JSON.stringify({blindStudyRun:summary}));
     return summary;

@@ -17,8 +17,12 @@ if(process.env.VERCEL_ENV==='production'&&process.env.CRON_SECRET&&blindStudyEna
     const result=await study.runWeekly(true);
     console.info(JSON.stringify({weeklyPingPongBootstrap:result.status}));
     logWeeklyDisagreement(await study.disagreementSnapshot());
-    const {calibration,...audit}=await study.audit();
+    const {calibration,today,...audit}=await study.audit();
     console.info(JSON.stringify({blindLifetimeAudit:audit}));
+    if(today){
+      console.info(JSON.stringify({blindToday:{date:today.date,recorded:today.recorded,withPrice:today.withPrice}}));
+      for(const row of today.tournaments)console.info(JSON.stringify({blindTodayTournament:row}));
+    }
     for(const band of calibration)console.info(JSON.stringify({blindOddsCalibration:band}));
   }catch{
     console.warn('WEEKLY_PING_PONG_BOOTSTRAP_FAILED');
