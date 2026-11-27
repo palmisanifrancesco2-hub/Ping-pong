@@ -103,7 +103,7 @@ describe('winner observation frozen before outcome',()=>{
     expect(csv.split('\r\n')).toHaveLength(4);
     expect(csv).toContain("home_fair_odds");
     expect(csv).toContain("home_bet365_au");
-    expect(csv).toContain('"'=A"');
+    expect(csv).toContain(`"'=A"`);
     expect(csv).toContain('"away","exact"');
     expect(csv).toContain('"pending"');
   });
