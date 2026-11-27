@@ -16,7 +16,7 @@ export function BestOdds({token,onMarkets,onSportPrices}:{token:string;onMarkets
   const results=reports.filter(item=>item.sport===sport);
   const cohorts:BenchmarkCohort[]=sport==='table_tennis' ? [sport,'moviodds','setka'] : [sport];
   return <>
-    <section className="panel"><SportSelect sport={sport} onSelect={setSport}/>{cohorts.map(cohort=><WalkForwardEvidence key={cohort} cohort={cohort}/>)}</section>
+    <section className="panel odds-sport"><SportSelect sport={sport} onSelect={setSport}/></section>
     {sport==='table_tennis' ? <ValueTracker token={token} demo={false} onMarkets={onMarkets}/> : <section className="panel">
       <h2>Quote selezionate · {individualSports[sport]}</h2>
       <p>Nessuna quota con affidabilità adeguatamente dimostrata. Per entrare in classifica servono una probabilità verificata fuori campione e un EV prudente positivo su una quota aggiornata di almeno 1,30.</p>
@@ -28,6 +28,10 @@ export function BestOdds({token,onMarkets,onSportPrices}:{token:string;onMarkets
         <p className="fine">Il test riguarda il vincente prematch ATP singolare. Per applicarlo al feed attuale servono identità degli atleti verificate e quote storiche confrontabili.</p>
       </section>}
     </section>}
+    <details className="panel study-disclosure">
+      <summary>Risultati dei test sul vincente</summary>
+      <div className="study-disclosure-content">{cohorts.map(cohort=><WalkForwardEvidence key={cohort} cohort={cohort}/>)}</div>
+    </details>
   </>;
 }
 

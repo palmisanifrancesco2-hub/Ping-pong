@@ -51,3 +51,53 @@
 .pricing-table{max-width:100%;overflow:auto;margin:12px 0}
 .pricing-table table{border-collapse:collapse;font-size:.85rem;min-width:49rem}
 .pricing-table td,.pricing-table th{border-bottom:1px solid #344159;text-align:left;padding:.6rem;vertical-align:top}
+
+/* Frequently used destinations remain reachable from every signed-in page. */
+.workspace-header{align-items:center;justify-content:space-between;gap:12px}
+.workspace-header h1{margin:0}
+.workspace-header .workspace-logout{white-space:nowrap;min-height:44px;padding:8px}
+.workspace-nav{display:grid;gap:4px}
+.workspace-more{position:relative;min-width:0}
+.workspace-more>summary{list-style:none;cursor:pointer}
+.workspace-more>summary::-webkit-details-marker{display:none}
+.workspace-more-links{display:grid;gap:4px;padding:6px 0 0 14px}
+.workspace-more-links .nav-item{min-height:44px}
+.workspace-nav summary:focus-visible,.study-disclosure>summary:focus-visible,.quote-filter-details>summary:focus-visible{outline:2px solid #bef264;outline-offset:2px}
+.login-shell.login-simple{max-width:530px;min-height:100vh;margin:auto;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:24px;padding:28px 16px}
+.login-simple .intro .brand{margin:0}
+.login-simple .login-card h1{font-size:28px}
+.market-heading,.market-quick-inputs{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.market-heading h2{margin:0}
+.market-quick-inputs{align-items:end;margin-bottom:8px}
+.market-quick-inputs label{flex:1;min-width:0}
+.market-quick-inputs input{display:block;width:100%;margin-bottom:0;min-height:44px}
+.market-quick-inputs button{min-height:44px}
+.quote-workspace .quote-tabs{margin:16px 0}
+.quote-workspace .quote-filter-details{background:#101b2e;border:1px solid #2c3b52;border-radius:10px;padding:0 12px}
+.quote-workspace .quote-filter-details[open]{padding-bottom:8px}
+.quote-workspace .quote-filter-details>summary,.study-disclosure>summary{cursor:pointer;font-weight:650}
+.quote-workspace .quote-filter-details>summary{font-size:14px}
+.quote-workspace .quote-filter-details[open]>summary{margin-bottom:0}
+.quote-workspace .quote-filter-details .quote-toolbar{margin-top:4px}
+.study-disclosure>summary{padding:4px 0}
+.study-disclosure-content{margin-top:12px}
+.study-disclosure-content>.panel{background:#101927}
+@media(max-width:760px){
+  .app-shell{--workspace-nav-height:60px}
+  .app-shell>aside{padding:12px 16px;background:#0e1726}
+  .app-shell>aside .brand{margin:0}
+  .workspace-main{padding-top:16px;padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+  .workspace-main:has(.quote-dock){padding-bottom:calc(160px + env(safe-area-inset-bottom))}
+  .workspace-nav{position:fixed;inset:auto 0 0;z-index:40;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:4px 5px calc(4px + env(safe-area-inset-bottom));min-height:calc(var(--workspace-nav-height) + env(safe-area-inset-bottom));overflow:visible;background:#111c2e;border-top:1px solid #354761}
+  .workspace-nav>.nav-item,.workspace-more>summary{display:flex;min-height:50px;min-width:0;flex-direction:column;justify-content:center;align-items:center;gap:2px;border-radius:8px;padding:4px 1px;font-size:11px}
+  .workspace-nav>.nav-item>span,.workspace-more>summary>span{display:block;margin:0;font-size:16px;line-height:1}
+  .workspace-more-links{position:absolute;bottom:calc(100% + 12px);right:0;width:min(255px,calc(100vw - 24px));max-height:calc(100dvh - 110px);overflow:auto;box-shadow:0 8px 30px #0009;background:#111c2e;border:1px solid #40546e;border-radius:12px;padding:7px}
+  .workspace-more-links .nav-item{white-space:normal}
+  .quote-dock{bottom:calc(var(--workspace-nav-height) + 8px + env(safe-area-inset-bottom))}
+  .quote-workspace .quote-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+  .quote-workspace .quote-tabs button{min-height:44px;min-width:0;padding:5px;font-size:11px}
+  .quote-workspace,.workspace-main .feed-compact{padding:12px}
+  .workspace-main .feed-compact{margin-bottom:10px}
+  .market-heading h2{font-size:17px}
+  .market-heading button{padding:7px;white-space:nowrap}
+}
