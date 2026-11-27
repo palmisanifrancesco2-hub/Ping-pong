@@ -1,5 +1,5 @@
 import {describe,expect,it} from 'vitest';
-import {BlindStudy,blindArchiveCsv,blindAudit,blindHistory,blindSummary,buildElo,freezeWinner,marketBlend25,settleObserved,weeklyClosingOrder,weeklyScanOverdue} from '../server/blind-study';
+import {BlindStudy,agreementBlend,blindArchiveCsv,blindAudit,blindHistory,blindSummary,buildElo,freezeWinner,marketBlend25,settleObserved,weeklyClosingOrder,weeklyScanOverdue} from '../server/blind-study';
 import {disagreementStartAt} from '../src/domain/underdog-study';
 import type {FeedMatch,FeedQuote} from '../src/shared/board';
 
@@ -106,6 +106,14 @@ describe('winner observation frozen before outcome',()=>{
     expect(csv).toContain(`"'=A"`);
     expect(csv).toContain('"away","exact"');
     expect(csv).toContain('"pending"');
+  });
+  it('uses market alone on disagreement and only applies the sports correction on agreement',()=>{
+    const prices={home:{odds:2.5,quoteAt:iso(now)},away:{odds:1.6,quoteAt:iso(now)}};
+    const market=1.6/(2.5+1.6);
+    expect(agreementBlend(.65,prices)).toBeCloseTo(market);
+    expect(agreementBlend(.28,prices)).toBeLessThan(market);
+    expect(agreementBlend(.28,{...prices,away:null})).toBeUndefined();
+    expect(agreementBlend(.72,{home:prices.away,away:prices.home})).toBeCloseTo(1-agreementBlend(.28,prices)!);
   });
   it('freezes the market correction using only both price sides and both prior forecasts',()=>{
     const prices={home:{odds:3,quoteAt:iso(now)},away:{odds:1.5,quoteAt:iso(now)}};

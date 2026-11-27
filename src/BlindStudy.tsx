@@ -22,9 +22,9 @@ function StudyHistory({history,scheduled,checkedAt,selectWeek}:{history:BlindHis
       {row.peer&&<p>Brier su {row.peer.count} partite comuni ai tre metodi · Modello {row.peer.modelBrier.toFixed(4)} · Elo {row.peer.eloBrier.toFixed(4)} · Bet365 {row.peer.marketBrier.toFixed(4)}</p>}
       {row.candidate&&<p>Brier su {row.candidate.count} partite del nuovo test · Bet365 con correzione sportiva 25% {row.candidate.brier.toFixed(4)} · Bet365 {row.candidate.marketBrier.toFixed(4)}</p>}
       {row.external&&<p>Brier su {row.external.count} partite del test esterno Elo · Calibrato {row.external.brier.toFixed(4)} · Elo {row.external.eloBrier.toFixed(4)} · Bet365 {row.external.marketBrier.toFixed(4)}</p>}
+      {row.agreement&&<p>Correzione sportiva quando i favoriti coincidono · {row.agreement.count} confronti, {row.agreement.disagreements} favoriti in disaccordo · Brier variante {row.agreement.brier.toFixed(4)} · Modello {row.agreement.sportsBrier.toFixed(4)} · Bet365 {row.agreement.marketBrier.toFixed(4)}</p>}
       {row.disagreements.some(band=>band.available>0)&&<ul className="competition-list">
-        {row.external&&<p>Brier su {row.external.count} partite del test esterno Elo · Calibrato {row.external.brier.toFixed(4)} · Elo {row.external.eloBrier.toFixed(4)} · Bet365 {row.external.marketBrier.toFixed(4)}</p>}
-      {row.disagreements.filter(band=>band.available>0).map(band=><li key={band.minimum}><span>
+        {row.disagreements.filter(band=>band.available>0).map(band=><li key={band.minimum}><span>
           <strong>Sfavorito Bet365 da {odds.format(band.minimum)}{band.maximum===null?' in su':` a meno di ${odds.format(band.maximum)}`}</strong>
           <small>{band.available} confrontabili · {band.n} selezionate dal modello · Esatto {band.exact} · Sbagliato {band.wrong}</small>
           {band.roi!==null&&<small>Rendimento teorico {probability.format(band.roi)} · Quota media esatti {band.meanExactOdds===null?'—':odds.format(band.meanExactOdds)} · Sbagliati {band.meanWrongOdds===null?'—':odds.format(band.meanWrongOdds)}</small>}

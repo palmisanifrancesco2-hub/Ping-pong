@@ -6,12 +6,14 @@ export type BlindSportSummary = {
   exact:number; incorrect:number; verifiedExact:number; verifiedIncorrect:number; invalid:number;
   brier:number|null; marketBrier:number|null; paired:number;
 };
+export type AgreementBenchmark={count:number;disagreements:number;brier:number;marketBrier:number;sportsBrier:number};
 export type BlindHistoryWeek = BlindSportSummary & {
   from:string;
   until:string;
   peer:{count:number;modelBrier:number;eloBrier:number;marketBrier:number}|null;
   candidate:{count:number;brier:number;marketBrier:number}|null;
   external:{count:number;brier:number;eloBrier:number;marketBrier:number}|null;
+  agreement?:AgreementBenchmark|null;
   disagreements:ReturnType<typeof disagreementReport>['forward'];
 };
 export type BlindHistory = {
@@ -32,7 +34,7 @@ export type BlindStudyReport = {
   enabled:boolean;
   canRun:boolean;
   sports:BlindSportSummary[];
-  weekly?:BlindSportSummary&{until:string;value:number;exactValue:number;theoreticalRoi:number|null;closingPairs:number;betterThanClosing:number};
+  weekly?:BlindSportSummary&{until:string;value:number;exactValue:number;theoreticalRoi:number|null;closingPairs:number;betterThanClosing:number;agreement?:AgreementBenchmark|null;
   weeklyDisagreement?:ReturnType<typeof disagreementReport>;
   history:BlindHistory;
   pricing?:PricingReport|null;

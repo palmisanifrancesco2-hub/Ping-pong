@@ -53,6 +53,7 @@ export type FrozenWinner={
   peerHomeProbability?:number;
   marketBlend25HomeProbability?:number;
   externalEloCalibratedHomeProbability?:number;
+  agreementBlendHomeProbability?:number;
 };
 type Outcome={winner:'home'|'away';finishedAt:string;availableAt:string;actualGuard:number|null;invalid:boolean;sets?:[number,number][];pricingClosing?:ReturnType<typeof archivedPricingPairs>;closing?:{homeOdds:number;awayOdds:number}};
 type Row={id:string;created_at:string;parameters:{study:string;userId:string;forecast:FrozenWinner;hash:string;attempts:number;lastAttempt:number;outcome:Outcome|null}};
@@ -73,14 +74,26 @@ function pairedPrices(m:Match,quotes:FeedQuote[],now:number):FrozenWinner['price
   return {home:a?{odds:a.odds_dec,quoteAt:a.ts}:null,away:b?{odds:b.odds_dec,quoteAt:b.ts}:null};
 }
 
+export function agreementBlend(sports:number,prices:FrozenWinner['prices']) {
+  if(!prices?.home||!prices.away)return;
+  const market=fairMarketProbability(prices.home.odds,prices.away.odds);
+  if(market===null)return;
+  const disagree=sports!==.5&&market!==.5&&(sports>.5)!==(market>.5);
+  if(disagree)return market;
+  const logit=(p:number)=>Math.log(p/(1-p));
+  return 1/(1+Math.exp(-(.75*logit(market)+.25*logit(sports))));
+}
+
 export function freezeWinner(m:Match, now:number, p:number, model:string, quotes:FeedQuote[]):FrozenWinner|undefined {
   const starts=Date.parse(m.kickoff_utc??'');
   if(m.in_play||!Number.isFinite(starts)||starts-now<=lead||starts-now>26*hour||
       !Number.isFinite(p)||p<=0||p>=1||normalized(m.home)===normalized(m.away))return;
   const prices=pairedPrices(m,quotes,now);
   const closingComparable=m.sport==='table_tennis'&&prices?.home&&prices.away&&quotes.every(q=>q.market_id==='920000'&&!q.period);
+  const agreement=m.sport==='table_tennis'?agreementBlend(p,prices):undefined;
   return {sport:m.sport,id:m.id,home:m.home,away:m.away,league:m.league,seenAt:now,scheduledAt:starts,
-    model,homeProbability:p,selection:p===.5?null:p>.5?'home':'away',prices,...(closingComparable?{closingComparable:true as const}:{})};
+    model,homeProbability:p,selection:p===.5?null:p>.5?'home':'away',prices,...(closingComparable?{closingComparable:true as const}:{}),
+    ...(agreement!==undefined?{agreementBlendHomeProbability:agreement}:{})};
 }
 
 export function buildElo(history:History[],at:number,identity=competitionKey) {
@@ -204,7 +217,7 @@ export function blindAudit(rows:Row[]):BlindAudit {
 export function blindArchiveCsv(rows:Row[]) {
   const header=['event_id','competition','home','away','model','forecast_utc','kickoff_utc','result_utc','result_state','winner','sets','model_favorite',
     'home_model_p','away_model_p','home_fair_odds','away_fair_odds','home_bet365_au','away_bet365_au','home_quote_utc','away_quote_utc',
-    'home_ev','away_ev','ev_above_50_selection','ev_above_50_outcome','verified_start_guard_utc','home_market_no_vig_p','home_elo_p','home_blend25_p','home_elo_external_calibrated_v42_p'];
+    'home_ev','away_ev','ev_above_50_selection','ev_above_50_outcome','verified_start_guard_utc','home_market_no_vig_p','home_elo_p','home_blend25_p','home_elo_external_calibrated_v42_p','home_agreement_blend_v43_p'];
   const cell=(value:string|number|null|undefined)=>{
     if(typeof value==='number')return String(value);
     const clean=value??'';
@@ -219,9 +232,25 @@ export function blindArchiveCsv(rows:Row[]) {
       f.homeProbability,1-f.homeProbability,1/f.homeProbability,1/(1-f.homeProbability),home?.odds,away?.odds,home?.quoteAt,away?.quoteAt,
       home?f.homeProbability*home.odds-1:null,away?(1-f.homeProbability)*away.odds-1:null,high,
       high&&status==='verified'&&o?(high===o.winner?'exact':'wrong'):null,o?.actualGuard!=null?new Date(o.actualGuard).toISOString():null,
-      home&&away?fairMarketProbability(home.odds,away.odds):null,f.peerHomeProbability,f.marketBlend25HomeProbability,f.externalEloCalibratedHomeProbability].map(cell).join(',');
+      home&&away?fairMarketProbability(home.odds,away.odds):null,f.peerHomeProbability,f.marketBlend25HomeProbability,f.externalEloCalibratedHomeProbability,f.agreementBlendHomeProbability].map(cell).join(',');
   });
   return [header.join(','),...records].join('\r\n')+'\r\n';
+}
+
+function agreementBenchmark(rows:Row[]) {
+  let count=0,candidate=0,marketScore=0,sports=0,disagreements=0;
+  for(const {parameters:{forecast:f,outcome:o}} of rows){
+    if(!o||o.invalid||o.actualGuard===null||f.agreementBlendHomeProbability===undefined||!f.prices?.home||!f.prices.away)continue;
+    const market=fairMarketProbability(f.prices.home.odds,f.prices.away.odds);
+    if(market===null)continue;
+    const result=Number(o.winner==='home');
+    count++;
+    if(f.homeProbability!==.5&&market!==.5&&(f.homeProbability>.5)!==(market>.5))disagreements++;
+    candidate+=(f.agreementBlendHomeProbability-result)**2;
+    marketScore+=(market-result)**2;
+    sports+=(f.homeProbability-result)**2;
+  }
+  return count?{count,disagreements,brier:candidate/count,marketBrier:marketScore/count,sportsBrier:sports/count}:null;
 }
 
 function weeklyRows(rows:Row[]) {
@@ -254,7 +283,7 @@ function weeklySummary(rows:Row[]) {
     if(fair!==null){closingPairs++;if(price*(f.selection==='home'?fair:1-fair)>1+1e-12)betterThanClosing++;}
   }
   return {until:new Date(weeklyEnd).toISOString(),...blindSummary(rows,'table_tennis'),value,exactValue:exact,
-    theoreticalRoi:value?units/value-1:null,closingPairs,betterThanClosing};
+    theoreticalRoi:value?units/value-1:null,closingPairs,betterThanClosing,agreement:agreementBenchmark(rows)};
 }
 
 function weeklyDisagreement(rows:Row[]) {
@@ -323,7 +352,7 @@ export function blindHistory(rows:Row[],now:number,last=utcWeek(now)):BlindHisto
       candidate:candidateCount?{count:candidateCount,brier:candidateBrier/candidateCount,marketBrier:candidateMarketBrier/candidateCount}:null,
       external:externalCount?{count:externalCount,brier:externalBrier/externalCount,
         eloBrier:externalEloBrier/externalCount,marketBrier:externalMarketBrier/externalCount}:null,
-      disagreements:weeklyDisagreement(group).forward});
+      agreement:agreementBenchmark(group),disagreements:weeklyDisagreement(group).forward});
   }
   const latest=utcWeek(now);
   return {startsAt:new Date(weeklyEnd).toISOString(),weeks,
