@@ -51,6 +51,7 @@ describe('private HTTP API', () => {
         history:{startsAt:'2026-12-01T16:00:00Z',older:null,newer:null,weeks:[],recent:[]}}))};
     const base=await start(createHandler({env:{},blindStudy,authorize:async t=>['owner','member'].includes(t)?t:null}));
     expect((await fetch(base+'/api/blind-study')).status).toBe(401);
+    expect((await fetch(base+'/api/blind-study?archive=csv')).status).toBe(401);
     expect((await fetch(base+'/api/blind-study',{method:'POST',headers:{Authorization:'Bearer member'}})).status).toBe(403);
     expect((await fetch(base+'/api/blind-study',{method:'POST',headers:{Authorization:'Bearer owner'}})).status).toBe(200);
     expect(blindStudy.run).toHaveBeenLastCalledWith('owner');

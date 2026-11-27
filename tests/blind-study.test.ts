@@ -1,5 +1,5 @@
 import {describe,expect,it} from 'vitest';
-import {BlindStudy,blindHistory,blindSummary,buildElo,freezeWinner,marketBlend25,settleObserved,weeklyClosingOrder,weeklyScanOverdue} from '../server/blind-study';
+import {BlindStudy,blindArchiveCsv,blindAudit,blindHistory,blindSummary,buildElo,freezeWinner,marketBlend25,settleObserved,weeklyClosingOrder,weeklyScanOverdue} from '../server/blind-study';
 import {disagreementStartAt} from '../src/domain/underdog-study';
 import type {FeedMatch,FeedQuote} from '../src/shared/board';
 
@@ -83,6 +83,29 @@ describe('winner observation frozen before outcome',()=>{
     const previous=blindHistory([stored],later,Date.parse(latest.older!));
     expect(previous.recent).toHaveLength(1);
     expect(previous.newer).toBe(latest.weeks[0].from);
+  });
+  it('counts EV strictly above +50%, including underdogs, and grades only verified starts',()=>{
+    const forecast={sport:'table_tennis' as const,id:'v',home:'=A',away:'B',league:'Setka Cup',model:'test',
+      homeProbability:.6,selection:'home' as const,seenAt:now,scheduledAt:now+600_000,
+      prices:{home:{odds:1.5,quoteAt:iso(now)},away:{odds:4,quoteAt:iso(now)}}};
+    const outcome={winner:'away' as const,finishedAt:iso(now+900_000),availableAt:iso(now+950_000),
+      actualGuard:now+500_000,invalid:false};
+    const row={id:'case',created_at:iso(now+1),parameters:{study:'blind-winner-v1',userId:'owner',forecast,
+      hash:'test',attempts:0,lastAttempt:0,outcome}};
+    const boundary={...row,parameters:{...row.parameters,forecast:{...forecast,id:'edge',
+      prices:{...forecast.prices,away:{...forecast.prices.away,odds:3.75}}}}};
+    const pending={...row,parameters:{...row.parameters,outcome:null}};
+    const unverified={...row,parameters:{...row.parameters,outcome:{...outcome,actualGuard:null}}};
+    const a=blindAudit([row,boundary,pending,unverified]);
+    expect(a.highEv).toMatchObject({eligible:4,registered:3,favorites:0,exact:1,wrong:0,pending:1,unverified:1,roi:3});
+    expect(a.models).toMatchObject([{model:'test',n:4,highEv:{registered:3}}]);
+    const csv=blindArchiveCsv([row,pending]);
+    expect(csv.split('\r\n')).toHaveLength(4);
+    expect(csv).toContain("home_fair_odds");
+    expect(csv).toContain("home_bet365_au");
+    expect(csv).toContain('"'=A"');
+    expect(csv).toContain('"away","exact"');
+    expect(csv).toContain('"pending"');
   });
   it('freezes the market correction using only both price sides and both prior forecasts',()=>{
     const prices={home:{odds:3,quoteAt:iso(now)},away:{odds:1.5,quoteAt:iso(now)}};

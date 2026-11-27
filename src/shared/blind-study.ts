@@ -11,6 +11,7 @@ export type BlindHistoryWeek = BlindSportSummary & {
   until:string;
   peer:{count:number;modelBrier:number;eloBrier:number;marketBrier:number}|null;
   candidate:{count:number;brier:number;marketBrier:number}|null;
+  external:{count:number;brier:number;eloBrier:number;marketBrier:number}|null;
   disagreements:ReturnType<typeof disagreementReport>['forward'];
 };
 export type BlindHistory = {
@@ -43,4 +44,12 @@ export type PricingReport = {
   recent:{event:string;eventId:string;market:string;marketKey:string;side:string;line:string;source:string;site:string;observedAt:string;quotedAt:string;
     odds:number;marketProbability:number;power:number;model:number;fair:number;ev:number;stressed:number;trial:boolean}[];
   summary:{market:string;records:number;settled:number;exact:number;simulatedRoi:number|null;roiLower:number|null;roiUpper:number|null;drawdown:number|null;closing:number;clv:number|null;delay:number;delayedRoi:number|null;brier:number|null;logLoss:number|null;ece:number|null}[];
+};
+
+export type BlindHighEv = {
+  eligible:number;registered:number;favorites:number;favoritesExact:number;favoritesWrong:number;exact:number;wrong:number;pending:number;unverified:number;invalid:number;roi:number|null;
+};
+export type BlindAudit = BlindSportSummary & {
+  from:string|null;until:string|null;highEv:BlindHighEv;
+  models:{model:string;n:number;highEv:BlindHighEv}[];
 };

@@ -1,6 +1,6 @@
 import {randomUUID} from 'node:crypto';
 import { additionalSports, type IndividualSport } from '../src/shared/individual-sports.js';
-import type { BlindHistory, BlindHistoryWeek, BlindSportSummary, BlindStudyReport } from '../src/shared/blind-study.js';
+import type { BlindAudit, BlindHistory, BlindHistoryWeek, BlindSportSummary, BlindStudyReport } from '../src/shared/blind-study.js';
 import type { Board, FeedMatch, FeedQuote } from '../src/shared/board.js';
 import { marketIdentity, quoteStatus } from '../src/shared/board.js';
 import { eloProbability, playerKey } from '../src/domain/player-model.js';
@@ -32,6 +32,7 @@ const weeklyEnd=Date.parse('2026-12-01T16:00:00Z');
 const weeklyFollowup=weeklyEnd+48*hour;
 const week=7*24*hour;
 const historyWindow=12*week;
+const externalEloSlope=.851669859603553;
 const historyStart=Date.parse('2026-11-16T00:00:00Z');
 type CollectionMode='daily'|'weekly'|'history';
 
@@ -51,6 +52,7 @@ export type FrozenWinner={
   closingComparable?:true;
   peerHomeProbability?:number;
   marketBlend25HomeProbability?:number;
+  externalEloCalibratedHomeProbability?:number;
 };
 type Outcome={winner:'home'|'away';finishedAt:string;availableAt:string;actualGuard:number|null;invalid:boolean;sets?:[number,number][];pricingClosing?:ReturnType<typeof archivedPricingPairs>;closing?:{homeOdds:number;awayOdds:number}};
 type Row={id:string;created_at:string;parameters:{study:string;userId:string;forecast:FrozenWinner;hash:string;attempts:number;lastAttempt:number;outcome:Outcome|null}};
@@ -152,6 +154,76 @@ export function blindSummary(rows:Row[], sport:IndividualSport):BlindSportSummar
     verifiedExact,verifiedIncorrect,invalid,brier:paired?brier/paired:null,marketBrier:paired?marketBrier/paired:null,paired};
 }
 
+const highEvThreshold=.5;
+
+function bestArchivedValue(f:FrozenWinner) {
+  // A coherent two-way book admits a single high-EV side in ordinary cases.
+  // Rank eligible sides explicitly and make equal estimates deterministic.
+  return (['home','away'] as const).flatMap(side=>{
+    const price=f.prices?.[side];
+    if(!price||!Number.isFinite(price.odds)||price.odds<1.30)return [];
+    const probability=side==='home'?f.homeProbability:1-f.homeProbability;
+    return [{side,odds:price.odds,ev:probability*price.odds-1}];
+  }).sort((a,b)=>b.ev-a.ev)[0];
+}
+
+export function blindAudit(rows:Row[]):BlindAudit {
+  const cases=rows.filter(row=>row.parameters.forecast.sport==='table_tennis');
+  const groups=new Map<string,Row[]>();
+  let from=Infinity,to=-Infinity;
+  const summarize=(observations:Row[])=>{
+    let eligible=0,registered=0,favorites=0,favoritesExact=0,favoritesWrong=0,exact=0,wrong=0,pending=0,unverified=0,invalid=0,winsAtOdds=0;
+    for(const {parameters:{forecast:f,outcome:o}} of observations){
+      const selection=bestArchivedValue(f);
+      if(!selection)continue;
+      eligible++;
+      if(selection.ev<=highEvThreshold+1e-12)continue;
+      registered++;
+      const favorite=selection.side===f.selection;
+      if(favorite)favorites++;
+      if(!o)pending++;
+      else if(o.invalid)invalid++;
+      else if(o.actualGuard===null)unverified++;
+      else if(selection.side===o.winner){exact++;winsAtOdds+=selection.odds;if(favorite)favoritesExact++;}
+      else{wrong++;if(favorite)favoritesWrong++;}
+    }
+    return {eligible,registered,favorites,favoritesExact,favoritesWrong,exact,wrong,pending,unverified,invalid,
+      roi:exact+wrong?winsAtOdds/(exact+wrong)-1:null};
+  };
+  for(const row of cases){
+    const {forecast:f}=row.parameters;
+    const group=groups.get(f.model)??[];
+    group.push(row);groups.set(f.model,group);
+    from=Math.min(from,f.seenAt);to=Math.max(to,f.seenAt);
+  }
+  return {...blindSummary(cases,'table_tennis'),from:Number.isFinite(from)?new Date(from).toISOString():null,
+    until:Number.isFinite(to)?new Date(to).toISOString():null,
+    highEv:summarize(cases),models:[...groups].map(([model,group])=>({model,n:group.length,highEv:summarize(group)}))};
+}
+
+export function blindArchiveCsv(rows:Row[]) {
+  const header=['event_id','competition','home','away','model','forecast_utc','kickoff_utc','result_utc','result_state','winner','sets','model_favorite',
+    'home_model_p','away_model_p','home_fair_odds','away_fair_odds','home_bet365_au','away_bet365_au','home_quote_utc','away_quote_utc',
+    'home_ev','away_ev','ev_above_50_selection','ev_above_50_outcome','verified_start_guard_utc','home_market_no_vig_p','home_elo_p','home_blend25_p','home_elo_external_calibrated_v42_p'];
+  const cell=(value:string|number|null|undefined)=>{
+    if(typeof value==='number')return String(value);
+    const clean=value??'';
+    return '"'+(/^[\s]*[=+@-]/.test(clean)?"'":'')+clean.replaceAll('"','""')+'"';
+  };
+  const records=rows.filter(r=>r.parameters.forecast.sport==='table_tennis').map(({parameters:{forecast:f,outcome:o}})=>{
+    const home=f.prices?.home,away=f.prices?.away,selection=bestArchivedValue(f);
+    const high=selection&&selection.ev>highEvThreshold+1e-12?selection.side:null;
+    const status=!o?'pending':o.invalid?'invalid':o.actualGuard===null?'reported':'verified';
+    return [f.id,f.league,f.home,f.away,f.model,new Date(f.seenAt).toISOString(),new Date(f.scheduledAt).toISOString(),o?.finishedAt,status,
+      o?.winner,o?.sets?.map(([a,b])=>a+'-'+b).join(' | '),f.selection,
+      f.homeProbability,1-f.homeProbability,1/f.homeProbability,1/(1-f.homeProbability),home?.odds,away?.odds,home?.quoteAt,away?.quoteAt,
+      home?f.homeProbability*home.odds-1:null,away?(1-f.homeProbability)*away.odds-1:null,high,
+      high&&status==='verified'&&o?(high===o.winner?'exact':'wrong'):null,o?.actualGuard!=null?new Date(o.actualGuard).toISOString():null,
+      home&&away?fairMarketProbability(home.odds,away.odds):null,f.peerHomeProbability,f.marketBlend25HomeProbability,f.externalEloCalibratedHomeProbability].map(cell).join(',');
+  });
+  return [header.join(','),...records].join('\r\n')+'\r\n';
+}
+
 function weeklyRows(rows:Row[]) {
   return rows.filter(({parameters:{forecast:f}})=>f.sport==='table_tennis'&&f.seenAt>=weeklyStart&&f.seenAt<weeklyEnd&&f.scheduledAt<weeklyEnd);
 }
@@ -223,6 +295,7 @@ export function blindHistory(rows:Row[],now:number,last=utcWeek(now)):BlindHisto
     const group=groups.get(start)??[];
     let count=0,modelBrier=0,eloBrier=0,marketBrier=0;
     let candidateCount=0,candidateBrier=0,candidateMarketBrier=0;
+    let externalCount=0,externalBrier=0,externalEloBrier=0,externalMarketBrier=0;
     for(const {parameters:{forecast:f,outcome:o}} of group){
       if(!o||o.invalid||o.actualGuard===null||f.peerHomeProbability===undefined||!f.prices?.home||!f.prices.away)continue;
       const market=fairMarketProbability(f.prices.home.odds,f.prices.away.odds);
@@ -232,6 +305,12 @@ export function blindHistory(rows:Row[],now:number,last=utcWeek(now)):BlindHisto
       modelBrier+=(f.homeProbability-y)**2;
       eloBrier+=(f.peerHomeProbability-y)**2;
       marketBrier+=(market-y)**2;
+      if(f.externalEloCalibratedHomeProbability!==undefined){
+        externalCount++;
+        externalBrier+=(f.externalEloCalibratedHomeProbability-y)**2;
+        externalEloBrier+=(f.peerHomeProbability-y)**2;
+        externalMarketBrier+=(market-y)**2;
+      }
       if(f.marketBlend25HomeProbability!==undefined){
         candidateCount++;
         candidateBrier+=(f.marketBlend25HomeProbability-y)**2;
@@ -242,6 +321,8 @@ export function blindHistory(rows:Row[],now:number,last=utcWeek(now)):BlindHisto
       ...blindSummary(group,'table_tennis'),
       peer:count?{count,modelBrier:modelBrier/count,eloBrier:eloBrier/count,marketBrier:marketBrier/count}:null,
       candidate:candidateCount?{count:candidateCount,brier:candidateBrier/candidateCount,marketBrier:candidateMarketBrier/candidateCount}:null,
+      external:externalCount?{count:externalCount,brier:externalBrier/externalCount,
+        eloBrier:externalEloBrier/externalCount,marketBrier:externalMarketBrier/externalCount}:null,
       disagreements:weeklyDisagreement(group).forward});
   }
   const latest=utcWeek(now);
@@ -300,6 +381,12 @@ export class BlindStudy {
       checkedAt:new Date(now).toISOString(),sports:sports.map(sport=>blindSummary(rows.filter(r=>r.parameters.forecast.seenAt<until),sport)),
       weekly:weeklySummary(collected),weeklyDisagreement:weeklyDisagreement(collected),pricing:pricing?pricingReport(pricing,new Map(rows.flatMap(({parameters:{forecast,outcome}})=>
         forecast.sport==='table_tennis'&&outcome?[[forecast.id,{...outcome,home:forecast.home,away:forecast.away,league:forecast.league}]]:[])),now):pricing,history:blindHistory(rows,now,last)};
+  }
+  async audit():Promise<BlindAudit>{
+    return blindAudit(await this.rows(this.store.db(),await this.owner.ownerId()));
+  }
+  async archiveCsv():Promise<string>{
+    return blindArchiveCsv(await this.rows(this.store.db(),await this.owner.ownerId()));
   }
   async disagreementSnapshot(){
     const owner=await this.owner.ownerId();
@@ -432,6 +519,7 @@ export class BlindStudy {
         const f=freezeWinner(match,at,p,ready!==undefined?runtimeVersion:local!==undefined?'elo-league-k24-v1':'elo-tennis-tour-k24-v1',prices);
         if(f&&sport==='table_tennis'&&at>=disagreementStartAt&&ready!==undefined&&local!==undefined){
           f.peerHomeProbability=local;
+          f.externalEloCalibratedHomeProbability=1/(1+Math.exp(-externalEloSlope*Math.log(local/(1-local))));
           const blend=marketBlend25(f);
           if(blend!==undefined)f.marketBlend25HomeProbability=blend;
         }
@@ -541,7 +629,7 @@ export class BlindStudy {
     const summary={status:tableOnly&&!bySport.get('table_tennis')?.board?'settlement_only':'completed',captured,reported,verified,pricingCaptured,capturedBySport,capturedWithPrice,feeds:bySport.size,closingQueries:calls,checkedAt:new Date(started).toISOString()};
     if(weekly){
       const all=weeklyRows(await this.rows(db,owner,new Date(weeklyStart-60_000).toISOString(),new Date(weeklyEnd+hour).toISOString()));
-      console.info(JSON.stringify({weeklyPingPongRun:summary,weekly:weeklySummary(all)}));
+      console.info(JSON.stringify({weeklyPingPongRun:summary,weekly:weeklySummary(all),highEv:blindAudit(all).highEv}));
       logWeeklyDisagreement(weeklyDisagreement(all));
     }else if(tableOnly)console.info(JSON.stringify({longitudinalPingPongRun:summary}));
     else console.info(JSON.stringify({blindStudyRun:summary}));

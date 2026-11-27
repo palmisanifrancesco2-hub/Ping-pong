@@ -1,5 +1,5 @@
 import {useEffect,useState} from 'react';
-import type {BlindHistory, BlindStudyReport, PricingReport} from './shared/blind-study';
+import type {BlindAudit, BlindHistory, BlindStudyReport, PricingReport} from './shared/blind-study';
 import {individualSports} from './shared/individual-sports';
 import {dateTime} from './shared/format';
 
@@ -21,8 +21,10 @@ function StudyHistory({history,scheduled,checkedAt,selectWeek}:{history:BlindHis
       {row.paired>0&&<p>Brier su {row.paired} partite · Modello {row.brier?.toFixed(4)} · Bet365 {row.marketBrier?.toFixed(4)}</p>}
       {row.peer&&<p>Brier su {row.peer.count} partite comuni ai tre metodi · Modello {row.peer.modelBrier.toFixed(4)} · Elo {row.peer.eloBrier.toFixed(4)} · Bet365 {row.peer.marketBrier.toFixed(4)}</p>}
       {row.candidate&&<p>Brier su {row.candidate.count} partite del nuovo test · Bet365 con correzione sportiva 25% {row.candidate.brier.toFixed(4)} · Bet365 {row.candidate.marketBrier.toFixed(4)}</p>}
+      {row.external&&<p>Brier su {row.external.count} partite del test esterno Elo · Calibrato {row.external.brier.toFixed(4)} · Elo {row.external.eloBrier.toFixed(4)} · Bet365 {row.external.marketBrier.toFixed(4)}</p>}
       {row.disagreements.some(band=>band.available>0)&&<ul className="competition-list">
-        {row.disagreements.filter(band=>band.available>0).map(band=><li key={band.minimum}><span>
+        {row.external&&<p>Brier su {row.external.count} partite del test esterno Elo · Calibrato {row.external.brier.toFixed(4)} · Elo {row.external.eloBrier.toFixed(4)} · Bet365 {row.external.marketBrier.toFixed(4)}</p>}
+      {row.disagreements.filter(band=>band.available>0).map(band=><li key={band.minimum}><span>
           <strong>Sfavorito Bet365 da {odds.format(band.minimum)}{band.maximum===null?' in su':` a meno di ${odds.format(band.maximum)}`}</strong>
           <small>{band.available} confrontabili · {band.n} selezionate dal modello · Esatto {band.exact} · Sbagliato {band.wrong}</small>
           {band.roi!==null&&<small>Rendimento teorico {probability.format(band.roi)} · Quota media esatti {band.meanExactOdds===null?'—':odds.format(band.meanExactOdds)} · Sbagliati {band.meanWrongOdds===null?'—':odds.format(band.meanWrongOdds)}</small>}
@@ -99,6 +101,46 @@ function PricingResearch({report}:{report:PricingReport|null}){
   </details>;
 }
 
+function FullWinnerArchive({token}:{token:string}){
+  const [audit,setAudit]=useState<BlindAudit>();
+  const [busy,setBusy]=useState<'summary'|'csv'|null>(null);
+  const [error,setError]=useState('');
+  async function load(format:'summary'|'csv') {
+    if(busy)return;
+    setBusy(format);setError('');
+    try{
+      const response=await fetch('/api/blind-study?archive='+format,{headers:{Authorization:`Bearer ${token}`},signal:AbortSignal.timeout(30_000)});
+      if(!response.ok)throw Error();
+      if(format==='summary'){setAudit(await response.json() as BlindAudit);return;}
+      const url=URL.createObjectURL(await response.blob());
+      const link=document.createElement('a');
+      link.href=url;link.download='ping-pong-archivio-vincente.csv';
+      link.click();
+      setTimeout(()=>URL.revokeObjectURL(url),10_000);
+    }catch{setError('Archivio temporaneamente non disponibile. Riprova.');}
+    finally{setBusy(null);}
+  }
+  return <details>
+    <summary>Archivio completo e selezioni con EV sopra +50%</summary>
+    <p>EV = probabilità del modello × quota Bet365 − 1. Consideriamo la selezione con EV più alto per partita, con quota minima 1,30. Esatto e Sbagliato richiedono inizio verificato.</p>
+    <div className="quote-toolbar">
+      <button className="secondary" disabled={busy!==null} onClick={()=>load('summary')}>Aggiorna riepilogo</button>
+      <button className="secondary" disabled={busy!==null} onClick={()=>load('csv')}>Scarica tutte le partite (CSV)</button>
+    </div>
+    {busy&&<p role="status">Caricamento archivio…</p>}
+    {error&&<p role="alert" className="error">{error}</p>}
+    {audit&&<>
+      <p>{audit.recorded} partite registrate · {audit.withPrice} con quota · da {dateTime(audit.from??undefined)} a {dateTime(audit.until??undefined)}.</p>
+      {audit.paired>0&&<p>Brier su {audit.paired} partite · Modello {audit.brier?.toFixed(4)} · Bet365 {audit.marketBrier?.toFixed(4)}.</p>}
+      <p><strong>{audit.highEv.registered} selezioni sopra +50%</strong> su {audit.highEv.eligible} osservazioni con quota idonea · {audit.highEv.exact} esatte · {audit.highEv.wrong} sbagliate · {audit.highEv.pending} in attesa · {audit.highEv.unverified} senza inizio verificato · {audit.highEv.invalid} escluse.</p>
+      <p>{audit.highEv.favorites} erano anche il favorito del modello · {audit.highEv.favoritesExact} esatte · {audit.highEv.favoritesWrong} sbagliate.{audit.highEv.roi!==null&&` Rendimento simulato sui soli esiti verificati ${probability.format(audit.highEv.roi)}.`}</p>
+      <details><summary>Per versione del modello</summary><ul className="competition-list">{audit.models.map(row=><li key={row.model}>
+        <span><strong>{row.model}</strong><small>{row.n} partite · {row.highEv.registered} oltre +50% · {row.highEv.exact} esatte · {row.highEv.wrong} sbagliate</small></span>
+      </li>)}</ul></details>
+    </>}
+  </details>;
+}
+
 export function BlindStudy({token}:{token?:string}) {
   const [report,setReport]=useState<BlindStudyReport>();
   const [error,setError]=useState('');
@@ -134,6 +176,7 @@ export function BlindStudy({token}:{token?:string}) {
     {!report&&!error&&<p role="status">Caricamento del test…</p>}
     {report&&<>
       <p>{report.scheduled?'Raccolta giornaliera attiva.':'Raccolta giornaliera non configurata.'} Ultimo controllo {dateTime(report.checkedAt)}.</p>
+      {token&&<FullWinnerArchive token={token}/>}
       {report.weekly&&<div>
         <h3>Studio settimanale di tennis tavolo</h3>
         <p>Partite in programma fino al {dateTime(report.weekly.until)}.</p>

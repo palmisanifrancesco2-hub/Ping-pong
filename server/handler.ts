@@ -87,7 +87,17 @@ export function createHandler(deps: Dependencies = {}) {
     if (!match || !userId) return send(401, { error: 'Accesso riservato agli utenti autorizzati.' });
     try {
       if(path==='/api/blind-study'){
-        try { return send(200,req.method==='POST'?await blindStudy.run(userId):await blindStudy.report(userId,url.searchParams.get('historyWeek'))); }
+        try {
+          if(req.method==='POST')return send(200,await blindStudy.run(userId));
+          if(url.searchParams.get('archive')==='summary')return send(200,await blindService.audit());
+          if(url.searchParams.get('archive')==='csv'){
+            const csv=await blindService.archiveCsv();
+            res.setHeader('Content-Type','text/csv; charset=utf-8');
+            res.setHeader('Content-Disposition','attachment; filename="ping-pong-archivio-vincente.csv"');
+            return res.end(csv);
+          }
+          return send(200,await blindStudy.report(userId,url.searchParams.get('historyWeek')));
+        }
         catch(error) { if(error instanceof Error&&error.message==='BLIND_STUDY_OWNER_ONLY')return send(403,{error:'Raccolta riservata al proprietario.'});throw error; }
       }
       if(path==='/api/sport-odds'){
