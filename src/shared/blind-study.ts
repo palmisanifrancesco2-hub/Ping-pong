@@ -34,7 +34,7 @@ export type BlindStudyReport = {
   enabled:boolean;
   canRun:boolean;
   sports:BlindSportSummary[];
-  weekly?:BlindSportSummary&{until:string;value:number;exactValue:number;theoreticalRoi:number|null;closingPairs:number;betterThanClosing:number;agreement?:AgreementBenchmark|null;
+  weekly?:BlindSportSummary&{until:string;value:number;exactValue:number;theoreticalRoi:number|null;closingPairs:number;betterThanClosing:number;agreement?:AgreementBenchmark|null};
   weeklyDisagreement?:ReturnType<typeof disagreementReport>;
   history:BlindHistory;
   pricing?:PricingReport|null;
