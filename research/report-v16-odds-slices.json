@@ -1,0 +1,1201 @@
+{
+  "version": "asof-odds-v16-descriptive-slices",
+  "generatedAt": "2026-11-11T10:18:08.159732+00:00",
+  "frozenReportHash": "d9a55353ab7c4b70869bc64de24528ec0b76686b54dcff8d81d26ea79d72c1f4",
+  "n": 88,
+  "tiesWithoutModalSelection": 6,
+  "quoteBinDefinition": "Decimal price of market-favored selection; ties kept in total but no side/price assigned. Fixed display intervals only, not selected for performance.",
+  "oddsBins": [
+    {
+      "minimumInclusive": 0,
+      "maximumExclusive": 1.3,
+      "n": 6,
+      "metrics": {
+        "sports-only": {
+          "n": 6,
+          "correct": 0,
+          "wrong": 0,
+          "undecided": 6,
+          "accuracy": null,
+          "coverage": 0.0,
+          "brier": 0.25,
+          "logLoss": 0.6931471805599453,
+          "ece": 0.0,
+          "calibration": [
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 6,
+              "probability": 0.5,
+              "frequency": 0.5
+            }
+          ]
+        },
+        "sports-and-market": {
+          "n": 6,
+          "correct": 4,
+          "wrong": 2,
+          "undecided": 0,
+          "accuracy": 0.6666666666666666,
+          "coverage": 1.0,
+          "brier": 0.23820386181786193,
+          "logLoss": 0.6822976918510716,
+          "ece": 0.2559655480202967,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 3,
+              "probability": 0.25089975653646657,
+              "frequency": 0.3333333333333333
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 2,
+              "probability": 0.7627304653204565,
+              "frequency": 1.0
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "n": 1,
+              "probability": 0.813953488372093,
+              "frequency": 0.0
+            }
+          ]
+        },
+        "market-only": {
+          "n": 6,
+          "correct": 4,
+          "wrong": 2,
+          "undecided": 0,
+          "accuracy": 0.6666666666666666,
+          "coverage": 1.0,
+          "brier": 0.23820386181786193,
+          "logLoss": 0.6822976918510716,
+          "ece": 0.2559655480202967,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 3,
+              "probability": 0.25089975653646657,
+              "frequency": 0.3333333333333333
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 2,
+              "probability": 0.7627304653204565,
+              "frequency": 1.0
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "n": 1,
+              "probability": 0.813953488372093,
+              "frequency": 0.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "minimumInclusive": 1.3,
+      "maximumExclusive": 1.5,
+      "n": 18,
+      "metrics": {
+        "sports-only": {
+          "n": 18,
+          "correct": 0,
+          "wrong": 0,
+          "undecided": 18,
+          "accuracy": null,
+          "coverage": 0.0,
+          "brier": 0.25,
+          "logLoss": 0.6931471805599453,
+          "ece": 0.2777777777777778,
+          "calibration": [
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 18,
+              "probability": 0.5,
+              "frequency": 0.2222222222222222
+            }
+          ]
+        },
+        "sports-and-market": {
+          "n": 18,
+          "correct": 11,
+          "wrong": 7,
+          "undecided": 0,
+          "accuracy": 0.6111111111111112,
+          "coverage": 1.0,
+          "brier": 0.23573767486213523,
+          "logLoss": 0.6632502422965362,
+          "ece": 0.3438584988682955,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 2,
+              "probability": 0.28375241779497096,
+              "frequency": 0.0
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 5,
+              "probability": 0.35142892388667296,
+              "frequency": 0.0
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 10,
+              "probability": 0.6588207779925161,
+              "frequency": 0.3
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 1,
+              "probability": 0.7234042553191489,
+              "frequency": 1.0
+            }
+          ]
+        },
+        "market-only": {
+          "n": 18,
+          "correct": 11,
+          "wrong": 7,
+          "undecided": 0,
+          "accuracy": 0.6111111111111112,
+          "coverage": 1.0,
+          "brier": 0.23573767486213523,
+          "logLoss": 0.6632502422965362,
+          "ece": 0.3438584988682955,
+          "calibration": [
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "n": 2,
+              "probability": 0.28375241779497096,
+              "frequency": 0.0
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 5,
+              "probability": 0.35142892388667296,
+              "frequency": 0.0
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 10,
+              "probability": 0.6588207779925161,
+              "frequency": 0.3
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "n": 1,
+              "probability": 0.7234042553191489,
+              "frequency": 1.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "minimumInclusive": 1.5,
+      "maximumExclusive": 2,
+      "n": 58,
+      "metrics": {
+        "sports-only": {
+          "n": 58,
+          "correct": 0,
+          "wrong": 0,
+          "undecided": 58,
+          "accuracy": null,
+          "coverage": 0.0,
+          "brier": 0.25,
+          "logLoss": 0.6931471805599453,
+          "ece": 0.0,
+          "calibration": [
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 58,
+              "probability": 0.5,
+              "frequency": 0.5
+            }
+          ]
+        },
+        "sports-and-market": {
+          "n": 58,
+          "correct": 30,
+          "wrong": 28,
+          "undecided": 0,
+          "accuracy": 0.5172413793103449,
+          "coverage": 1.0,
+          "brier": 0.2523294984402732,
+          "logLoss": 0.6979107147375729,
+          "ece": 0.04305185748908479,
+          "calibration": [
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 3,
+              "probability": 0.3807746979388771,
+              "frequency": 0.6666666666666666
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 26,
+              "probability": 0.44768934699495666,
+              "frequency": 0.46153846153846156
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 25,
+              "probability": 0.5518631577547621,
+              "frequency": 0.52
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 4,
+              "probability": 0.6206689765458422,
+              "frequency": 0.5
+            }
+          ]
+        },
+        "market-only": {
+          "n": 58,
+          "correct": 30,
+          "wrong": 28,
+          "undecided": 0,
+          "accuracy": 0.5172413793103449,
+          "coverage": 1.0,
+          "brier": 0.2523294984402732,
+          "logLoss": 0.6979107147375729,
+          "ece": 0.04305185748908479,
+          "calibration": [
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "n": 3,
+              "probability": 0.3807746979388771,
+              "frequency": 0.6666666666666666
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "n": 26,
+              "probability": 0.44768934699495666,
+              "frequency": 0.46153846153846156
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "n": 25,
+              "probability": 0.5518631577547621,
+              "frequency": 0.52
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "n": 4,
+              "probability": 0.6206689765458422,
+              "frequency": 0.5
+            }
+          ]
+        }
+      }
+    },
+    {
+      "minimumInclusive": 2,
+      "maximumExclusive": 3,
+      "n": 0,
+      "metrics": null
+    },
+    {
+      "minimumInclusive": 3,
+      "maximumExclusive": null,
+      "n": 0,
+      "metrics": null
+    }
+  ],
+  "perCompetition": {
+    "Czech Liga Pro": {
+      "sports-only": {
+        "n": 20,
+        "correct": 0,
+        "wrong": 0,
+        "undecided": 20,
+        "accuracy": null,
+        "coverage": 0.0,
+        "brier": 0.25,
+        "logLoss": 0.6931471805599453,
+        "ece": 0.15000000000000002,
+        "calibration": [
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 20,
+            "probability": 0.5,
+            "frequency": 0.65
+          }
+        ]
+      },
+      "sports-and-market": {
+        "n": 20,
+        "correct": 12,
+        "wrong": 7,
+        "undecided": 1,
+        "accuracy": 0.631578947368421,
+        "coverage": 0.95,
+        "brier": 0.24774496391418258,
+        "logLoss": 0.6882629629230914,
+        "ece": 0.2621811353095678,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 1,
+            "probability": 0.2909090909090909,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 4,
+            "probability": 0.3743182248193455,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 5,
+            "probability": 0.44759216428959636,
+            "frequency": 0.6
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 9,
+            "probability": 0.5507893176146244,
+            "frequency": 0.8888888888888888
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 1,
+            "probability": 0.6450511945392492,
+            "frequency": 0.0
+          }
+        ]
+      },
+      "market-only": {
+        "n": 20,
+        "correct": 12,
+        "wrong": 7,
+        "undecided": 1,
+        "accuracy": 0.631578947368421,
+        "coverage": 0.95,
+        "brier": 0.24774496391418258,
+        "logLoss": 0.6882629629230914,
+        "ece": 0.2621811353095678,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 1,
+            "probability": 0.2909090909090909,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 4,
+            "probability": 0.3743182248193455,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 5,
+            "probability": 0.44759216428959636,
+            "frequency": 0.6
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 9,
+            "probability": 0.5507893176146244,
+            "frequency": 0.8888888888888888
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 1,
+            "probability": 0.6450511945392492,
+            "frequency": 0.0
+          }
+        ]
+      }
+    },
+    "Setka Cup": {
+      "sports-only": {
+        "n": 36,
+        "correct": 0,
+        "wrong": 0,
+        "undecided": 36,
+        "accuracy": null,
+        "coverage": 0.0,
+        "brier": 0.25,
+        "logLoss": 0.6931471805599451,
+        "ece": 0.05555555555555558,
+        "calibration": [
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 36,
+            "probability": 0.5,
+            "frequency": 0.4444444444444444
+          }
+        ]
+      },
+      "sports-and-market": {
+        "n": 36,
+        "correct": 20,
+        "wrong": 16,
+        "undecided": 0,
+        "accuracy": 0.5555555555555556,
+        "coverage": 1.0,
+        "brier": 0.23715224733054857,
+        "logLoss": 0.6689059877947048,
+        "ece": 0.15791989151623562,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 3,
+            "probability": 0.26508415369958716,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 3,
+            "probability": 0.349082336170621,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 10,
+            "probability": 0.4583832111509242,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 10,
+            "probability": 0.5521509975701956,
+            "frequency": 0.4
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 6,
+            "probability": 0.6550592300944392,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 3,
+            "probability": 0.749621728653354,
+            "frequency": 1.0
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 1,
+            "probability": 0.813953488372093,
+            "frequency": 0.0
+          }
+        ]
+      },
+      "market-only": {
+        "n": 36,
+        "correct": 20,
+        "wrong": 16,
+        "undecided": 0,
+        "accuracy": 0.5555555555555556,
+        "coverage": 1.0,
+        "brier": 0.23715224733054857,
+        "logLoss": 0.6689059877947048,
+        "ece": 0.15791989151623562,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 3,
+            "probability": 0.26508415369958716,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 3,
+            "probability": 0.349082336170621,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 10,
+            "probability": 0.4583832111509242,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 10,
+            "probability": 0.5521509975701956,
+            "frequency": 0.4
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 6,
+            "probability": 0.6550592300944392,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 3,
+            "probability": 0.749621728653354,
+            "frequency": 1.0
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 1,
+            "probability": 0.813953488372093,
+            "frequency": 0.0
+          }
+        ]
+      }
+    },
+    "TT Cup": {
+      "sports-only": {
+        "n": 20,
+        "correct": 0,
+        "wrong": 0,
+        "undecided": 20,
+        "accuracy": null,
+        "coverage": 0.0,
+        "brier": 0.25,
+        "logLoss": 0.6931471805599453,
+        "ece": 0.15000000000000002,
+        "calibration": [
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 20,
+            "probability": 0.5,
+            "frequency": 0.35
+          }
+        ]
+      },
+      "sports-and-market": {
+        "n": 20,
+        "correct": 8,
+        "wrong": 9,
+        "undecided": 3,
+        "accuracy": 0.47058823529411764,
+        "coverage": 0.85,
+        "brier": 0.26490518126026663,
+        "logLoss": 0.7244316025832461,
+        "ece": 0.16862047281710632,
+        "calibration": [
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 7,
+            "probability": 0.4308183582487183,
+            "frequency": 0.2857142857142857
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 9,
+            "probability": 0.5312644159757579,
+            "frequency": 0.4444444444444444
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 4,
+            "probability": 0.6438253012048193,
+            "frequency": 0.25
+          }
+        ]
+      },
+      "market-only": {
+        "n": 20,
+        "correct": 8,
+        "wrong": 9,
+        "undecided": 3,
+        "accuracy": 0.47058823529411764,
+        "coverage": 0.85,
+        "brier": 0.26490518126026663,
+        "logLoss": 0.7244316025832461,
+        "ece": 0.16862047281710632,
+        "calibration": [
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 7,
+            "probability": 0.4308183582487183,
+            "frequency": 0.2857142857142857
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 9,
+            "probability": 0.5312644159757579,
+            "frequency": 0.4444444444444444
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 4,
+            "probability": 0.6438253012048193,
+            "frequency": 0.25
+          }
+        ]
+      }
+    },
+    "TT Elite Series": {
+      "sports-only": {
+        "n": 12,
+        "correct": 0,
+        "wrong": 0,
+        "undecided": 12,
+        "accuracy": null,
+        "coverage": 0.0,
+        "brier": 0.25,
+        "logLoss": 0.6931471805599453,
+        "ece": 0.16666666666666666,
+        "calibration": [
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 12,
+            "probability": 0.5,
+            "frequency": 0.3333333333333333
+          }
+        ]
+      },
+      "sports-and-market": {
+        "n": 12,
+        "correct": 5,
+        "wrong": 5,
+        "undecided": 2,
+        "accuracy": 0.5,
+        "coverage": 0.8333333333333334,
+        "brier": 0.2514273683810598,
+        "logLoss": 0.6946240149872379,
+        "ece": 0.1869459207932204,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 1,
+            "probability": 0.23404255319148937,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 1,
+            "probability": 0.35494880546075086,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 4,
+            "probability": 0.4506003952926557,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 3,
+            "probability": 0.5121951219512195,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 3,
+            "probability": 0.6400586353944563,
+            "frequency": 0.3333333333333333
+          }
+        ]
+      },
+      "market-only": {
+        "n": 12,
+        "correct": 5,
+        "wrong": 5,
+        "undecided": 2,
+        "accuracy": 0.5,
+        "coverage": 0.8333333333333334,
+        "brier": 0.2514273683810598,
+        "logLoss": 0.6946240149872379,
+        "ece": 0.1869459207932204,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 1,
+            "probability": 0.23404255319148937,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 1,
+            "probability": 0.35494880546075086,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 4,
+            "probability": 0.4506003952926557,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 3,
+            "probability": 0.5121951219512195,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 3,
+            "probability": 0.6400586353944563,
+            "frequency": 0.3333333333333333
+          }
+        ]
+      }
+    }
+  },
+  "perDay": {
+    "2026-11-02": {
+      "sports-only": {
+        "n": 25,
+        "correct": 0,
+        "wrong": 0,
+        "undecided": 25,
+        "accuracy": null,
+        "coverage": 0.0,
+        "brier": 0.25,
+        "logLoss": 0.6931471805599452,
+        "ece": 0.09999999999999998,
+        "calibration": [
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 25,
+            "probability": 0.5,
+            "frequency": 0.6
+          }
+        ]
+      },
+      "sports-and-market": {
+        "n": 25,
+        "correct": 14,
+        "wrong": 9,
+        "undecided": 2,
+        "accuracy": 0.6086956521739131,
+        "coverage": 0.92,
+        "brier": 0.2517187357457893,
+        "logLoss": 0.6984588289802306,
+        "ece": 0.20947125421071808,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 1,
+            "probability": 0.2686567164179104,
+            "frequency": 1.0
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 1,
+            "probability": 0.35494880546075086,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 9,
+            "probability": 0.44639335485081294,
+            "frequency": 0.4444444444444444
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 8,
+            "probability": 0.5470139047184864,
+            "frequency": 0.875
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 5,
+            "probability": 0.6480807187795551,
+            "frequency": 0.4
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 1,
+            "probability": 0.7313432835820896,
+            "frequency": 1.0
+          }
+        ]
+      },
+      "market-only": {
+        "n": 25,
+        "correct": 14,
+        "wrong": 9,
+        "undecided": 2,
+        "accuracy": 0.6086956521739131,
+        "coverage": 0.92,
+        "brier": 0.2517187357457893,
+        "logLoss": 0.6984588289802306,
+        "ece": 0.20947125421071808,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 1,
+            "probability": 0.2686567164179104,
+            "frequency": 1.0
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 1,
+            "probability": 0.35494880546075086,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 9,
+            "probability": 0.44639335485081294,
+            "frequency": 0.4444444444444444
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 8,
+            "probability": 0.5470139047184864,
+            "frequency": 0.875
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 5,
+            "probability": 0.6480807187795551,
+            "frequency": 0.4
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 1,
+            "probability": 0.7313432835820896,
+            "frequency": 1.0
+          }
+        ]
+      }
+    },
+    "2026-11-03": {
+      "sports-only": {
+        "n": 23,
+        "correct": 0,
+        "wrong": 0,
+        "undecided": 23,
+        "accuracy": null,
+        "coverage": 0.0,
+        "brier": 0.25,
+        "logLoss": 0.6931471805599453,
+        "ece": 0.15217391304347827,
+        "calibration": [
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 23,
+            "probability": 0.5,
+            "frequency": 0.34782608695652173
+          }
+        ]
+      },
+      "sports-and-market": {
+        "n": 23,
+        "correct": 10,
+        "wrong": 10,
+        "undecided": 3,
+        "accuracy": 0.5,
+        "coverage": 0.8695652173913043,
+        "brier": 0.2723177371885567,
+        "logLoss": 0.7452128897859105,
+        "ece": 0.18227019347694154,
+        "calibration": [
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 4,
+            "probability": 0.3693054261845332,
+            "frequency": 0.25
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 5,
+            "probability": 0.467979075938599,
+            "frequency": 0.4
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 7,
+            "probability": 0.5268878542135611,
+            "frequency": 0.42857142857142855
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 6,
+            "probability": 0.6454881496119177,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 1,
+            "probability": 0.813953488372093,
+            "frequency": 0.0
+          }
+        ]
+      },
+      "market-only": {
+        "n": 23,
+        "correct": 10,
+        "wrong": 10,
+        "undecided": 3,
+        "accuracy": 0.5,
+        "coverage": 0.8695652173913043,
+        "brier": 0.2723177371885567,
+        "logLoss": 0.7452128897859105,
+        "ece": 0.18227019347694154,
+        "calibration": [
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 4,
+            "probability": 0.3693054261845332,
+            "frequency": 0.25
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 5,
+            "probability": 0.467979075938599,
+            "frequency": 0.4
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 7,
+            "probability": 0.5268878542135611,
+            "frequency": 0.42857142857142855
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 6,
+            "probability": 0.6454881496119177,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "n": 1,
+            "probability": 0.813953488372093,
+            "frequency": 0.0
+          }
+        ]
+      }
+    },
+    "2026-11-04": {
+      "sports-only": {
+        "n": 40,
+        "correct": 0,
+        "wrong": 0,
+        "undecided": 40,
+        "accuracy": null,
+        "coverage": 0.0,
+        "brier": 0.25,
+        "logLoss": 0.6931471805599453,
+        "ece": 0.07500000000000001,
+        "calibration": [
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 40,
+            "probability": 0.5,
+            "frequency": 0.425
+          }
+        ]
+      },
+      "sports-and-market": {
+        "n": 40,
+        "correct": 21,
+        "wrong": 18,
+        "undecided": 1,
+        "accuracy": 0.5384615384615384,
+        "coverage": 0.975,
+        "brier": 0.23128339697449776,
+        "logLoss": 0.6517156965250317,
+        "ece": 0.12521600405253736,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 4,
+            "probability": 0.2628868471953578,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 3,
+            "probability": 0.35576606768370406,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 12,
+            "probability": 0.44020728737654685,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 16,
+            "probability": 0.5457657954141397,
+            "frequency": 0.4375
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 3,
+            "probability": 0.6525170648464164,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 2,
+            "probability": 0.7587609511889861,
+            "frequency": 1.0
+          }
+        ]
+      },
+      "market-only": {
+        "n": 40,
+        "correct": 21,
+        "wrong": 18,
+        "undecided": 1,
+        "accuracy": 0.5384615384615384,
+        "coverage": 0.975,
+        "brier": 0.23128339697449776,
+        "logLoss": 0.6517156965250317,
+        "ece": 0.12521600405253736,
+        "calibration": [
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "n": 4,
+            "probability": 0.2628868471953578,
+            "frequency": 0.0
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "n": 3,
+            "probability": 0.35576606768370406,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "n": 12,
+            "probability": 0.44020728737654685,
+            "frequency": 0.5
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "n": 16,
+            "probability": 0.5457657954141397,
+            "frequency": 0.4375
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "n": 3,
+            "probability": 0.6525170648464164,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "n": 2,
+            "probability": 0.7587609511889861,
+            "frequency": 1.0
+          }
+        ]
+      }
+    }
+  },
+  "independentValidation": false,
+  "operationallyValidated": false,
+  "roi": null,
+  "limitations": [
+    "Descriptive post-report summary; not extra independent evidence or optimized selection rule.",
+    "Every bin/league/day is a subset of the same 88 events; do not sum them as new tests.",
+    "All odds source AU; no operational ADM qualification."
+  ]
+}

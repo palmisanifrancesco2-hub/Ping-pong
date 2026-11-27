@@ -1,0 +1,9 @@
+{
+  "sourceProtocol": "protocol-sports-favorites-v36.json",
+  "calibrationLagDays": 2,
+  "minimumCalibrationMatches": 70,
+  "minimumCalibrationDays": 4,
+  "residualPenalty": 1,
+  "minimumPrice": 1.3,
+  "bootstrap": {"blockDays": 3, "bootstrapReplicates": 10000, "familyComparisons": 3, "seed": 3701}
+}

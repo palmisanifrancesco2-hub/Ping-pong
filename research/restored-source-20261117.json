@@ -1,0 +1,384 @@
+{
+  "verifiedAt": "2026-11-17T19:46:32.070Z",
+  "commit": "82d13602a6c32437f14619ff7e22e8e107223804",
+  "deployment": "dpl_E1BYD5HUxc9Ymn6KaNwHtN47Q34n",
+  "evidence": "Normal application deployment checks; no private audit script executed.",
+  "feed": {
+    "matches": 454,
+    "competitions": 9,
+    "marketNames": 43,
+    "quoteEntries": 3130,
+    "warming": false,
+    "bookmakerSite": "bet365.com.au"
+  },
+  "archive": {
+    "accepted": 33934,
+    "rejected": 1329,
+    "from": "2026-10-05T12:42:25.998473Z",
+    "to": "2026-11-17T19:40:52.560703Z",
+    "source": "postgres"
+  },
+  "observations": [
+    {
+      "at": "2026-11-17T19:46:32.664Z",
+      "marketStudyBootstrap": {
+        "status": "completed",
+        "captured": 100,
+        "settled": 97,
+        "attempted": 97,
+        "sourceErrors": 0,
+        "total": 1200,
+        "checkedAt": "2026-11-17T19:46:29.057Z"
+      },
+      "persisted": {
+        "captured": 1200,
+        "settled": 1057,
+        "pending": 140,
+        "observedDays": 12,
+        "scheduled": true,
+        "operationallyValidated": false
+      }
+    },
+    {
+      "at": "2026-11-17T19:46:32.664Z",
+      "adaptiveTrainingBootstrap": {
+        "day": "2026-11-17",
+        "checkedAt": "2026-11-17T19:46:32.070Z",
+        "automaticPromotion": false,
+        "operationallyValidated": false,
+        "status": "daily_already_attempted",
+        "reason": "Tentativo già registrato oggi; prossimo tentativo nel prossimo giorno UTC."
+      }
+    },
+    {
+      "at": "2026-11-17T19:46:32.070Z",
+      "winnerShadowStatus": "winner-challengers-v10-20261105",
+      "captured": 880,
+      "settled": 748,
+      "pending": 128,
+      "invalid": 4,
+      "observedDays": 12,
+      "models": [
+        {
+          "id": "current-eb",
+          "n": 748,
+          "correct": 405,
+          "wrong": 343,
+          "undecided": 0,
+          "brier": 0.2437669656442642,
+          "logLoss": 0.680530411118258,
+          "ece": 0.03307027605395453
+        },
+        {
+          "id": "full-logistic",
+          "n": 748,
+          "correct": 414,
+          "wrong": 334,
+          "undecided": 0,
+          "brier": 0.24215425014328712,
+          "logLoss": 0.6771460870350167,
+          "ece": 0.026696063053884497
+        },
+        {
+          "id": "scores-logistic",
+          "n": 748,
+          "correct": 420,
+          "wrong": 328,
+          "undecided": 0,
+          "brier": 0.24247901219332987,
+          "logLoss": 0.6777923773500772,
+          "ece": 0.023074266921206673
+        },
+        {
+          "id": "context-logistic",
+          "n": 748,
+          "correct": 417,
+          "wrong": 331,
+          "undecided": 0,
+          "brier": 0.24350424243282898,
+          "logLoss": 0.6800069811766565,
+          "ece": 0.023343391328867442
+        }
+      ],
+      "league": {
+        "n": 748,
+        "brier": 0.2500542917982601,
+        "logLoss": 0.6932583029099295,
+        "ece": 0.025927995015973652,
+        "correct": 379,
+        "wrong": 369,
+        "undecided": 0,
+        "accuracy": 0.5066844919786097
+      },
+      "bookmaker": {
+        "n": 748,
+        "brier": 0.22930123646196135,
+        "logLoss": 0.6495179703403443,
+        "ece": 0.02802908778472184,
+        "correct": 425,
+        "wrong": 260,
+        "undecided": 63,
+        "accuracy": 0.6204379562043796
+      },
+      "checkpoints": [],
+      "validated": false
+    },
+    {
+      "at": "2026-11-17T19:46:32.070Z",
+      "winnerReviewSlices": "winner-challengers-v10-20261105",
+      "leagues": [
+        {
+          "league": "Czech Liga Pro",
+          "n": 18,
+          "correct": 6,
+          "wrong": 12,
+          "brier": 0.2642453685987234
+        },
+        {
+          "league": "Setka Cup",
+          "n": 33,
+          "correct": 18,
+          "wrong": 15,
+          "brier": 0.24636325348062388
+        },
+        {
+          "league": "TT Cup",
+          "n": 7,
+          "correct": 3,
+          "wrong": 4,
+          "brier": 0.24631047465731704
+        },
+        {
+          "league": "TT Elite Series",
+          "n": 6,
+          "correct": 3,
+          "wrong": 3,
+          "brier": 0.27150452969452876
+        }
+      ],
+      "confidence": [
+        {
+          "from": 0.5,
+          "to": 0.55,
+          "n": 49,
+          "correct": 22,
+          "wrong": 27,
+          "brier": 0.25287461912427955
+        },
+        {
+          "from": 0.55,
+          "to": 0.6,
+          "n": 15,
+          "correct": 8,
+          "wrong": 7,
+          "brier": 0.25658321088775354
+        },
+        {
+          "from": 0.6,
+          "to": 1.00001,
+          "n": 0,
+          "correct": 0,
+          "wrong": 0,
+          "brier": null
+        }
+      ]
+    },
+    {
+      "at": "2026-11-17T19:46:32.070Z",
+      "winnerReviewStatus": "winner-challengers-v10-20261105",
+      "cutoff": "2026-11-05T20:55:54.694Z",
+      "expected": 64,
+      "n": 64,
+      "models": [
+        {
+          "id": "current-eb",
+          "n": 64,
+          "correct": 30,
+          "wrong": 34,
+          "undecided": 0,
+          "brier": 0.25374382031884374,
+          "logLoss": 0.7007156696101621,
+          "ece": 0.05176780183872556
+        },
+        {
+          "id": "full-logistic",
+          "n": 64,
+          "correct": 25,
+          "wrong": 39,
+          "undecided": 0,
+          "brier": 0.26711424292592334,
+          "logLoss": 0.7279600457849299,
+          "ece": 0.06448983568610442
+        },
+        {
+          "id": "scores-logistic",
+          "n": 64,
+          "correct": 31,
+          "wrong": 33,
+          "undecided": 0,
+          "brier": 0.2528936842358981,
+          "logLoss": 0.6991228009008694,
+          "ece": 0.08808444819517547
+        },
+        {
+          "id": "context-logistic",
+          "n": 64,
+          "correct": 28,
+          "wrong": 36,
+          "undecided": 0,
+          "brier": 0.2594010104420655,
+          "logLoss": 0.7119931059483805,
+          "ece": 0.07786280476968188
+        }
+      ],
+      "reference": {
+        "n": 64,
+        "brier": 0.2501849279147983,
+        "logLoss": 0.693517393988208,
+        "ece": 0.050097705425612274,
+        "correct": 30,
+        "wrong": 34,
+        "undecided": 0,
+        "accuracy": 0.46875
+      },
+      "validated": false
+    },
+    {
+      "at": "2026-11-17T19:46:31.241Z",
+      "marketStudyStatus": "forward-markets-v9-20261105",
+      "checkedAt": "2026-11-17T19:46:31.220Z",
+      "captured": 1200,
+      "settled": 1057,
+      "pending": 140,
+      "invalid": 3,
+      "observedDays": 12,
+      "targets": [
+        {
+          "target": "winner",
+          "n": 1057,
+          "correct": 562,
+          "wrong": 495,
+          "undecided": 0,
+          "accuracy": 0.5316934720908231
+        },
+        {
+          "target": "first-set",
+          "n": 1057,
+          "correct": 562,
+          "wrong": 495,
+          "undecided": 0,
+          "accuracy": 0.5316934720908231
+        },
+        {
+          "target": "first-set-points-over-19.5",
+          "n": 1057,
+          "correct": 698,
+          "wrong": 359,
+          "undecided": 0,
+          "accuracy": 0.6603595080416272
+        },
+        {
+          "target": "sets-over-3.5",
+          "n": 1057,
+          "correct": 738,
+          "wrong": 319,
+          "undecided": 0,
+          "accuracy": 0.6982024597918638
+        },
+        {
+          "target": "sets-over-4.5",
+          "n": 1057,
+          "correct": 703,
+          "wrong": 354,
+          "undecided": 0,
+          "accuracy": 0.6650898770104068
+        },
+        {
+          "target": "points-over-74.5",
+          "n": 1057,
+          "correct": 556,
+          "wrong": 501,
+          "undecided": 0,
+          "accuracy": 0.5260170293282876
+        },
+        {
+          "target": "points-over-79.5",
+          "n": 1057,
+          "correct": 632,
+          "wrong": 425,
+          "undecided": 0,
+          "accuracy": 0.597918637653737
+        },
+        {
+          "target": "points-over-84.5",
+          "n": 1057,
+          "correct": 708,
+          "wrong": 349,
+          "undecided": 0,
+          "accuracy": 0.6698202459791863
+        },
+        {
+          "target": "home-set-handicap-minus-1.5",
+          "n": 1057,
+          "correct": 740,
+          "wrong": 317,
+          "undecided": 0,
+          "accuracy": 0.7000946073793756
+        },
+        {
+          "target": "home-set-handicap-plus-1.5",
+          "n": 1057,
+          "correct": 671,
+          "wrong": 386,
+          "undecided": 0,
+          "accuracy": 0.6348155156102177
+        },
+        {
+          "target": "home-point-handicap-minus-5.5",
+          "n": 1057,
+          "correct": 730,
+          "wrong": 327,
+          "undecided": 0,
+          "accuracy": 0.6906338694418165
+        },
+        {
+          "target": "home-point-handicap-plus-5.5",
+          "n": 1057,
+          "correct": 642,
+          "wrong": 415,
+          "undecided": 0,
+          "accuracy": 0.6073793755912961
+        },
+        {
+          "target": "home-point-handicap-minus-9.5",
+          "n": 1057,
+          "correct": 866,
+          "wrong": 191,
+          "undecided": 0,
+          "accuracy": 0.8192999053926207
+        },
+        {
+          "target": "home-point-handicap-plus-9.5",
+          "n": 1057,
+          "correct": 821,
+          "wrong": 236,
+          "undecided": 0,
+          "accuracy": 0.7767265846736046
+        }
+      ]
+    },
+    {
+      "at": "2026-11-17T19:46:29.200Z",
+      "marketStudyRun": "forward-markets-v9-20261105",
+      "status": "completed",
+      "captured": 100,
+      "settled": 97,
+      "attempted": 97,
+      "sourceErrors": 0,
+      "total": 1200,
+      "checkedAt": "2026-11-17T19:46:29.057Z"
+    }
+  ],
+  "independentValidation": false,
+  "automaticPromotion": false
+}

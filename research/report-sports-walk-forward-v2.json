@@ -1,0 +1,743 @@
+{
+  "table_tennis": {
+    "scope": "WTT singolare, uomini e donne",
+    "sourceHashes": {
+      "table_tennis_wtt_men_std.csv": "f2cf0fcf65ff398aa9f889042071193c8bdd8ec8ff71dfbd7ddf5f8fb5837545",
+      "table_tennis_wtt_women_std.csv": "d9aec1488bcee66625a0973d6ca6e0e5cc58dd8d22a193c0194b6bf908811d6b"
+    },
+    "matches": 10284,
+    "eligible": 6858,
+    "folds": [
+      {
+        "train": 2239,
+        "selection": 773,
+        "calibration": 841,
+        "from": "2024-06-19",
+        "to": "2025-01-06",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 1.0,
+        "referenceMetrics": {
+          "test": 796,
+          "correct": 551,
+          "logLoss": 0.595967463501587,
+          "brier": 0.20321598551312098,
+          "ece10": 0.03709320160166617
+        },
+        "candidateMetrics": {
+          "test": 796,
+          "correct": 549,
+          "logLoss": 0.5907408306208206,
+          "brier": 0.20162374893156887,
+          "ece10": 0.0248644280052701
+        }
+      },
+      {
+        "train": 3416,
+        "selection": 626,
+        "calibration": 607,
+        "from": "2025-01-11",
+        "to": "2025-07-21",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 0.85,
+        "referenceMetrics": {
+          "test": 1164,
+          "correct": 810,
+          "logLoss": 0.5851133708335736,
+          "brier": 0.20076987393979287,
+          "ece10": 0.038280444241499005
+        },
+        "candidateMetrics": {
+          "test": 1164,
+          "correct": 824,
+          "logLoss": 0.5716534382210149,
+          "brier": 0.19494666299567998,
+          "ece10": 0.03454279543671017
+        }
+      },
+      {
+        "train": 4445,
+        "selection": 611,
+        "calibration": 757,
+        "from": "2025-07-22",
+        "to": "2025-12-10",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 0.85,
+        "referenceMetrics": {
+          "test": 1045,
+          "correct": 726,
+          "logLoss": 0.5646042712102816,
+          "brier": 0.19251549365824913,
+          "ece10": 0.05153921742818804
+        },
+        "candidateMetrics": {
+          "test": 1045,
+          "correct": 731,
+          "logLoss": 0.5581900437589377,
+          "brier": 0.1895779205821969,
+          "ece10": 0.04264775089123503
+        }
+      }
+    ],
+    "reference": {
+      "test": 3005,
+      "correct": 2087,
+      "logLoss": 0.5808564153119092,
+      "brier": 0.19854733730689972,
+      "ece10": 0.02730910147453592
+    },
+    "candidate": {
+      "test": 3005,
+      "correct": 2104,
+      "logLoss": 0.57202758701881,
+      "brier": 0.19484836834771915,
+      "ece10": 0.023024341560652164
+    },
+    "deltaLogLoss": -0.008828828293099196,
+    "interval95": [
+      -0.011757358079772663,
+      -0.005648404590429223
+    ],
+    "familyInterval95": [
+      -0.012848760618323076,
+      -0.004334347077146385
+    ]
+  },
+  "tennis": {
+    "scope": "ATP singolare",
+    "sourceHashes": {
+      "2019.csv": "7f1a21451ff622bb0c6a09690898db46d51e59dcdf08086d369753822e1d5478",
+      "2021.csv": "b9b1d31a4b0b9273b8f338cbb1347c5a847ad2361334ec760a286f5990fba347",
+      "2022.csv": "7190042565ab8400e74f44fda60700acb36ddf3c82d393f331a07589e05b5f52",
+      "2023.csv": "9b9671aa7c8156e74c2e4466675b7ed4e762bb8a58b7237a30daefd84ffceff5",
+      "2024.csv": "73aec32247a0db68d8aa8fd8003eefea132905177f1cb145502d9215b53311be",
+      "2025.csv": "78c356ef9328b89ae58a17564d61c02cdad2a3a007f6b8af5cfc17992b11bb2d"
+    },
+    "matches": 16876,
+    "eligible": 14185,
+    "folds": [
+      {
+        "train": 4622,
+        "selection": 1507,
+        "calibration": 1561,
+        "from": "2023-06-12",
+        "to": "2024-03-18",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 0.7,
+        "referenceMetrics": {
+          "test": 2045,
+          "correct": 1305,
+          "logLoss": 0.6263868032205001,
+          "brier": 0.21887320345014888,
+          "ece10": 0.01430216471156281
+        },
+        "candidateMetrics": {
+          "test": 2045,
+          "correct": 1309,
+          "logLoss": 0.6242807332016127,
+          "brier": 0.21794078687797533,
+          "ece10": 0.018659729325006313
+        }
+      },
+      {
+        "train": 6646,
+        "selection": 1859,
+        "calibration": 1230,
+        "from": "2024-04-01",
+        "to": "2025-01-27",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 0.85,
+        "referenceMetrics": {
+          "test": 2137,
+          "correct": 1392,
+          "logLoss": 0.6186065664200628,
+          "brier": 0.21593581191347525,
+          "ece10": 0.027666733071710338
+        },
+        "candidateMetrics": {
+          "test": 2137,
+          "correct": 1385,
+          "logLoss": 0.6180814913694387,
+          "brier": 0.215425108235652,
+          "ece10": 0.010260049281963115
+        }
+      },
+      {
+        "train": 8940,
+        "selection": 1983,
+        "calibration": 949,
+        "from": "2025-01-30",
+        "to": "2025-12-17",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 0.85,
+        "referenceMetrics": {
+          "test": 2313,
+          "correct": 1464,
+          "logLoss": 0.6278305034417,
+          "brier": 0.21960291669433674,
+          "ece10": 0.027189153802555228
+        },
+        "candidateMetrics": {
+          "test": 2313,
+          "correct": 1483,
+          "logLoss": 0.6252741220052946,
+          "brier": 0.21840347614040884,
+          "ece10": 0.01980853534452511
+        }
+      }
+    ],
+    "reference": {
+      "test": 6495,
+      "correct": 4161,
+      "logLoss": 0.6243410622765587,
+      "brier": 0.21816660160564308,
+      "ece10": 0.010979539187434549
+    },
+    "candidate": {
+      "test": 6495,
+      "correct": 4177,
+      "logLoss": 0.622594809954124,
+      "brier": 0.2172778453853447,
+      "ece10": 0.01015864945564456
+    },
+    "deltaLogLoss": -0.0017462523224347894,
+    "interval95": [
+      -0.0032142027106419127,
+      -0.00023049092053193523
+    ],
+    "familyInterval95": [
+      -0.0037438353724334322,
+      0.0003619219654486169
+    ]
+  },
+  "badminton": {
+    "scope": "BWF singolare, uomini e donne",
+    "sourceHashes": {
+      "badminton-normalized.json": "6c4ece256a1f04d60a9e1e8bdbbbd960eb556c73d67122c61e25294ea7947a67"
+    },
+    "matches": 48324,
+    "eligible": 37334,
+    "folds": [
+      {
+        "train": 12344,
+        "selection": 4296,
+        "calibration": 3874,
+        "from": "2018-01-14",
+        "to": "2021-01-31",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 0.85,
+        "referenceMetrics": {
+          "test": 5599,
+          "correct": 4024,
+          "logLoss": 0.5563422596681186,
+          "brier": 0.1877814483945205,
+          "ece10": 0.01964001957717056
+        },
+        "candidateMetrics": {
+          "test": 5599,
+          "correct": 4107,
+          "logLoss": 0.5396680268811077,
+          "brier": 0.1814817725237647,
+          "ece10": 0.022052383466794723
+        }
+      },
+      {
+        "train": 18469,
+        "selection": 3904,
+        "calibration": 3740,
+        "from": "2021-03-03",
+        "to": "2024-03-26",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 1.0,
+        "referenceMetrics": {
+          "test": 5231,
+          "correct": 3730,
+          "logLoss": 0.5506330243337128,
+          "brier": 0.18653805344529154,
+          "ece10": 0.020113822533381325
+        },
+        "candidateMetrics": {
+          "test": 5231,
+          "correct": 3783,
+          "logLoss": 0.535700087290001,
+          "brier": 0.18078197088529113,
+          "ece10": 0.01844602578499464
+        }
+      },
+      {
+        "train": 24389,
+        "selection": 3229,
+        "calibration": 3726,
+        "from": "2024-03-27",
+        "to": "2026-07-05",
+        "reference": "Elo",
+        "selected": "Gradient boosting",
+        "temperature": 0.85,
+        "referenceMetrics": {
+          "test": 5990,
+          "correct": 4242,
+          "logLoss": 0.5603176997576382,
+          "brier": 0.190792752307654,
+          "ece10": 0.014715911682666432
+        },
+        "candidateMetrics": {
+          "test": 5990,
+          "correct": 4263,
+          "logLoss": 0.5495662997234714,
+          "brier": 0.18617477582864814,
+          "ece10": 0.017243311105548532
+        }
+      }
+    ],
+    "reference": {
+      "test": 16820,
+      "correct": 11996,
+      "logLoss": 0.5559824425517063,
+      "brier": 0.18846715062164612,
+      "ece10": 0.010709326466276875
+    },
+    "candidate": {
+      "test": 16820,
+      "correct": 12153,
+      "logLoss": 0.5419590115615286,
+      "brier": 0.18293542457045892,
+      "ece10": 0.006798646037822819
+    },
+    "deltaLogLoss": -0.01402343099017774,
+    "interval95": [
+      -0.017085476102025425,
+      -0.011150512337906825
+    ],
+    "familyInterval95": [
+      -0.01831074199092447,
+      -0.009876996651272589
+    ]
+  },
+  "darts": {
+    "scope": "PDC Players Championship",
+    "sourceHashes": {
+      "darts-normalized.json": "9b396023795598c6f5c942f56728275f1b3a6823fff73bb769d296c60c4aabcc"
+    },
+    "matches": 26196,
+    "eligible": 24586,
+    "folds": [
+      {
+        "train": 8238,
+        "selection": 2501,
+        "calibration": 2457,
+        "from": "2023-02-12",
+        "to": "2024-02-13",
+        "reference": "Elo",
+        "selected": "Elo",
+        "temperature": 0.7,
+        "referenceMetrics": {
+          "test": 3753,
+          "correct": 2456,
+          "logLoss": 0.6333187388403722,
+          "brier": 0.22123195220536088,
+          "ece10": 0.03562029285998972
+        },
+        "candidateMetrics": {
+          "test": 3753,
+          "correct": 2456,
+          "logLoss": 0.6333187388403722,
+          "brier": 0.22123195220536088,
+          "ece10": 0.03562029285998972
+        }
+      },
+      {
+        "train": 11979,
+        "selection": 2526,
+        "calibration": 2444,
+        "from": "2024-02-19",
+        "to": "2025-02-17",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 1.0,
+        "referenceMetrics": {
+          "test": 3803,
+          "correct": 2512,
+          "logLoss": 0.6238171863471788,
+          "brier": 0.21664825959069658,
+          "ece10": 0.013480214565808637
+        },
+        "candidateMetrics": {
+          "test": 3803,
+          "correct": 2514,
+          "logLoss": 0.6251970671719033,
+          "brier": 0.2173461010277459,
+          "ece10": 0.01696107154473162
+        }
+      },
+      {
+        "train": 15736,
+        "selection": 2438,
+        "calibration": 2578,
+        "from": "2025-02-18",
+        "to": "2025-10-30",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica di riferimento",
+        "temperature": 1.0,
+        "referenceMetrics": {
+          "test": 3834,
+          "correct": 2487,
+          "logLoss": 0.6288649352940494,
+          "brier": 0.21922506099822037,
+          "ece10": 0.01927549344893188
+        },
+        "candidateMetrics": {
+          "test": 3834,
+          "correct": 2487,
+          "logLoss": 0.6288649352940494,
+          "brier": 0.21922506099822037,
+          "ece10": 0.01927549344893188
+        }
+      }
+    ],
+    "reference": {
+      "test": 11390,
+      "correct": 7455,
+      "logLoss": 0.628647071858088,
+      "brier": 0.21902596415428577,
+      "ece10": 0.014324592109217812
+    },
+    "candidate": {
+      "test": 11390,
+      "correct": 7457,
+      "logLoss": 0.6291077994065013,
+      "brier": 0.21925896599670008,
+      "ece10": 0.015018990653458648
+    },
+    "deltaLogLoss": 0.0004607275484132801,
+    "interval95": [
+      7.016561578620708e-05,
+      0.0008544870906837863
+    ],
+    "familyInterval95": [
+      -4.913863103384392e-05,
+      0.0010136415137877253
+    ]
+  },
+  "snooker": {
+    "scope": "Stagioni del circuito storico",
+    "sourceHashes": {
+      "snooker-normalized.json": "171180c10e181e5020c176fac18f45b0809711074866308465127ee422ecf151"
+    },
+    "matches": 46334,
+    "eligible": 39423,
+    "folds": [
+      {
+        "train": 2574,
+        "selection": 4374,
+        "calibration": 5213,
+        "from": "1997-07-01",
+        "to": "2004-07-01",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica di riferimento",
+        "temperature": 0.7,
+        "referenceMetrics": {
+          "test": 7617,
+          "correct": 4499,
+          "logLoss": 0.6626197434564582,
+          "brier": 0.23533204239182165,
+          "ece10": 0.02540144154867036
+        },
+        "candidateMetrics": {
+          "test": 7617,
+          "correct": 4499,
+          "logLoss": 0.6626197434564582,
+          "brier": 0.23533204239182165,
+          "ece10": 0.02540144154867036
+        }
+      },
+      {
+        "train": 9737,
+        "selection": 5479,
+        "calibration": 4562,
+        "from": "2005-07-01",
+        "to": "2011-07-01",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica di riferimento",
+        "temperature": 0.7,
+        "referenceMetrics": {
+          "test": 5700,
+          "correct": 3329,
+          "logLoss": 0.6679271990900965,
+          "brier": 0.2377738030785669,
+          "ece10": 0.016115068818062815
+        },
+        "candidateMetrics": {
+          "test": 5700,
+          "correct": 3329,
+          "logLoss": 0.6679271990900965,
+          "brier": 0.2377738030785669,
+          "ece10": 0.016115068818062815
+        }
+      },
+      {
+        "train": 17248,
+        "selection": 3821,
+        "calibration": 4409,
+        "from": "2012-07-01",
+        "to": "2019-07-01",
+        "reference": "Logistica di riferimento",
+        "selected": "Gradient boosting",
+        "temperature": 0.7,
+        "referenceMetrics": {
+          "test": 13945,
+          "correct": 9095,
+          "logLoss": 0.6279869765586125,
+          "brier": 0.21891334060139614,
+          "ece10": 0.03505100328438397
+        },
+        "candidateMetrics": {
+          "test": 13945,
+          "correct": 9049,
+          "logLoss": 0.6302495545758788,
+          "brier": 0.21999373398690583,
+          "ece10": 0.03671822684592381
+        }
+      }
+    ],
+    "reference": {
+      "test": 27262,
+      "correct": 16923,
+      "logLoss": 0.6460141592264413,
+      "brier": 0.22744411191889097,
+      "ece10": 0.01149887767339121
+    },
+    "candidate": {
+      "test": 27262,
+      "correct": 16877,
+      "logLoss": 0.6471715083002723,
+      "brier": 0.227996752435395,
+      "ece10": 0.009997941763711438
+    },
+    "deltaLogLoss": 0.00115734907383091,
+    "interval95": [
+      0.0005240466050111945,
+      0.0017195041914961308
+    ],
+    "familyInterval95": [
+      0.00031585048069830945,
+      0.0019525609927462002
+    ]
+  },
+  "boxing": {
+    "scope": "Incontri per titoli mondiali",
+    "sourceHashes": {
+      "boxing-normalized.json": "485bb2fffe58fea1c158c939d7c95e69146f9f7d5f353b03f0a687d684cd5fc2"
+    },
+    "matches": 7023,
+    "eligible": 698,
+    "folds": [
+      {
+        "train": 238,
+        "selection": 72,
+        "calibration": 74,
+        "from": "2004-09-18",
+        "to": "2011-09-03",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 1.5,
+        "referenceMetrics": {
+          "test": 107,
+          "correct": 65,
+          "logLoss": 0.6522431368784714,
+          "brier": 0.2306412831993627,
+          "ece10": 0.09912672684342386
+        },
+        "candidateMetrics": {
+          "test": 107,
+          "correct": 65,
+          "logLoss": 0.6525602948906216,
+          "brier": 0.23185574282557908,
+          "ece10": 0.0999723317240261
+        }
+      },
+      {
+        "train": 347,
+        "selection": 74,
+        "calibration": 70,
+        "from": "2011-09-10",
+        "to": "2017-09-09",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 0.85,
+        "referenceMetrics": {
+          "test": 104,
+          "correct": 73,
+          "logLoss": 0.6171514901085556,
+          "brier": 0.2135734251559106,
+          "ece10": 0.09684234502886747
+        },
+        "candidateMetrics": {
+          "test": 104,
+          "correct": 71,
+          "logLoss": 0.6104408018355033,
+          "brier": 0.210487981111374,
+          "ece10": 0.1044348597728311
+        }
+      },
+      {
+        "train": 458,
+        "selection": 71,
+        "calibration": 66,
+        "from": "2017-12-09",
+        "to": "2026-10-24",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 1.5,
+        "referenceMetrics": {
+          "test": 103,
+          "correct": 68,
+          "logLoss": 0.5965540946032429,
+          "brier": 0.2043598325853587,
+          "ece10": 0.09843416219462135
+        },
+        "candidateMetrics": {
+          "test": 103,
+          "correct": 69,
+          "logLoss": 0.5744711018717846,
+          "brier": 0.19447612133084635,
+          "ece10": 0.09715901056690945
+        }
+      }
+    ],
+    "reference": {
+      "test": 314,
+      "correct": 206,
+      "logLoss": 0.6223530011510199,
+      "brier": 0.21636724928292503,
+      "ece10": 0.048787065854668195
+    },
+    "candidate": {
+      "test": 314,
+      "correct": 205,
+      "logLoss": 0.6129946447037665,
+      "brier": 0.21251705418788863,
+      "ece10": 0.039609097030080496
+    },
+    "deltaLogLoss": -0.009358356447253378,
+    "interval95": [
+      -0.022734107973483315,
+      0.004499542420750916
+    ],
+    "familyInterval95": [
+      -0.029147335895885158,
+      0.009606416396743766
+    ]
+  },
+  "mma": {
+    "scope": "UFC",
+    "sourceHashes": {
+      "mma-normalized.json": "a66d07119d1fedea9035d96d6368aaf83b4183ef07f80de70fc7ff149cf39c3d"
+    },
+    "matches": 6618,
+    "eligible": 2298,
+    "folds": [
+      {
+        "train": 673,
+        "selection": 203,
+        "calibration": 203,
+        "from": "2021-08-07",
+        "to": "2023-04-29",
+        "reference": "Elo",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 1.5,
+        "referenceMetrics": {
+          "test": 394,
+          "correct": 221,
+          "logLoss": 0.6840117466779465,
+          "brier": 0.24548881886986898,
+          "ece10": 0.02593842974811923
+        },
+        "candidateMetrics": {
+          "test": 394,
+          "correct": 220,
+          "logLoss": 0.6840203260148064,
+          "brier": 0.2454817856103189,
+          "ece10": 0.04957633344827284
+        }
+      },
+      {
+        "train": 970,
+        "selection": 226,
+        "calibration": 277,
+        "from": "2023-05-06",
+        "to": "2025-02-01",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica con forma e precedenti",
+        "temperature": 0.7,
+        "referenceMetrics": {
+          "test": 415,
+          "correct": 234,
+          "logLoss": 0.6809368175068309,
+          "brier": 0.24394835926773828,
+          "ece10": 0.035062185727337464
+        },
+        "candidateMetrics": {
+          "test": 415,
+          "correct": 234,
+          "logLoss": 0.6765429890143697,
+          "brier": 0.2418037543801687,
+          "ece10": 0.03538297018274143
+        }
+      },
+      {
+        "train": 1339,
+        "selection": 262,
+        "calibration": 287,
+        "from": "2025-02-08",
+        "to": "2026-10-10",
+        "reference": "Logistica di riferimento",
+        "selected": "Logistica di riferimento",
+        "temperature": 1.5,
+        "referenceMetrics": {
+          "test": 410,
+          "correct": 245,
+          "logLoss": 0.6709212246411799,
+          "brier": 0.23898081769603063,
+          "ece10": 0.03577271256961797
+        },
+        "candidateMetrics": {
+          "test": 410,
+          "correct": 245,
+          "logLoss": 0.6709212246411799,
+          "brier": 0.23898081769603063,
+          "ece10": 0.03577271256961797
+        }
+      }
+    ],
+    "reference": {
+      "test": 1219,
+      "correct": 700,
+      "logLoss": 0.6785620258895237,
+      "brier": 0.242775470866458,
+      "ece10": 0.026228616162615768
+    },
+    "candidate": {
+      "test": 1219,
+      "correct": 699,
+      "logLoss": 0.6770689507741434,
+      "brier": 0.2420430819143628,
+      "ece10": 0.023191621349033506
+    },
+    "deltaLogLoss": -0.0014930751153803452,
+    "interval95": [
+      -0.0051636164893740346,
+      0.002239495524308302
+    ],
+    "familyInterval95": [
+      -0.006395719600246698,
+      0.0031439220536999537
+    ]
+  }
+}

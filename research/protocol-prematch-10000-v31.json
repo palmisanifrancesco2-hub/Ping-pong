@@ -1,0 +1,11 @@
+{
+  "archiveProtocol": "protocol-live-expanded-v29.json",
+  "modelProtocol": "protocol-live-setka-v28.json",
+  "testBoundariesUtc": ["2026-10-22", "2026-10-27", "2026-11-01", "2026-11-05"],
+  "trainingEndsDaysBeforeFold": 6,
+  "calibrationStartsDaysBeforeFold": 4,
+  "calibrationEndsDaysBeforeFold": 2,
+  "quoteMinimumExclusive": 2.0,
+  "pairedComparisons": {"blockDays": 3, "bootstrapReplicates": 10000, "familyComparisons": 2, "seed": 311},
+  "notes": "Use all complete dates, not a quota-based or outcome-based subset. Both candidates train with eligible archived Setka 2022 and prior MoviOdds outcomes. Scores only at prematch 0–0. Archived finish date proxies match date, with existing two-day history lag. Quotes are optional, from the existing MoviOdds closing cache and matched to the same UTC date as the model decision."
+}

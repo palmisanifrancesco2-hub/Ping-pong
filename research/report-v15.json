@@ -1,0 +1,308 @@
+{
+  "version": "wtt-training-v15",
+  "generatedAt": "2026-11-07T11:59:02.640101+00:00",
+  "protocol": {
+    "version": "wtt-training-v15",
+    "createdAt": "2026-11-07T11:59:00.418590+00:00",
+    "inputs": {
+      "table_tennis_wtt_men_std.csv": "f2cf0fcf65ff398aa9f889042071193c8bdd8ec8ff71dfbd7ddf5f8fb5837545",
+      "table_tennis_wtt_women_std.csv": "d9aec1488bcee66625a0973d6ca6e0e5cc58dd8d22a193c0194b6bf908811d6b"
+    },
+    "trainBefore": "2024-01-01",
+    "calibrationBefore": "2025-01-01",
+    "testBefore": "2026-01-01",
+    "minimumPlayerHistory": 5,
+    "historyLagDays": 7,
+    "lagAssumption": "Date-only source; seven-day delay is conservative convention, not verified outcome availability or kickoff time.",
+    "candidates": [
+      "logistic",
+      "boosted"
+    ],
+    "logisticC": 1,
+    "boosted": {
+      "max_iter": 100,
+      "max_depth": 3,
+      "learning_rate": 0.05,
+      "min_samples_leaf": 30,
+      "l2_regularization": 5
+    },
+    "temperatures": [
+      0.5,
+      0.75,
+      1,
+      1.25,
+      1.5
+    ],
+    "shrinkWeights": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "eloK": 20,
+    "seed": 20261107,
+    "bootstrapReplicates": 10000,
+    "blockDays": 3,
+    "familyComparisons": 12,
+    "features": [
+      "eloDifference/400",
+      "smoothedWinRateDifference",
+      "last10WinRateDifference",
+      "setMarginRateDifference",
+      "pointMarginRateDifference",
+      "smoothedH2H",
+      "logHistorySizeDifference"
+    ],
+    "target": "winner only",
+    "symmetry": "Augment training by player reversal and symmetrize model outputs",
+    "automaticPromotion": false,
+    "limitations": [
+      "External WTT cohorts do not validate current minor-league application.",
+      "Ranking and declared best_of excluded; metadata inconsistent.",
+      "All cohort IDs prefixed by source gender; no joining with MoviOdds.",
+      "No historical executable odds; no ROI or operational EV claim.",
+      "Downloaded rows include training, calibration, cold starts and excluded rows; not 10000 independent test predictions.",
+      "Raw source already audited; performance has not yet been inspected for this protocol.",
+      "No changes to original prospective protocols or operational models."
+    ]
+  },
+  "cohorts": [
+    {
+      "sourceFile": "table_tennis_wtt_men_std.csv",
+      "raw": 5442,
+      "scoreCoherent": 5436,
+      "excluded": {
+        "inconsistentScoreOrIdentity": 6
+      },
+      "coldStart": 1918,
+      "eligibleFeatureRows": 3518,
+      "training": 1231,
+      "calibration": 1146,
+      "test": 1141,
+      "embargoOrOutsideWindows": 0,
+      "candidates": [
+        {
+          "name": "logistic",
+          "temperature": 1.5,
+          "shrinkWeight": 0.75,
+          "metrics": {
+            "n": 1141,
+            "brier": 0.2054878368650093,
+            "logLoss": 0.597107140019499,
+            "ece": 0.020377513102763894,
+            "correct": 775,
+            "wrong": 366,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "elo": {
+              "lower": -0.016869903934247494,
+              "upper": 0.0014932274352806405,
+              "days": 25,
+              "blockDays": 3,
+              "familyComparisons": 12
+            },
+            "neutral": {
+              "lower": -0.06122211130281899,
+              "upper": -0.030685939622023355,
+              "days": 25,
+              "blockDays": 3,
+              "familyComparisons": 12
+            }
+          }
+        },
+        {
+          "name": "boosted",
+          "temperature": 1,
+          "shrinkWeight": 1,
+          "metrics": {
+            "n": 1141,
+            "brier": 0.21733798287972736,
+            "logLoss": 0.6237297094581423,
+            "ece": 0.021291519697021956,
+            "correct": 736,
+            "wrong": 405,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "elo": {
+              "lower": -0.001920648693518068,
+              "upper": 0.009502179736731705,
+              "days": 25,
+              "blockDays": 3,
+              "familyComparisons": 12
+            },
+            "neutral": {
+              "lower": -0.04772798585362858,
+              "upper": -0.021224988400304207,
+              "days": 25,
+              "blockDays": 3,
+              "familyComparisons": 12
+            }
+          }
+        }
+      ],
+      "comparators": {
+        "elo": {
+          "n": 1141,
+          "brier": 0.2129894545848177,
+          "logLoss": 0.6143920295500013,
+          "ece": 0.040922010045634574,
+          "correct": 760,
+          "wrong": 381,
+          "undecided": 0
+        },
+        "neutral": {
+          "n": 1141,
+          "brier": 0.25,
+          "logLoss": 0.6931471805599453,
+          "ece": 0.01621384750219106,
+          "correct": 0,
+          "wrong": 0,
+          "undecided": 1141
+        }
+      }
+    },
+    {
+      "sourceFile": "table_tennis_wtt_women_std.csv",
+      "raw": 4850,
+      "scoreCoherent": 4848,
+      "excluded": {
+        "inconsistentScoreOrIdentity": 2
+      },
+      "coldStart": 1701,
+      "eligibleFeatureRows": 3147,
+      "training": 1053,
+      "calibration": 1032,
+      "test": 1062,
+      "embargoOrOutsideWindows": 0,
+      "candidates": [
+        {
+          "name": "logistic",
+          "temperature": 0.75,
+          "shrinkWeight": 1,
+          "metrics": {
+            "n": 1062,
+            "brier": 0.18466270950537397,
+            "logLoss": 0.5491582681317224,
+            "ece": 0.025087660824703664,
+            "correct": 765,
+            "wrong": 297,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "elo": {
+              "lower": -0.016588927673498177,
+              "upper": 0.0015788307232950977,
+              "days": 25,
+              "blockDays": 3,
+              "familyComparisons": 12
+            },
+            "neutral": {
+              "lower": -0.088706597406467,
+              "upper": -0.04258832235999508,
+              "days": 25,
+              "blockDays": 3,
+              "familyComparisons": 12
+            }
+          }
+        },
+        {
+          "name": "boosted",
+          "temperature": 1,
+          "shrinkWeight": 1,
+          "metrics": {
+            "n": 1062,
+            "brier": 0.18614946122179124,
+            "logLoss": 0.5504615458410842,
+            "ece": 0.022858251682163107,
+            "correct": 759,
+            "wrong": 303,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "elo": {
+              "lower": -0.014549640404720721,
+              "upper": 0.005064557393800628,
+              "days": 25,
+              "blockDays": 3,
+              "familyComparisons": 12
+            },
+            "neutral": {
+              "lower": -0.08496784096710362,
+              "upper": -0.04146634212641497,
+              "days": 25,
+              "blockDays": 3,
+              "familyComparisons": 12
+            }
+          }
+        }
+      ],
+      "comparators": {
+        "elo": {
+          "n": 1062,
+          "brier": 0.19254533096089932,
+          "logLoss": 0.5680197990211997,
+          "ece": 0.06937546069313878,
+          "correct": 760,
+          "wrong": 302,
+          "undecided": 0
+        },
+        "neutral": {
+          "n": 1062,
+          "brier": 0.25,
+          "logLoss": 0.6931471805599453,
+          "ece": 0.00847457627118644,
+          "correct": 0,
+          "wrong": 0,
+          "undecided": 1062
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "elo": {
+      "n": 2203,
+      "brier": 0.20313395785826238,
+      "logLoss": 0.5920373727993943,
+      "ece": 0.054638562286964336,
+      "correct": 1520,
+      "wrong": 683,
+      "undecided": 0
+    },
+    "neutral": {
+      "n": 2203,
+      "brier": 0.25,
+      "logLoss": 0.6931471805599453,
+      "ece": 0.012482977757603268,
+      "correct": 0,
+      "wrong": 0,
+      "undecided": 2203
+    },
+    "logistic": {
+      "n": 2203,
+      "brier": 0.195448669703896,
+      "logLoss": 0.5739924319192635,
+      "ece": 0.01930322361708866,
+      "correct": 1540,
+      "wrong": 663,
+      "undecided": 0
+    },
+    "boosted": {
+      "n": 2203,
+      "brier": 0.20230293521711812,
+      "logLoss": 0.5884093328075224,
+      "ece": 0.021174387274431602,
+      "correct": 1495,
+      "wrong": 708,
+      "undecided": 0
+    }
+  },
+  "totalTestCases": 2203,
+  "rawRows": 10292,
+  "tenThousandTestCases": false,
+  "sourceDatesVerifiedAgainstOfficialResults": false,
+  "operationallyValidated": false,
+  "automaticPromotion": false
+}

@@ -1,0 +1,17 @@
+{
+ "version":"score-logistic-v3-20261104",
+ "targetFrom":"2026-10-30T00:00:00Z",
+ "targetToExclusive":"2026-11-02T00:00:00Z",
+ "maxTargets":600,
+ "minimumPlayerHistory":20,
+ "trainEnd":"2026-10-26T00:00:00Z",
+ "selectionEnd":"2026-10-28T00:00:00Z",
+ "calibrationEnd":"2026-10-30T00:00:00Z",
+ "candidates":["scores:0.001","scores:0.01","scores:0.1","full:0.001","full:0.01","full:0.1","form:0.001","form:0.01","form:0.1"],
+ "features":["elo20_difference","recent20_point_share_difference","recent20_set_share_difference","recent10_win_rate_difference","recent30_win_rate_difference","head_to_head_smoothed","rest_difference","matches24h_difference"],
+ "selection":"Minimum Brier on October 26-27 only; model fit only before October 26; symmetric no-intercept ridge logistic regression",
+ "calibration":"October 28-29 labels available before October 30; symmetric temperature scaling",
+ "holdout":"600 deterministic events October 30-November 1 excluding all known v2 start IDs; candidate fixed before evaluation",
+ "acceptance":{"minimumSamples":200,"minimumDays":3,"maximumECE":0.08,"pairedBrierUpper95":0},
+ "limitations":["Different event IDs do not make the already explored time period pristine","Retrospective gates alone never set productionValidated=true","No profit claims without valid point-in-time odds","Future observed predictions required for confirmation"]
+}

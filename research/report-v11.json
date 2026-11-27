@@ -1,0 +1,1303 @@
+{
+  "version": "score-projection-v11",
+  "generatedAt": "2026-11-05T23:52:23.865560+00:00",
+  "protocol": {
+    "version": "score-projection-v11",
+    "createdAt": "2026-11-05T23:48:39.606481+00:00",
+    "historyInput": ".research-data/3000-data.json",
+    "minimumPlayerHistory": 30,
+    "minimumTraining": 50,
+    "minimumCalibration": 40,
+    "calibrationDays": 2,
+    "foldStarts": [
+      "2026-10-25T00:00:00Z",
+      "2026-10-27T00:00:00Z",
+      "2026-10-29T00:00:00Z",
+      "2026-10-31T00:00:00Z",
+      "2026-11-02T00:00:00Z"
+    ],
+    "historyEndExclusive": "2026-11-05T00:00:00Z",
+    "targets": [
+      "winner",
+      "first-set",
+      "first-set-points-over-19.5",
+      "sets-over-3.5",
+      "sets-over-4.5",
+      "points-over-74.5",
+      "points-over-79.5",
+      "points-over-84.5",
+      "home-set-handicap-minus-1.5",
+      "home-set-handicap-plus-1.5",
+      "home-point-handicap-minus-5.5",
+      "home-point-handicap-plus-5.5",
+      "home-point-handicap-minus-9.5",
+      "home-point-handicap-plus-9.5"
+    ],
+    "candidates": [
+      "rally-iid-logit",
+      "rally-beta-binomial",
+      "poisson-total-points"
+    ],
+    "regularization": 1.0,
+    "kappaBounds": [
+      20,
+      5000
+    ],
+    "initialKappa": 200,
+    "optimizerMaxIterations": 1000,
+    "projectionGridIntervals": 4096,
+    "quadratureNodes": 21,
+    "quadratureCheckNodes": 41,
+    "temperatures": [
+      0.5,
+      1,
+      1.5
+    ],
+    "shrinkWeights": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "poissonAlpha": 1.0,
+    "pointTotalCap": 86,
+    "bootstrapReplicates": 10000,
+    "familyComparisons": 31,
+    "fit": "Fit signed eight causal score features to observed home/away point counts. IID binomial and match-latent Beta-binomial likelihood use complete stopped-score counts; scoring-path factors independent of fitted parameters omitted. Penalized mean negative log likelihood, not fabricated probabilities. All parameters fit strictly before calibration cutoff.",
+    "calibration": "Choose rally-logit temperature and one shared shrink-to-causal-league weight on prior calibration only, pooled 14-target Brier. Shared mixture preserves cross-market coherence. Poisson benchmark uses only three declared match-total thresholds, no winner/set probability borrowed.",
+    "projection": "Exact IID set endpoint kernels to 11/win-by-two with analytic infinite deuce tail. Saturated total-point convolution at 86 preserves exact probabilities for the declared totals <=84.5. Point-margin convolution and stopped BO5 set-score paths share the same process. Beta-binomial integrates point probability uncertainty by Gauss-Jacobi quadrature. Prediction grid interpolation is deterministic, not Monte Carlo forecasts.",
+    "scope": "Exploratory replay of previously inspected archive. Same 1804 outer-fold cases when eligible. Report proper probability scores and paired 3-day-block uncertainty with multiplicity correction; no independent validation or automatic model promotion. New 64-case diagnostic and prospective v9/v10 cohorts are not used for fitting, calibration, or model selection in this experiment.",
+    "limitations": [
+      "Only BO5 complete reported set scores; no point-by-point sequence, first server, serve/receive probabilities or verified live state",
+      "IID conditionally on a latent match point probability; no claim to capture tactical changes or true momentum",
+      "Poisson count benchmark does not represent a complete legal score process and is limited to match totals",
+      "No ROI or executable price backtest; no new operational opportunities or random forecasts from an unvalidated projection"
+    ],
+    "poissonFeatures": "Absolute eight signed causal strength features plus mean of players last-30 total-point and total-set context (x39/x47 and x38/x46). Standardized on training only. Poisson total prediction conditioned on complete BO5 T>=33; approximate count benchmark, not a full score model."
+  },
+  "source": "MoviOdds reported complete BO5 scores; old verified closing start snapshot",
+  "hashes": {
+    "input": "2380fc423d187688028575f301aea2cc3dfb5b6b458aac46b7370bc9f967e02f",
+    "features": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4",
+    "closing": "e09d4fbc82ee1193aebe67f6d86befa80548851b2a1d9d8177dbe9f161b92834",
+    "implementation": "156f8effa9fe6e1dc91cb824776fd78e3f8c7b58fcfd5e35ffef14d46d470363"
+  },
+  "n": 1804,
+  "folds": [
+    {
+      "start": 1793059200000,
+      "training": 83,
+      "calibration": 271,
+      "test": 309,
+      "models": {
+        "rally-iid-logit": {
+          "weight": 1,
+          "temperature": 1.5,
+          "indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "kappa": null,
+          "weights": [
+            0.028540808916380028,
+            0.05341769456169533,
+            0.019743613151429973,
+            -0.06667100278341447,
+            -0.0035748403662214357,
+            0.024086337836418722,
+            0.021667728839367895,
+            0.0037846846918489097
+          ]
+        },
+        "rally-beta-binomial": {
+          "weight": 1,
+          "temperature": 1.5,
+          "indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "kappa": 330.9443052453197,
+          "weights": [
+            0.02633028972793197,
+            0.048086435992541254,
+            0.021112024432627212,
+            -0.05703331991602475,
+            -0.0005573979084791516,
+            0.024256925475851666,
+            0.02182089218621807,
+            0.0058966119954556055
+          ]
+        },
+        "poisson-total-points": {
+          "weight": 0,
+          "temperature": 1,
+          "indices": [
+            5,
+            6,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "start": 1793232000000,
+      "training": 354,
+      "calibration": 305,
+      "test": 449,
+      "models": {
+        "rally-iid-logit": {
+          "weight": 0.5,
+          "temperature": 1.5,
+          "indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "kappa": null,
+          "weights": [
+            0.03541404796272663,
+            0.037019637857303785,
+            0.019653761228087426,
+            -0.0046859870145735645,
+            0.04550758184011379,
+            0.0528688544659613,
+            0.03930249738481536,
+            -0.0072871881726189695
+          ]
+        },
+        "rally-beta-binomial": {
+          "weight": 0.5,
+          "temperature": 1.5,
+          "indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "kappa": 636.8785303344455,
+          "weights": [
+            0.034130325696918755,
+            0.036246203397668667,
+            0.021520783984934278,
+            -0.0034992868385716955,
+            0.043912339013799,
+            0.05088596180050569,
+            0.03717921460011683,
+            -0.006652394432119045
+          ]
+        },
+        "poisson-total-points": {
+          "weight": 0.25,
+          "temperature": 1,
+          "indices": [
+            5,
+            6,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "start": 1793404800000,
+      "training": 669,
+      "calibration": 445,
+      "test": 412,
+      "models": {
+        "rally-iid-logit": {
+          "weight": 0.75,
+          "temperature": 1.5,
+          "indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "kappa": null,
+          "weights": [
+            0.031304868064483723,
+            0.03624661508375575,
+            0.018424886898143932,
+            -0.0011501728064917587,
+            0.02467465462399446,
+            0.04546737656581332,
+            -0.0051928003288959695,
+            0.018654628308701363
+          ]
+        },
+        "rally-beta-binomial": {
+          "weight": 1,
+          "temperature": 1.5,
+          "indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "kappa": 356.2463951596641,
+          "weights": [
+            0.029602600965351236,
+            0.03346221318024535,
+            0.019889838799445284,
+            0.0009380615789948742,
+            0.024273276447387714,
+            0.04165301006211782,
+            -0.0057429846332167,
+            0.018319277069745787
+          ]
+        },
+        "poisson-total-points": {
+          "weight": 0.25,
+          "temperature": 1,
+          "indices": [
+            5,
+            6,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "start": 1793577600000,
+      "training": 1118,
+      "calibration": 406,
+      "test": 634,
+      "models": {
+        "rally-iid-logit": {
+          "weight": 0.5,
+          "temperature": 1.5,
+          "indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "kappa": null,
+          "weights": [
+            0.030615764687644847,
+            0.03676585677826128,
+            0.01839779766093114,
+            0.0066222131031240085,
+            0.014463669494836809,
+            0.056882066044664885,
+            0.001564012089291669,
+            -0.005259721924279999
+          ]
+        },
+        "rally-beta-binomial": {
+          "weight": 0.75,
+          "temperature": 1.5,
+          "indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "kappa": 389.168070309489,
+          "weights": [
+            0.02900592527300789,
+            0.034770833532977205,
+            0.020151484460727564,
+            0.0075048594160050264,
+            0.015366200014169535,
+            0.05167840702541227,
+            0.0010215611609521106,
+            -0.004529892635641022
+          ]
+        },
+        "poisson-total-points": {
+          "weight": 0.25,
+          "temperature": 1,
+          "indices": [
+            5,
+            6,
+            7
+          ]
+        }
+      }
+    }
+  ],
+  "markets": [
+    {
+      "target": "winner",
+      "reference": {
+        "n": 1804,
+        "brier": 0.250108442984218,
+        "logLoss": 0.6933643698837861,
+        "ece": 0.009498192658601539,
+        "correct": 916,
+        "wrong": 888,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.2460402757946339,
+            "logLoss": 0.6851617554151295,
+            "ece": 0.013312498819725285,
+            "correct": 1002,
+            "wrong": 802,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.005287688679546756,
+            "upper": -0.002323132179028052,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.24577220783404657,
+            "logLoss": 0.6846031014146949,
+            "ece": 0.016255182138277532,
+            "correct": 996,
+            "wrong": 808,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.005751830922806103,
+            "upper": -0.0025718003225655914,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "first-set",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2498834179899676,
+        "logLoss": 0.6929151008516315,
+        "ece": 0.0014672108961267217,
+        "correct": 930,
+        "wrong": 874,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.2485016053700288,
+            "logLoss": 0.690141669229351,
+            "ece": 0.013122844322467974,
+            "correct": 964,
+            "wrong": 840,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.001997080451072579,
+            "upper": -0.0005994954019481493,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.24838610083369828,
+            "logLoss": 0.6899087958791613,
+            "ece": 0.016600396213775036,
+            "correct": 970,
+            "wrong": 834,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0024725098386707087,
+            "upper": -0.0004351460087017229,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "first-set-points-over-19.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.21855199135315279,
+        "logLoss": 0.628945863620494,
+        "ece": 0.021968856700952374,
+        "correct": 1225,
+        "wrong": 579,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21870217005523235,
+            "logLoss": 0.6292803158148585,
+            "ece": 0.026969503740479482,
+            "correct": 1225,
+            "wrong": 579,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -6.463839162934226e-05,
+            "upper": 0.00025449513881472115,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21848061170517202,
+            "logLoss": 0.6287906266809865,
+            "ece": 0.022061341298914357,
+            "correct": 1225,
+            "wrong": 579,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.00022167982544105643,
+            "upper": 8.19219693490858e-05,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "sets-over-3.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.20233372825714555,
+        "logLoss": 0.5946039702934592,
+        "ece": 0.016510164950073295,
+        "correct": 1297,
+        "wrong": 507,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.20206877399427473,
+            "logLoss": 0.5939873174498034,
+            "ece": 0.010798341610816727,
+            "correct": 1297,
+            "wrong": 507,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0011877554671432464,
+            "upper": 0.0009712141336625855,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.20188575530453215,
+            "logLoss": 0.5935250495113733,
+            "ece": 0.004359257768326078,
+            "correct": 1297,
+            "wrong": 507,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0009790485954850876,
+            "upper": 0.00028418860071501023,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "sets-over-4.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2185312613402781,
+        "logLoss": 0.6288647919078407,
+        "ece": 0.004373069530580546,
+        "correct": 1223,
+        "wrong": 581,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21963185509837674,
+            "logLoss": 0.6312656968296966,
+            "ece": 0.02918103735745987,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0016709635590883014,
+            "upper": 0.002386985689956903,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21877012237755555,
+            "logLoss": 0.6293840756926602,
+            "ece": 0.016858916835585016,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0012594555512896485,
+            "upper": 0.0009183093817911434,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "points-over-74.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.24976151725008253,
+        "logLoss": 0.6926705344024628,
+        "ece": 0.008532740253364595,
+        "correct": 939,
+        "wrong": 865,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.25074175147817307,
+            "logLoss": 0.6946531472942714,
+            "ece": 0.02486847244432198,
+            "correct": 939,
+            "wrong": 865,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0011792279584122898,
+            "upper": 0.002196757008272759,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.249643542262285,
+            "logLoss": 0.6924347319899886,
+            "ece": 0.00684210862118959,
+            "correct": 945,
+            "wrong": 859,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0011482452211442563,
+            "upper": 0.0004871980737358832,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "poisson-total-points",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.24803828149137108,
+            "logLoss": 0.6892069989898932,
+            "ece": 0.002935345330635019,
+            "correct": 965,
+            "wrong": 839,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0029167342338398284,
+            "upper": -0.0010027673213022395,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "points-over-79.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.24062993701385535,
+        "logLoss": 0.6742960608956753,
+        "ece": 0.00670762533558411,
+        "correct": 1078,
+        "wrong": 726,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.24198952698684262,
+            "logLoss": 0.6770627978638988,
+            "ece": 0.030964474548586925,
+            "correct": 1078,
+            "wrong": 726,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0013014519953338777,
+            "upper": 0.0026296165452581103,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.2408241587323202,
+            "logLoss": 0.6746918150108151,
+            "ece": 0.01619148977370888,
+            "correct": 1078,
+            "wrong": 726,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.000966513222524658,
+            "upper": 0.0010474704550632562,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "poisson-total-points",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.239425035158818,
+            "logLoss": 0.671764489363128,
+            "ece": 0.014033130865275745,
+            "correct": 1078,
+            "wrong": 726,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.002281468057668265,
+            "upper": -0.0007843959376580007,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "points-over-84.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2200162671345243,
+        "logLoss": 0.6319438596785345,
+        "ece": 0.0011561387676703124,
+        "correct": 1215,
+        "wrong": 589,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22132207128393705,
+            "logLoss": 0.6347880897085986,
+            "ece": 0.030212678459503973,
+            "correct": 1215,
+            "wrong": 589,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0009328333495064467,
+            "upper": 0.0026586724458861517,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22031427111474206,
+            "logLoss": 0.6326008229085316,
+            "ece": 0.016645599620075176,
+            "correct": 1215,
+            "wrong": 589,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.000780588128603531,
+            "upper": 0.0006972421535438325,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "poisson-total-points",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22099969829822919,
+            "logLoss": 0.6343133443241646,
+            "ece": 0.032709018381645964,
+            "correct": 1215,
+            "wrong": 589,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0006594170823141294,
+            "upper": 0.003234182987048859,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-set-handicap-minus-1.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22137127652731967,
+        "logLoss": 0.6347934395706673,
+        "ece": 0.01047275140185821,
+        "correct": 1209,
+        "wrong": 595,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21816134872803442,
+            "logLoss": 0.6274674275265884,
+            "ece": 0.002907852714837635,
+            "correct": 1209,
+            "wrong": 595,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.005786497177415033,
+            "upper": -0.00032949656469323014,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21773185097563613,
+            "logLoss": 0.6265140165715893,
+            "ece": 0.004033652847022063,
+            "correct": 1210,
+            "wrong": 594,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.005833502372506005,
+            "upper": -0.0007539784127296875,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-set-handicap-plus-1.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22746704181553298,
+        "logLoss": 0.6474430418789681,
+        "ece": 0.008125341205640728,
+        "correct": 1176,
+        "wrong": 628,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22551913309216046,
+            "logLoss": 0.6432481082501333,
+            "ece": 0.02648959204693067,
+            "correct": 1176,
+            "wrong": 628,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.003716304692853354,
+            "upper": -0.000952749423483595,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22494400507991508,
+            "logLoss": 0.6419896026077383,
+            "ece": 0.020892569682607078,
+            "correct": 1176,
+            "wrong": 628,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.00467923343480461,
+            "upper": -0.0009179383613010002,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-minus-5.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22361473182567443,
+        "logLoss": 0.6394438914311787,
+        "ece": 0.016553159038757335,
+        "correct": 1197,
+        "wrong": 607,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21892161644196934,
+            "logLoss": 0.6289014487101607,
+            "ece": 0.006768846259552822,
+            "correct": 1198,
+            "wrong": 606,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.00542342693601362,
+            "upper": -0.003770130889753183,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21883986001388306,
+            "logLoss": 0.6287601656340704,
+            "ece": 0.015066788235342202,
+            "correct": 1200,
+            "wrong": 604,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.005372101469148705,
+            "upper": -0.0040243756213665825,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-plus-5.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.23121240352679653,
+        "logLoss": 0.6551087739466049,
+        "ece": 0.008830583106911325,
+        "correct": 1150,
+        "wrong": 654,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22880289252372923,
+            "logLoss": 0.6498808488638296,
+            "ece": 0.028215916958329427,
+            "correct": 1149,
+            "wrong": 655,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.002872160440995017,
+            "upper": -0.0013503003771619497,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22837126366321328,
+            "logLoss": 0.6489611709988846,
+            "ece": 0.020673655984218085,
+            "correct": 1151,
+            "wrong": 653,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0030152536873871,
+            "upper": -0.0013345641214556612,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-minus-9.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.1562219208152689,
+        "logLoss": 0.4918005385563789,
+        "ece": 0.011978835993693837,
+        "correct": 1455,
+        "wrong": 349,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.154001328613664,
+            "logLoss": 0.48474560827503055,
+            "ece": 0.010991353091583785,
+            "correct": 1455,
+            "wrong": 349,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0030014150890244617,
+            "upper": -0.0017177861011498424,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.15346986700910156,
+            "logLoss": 0.4832075721959951,
+            "ece": 0.015673792593211035,
+            "correct": 1455,
+            "wrong": 349,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.004042609871840447,
+            "upper": -0.0018722211159060832,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-plus-9.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.16336769611632948,
+        "logLoss": 0.508189241604515,
+        "ece": 0.011587554708537203,
+        "correct": 1433,
+        "wrong": 371,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.16254682958012154,
+            "logLoss": 0.506100152580888,
+            "ece": 0.02631141952871184,
+            "correct": 1433,
+            "wrong": 371,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.001532614578648322,
+            "upper": 0.0006538350637476624,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.1619702538173734,
+            "logLoss": 0.5042809818603634,
+            "ece": 0.016041155139697533,
+            "correct": 1433,
+            "wrong": 371,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0021164503093722767,
+            "upper": -0.0001530303409093614,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 31
+          }
+        }
+      ]
+    }
+  ],
+  "finalTraining": 1777,
+  "finalCalibration": 386,
+  "finalModels": {
+    "rally-iid-logit": {
+      "kind": "rally-iid-logit",
+      "weights": [
+        0.031888268577221004,
+        0.028968780004137575,
+        0.011728787056845817,
+        0.011412459677890507,
+        0.017142854134028433,
+        0.0670654865117068,
+        0.00020617582735258055,
+        -0.009250710987377104
+      ],
+      "kappa": null,
+      "success": true,
+      "objective": 52.456513251850616,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "weight": 0.75,
+      "temperature": 1.5,
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    "rally-beta-binomial": {
+      "kind": "rally-beta-binomial",
+      "weights": [
+        0.029457459253607304,
+        0.02735407245718732,
+        0.014796069453845028,
+        0.011641657536247614,
+        0.017840057302491857,
+        0.05882455091991519,
+        4.825741073580587e-05,
+        -0.008471891530834942
+      ],
+      "kappa": 274.59002162364703,
+      "success": true,
+      "objective": 52.4457720021784,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "weight": 1,
+      "temperature": 1.5,
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    "poisson-total-points": {
+      "weight": 0.25,
+      "temperature": 1,
+      "indices": [
+        5,
+        6,
+        7
+      ],
+      "featureCount": 10,
+      "coefficients": [
+        -0.020950786550092297,
+        -0.013621889365784193,
+        0.009428815621117258,
+        0.0003469616194084282,
+        0.021358533704781406,
+        0.00850486738202495,
+        -0.0038335610806459228,
+        0.00014278468341930424,
+        0.044205530277968655,
+        -0.02444751297636594
+      ],
+      "intercept": 4.326285378873514
+    }
+  },
+  "numerics": {
+    "gridIntervals": 4096,
+    "interpolationMaxAbsError97Checks": 6.96511009867784e-07,
+    "quadrature21vs41MaxAbsDifference": 2.816986337528249e-07,
+    "massConserved": true
+  },
+  "independentValidation": false,
+  "operationallyValidated": false,
+  "limitations": [
+    "Only BO5 complete reported set scores; no point-by-point sequence, first server, serve/receive probabilities or verified live state",
+    "IID conditionally on a latent match point probability; no claim to capture tactical changes or true momentum",
+    "Poisson count benchmark does not represent a complete legal score process and is limited to match totals",
+    "No ROI or executable price backtest; no new operational opportunities or random forecasts from an unvalidated projection"
+  ]
+}

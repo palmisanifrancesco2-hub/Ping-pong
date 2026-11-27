@@ -1,0 +1,16 @@
+{
+ "version":"research-v2-20261104",
+ "source":"MoviOdds public results + closing kickoff only",
+ "targetFrom":"2026-10-20T00:00:00Z",
+ "targetToExclusive":"2026-11-03T00:00:00Z",
+ "selectionEnd":"2026-10-29T00:00:00Z",
+ "calibrationEnd":"2026-10-31T00:00:00Z",
+ "candidates":["elo10","elo20","elo40","elo80","form20","elo40-form20"],
+ "maxTargets":1000,
+ "minimumPlayerHistory":20,
+ "selectionMetric":"Brier score on selection window only",
+ "calibration":"Platt on calibration window only, labels available before final test boundary",
+ "finalTest":"2026-10-31 through 2026-11-02, excluding previous model test window",
+ "acceptance":{"minimumFinalSamples":200,"minimumDays":3,"brierUpperDayCluster95":0,"maximumECE":0.08},
+ "restrictions":["No candidate or threshold changes after final test","No profit claims without point-in-time prematch odds","Retrospective reconstruction is not prospective validation","No automatic replacement of production model"]
+}

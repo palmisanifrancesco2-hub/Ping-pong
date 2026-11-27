@@ -1,0 +1,15 @@
+{
+  "version": "forward-score-v3",
+  "observedAt": "2026-11-04T22:17:32.010Z",
+  "modelHash": "220599e9f04a084275ca810058ddf88aac5981aa38afac009c9a528a14881ac9",
+  "protocolHash": "d785270d0487ec0d2ab0876180a48ad19c5e84c192519bd5531dcc4a51b3464e",
+  "captureHash": "c59dfcc370683467d98952d7931389cca6cf583cdd516944927e9ff3b8b0732b",
+  "events": 304,
+  "policy": {
+    "minimumFinalEvents": 200,
+    "minimumDays": 7,
+    "required": "Paired Brier upper 95% below zero versus 50/50 and market on the same cases; lower log loss; ECE < 0.08; no parameter changes or selective exclusions",
+    "settlement": "Confirm actual known kickoff is after observedAt and match exact identities; only complete coherent results; unresolved remain pending",
+    "scope": "One captured cohort; no automatic background collection or betting"
+  }
+}

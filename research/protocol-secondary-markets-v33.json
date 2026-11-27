@@ -1,0 +1,12 @@
+{
+  "partition": "protocol-prematch-20000-v32.json",
+  "targets": ["first-set", "first-set-points-over-19.5", "sets-over-3.5", "sets-over-4.5", "points-over-74.5", "points-over-79.5", "points-over-84.5", "home-set-handicap-minus-1.5", "home-set-handicap-plus-1.5", "home-point-handicap-minus-5.5", "home-point-handicap-plus-5.5", "home-point-handicap-minus-9.5", "home-point-handicap-plus-9.5", "exact-score"],
+  "leaguePriorWeight": 50,
+  "logisticC": 1.0,
+  "histogramBoosting": {"max_iter": 90, "max_leaf_nodes": 15, "min_samples_leaf": 65, "l2_regularization": 2, "early_stopping": false, "random_state": 33},
+  "calibrationC": 1.0,
+  "scoreTemperatures": [0.75, 1.0, 1.25, 1.5, 2.0],
+  "selection": "Choose by Brier on the last calibration day only. The earlier two calibration days fit the calibrators. Exact score uses multiclass Brier and the league and joint-logistic distributions.",
+  "pairedComparisons": {"blockDays": 3, "bootstrapReplicates": 10000, "familyComparisons": 14, "seed": 333},
+  "historicalOdds": "This benchmark evaluates outcomes and probabilities. No time-matched book prices are used for these secondary selections."
+}

@@ -1,0 +1,337 @@
+{
+  "protocol": {
+    "version": "multi-model-v7",
+    "createdAt": "2026-11-05T07:04:00.150489+00:00",
+    "input": ".research-data/3000-data.json",
+    "minimumPlayerHistory": 30,
+    "foldStarts": [
+      "2026-10-25T00:00:00Z",
+      "2026-10-27T00:00:00Z",
+      "2026-10-29T00:00:00Z",
+      "2026-10-31T00:00:00Z",
+      "2026-11-02T00:00:00Z"
+    ],
+    "endExclusive": "2026-11-05T00:00:00Z",
+    "calibrationDays": 2,
+    "minimumTraining": 50,
+    "minimumCalibration": 40,
+    "temperatures": [
+      0.25,
+      0.5,
+      0.75,
+      1,
+      1.25,
+      1.5
+    ],
+    "candidates": [
+      "full:0.001",
+      "scores:0.01",
+      "glicko2",
+      "point-markov",
+      "set-bayes",
+      "ensemble-equal",
+      "ensemble-calibrated"
+    ],
+    "targets": [
+      "winner",
+      "first-set",
+      "over-sets-3.5",
+      "over-sets-4.5"
+    ],
+    "additionalMarketModel": "Logistic 0.01; raw signed features for first set; intercept and absolute strengths for totals. Compare Markov baseline and training/calibration-only constant. No outcome-based price backtest.",
+    "eligibility": "30 previous matches per player, source available strictly before verified kickoff minus one minute; Glicko periods are UTC days closed before forecast.",
+    "scope": "Exploratory reuse of already examined historical archive, not independent validation; old 18+ prospective observations and frozen model remain unchanged. No automatic validated=true.",
+    "activation": "New market needs >=500 held-out cases, lower Brier/log loss than calibration constant, ECE<0.08 and adjusted day-bootstrap upper Brier difference <0. No unsupported live or market/line mapping."
+  },
+  "inputHash": "2380fc423d187688028575f301aea2cc3dfb5b6b458aac46b7370bc9f967e02f",
+  "generatedAt": "2026-11-05T07:05:18.652Z",
+  "productionValidated": false,
+  "independent": false,
+  "ranking": [
+    {
+      "name": "ensemble-equal",
+      "n": 1804,
+      "brier": 0.24573315254242553,
+      "logLoss": 0.684508548328715,
+      "ece": 0.016170070634088325,
+      "versusFull": {
+        "days": 9,
+        "n": 1804,
+        "mean": -0.00014349654755138166,
+        "lower95": -0.001656734178249992,
+        "upper95": 0.0009147411726227899,
+        "lowerAdjusted": -0.0022588243257025517,
+        "upperAdjusted": 0.0011357347344768422
+      }
+    },
+    {
+      "name": "full:0.001",
+      "n": 1804,
+      "brier": 0.2458766490899766,
+      "logLoss": 0.6846550366650134,
+      "ece": 0.016896879256812894,
+      "versusFull": {
+        "days": 9,
+        "n": 1804,
+        "mean": 0,
+        "lower95": 0,
+        "upper95": 0,
+        "lowerAdjusted": 0,
+        "upperAdjusted": 0
+      }
+    },
+    {
+      "name": "ensemble-calibrated",
+      "n": 1804,
+      "brier": 0.24601512824035968,
+      "logLoss": 0.6850445197910504,
+      "ece": 0.019314715806660863,
+      "versusFull": {
+        "days": 9,
+        "n": 1804,
+        "mean": 0.00013847915038299406,
+        "lower95": -0.002250443962745825,
+        "upper95": 0.0019049204618144838,
+        "lowerAdjusted": -0.0033358711528138057,
+        "upperAdjusted": 0.002425809038333037
+      }
+    },
+    {
+      "name": "glicko2",
+      "n": 1804,
+      "brier": 0.2471493069743362,
+      "logLoss": 0.6874803142453154,
+      "ece": 0.01884566526354655,
+      "versusFull": {
+        "days": 9,
+        "n": 1804,
+        "mean": 0.0012726578843596597,
+        "lower95": -0.0014061773950829481,
+        "upper95": 0.0031874624223358896,
+        "lowerAdjusted": -0.0026874079603843447,
+        "upperAdjusted": 0.003638157439595461
+      }
+    },
+    {
+      "name": "set-bayes",
+      "n": 1804,
+      "brier": 0.24770723525072386,
+      "logLoss": 0.6885365793843873,
+      "ece": 0.013631342218273192,
+      "versusFull": {
+        "days": 9,
+        "n": 1804,
+        "mean": 0.0018305861607471206,
+        "lower95": -0.00027559256913109285,
+        "upper95": 0.003424900632595464,
+        "lowerAdjusted": -0.0011701433791398215,
+        "upperAdjusted": 0.0038495996900161557
+      }
+    },
+    {
+      "name": "scores:0.01",
+      "n": 1804,
+      "brier": 0.2477478483720875,
+      "logLoss": 0.6886113231303346,
+      "ece": 0.013206924248782738,
+      "versusFull": {
+        "days": 9,
+        "n": 1804,
+        "mean": 0.0018711992821105199,
+        "lower95": 0.0005056910275155875,
+        "upper95": 0.0028878068545214815,
+        "lowerAdjusted": -0.00006233026634845702,
+        "upperAdjusted": 0.0031584468044964244
+      }
+    },
+    {
+      "name": "point-markov",
+      "n": 1804,
+      "brier": 0.24786966223449985,
+      "logLoss": 0.6888320329843315,
+      "ece": 0.015868760686150035,
+      "versusFull": {
+        "days": 9,
+        "n": 1804,
+        "mean": 0.001993013144522963,
+        "lower95": -0.00017195385608564942,
+        "upper95": 0.0036061738206292836,
+        "lowerAdjusted": -0.0011095555156660653,
+        "upperAdjusted": 0.0039590669855704705
+      }
+    }
+  ],
+  "markets": [
+    {
+      "name": "first-set",
+      "metrics": {
+        "n": 1804,
+        "brier": 0.24883903274426283,
+        "logLoss": 0.6908179753715707,
+        "ece": 0.019606801829441783
+      },
+      "baseline": {
+        "n": 1804,
+        "brier": 0.24994638451653883,
+        "logLoss": 0.6930406511213606,
+        "ece": 0.004913972515284677
+      },
+      "markov": {
+        "n": 1804,
+        "brier": 0.2486410355782885,
+        "logLoss": 0.6904130562158393,
+        "ece": 0.019450416130429513
+      },
+      "paired": {
+        "days": 9,
+        "n": 1804,
+        "mean": -0.001107351772274083,
+        "lower95": -0.0024674301932754647,
+        "upper95": 0.00028735666244382636,
+        "lowerAdjusted": -0.002783357566269279,
+        "upperAdjusted": 0.0006527599608930764
+      },
+      "eligible": false
+    },
+    {
+      "name": "over-sets-3.5",
+      "metrics": {
+        "n": 1804,
+        "brier": 0.2021600333213986,
+        "logLoss": 0.5941594888143289,
+        "ece": 0.0006377707003398154
+      },
+      "baseline": {
+        "n": 1804,
+        "brier": 0.20228328069637705,
+        "logLoss": 0.5944885337668834,
+        "ece": 0.001131171670113122
+      },
+      "markov": {
+        "n": 1804,
+        "brier": 0.2023099984023742,
+        "logLoss": 0.5946008983672709,
+        "ece": 0.023722738455461384
+      },
+      "paired": {
+        "days": 9,
+        "n": 1804,
+        "mean": -0.00012324737497531915,
+        "lower95": -0.0007092183377902881,
+        "upper95": 0.00040836432868561544,
+        "lowerAdjusted": -0.0008491050966567985,
+        "upperAdjusted": 0.0004955419485021076
+      },
+      "eligible": false
+    },
+    {
+      "name": "over-sets-4.5",
+      "metrics": {
+        "n": 1804,
+        "brier": 0.22048354126312902,
+        "logLoss": 0.6331481735577347,
+        "ece": 0.01087474401474852
+      },
+      "baseline": {
+        "n": 1804,
+        "brier": 0.219497567773691,
+        "logLoss": 0.6310361153895783,
+        "ece": 0.007804416432238002
+      },
+      "markov": {
+        "n": 1804,
+        "brier": 0.22018582570091572,
+        "logLoss": 0.632463718567956,
+        "ece": 0.0457447060296177
+      },
+      "paired": {
+        "days": 9,
+        "n": 1804,
+        "mean": 0.0009859734894428374,
+        "lower95": -0.000061475323754479,
+        "upper95": 0.002359314668622558,
+        "lowerAdjusted": -0.00024188570008289956,
+        "upperAdjusted": 0.002660548961401963
+      },
+      "eligible": false
+    }
+  ],
+  "folds": [
+    {
+      "fold": 1,
+      "start": "2026-10-27T00:00:00.000Z",
+      "training": 83,
+      "calibration": 271,
+      "test": 309,
+      "temperatures": {
+        "full:0.001": 0.25,
+        "scores:0.01": 0.25,
+        "glicko2": 0.75,
+        "point-markov": 1,
+        "set-bayes": 1
+      },
+      "ensembleWeights": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "fold": 2,
+      "start": "2026-10-29T00:00:00.000Z",
+      "training": 354,
+      "calibration": 305,
+      "test": 449,
+      "temperatures": {
+        "full:0.001": 0.5,
+        "scores:0.01": 1,
+        "glicko2": 0.5,
+        "point-markov": 0.5,
+        "set-bayes": 0.75
+      },
+      "ensembleWeights": [
+        0,
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "fold": 3,
+      "start": "2026-10-31T00:00:00.000Z",
+      "training": 669,
+      "calibration": 445,
+      "test": 412,
+      "temperatures": {
+        "full:0.001": 1,
+        "scores:0.01": 0.75,
+        "glicko2": 0.25,
+        "point-markov": 0.25,
+        "set-bayes": 0.5
+      },
+      "ensembleWeights": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "fold": 4,
+      "start": "2026-11-02T00:00:00.000Z",
+      "training": 1118,
+      "calibration": 406,
+      "test": 634,
+      "temperatures": {
+        "full:0.001": 1.25,
+        "scores:0.01": 1,
+        "glicko2": 0.5,
+        "point-markov": 0.5,
+        "set-bayes": 0.5
+      },
+      "ensembleWeights": [
+        0.75,
+        0,
+        0.25
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "version": "forecast-odds-outcomes-v22",
+  "createdAt": "2026-11-17T20:46:49.867193+00:00",
+  "inputHashes": {
+    ".research-data/v16-odds-audit.json": "83bdbb9ab7b27a77fe0a8e193a8eb0d98783cfbe4e858cd721973033bce66243",
+    ".research-data/v16-qualified-market-baselines.json": "bb32f84e69f322898bcadd1d8151da83a5dde6a50bd39e7f9532ba45935e315b",
+    ".research-data/advanced-v16-audit.json": "44cc19a647860cf4c21f77441d9943655587a38ef9c1621c8caae4cb673d3048",
+    ".research-data/probabilistic-v18-audit.json": "d7f9a4bed0942b08fb652248c030616daecefe38ee46249f67b48359caf681a4",
+    ".research-data/coherent-v21-audit.json": "8c1af9e58a4d5bbf5e164d8c85f58ce67bca33452706733218234c0306897d84",
+    ".research-data/frozen-transfer-v20-audit.json": "25d567ee1aba747c8727185b2fb02cd4396aa859400f0cf1255881f4ed0720dd",
+    ".research-data/market-v8-confirmation-features.json": "4088b07a52bee4132c3c9277452886e756ed1374689d7d91ed4d17812f7f32ed",
+    ".research-data/market-v8-confirmation/sealed.json": "6b0bcda64999a17916a8961f9dd76114cdf3e7c431e42e5c8854af6f54ea1f96"
+  },
+  "cohorts": [
+    "v16-asof-test-88",
+    "v20-transfer-qualified-28"
+  ],
+  "market": "Match winner only",
+  "selection": "Home when p>0.5, away when p<0.5; exact ties undecided. Use the corresponding side price, never the winning side chosen after the outcome.",
+  "policies": [
+    "all-decided-with-recorded-price",
+    "min-odds-1.30",
+    "min-odds-1.30-and-positive-nominal-EV"
+  ],
+  "positiveEVTolerance": 1e-12,
+  "quoteMaximum": null,
+  "statistics": [
+    "count",
+    "mean",
+    "median",
+    "min",
+    "max",
+    "mean lost minus mean won",
+    "unit-stake theoretical arithmetic at recorded prices"
+  ],
+  "independentValidation": false,
+  "automaticPromotion": false,
+  "limitations": [
+    "Descriptive subsets of previously inspected historical data, not new matches or independent tests.",
+    "No claim of historical executable prices, real bets, verified ROI or future profits.",
+    "Positive nominal EV from unvalidated probabilities is only an exploratory filter, not operational approval.",
+    "Do not mix cohorts with different dates; outcome prices unavailable for all 1804 or current 1057 prospective events.",
+    "No thresholds or models selected using the resulting comparison."
+  ]
+}

@@ -1,0 +1,3 @@
+import{ProspectiveStudy}from'../server/prospective-study.js';
+if(process.env.VERCEL_ENV!=='production'||process.env.APP_FORWARD_STUDY_BOOTSTRAP!=='1')console.info('Forward study bootstrap: non richiesto.');
+else{try{const study=new ProspectiveStudy(process.env);const run=await study.run();const owner=await study.ownerId();const report=await study.report(owner);console.info(JSON.stringify({forwardStudyBootstrap:'success',run,captured:report.captured,phaseCases:report.phases.map(p=>p.settled),scheduled:report.scheduled,productionValidated:false}));}catch(e){console.error(JSON.stringify({forwardStudyBootstrap:'failed',code:e instanceof Error&&/^[A-Z_]+$/.test(e.message)?e.message:'STUDY_FAILED'}));process.exitCode=1;}}

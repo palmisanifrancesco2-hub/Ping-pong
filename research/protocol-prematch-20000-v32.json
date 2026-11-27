@@ -1,0 +1,13 @@
+{
+  "archiveProtocol": "protocol-live-expanded-v29.json",
+  "modelProtocol": "protocol-live-setka-v28.json",
+  "testBoundariesUtc": ["2026-10-09", "2026-10-13", "2026-10-17", "2026-10-22", "2026-10-27", "2026-11-01", "2026-11-05"],
+  "additionalTestUntilExclusive": "2026-10-22",
+  "minimumTestMatches": 20000,
+  "trainingEndsDaysBeforeFold": 6,
+  "calibrationStartsDaysBeforeFold": 4,
+  "calibrationEndsDaysBeforeFold": 2,
+  "quoteMinimumExclusive": 2.0,
+  "pairedComparisons": {"blockDays": 3, "bootstrapReplicates": 10000, "familyComparisons": 2, "seed": 311},
+  "notes": "Preserve the three v31 holdout folds and prepend three earlier date folds. Hold out all accepted matches on each date. Both candidates train with eligible archived Setka 2022 and earlier MoviOdds results when available. Calibrate on prior MoviOdds results. Use the prematch 0–0 state and existing two-day feature history lag. Archived UTC finish date proxies match date. Quote comparisons require a verified prematch pair from the MoviOdds closing cache on the same UTC date."
+}

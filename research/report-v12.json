@@ -1,0 +1,2029 @@
+{
+  "version": "projection-ensembles-v12",
+  "generatedAt": "2026-11-06T11:00:36.248370+00:00",
+  "protocol": {
+    "version": "projection-ensembles-v12",
+    "createdAt": "2026-11-06T11:00:07.695624+00:00",
+    "scope": "Exploratory fixed-weight pooling on already examined historical forecasts; no prospective data or activation",
+    "sources": {
+      ".research-data/projection-v11-audit.json": "2c97066715818db9875b94471828c167887b65260acfbefd40806fea4a04e216",
+      ".research-data/market-v8-historical-audit.json": "9bf385f6f7e8a240b6be6677b151970dba6fb0cc9db9af1b7ff1ead457eed96a",
+      ".research-data/multi-model-v7-audit.json": "a189883f928f6efa24cda62367e5a352bafca5d787e5589cdb31d29e60ce58e3",
+      ".research-data/market-v8-selection.json": "793f1c676b1cc8c8fd13b78e6a3c1841fb54b6509bb75a93fda05f6d6332e718",
+      ".research-data/market-v8-features.json": "c03bca29d1000e20bfee86eeb01a948d57bd514dc1680b1bf0ba066d6ccda7c4"
+    },
+    "projection": "rally-beta-binomial",
+    "reference": "ensemble-equal-v7 for winner; historically selected v8 candidate per other target",
+    "recipes": {
+      "projection-with-reference": {
+        "all14Targets": true,
+        "weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "projection-with-reference-and-poisson": {
+        "targets": [
+          "points-over-74.5",
+          "points-over-79.5",
+          "points-over-84.5"
+        ],
+        "weights": [
+          0.3333333333333333,
+          0.3333333333333333,
+          0.3333333333333333
+        ]
+      },
+      "projection-with-full": {
+        "targets": [
+          "winner"
+        ],
+        "weights": [
+          0.5,
+          0.5
+        ],
+        "fullModel": "full:0.001-v7"
+      }
+    },
+    "bootstrapReplicates": 10000,
+    "blockDays": 3,
+    "familyComparisons": 58,
+    "seed": 20261106,
+    "metrics": [
+      "brier",
+      "logLoss",
+      "eceFiveBins",
+      "correct",
+      "wrong",
+      "undecided"
+    ],
+    "diagnostics": [
+      "residualCorrelation",
+      "binaryMistakeCorrelation",
+      "selectionAgreement",
+      "accuracyOnAgreementSubsetDescriptiveOnly"
+    ],
+    "comparators": "Every component, previous best and causal league baseline on identical cases",
+    "activation": false,
+    "independentValidation": false,
+    "limitations": [
+      "All historical outcomes already inspected; no independent confirmatory inference.",
+      "Previously best candidates selected using this archive; optimistic reference selection.",
+      "Fixed weights not optimized on test outcomes; no post-hoc grid search.",
+      "Each market pooled separately; no claim of one coherent joint distribution across all markets.",
+      "Pooling can alter calibration; no recalibration without a separate causal calibration sample.",
+      "Agreement of models is not independent evidence; disagreement is diagnostic only.",
+      "Nine days are insufficient for strong day-block interval guarantees.",
+      "No pre-event executable odds; cannot estimate tradable EV or profit.",
+      "No changes to original prospective protocols or recorded predictions."
+    ]
+  },
+  "n": 1804,
+  "observedDays": 9,
+  "markets": [
+    {
+      "target": "winner",
+      "reference": {
+        "n": 1804,
+        "brier": 0.24573315254242545,
+        "logLoss": 0.6845085483287152,
+        "ece": 0.01617007063408835,
+        "correct": 989,
+        "wrong": 815,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.24561057341166334,
+            "logLoss": 0.6842664949997881,
+            "ece": 0.015107317943026837,
+            "correct": 994,
+            "wrong": 810,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.250108442984218,
+              "logLoss": 0.6933643698837861,
+              "ece": 0.009498192658601539,
+              "correct": 916,
+              "wrong": 888,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.24573315254242545,
+              "logLoss": 0.6845085483287152,
+              "ece": 0.01617007063408835,
+              "correct": 989,
+              "wrong": 815,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.24577220783404657,
+              "logLoss": 0.6846031014146949,
+              "ece": 0.016255182138277532,
+              "correct": 996,
+              "wrong": 808,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.005991527924265798,
+              "upper": -0.002679937739698272,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.00028209885576413907,
+              "upper": 1.0392375776161656e-06,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.00023969700145969744,
+              "upper": 3.3856652030252865e-05,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9988516396613561,
+                "mistakeCorrelation": 0.7682034257366929
+              }
+            ],
+            "agreement": {
+              "n": 1597,
+              "coverage": 0.8852549889135255,
+              "correct": 889,
+              "wrong": 708,
+              "accuracy": 0.5566687539135879,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        },
+        {
+          "name": "projection-with-full",
+          "componentNames": [
+            "projection",
+            "full-logistic"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.2453950667050091,
+            "logLoss": 0.6837751535690234,
+            "ece": 0.020132933172300374,
+            "correct": 992,
+            "wrong": 812,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.250108442984218,
+              "logLoss": 0.6933643698837861,
+              "ece": 0.009498192658601539,
+              "correct": 916,
+              "wrong": 888,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.24573315254242545,
+              "logLoss": 0.6845085483287152,
+              "ece": 0.01617007063408835,
+              "correct": 989,
+              "wrong": 815,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.24577220783404657,
+              "logLoss": 0.6846031014146949,
+              "ece": 0.016255182138277532,
+              "correct": 996,
+              "wrong": 808,
+              "undecided": 0
+            },
+            "full-logistic": {
+              "n": 1804,
+              "brier": 0.2458766490899768,
+              "logLoss": 0.6846550366650134,
+              "ece": 0.016896879256812887,
+              "correct": 971,
+              "wrong": 833,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.0068781091550018224,
+              "upper": -0.0020120968164273815,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.0009416480559943877,
+              "upper": 0.00046301430225153606,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0011262782321957232,
+              "upper": 0.0005597035061382127,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "full-logistic": {
+              "lower": -0.0012402730668312001,
+              "upper": 0.0001405502722338208,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9965152885054377,
+                "mistakeCorrelation": 0.6482227348637348
+              }
+            ],
+            "agreement": {
+              "n": 1489,
+              "coverage": 0.8253880266075388,
+              "correct": 826,
+              "wrong": 663,
+              "accuracy": 0.554734721289456,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "first-set",
+      "reference": {
+        "n": 1804,
+        "brier": 0.24886301923487625,
+        "logLoss": 0.6908835838056518,
+        "ece": 0.0019286655008758993,
+        "correct": 967,
+        "wrong": 837,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.24837282239798927,
+            "logLoss": 0.689891597159421,
+            "ece": 0.008063019921733023,
+            "correct": 967,
+            "wrong": 837,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.2498834179899676,
+              "logLoss": 0.6929151008516315,
+              "ece": 0.0014672108961267217,
+              "correct": 930,
+              "wrong": 874,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.24886301923487625,
+              "logLoss": 0.6908835838056518,
+              "ece": 0.0019286655008758993,
+              "correct": 967,
+              "wrong": 837,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.24838610083369828,
+              "logLoss": 0.6899087958791613,
+              "ece": 0.016600396213775036,
+              "correct": 970,
+              "wrong": 834,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.0022632819689283276,
+              "upper": -0.0009266175710557196,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.000785232090595413,
+              "upper": -5.305363521615269e-05,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0004914715623539958,
+              "upper": 0.00032415604099603006,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9984708249634767,
+                "mistakeCorrelation": 0.2810180026941699
+              }
+            ],
+            "agreement": {
+              "n": 1159,
+              "coverage": 0.6424611973392461,
+              "correct": 646,
+              "wrong": 513,
+              "accuracy": 0.5573770491803278,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "first-set-points-over-19.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2184495833843661,
+        "logLoss": 0.6287285124517913,
+        "ece": 0.02105872644390877,
+        "correct": 1225,
+        "wrong": 579,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21843330910758174,
+            "logLoss": 0.6286877510877706,
+            "ece": 0.021560033871411567,
+            "correct": 1225,
+            "wrong": 579,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.21855199135315279,
+              "logLoss": 0.628945863620494,
+              "ece": 0.021968856700952374,
+              "correct": 1225,
+              "wrong": 579,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.2184495833843661,
+              "logLoss": 0.6287285124517913,
+              "ece": 0.02105872644390877,
+              "correct": 1225,
+              "wrong": 579,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.21848061170517202,
+              "logLoss": 0.6287906266809865,
+              "ece": 0.022061341298914357,
+              "correct": 1225,
+              "wrong": 579,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.0003253537599239051,
+              "upper": 2.910500027028783e-05,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -5.7591920269570175e-05,
+              "upper": 2.910500027028783e-05,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.00010367393448284876,
+              "upper": 4.1144796081976874e-05,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9997106689564893,
+                "mistakeCorrelation": 0.9999999999999999
+              }
+            ],
+            "agreement": {
+              "n": 1804,
+              "coverage": 1.0,
+              "correct": 1225,
+              "wrong": 579,
+              "accuracy": 0.6790465631929047,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "sets-over-3.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2017218256637273,
+        "logLoss": 0.5930396286420558,
+        "ece": 0.014972823439709475,
+        "correct": 1297,
+        "wrong": 507,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.20154964820753152,
+            "logLoss": 0.5926898831935519,
+            "ece": 0.00966604060401778,
+            "correct": 1297,
+            "wrong": 507,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.20233372825714555,
+              "logLoss": 0.5946039702934592,
+              "ece": 0.016510164950073295,
+              "correct": 1297,
+              "wrong": 507,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.2017218256637273,
+              "logLoss": 0.5930396286420558,
+              "ece": 0.014972823439709475,
+              "correct": 1297,
+              "wrong": 507,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.20188575530453215,
+              "logLoss": 0.5935250495113733,
+              "ece": 0.004359257768326078,
+              "correct": 1297,
+              "wrong": 507,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.0022116379052092624,
+              "upper": 0.000244162019461388,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.0007611312332791042,
+              "upper": 0.0002453488513058822,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0012325893097241737,
+              "upper": 7.600075421642436e-05,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9977594630526215,
+                "mistakeCorrelation": 0.9999999999999999
+              }
+            ],
+            "agreement": {
+              "n": 1804,
+              "coverage": 1.0,
+              "correct": 1297,
+              "wrong": 507,
+              "accuracy": 0.7189578713968958,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "sets-over-4.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.21805639513777353,
+        "logLoss": 0.6277301608861143,
+        "ece": 0.007124307246622043,
+        "correct": 1223,
+        "wrong": 581,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21812787186632882,
+            "logLoss": 0.627924778396231,
+            "ece": 0.0055618677682643764,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.2185312613402781,
+              "logLoss": 0.6288647919078407,
+              "ece": 0.004373069530580546,
+              "correct": 1223,
+              "wrong": 581,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.21805639513777353,
+              "logLoss": 0.6277301608861143,
+              "ece": 0.007124307246622043,
+              "correct": 1223,
+              "wrong": 581,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.21877012237755555,
+              "logLoss": 0.6293840756926602,
+              "ece": 0.016858916835585016,
+              "correct": 1223,
+              "wrong": 581,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.0009484655275210168,
+              "upper": -0.0002120801470298014,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.0007605490466330863,
+              "upper": 0.0008181896023471912,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0012610432833140889,
+              "upper": 0.00035208941808231647,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.998554877085767,
+                "mistakeCorrelation": 1.0
+              }
+            ],
+            "agreement": {
+              "n": 1804,
+              "coverage": 1.0,
+              "correct": 1223,
+              "wrong": 581,
+              "accuracy": 0.6779379157427938,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "points-over-74.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2487336525440079,
+        "logLoss": 0.6906135440834447,
+        "ece": 0.007580136035163316,
+        "correct": 955,
+        "wrong": 849,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.24885914395386594,
+            "logLoss": 0.6908609335712571,
+            "ece": 0.0003690137069868643,
+            "correct": 952,
+            "wrong": 852,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.24976151725008253,
+              "logLoss": 0.6926705344024628,
+              "ece": 0.008532740253364595,
+              "correct": 939,
+              "wrong": 865,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.2487336525440079,
+              "logLoss": 0.6906135440834447,
+              "ece": 0.007580136035163316,
+              "correct": 955,
+              "wrong": 849,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.249643542262285,
+              "logLoss": 0.6924347319899886,
+              "ece": 0.00684210862118959,
+              "correct": 945,
+              "wrong": 859,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.002009840581981569,
+              "upper": -0.00035079281174271016,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.001016913925640953,
+              "upper": 0.0008283786297376021,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0016122468906557281,
+              "upper": 0.00010505690431623296,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9977743839174408,
+                "mistakeCorrelation": 0.39077878091902946
+              }
+            ],
+            "agreement": {
+              "n": 1256,
+              "coverage": 0.6962305986696231,
+              "correct": 676,
+              "wrong": 580,
+              "accuracy": 0.5382165605095541,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        },
+        {
+          "name": "projection-with-reference-and-poisson",
+          "componentNames": [
+            "projection",
+            "previous-best",
+            "poisson"
+          ],
+          "weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.2484529699857683,
+            "logLoss": 0.6900460830085557,
+            "ece": 2.5326478089912512e-06,
+            "correct": 972,
+            "wrong": 832,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.24976151725008253,
+              "logLoss": 0.6926705344024628,
+              "ece": 0.008532740253364595,
+              "correct": 939,
+              "wrong": 865,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.2487336525440079,
+              "logLoss": 0.6906135440834447,
+              "ece": 0.007580136035163316,
+              "correct": 955,
+              "wrong": 849,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.249643542262285,
+              "logLoss": 0.6924347319899886,
+              "ece": 0.00684210862118959,
+              "correct": 945,
+              "wrong": 859,
+              "undecided": 0
+            },
+            "poisson": {
+              "n": 1804,
+              "brier": 0.24803828149137108,
+              "logLoss": 0.6892069989898932,
+              "ece": 0.002935345330635019,
+              "correct": 965,
+              "wrong": 839,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.0024719562114914237,
+              "upper": -0.0006695940375460112,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.0018408295247457076,
+              "upper": 0.00034247714735634153,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0018908780882002131,
+              "upper": -0.00039512826693774406,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "poisson": {
+              "lower": 6.040684140047341e-05,
+              "upper": 0.0011797584541607944,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9977743839174408,
+                "mistakeCorrelation": 0.39077878091902946
+              },
+              {
+                "a": 0,
+                "b": 2,
+                "residualCorrelation": 0.9985041461805666,
+                "mistakeCorrelation": 0.5952514971733177
+              },
+              {
+                "a": 1,
+                "b": 2,
+                "residualCorrelation": 0.9979904660072678,
+                "mistakeCorrelation": 0.5035368445830639
+              }
+            ],
+            "agreement": {
+              "n": 1125,
+              "coverage": 0.6236141906873615,
+              "correct": 610,
+              "wrong": 515,
+              "accuracy": 0.5422222222222223,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "points-over-79.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.23901625665270648,
+        "logLoss": 0.6709100296928953,
+        "ece": 0.007777180608046217,
+        "correct": 1076,
+        "wrong": 728,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.239576978934819,
+            "logLoss": 0.6721076945482843,
+            "ece": 0.016117326935333992,
+            "correct": 1078,
+            "wrong": 726,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.24062993701385535,
+              "logLoss": 0.6742960608956753,
+              "ece": 0.00670762533558411,
+              "correct": 1078,
+              "wrong": 726,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.23901625665270648,
+              "logLoss": 0.6709100296928953,
+              "ece": 0.007777180608046217,
+              "correct": 1076,
+              "wrong": 728,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.2408241587323202,
+              "logLoss": 0.6746918150108151,
+              "ece": 0.01619148977370888,
+              "correct": 1078,
+              "wrong": 726,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.002023677888341075,
+              "upper": -0.0007557947899195424,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -1.5169069729230253e-05,
+              "upper": 0.0010033980936161248,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.001803265244982799,
+              "upper": -0.0007919936226469315,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9977977655636929,
+                "mistakeCorrelation": 0.990786557867832
+              }
+            ],
+            "agreement": {
+              "n": 1796,
+              "coverage": 0.9955654101995566,
+              "correct": 1073,
+              "wrong": 723,
+              "accuracy": 0.5974387527839644,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        },
+        {
+          "name": "projection-with-reference-and-poisson",
+          "componentNames": [
+            "projection",
+            "previous-best",
+            "poisson"
+          ],
+          "weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.23933355062689227,
+            "logLoss": 0.6715936064964337,
+            "ece": 0.019167035034633573,
+            "correct": 1078,
+            "wrong": 726,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.24062993701385535,
+              "logLoss": 0.6742960608956753,
+              "ece": 0.00670762533558411,
+              "correct": 1078,
+              "wrong": 726,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.23901625665270648,
+              "logLoss": 0.6709100296928953,
+              "ece": 0.007777180608046217,
+              "correct": 1076,
+              "wrong": 728,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.2408241587323202,
+              "logLoss": 0.6746918150108151,
+              "ece": 0.01619148977370888,
+              "correct": 1078,
+              "wrong": 726,
+              "undecided": 0
+            },
+            "poisson": {
+              "n": 1804,
+              "brier": 0.239425035158818,
+              "logLoss": 0.671764489363128,
+              "ece": 0.014033130865275745,
+              "correct": 1078,
+              "wrong": 726,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.0019815300587457227,
+              "upper": -0.0010601705448359563,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.0004396779808915248,
+              "upper": 0.0010603708607107344,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0025224756165864756,
+              "upper": -0.0009362186243837696,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "poisson": {
+              "lower": -0.0008219239925533625,
+              "upper": 0.0008064628961450468,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9977977655636929,
+                "mistakeCorrelation": 0.990786557867832
+              },
+              {
+                "a": 0,
+                "b": 2,
+                "residualCorrelation": 0.9987151706197873,
+                "mistakeCorrelation": 1.0
+              },
+              {
+                "a": 1,
+                "b": 2,
+                "residualCorrelation": 0.9982969231089103,
+                "mistakeCorrelation": 0.9907865578678319
+              }
+            ],
+            "agreement": {
+              "n": 1796,
+              "coverage": 0.9955654101995566,
+              "correct": 1073,
+              "wrong": 723,
+              "accuracy": 0.5974387527839644,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "points-over-84.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.21930171843211535,
+        "logLoss": 0.6302831587010573,
+        "ece": 0.0034197068576070997,
+        "correct": 1215,
+        "wrong": 589,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.2195432433208829,
+            "logLoss": 0.6308679398860002,
+            "ece": 0.007106473556150192,
+            "correct": 1215,
+            "wrong": 589,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.2200162671345243,
+              "logLoss": 0.6319438596785345,
+              "ece": 0.0011561387676703124,
+              "correct": 1215,
+              "wrong": 589,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.21930171843211535,
+              "logLoss": 0.6302831587010573,
+              "ece": 0.0034197068576070997,
+              "correct": 1215,
+              "wrong": 589,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.22031427111474206,
+              "logLoss": 0.6326008229085316,
+              "ece": 0.016645599620075176,
+              "correct": 1215,
+              "wrong": 589,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.000940015574547764,
+              "upper": -0.0002622317298912692,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.00025497152878995203,
+              "upper": 0.0005607772542102587,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.001196995924442145,
+              "upper": -0.00015180773371181933,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9984194186814744,
+                "mistakeCorrelation": 1.0
+              }
+            ],
+            "agreement": {
+              "n": 1804,
+              "coverage": 1.0,
+              "correct": 1215,
+              "wrong": 589,
+              "accuracy": 0.6735033259423503,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        },
+        {
+          "name": "projection-with-reference-and-poisson",
+          "componentNames": [
+            "projection",
+            "previous-best",
+            "poisson"
+          ],
+          "weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21957811903093416,
+            "logLoss": 0.630937898488116,
+            "ece": 0.006165357089781876,
+            "correct": 1215,
+            "wrong": 589,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.2200162671345243,
+              "logLoss": 0.6319438596785345,
+              "ece": 0.0011561387676703124,
+              "correct": 1215,
+              "wrong": 589,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.21930171843211535,
+              "logLoss": 0.6302831587010573,
+              "ece": 0.0034197068576070997,
+              "correct": 1215,
+              "wrong": 589,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.22031427111474206,
+              "logLoss": 0.6326008229085316,
+              "ece": 0.016645599620075176,
+              "correct": 1215,
+              "wrong": 589,
+              "undecided": 0
+            },
+            "poisson": {
+              "n": 1804,
+              "brier": 0.22099969829822919,
+              "logLoss": 0.6343133443241646,
+              "ece": 0.032709018381645964,
+              "correct": 1215,
+              "wrong": 589,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.0011038658053960293,
+              "upper": 5.8799796102578205e-05,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.00015593817668756255,
+              "upper": 0.0006431043538831926,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.001801107958939862,
+              "upper": 0.0007144702944505577,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "poisson": {
+              "lower": -0.00330030082120183,
+              "upper": -0.0004444487230819004,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9984194186814744,
+                "mistakeCorrelation": 1.0
+              },
+              {
+                "a": 0,
+                "b": 2,
+                "residualCorrelation": 0.9989418252517815,
+                "mistakeCorrelation": 1.0
+              },
+              {
+                "a": 1,
+                "b": 2,
+                "residualCorrelation": 0.9982550700801751,
+                "mistakeCorrelation": 1.0
+              }
+            ],
+            "agreement": {
+              "n": 1804,
+              "coverage": 1.0,
+              "correct": 1215,
+              "wrong": 589,
+              "accuracy": 0.6735033259423503,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "home-set-handicap-minus-1.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.21850419482603262,
+        "logLoss": 0.6281996280579424,
+        "ece": 0.013384560775053149,
+        "correct": 1209,
+        "wrong": 595,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.2178321027236012,
+            "logLoss": 0.6267384908253398,
+            "ece": 0.008709106811037603,
+            "correct": 1209,
+            "wrong": 595,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.22137127652731967,
+              "logLoss": 0.6347934395706673,
+              "ece": 0.01047275140185821,
+              "correct": 1209,
+              "wrong": 595,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.21850419482603262,
+              "logLoss": 0.6281996280579424,
+              "ece": 0.013384560775053149,
+              "correct": 1209,
+              "wrong": 595,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.21773185097563613,
+              "logLoss": 0.6265140165715893,
+              "ece": 0.004033652847022063,
+              "correct": 1210,
+              "wrong": 594,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.005114788654460033,
+              "upper": -0.0014850030347493051,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.0013457905799895491,
+              "upper": 9.979634103628065e-05,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0007310246220196181,
+              "upper": 0.0007187137180459706,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9975786285619108,
+                "mistakeCorrelation": 0.9987463493978077
+              }
+            ],
+            "agreement": {
+              "n": 1803,
+              "coverage": 0.9994456762749445,
+              "correct": 1209,
+              "wrong": 594,
+              "accuracy": 0.670549084858569,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "home-set-handicap-plus-1.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22532636667911388,
+        "logLoss": 0.6427093788585869,
+        "ece": 0.00509780480774282,
+        "correct": 1175,
+        "wrong": 629,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22475759081870283,
+            "logLoss": 0.6414716401816526,
+            "ece": 0.012995187245174946,
+            "correct": 1175,
+            "wrong": 629,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.22746704181553298,
+              "logLoss": 0.6474430418789681,
+              "ece": 0.008125341205640728,
+              "correct": 1176,
+              "wrong": 628,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.22532636667911388,
+              "logLoss": 0.6427093788585869,
+              "ece": 0.00509780480774282,
+              "correct": 1175,
+              "wrong": 629,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.22494400507991508,
+              "logLoss": 0.6419896026077383,
+              "ece": 0.020892569682607078,
+              "correct": 1176,
+              "wrong": 628,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.0050114100616630766,
+              "upper": -0.0010567514069536315,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.0014458493725704837,
+              "upper": 1.2525669011501657e-05,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0009183817671550093,
+              "upper": 0.0008571643240674121,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9971983398923966,
+                "mistakeCorrelation": 0.9914544707765781
+              }
+            ],
+            "agreement": {
+              "n": 1797,
+              "coverage": 0.996119733924612,
+              "correct": 1172,
+              "wrong": 625,
+              "accuracy": 0.6521981079577073,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-minus-5.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22000609634811663,
+        "logLoss": 0.6314497037579903,
+        "ece": 0.020347780158317442,
+        "correct": 1200,
+        "wrong": 604,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21910316307804534,
+            "logLoss": 0.629404515861103,
+            "ece": 0.0251036821522505,
+            "correct": 1198,
+            "wrong": 606,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.22361473182567443,
+              "logLoss": 0.6394438914311787,
+              "ece": 0.016553159038757335,
+              "correct": 1197,
+              "wrong": 607,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.22000609634811663,
+              "logLoss": 0.6314497037579903,
+              "ece": 0.020347780158317442,
+              "correct": 1200,
+              "wrong": 604,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.21883986001388306,
+              "logLoss": 0.6287601656340704,
+              "ece": 0.015066788235342202,
+              "correct": 1200,
+              "wrong": 604,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.004780944199415915,
+              "upper": -0.0035083587369299256,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.0020300229545226435,
+              "upper": -0.00010200130582186347,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0005549007882693624,
+              "upper": 0.0012878950410812216,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9972068437135884,
+                "mistakeCorrelation": 0.9825772626931569
+              }
+            ],
+            "agreement": {
+              "n": 1790,
+              "coverage": 0.9922394678492239,
+              "correct": 1193,
+              "wrong": 597,
+              "accuracy": 0.6664804469273743,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-plus-5.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22897240228276206,
+        "logLoss": 0.6502972893315455,
+        "ece": 0.012278558303859856,
+        "correct": 1149,
+        "wrong": 655,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22834423374808224,
+            "logLoss": 0.6488709769631343,
+            "ece": 0.01647610714403897,
+            "correct": 1151,
+            "wrong": 653,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.23121240352679653,
+              "logLoss": 0.6551087739466049,
+              "ece": 0.008830583106911325,
+              "correct": 1150,
+              "wrong": 654,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.22897240228276206,
+              "logLoss": 0.6502972893315455,
+              "ece": 0.012278558303859856,
+              "correct": 1149,
+              "wrong": 655,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.22837126366321328,
+              "logLoss": 0.6489611709988846,
+              "ece": 0.020673655984218085,
+              "correct": 1151,
+              "wrong": 653,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.0031669939154872033,
+              "upper": -0.002177259768961324,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.0011936994853738087,
+              "upper": -5.428725095254582e-05,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0008453834772012454,
+              "upper": 0.000644882972600563,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9972872774014735,
+                "mistakeCorrelation": 0.9904083930230224
+              }
+            ],
+            "agreement": {
+              "n": 1796,
+              "coverage": 0.9955654101995566,
+              "correct": 1146,
+              "wrong": 650,
+              "accuracy": 0.6380846325167038,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-minus-9.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.15395322255057745,
+        "logLoss": 0.48456043780644276,
+        "ece": 0.006560741573036381,
+        "correct": 1455,
+        "wrong": 349,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.1534627074541009,
+            "logLoss": 0.4831488912210706,
+            "ece": 0.013782779621725869,
+            "correct": 1455,
+            "wrong": 349,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.1562219208152689,
+              "logLoss": 0.4918005385563789,
+              "ece": 0.011978835993693837,
+              "correct": 1455,
+              "wrong": 349,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.15395322255057745,
+              "logLoss": 0.48456043780644276,
+              "ece": 0.006560741573036381,
+              "correct": 1455,
+              "wrong": 349,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.15346986700910156,
+              "logLoss": 0.4832075721959951,
+              "ece": 0.015673792593211035,
+              "correct": 1455,
+              "wrong": 349,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.004072025445490069,
+              "upper": -0.0019622196199201416,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.0009505933659938663,
+              "upper": -0.0001082198006673212,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0002193227707459883,
+              "upper": 0.0003511060044803141,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9968509783615195,
+                "mistakeCorrelation": 0.9999999999999999
+              }
+            ],
+            "agreement": {
+              "n": 1804,
+              "coverage": 1.0,
+              "correct": 1455,
+              "wrong": 349,
+              "accuracy": 0.8065410199556541,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-plus-9.5",
+      "reference": {
+        "n": 1804,
+        "brier": 0.16150071096808585,
+        "logLoss": 0.5025056243308909,
+        "ece": 0.009770143341524661,
+        "correct": 1433,
+        "wrong": 371,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "projection-with-reference",
+          "componentNames": [
+            "projection",
+            "previous-best"
+          ],
+          "weights": [
+            0.5,
+            0.5
+          ],
+          "metrics": {
+            "n": 1804,
+            "brier": 0.16145901093106277,
+            "logLoss": 0.5024162388016165,
+            "ece": 0.012905649240611095,
+            "correct": 1433,
+            "wrong": 371,
+            "undecided": 0
+          },
+          "components": {
+            "league": {
+              "n": 1804,
+              "brier": 0.16336769611632948,
+              "logLoss": 0.508189241604515,
+              "ece": 0.011587554708537203,
+              "correct": 1433,
+              "wrong": 371,
+              "undecided": 0
+            },
+            "previous-best": {
+              "n": 1804,
+              "brier": 0.16150071096808585,
+              "logLoss": 0.5025056243308909,
+              "ece": 0.009770143341524661,
+              "correct": 1433,
+              "wrong": 371,
+              "undecided": 0
+            },
+            "projection": {
+              "n": 1804,
+              "brier": 0.1619702538173734,
+              "logLoss": 0.5042809818603634,
+              "ece": 0.016041155139697533,
+              "correct": 1433,
+              "wrong": 371,
+              "undecided": 0
+            }
+          },
+          "pairedBrierDifference": {
+            "league": {
+              "lower": -0.0024805168462295932,
+              "upper": -0.0013747370299516154,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "previous-best": {
+              "lower": -0.0005992086799804879,
+              "upper": 0.0006821261252615602,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            },
+            "projection": {
+              "lower": -0.0012217066890422535,
+              "upper": 0.00019360173993127443,
+              "days": 9,
+              "blockDays": 3,
+              "familyComparisons": 58
+            }
+          },
+          "diversity": {
+            "pairs": [
+              {
+                "a": 0,
+                "b": 1,
+                "residualCorrelation": 0.9966996155489866,
+                "mistakeCorrelation": 0.9999999999999999
+              }
+            ],
+            "agreement": {
+              "n": 1804,
+              "coverage": 1.0,
+              "correct": 1433,
+              "wrong": 371,
+              "accuracy": 0.7943458980044346,
+              "descriptiveOnly": true
+            }
+          },
+          "beatsEveryComparatorBeyondUncertainty": false
+        }
+      ]
+    }
+  ],
+  "comparisons": 58,
+  "independentValidation": false,
+  "operationallyValidated": false,
+  "automaticPromotion": false
+}

@@ -1,0 +1,154 @@
+{
+  "sourceSha256": "0bb2d17f1eafdfc34a44865f1157d454f460fc2d867873173b765d793a30bd9a",
+  "rules": {
+    "above50": [
+      1.3,
+      0.5
+    ],
+    "above60": [
+      1.3,
+      0.6
+    ],
+    "odds2Above50": [
+      2,
+      0.5
+    ]
+  },
+  "cohorts": {
+    "all": {
+      "matches": 258,
+      "days": 16,
+      "methods": {
+        "sports": {
+          "above50": {
+            "selected": 12,
+            "exact": 3,
+            "wrong": 9,
+            "accuracy": 0.25
+          },
+          "above60": {
+            "selected": 10,
+            "exact": 2,
+            "wrong": 8,
+            "accuracy": 0.2
+          },
+          "odds2Above50": {
+            "selected": 12,
+            "exact": 3,
+            "wrong": 9,
+            "accuracy": 0.25
+          }
+        },
+        "symmetric": {
+          "above50": {
+            "selected": 13,
+            "exact": 4,
+            "wrong": 9,
+            "accuracy": 0.3076923076923077
+          },
+          "above60": {
+            "selected": 11,
+            "exact": 3,
+            "wrong": 8,
+            "accuracy": 0.2727272727272727
+          },
+          "odds2Above50": {
+            "selected": 13,
+            "exact": 4,
+            "wrong": 9,
+            "accuracy": 0.3076923076923077
+          }
+        },
+        "bothAboveCutoff": {
+          "above50": {
+            "selected": 12,
+            "exact": 3,
+            "wrong": 9,
+            "accuracy": 0.25
+          },
+          "above60": {
+            "selected": 10,
+            "exact": 2,
+            "wrong": 8,
+            "accuracy": 0.2
+          },
+          "odds2Above50": {
+            "selected": 12,
+            "exact": 3,
+            "wrong": 9,
+            "accuracy": 0.25
+          }
+        }
+      }
+    },
+    "final": {
+      "matches": 156,
+      "days": 4,
+      "methods": {
+        "sports": {
+          "above50": {
+            "selected": 5,
+            "exact": 1,
+            "wrong": 4,
+            "accuracy": 0.2
+          },
+          "above60": {
+            "selected": 4,
+            "exact": 1,
+            "wrong": 3,
+            "accuracy": 0.25
+          },
+          "odds2Above50": {
+            "selected": 5,
+            "exact": 1,
+            "wrong": 4,
+            "accuracy": 0.2
+          }
+        },
+        "symmetric": {
+          "above50": {
+            "selected": 5,
+            "exact": 1,
+            "wrong": 4,
+            "accuracy": 0.2
+          },
+          "above60": {
+            "selected": 4,
+            "exact": 1,
+            "wrong": 3,
+            "accuracy": 0.25
+          },
+          "odds2Above50": {
+            "selected": 5,
+            "exact": 1,
+            "wrong": 4,
+            "accuracy": 0.2
+          }
+        },
+        "bothAboveCutoff": {
+          "above50": {
+            "selected": 5,
+            "exact": 1,
+            "wrong": 4,
+            "accuracy": 0.2
+          },
+          "above60": {
+            "selected": 4,
+            "exact": 1,
+            "wrong": 3,
+            "accuracy": 0.25
+          },
+          "odds2Above50": {
+            "selected": 5,
+            "exact": 1,
+            "wrong": 4,
+            "accuracy": 0.2
+          }
+        }
+      }
+    }
+  },
+  "finalStart": "2026-11-01",
+  "prospective": false,
+  "executionVerified": false
+}

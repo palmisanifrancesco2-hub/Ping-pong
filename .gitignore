@@ -1,0 +1,15 @@
+node_modules/
+dist/
+coverage/
+.vercel/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+
+.research-data/
+
+.server-build/
+__pycache__/
+*.pyc

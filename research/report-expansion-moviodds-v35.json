@@ -1,0 +1,55 @@
+{
+  "deployment": "dpl_AccdtCSQQyeX3wvpg6PNzC9at9qb",
+  "cohortTotals": {
+    "v32MoviOdds": 20449,
+    "v35MoviOdds": 11875,
+    "setka": 4223,
+    "wttMen": 2411,
+    "wttWomen": 2258
+  },
+  "uniqueTestMatches": 41216,
+  "moviodds": {
+    "expansionVerification": "success",
+    "from": "2026-11-06",
+    "before": "2026-11-21",
+    "archiveResults": 37025,
+    "testDays": 15,
+    "testHash": "da7689ee9b9989ec2cc4cc24e843c726ad0df9fb574a1eb9b8669e138b3c993b",
+    "modelVersion": "score-full-v1-3ea7190e23ec068c",
+    "frequency": {
+      "n": 11875,
+      "correct": 6026,
+      "wrong": 5849,
+      "undecided": 0,
+      "brier": 0.2496713463503903,
+      "logLoss": 0.6924892640623219
+    },
+    "combined": {
+      "n": 11875,
+      "correct": 6409,
+      "wrong": 5466,
+      "undecided": 0,
+      "brier": 0.24667367110242205,
+      "logLoss": 0.6863884768249994
+    },
+    "logistic": {
+      "n": 7607,
+      "correct": 4179,
+      "wrong": 3428,
+      "undecided": 0,
+      "brier": 0.24527882388010097,
+      "logLoss": 0.6835407589743703
+    },
+    "elo": {
+      "n": 7607,
+      "correct": 4066,
+      "wrong": 3541,
+      "undecided": 0,
+      "brier": 0.24983119729483624,
+      "logLoss": 0.6930668184159121
+    }
+  },
+  "archivedOddsCompared": false,
+  "retrospective": true,
+  "operationallyValidated": false
+}

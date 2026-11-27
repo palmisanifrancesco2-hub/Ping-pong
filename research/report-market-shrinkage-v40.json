@@ -1,0 +1,382 @@
+{
+  "protocol": {
+    "lagDays": 2,
+    "minimumPriorMatches": 70,
+    "minimumPriorDays": 4,
+    "minimumOdds": 1.3,
+    "weights": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "priorEffectiveMatches": 25,
+    "strongFavoriteThreshold": 0.65,
+    "bootstrap": {
+      "blockDays": 3,
+      "bootstrapReplicates": 10000,
+      "familyComparisons": 2,
+      "seed": 4001
+    }
+  },
+  "sampleSha256": "0bb2d17f1eafdfc34a44865f1157d454f460fc2d867873173b765d793a30bd9a",
+  "nArchived": 258,
+  "nEvaluated": 156,
+  "evaluatedDays": 4,
+  "folds": [
+    {
+      "date": "2026-11-01",
+      "n": 23,
+      "priorN": 86,
+      "weights": {
+        "global": 0.25,
+        "balanced": 0.25,
+        "strongFavorite": 0.5
+      }
+    },
+    {
+      "date": "2026-11-02",
+      "n": 42,
+      "priorN": 102,
+      "weights": {
+        "global": 0.25,
+        "balanced": 0.0,
+        "strongFavorite": 0.25
+      }
+    },
+    {
+      "date": "2026-11-03",
+      "n": 37,
+      "priorN": 125,
+      "weights": {
+        "global": 0.0,
+        "balanced": 0.0,
+        "strongFavorite": 0.25
+      }
+    },
+    {
+      "date": "2026-11-04",
+      "n": 54,
+      "priorN": 167,
+      "weights": {
+        "global": 0.25,
+        "balanced": 0.0,
+        "strongFavorite": 0.5
+      }
+    }
+  ],
+  "forecast": {
+    "global": {
+      "n": 156,
+      "correct": 88,
+      "wrong": 63,
+      "undecided": 5,
+      "accuracy": 0.5827814569536424,
+      "coverage": 0.967948717948718,
+      "brier": 0.2431299116795149,
+      "logLoss": 0.6794350866932465,
+      "ece": 0.07305788679756546,
+      "calibration": [
+        {
+          "from": 0.2,
+          "to": 0.3,
+          "n": 4,
+          "probability": 0.27069626694892873,
+          "frequency": 0.25
+        },
+        {
+          "from": 0.3,
+          "to": 0.4,
+          "n": 15,
+          "probability": 0.3609562014728861,
+          "frequency": 0.26666666666666666
+        },
+        {
+          "from": 0.4,
+          "to": 0.5,
+          "n": 54,
+          "probability": 0.45661709045332455,
+          "frequency": 0.4444444444444444
+        },
+        {
+          "from": 0.5,
+          "to": 0.6,
+          "n": 58,
+          "probability": 0.5424746169965977,
+          "frequency": 0.5862068965517241
+        },
+        {
+          "from": 0.6,
+          "to": 0.7,
+          "n": 20,
+          "probability": 0.6375444412605702,
+          "frequency": 0.4
+        },
+        {
+          "from": 0.7,
+          "to": 0.8,
+          "n": 4,
+          "probability": 0.7146837904322869,
+          "frequency": 1.0
+        },
+        {
+          "from": 0.8,
+          "to": 0.9,
+          "n": 1,
+          "probability": 0.8139534883720931,
+          "frequency": 0.0
+        }
+      ]
+    },
+    "byMarketStrength": {
+      "n": 156,
+      "correct": 85,
+      "wrong": 60,
+      "undecided": 11,
+      "accuracy": 0.5862068965517241,
+      "coverage": 0.9294871794871795,
+      "brier": 0.24346163433564674,
+      "logLoss": 0.6800618878714426,
+      "ece": 0.05699283758915438,
+      "calibration": [
+        {
+          "from": 0.2,
+          "to": 0.3,
+          "n": 2,
+          "probability": 0.2773123675148119,
+          "frequency": 0.5
+        },
+        {
+          "from": 0.3,
+          "to": 0.4,
+          "n": 17,
+          "probability": 0.3614403527419149,
+          "frequency": 0.23529411764705882
+        },
+        {
+          "from": 0.4,
+          "to": 0.5,
+          "n": 49,
+          "probability": 0.4465619659499571,
+          "frequency": 0.42857142857142855
+        },
+        {
+          "from": 0.5,
+          "to": 0.6,
+          "n": 61,
+          "probability": 0.5425895620452365,
+          "frequency": 0.5737704918032787
+        },
+        {
+          "from": 0.6,
+          "to": 0.7,
+          "n": 25,
+          "probability": 0.6417796310162303,
+          "frequency": 0.52
+        },
+        {
+          "from": 0.7,
+          "to": 0.8,
+          "n": 2,
+          "probability": 0.7364787900654615,
+          "frequency": 0.5
+        }
+      ]
+    },
+    "market": {
+      "n": 156,
+      "correct": 83,
+      "wrong": 60,
+      "undecided": 13,
+      "accuracy": 0.5804195804195804,
+      "coverage": 0.9166666666666666,
+      "brier": 0.2428776220605315,
+      "logLoss": 0.6786417369109191,
+      "ece": 0.056220842814258064,
+      "calibration": [
+        {
+          "from": 0.1,
+          "to": 0.2,
+          "n": 1,
+          "probability": 0.18604651162790697,
+          "frequency": 0.0
+        },
+        {
+          "from": 0.2,
+          "to": 0.3,
+          "n": 7,
+          "probability": 0.26967270582704056,
+          "frequency": 0.14285714285714285
+        },
+        {
+          "from": 0.3,
+          "to": 0.4,
+          "n": 12,
+          "probability": 0.36325758417647824,
+          "frequency": 0.4166666666666667
+        },
+        {
+          "from": 0.4,
+          "to": 0.5,
+          "n": 46,
+          "probability": 0.44442851210446105,
+          "frequency": 0.43478260869565216
+        },
+        {
+          "from": 0.5,
+          "to": 0.6,
+          "n": 60,
+          "probability": 0.5404735567522183,
+          "frequency": 0.55
+        },
+        {
+          "from": 0.6,
+          "to": 0.7,
+          "n": 25,
+          "probability": 0.6473796596692628,
+          "frequency": 0.48
+        },
+        {
+          "from": 0.7,
+          "to": 0.8,
+          "n": 4,
+          "probability": 0.7394890237627427,
+          "frequency": 1.0
+        },
+        {
+          "from": 0.8,
+          "to": 0.9,
+          "n": 1,
+          "probability": 0.8139534883720931,
+          "frequency": 0.0
+        }
+      ]
+    },
+    "sports": {
+      "n": 156,
+      "correct": 80,
+      "wrong": 76,
+      "undecided": 0,
+      "accuracy": 0.5128205128205128,
+      "coverage": 1.0,
+      "brier": 0.24766934455170309,
+      "logLoss": 0.6882523782013132,
+      "ece": 0.04951325516317968,
+      "calibration": [
+        {
+          "from": 0.2,
+          "to": 0.3,
+          "n": 1,
+          "probability": 0.2835609886205262,
+          "frequency": 0.0
+        },
+        {
+          "from": 0.3,
+          "to": 0.4,
+          "n": 5,
+          "probability": 0.3775208012418701,
+          "frequency": 0.4
+        },
+        {
+          "from": 0.4,
+          "to": 0.5,
+          "n": 79,
+          "probability": 0.46279894720505776,
+          "frequency": 0.4810126582278481
+        },
+        {
+          "from": 0.5,
+          "to": 0.6,
+          "n": 63,
+          "probability": 0.5379082481785135,
+          "frequency": 0.4603174603174603
+        },
+        {
+          "from": 0.6,
+          "to": 0.7,
+          "n": 8,
+          "probability": 0.6248739978752416,
+          "frequency": 0.75
+        }
+      ]
+    }
+  },
+  "pairedVsMarket": {
+    "global": {
+      "deltaBrier": 0.00025228961898338744,
+      "interval": {
+        "lower": null,
+        "upper": null,
+        "days": 4
+      }
+    },
+    "byMarketStrength": {
+      "deltaBrier": 0.0005840122751151753,
+      "interval": {
+        "lower": null,
+        "upper": null,
+        "days": 4
+      }
+    }
+  },
+  "disagreementValue": {
+    "global": {
+      "all": {
+        "n": 6,
+        "exact": 3,
+        "wrong": 3,
+        "theoreticalRoi": 0.22916666666666666
+      },
+      "atLeast3.65": {
+        "n": 2,
+        "exact": 0,
+        "wrong": 2,
+        "theoreticalRoi": -1.0
+      }
+    },
+    "byMarketStrength": {
+      "all": {
+        "n": 3,
+        "exact": 0,
+        "wrong": 3,
+        "theoreticalRoi": -1.0
+      },
+      "atLeast3.65": {
+        "n": 2,
+        "exact": 0,
+        "wrong": 2,
+        "theoreticalRoi": -1.0
+      }
+    },
+    "market": {
+      "all": {
+        "n": 0,
+        "exact": 0,
+        "wrong": 0,
+        "theoreticalRoi": null
+      },
+      "atLeast3.65": {
+        "n": 0,
+        "exact": 0,
+        "wrong": 0,
+        "theoreticalRoi": null
+      }
+    },
+    "sports": {
+      "all": {
+        "n": 39,
+        "exact": 17,
+        "wrong": 22,
+        "theoreticalRoi": -0.07068764568764567
+      },
+      "atLeast3.65": {
+        "n": 2,
+        "exact": 0,
+        "wrong": 2,
+        "theoreticalRoi": -1.0
+      }
+    }
+  },
+  "operationallyValidated": false
+}

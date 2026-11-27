@@ -1,0 +1,811 @@
+{
+  "version": "score-projection-v11-existing-comparator",
+  "n": 1804,
+  "primaryReportHash": "ef9e9926411e87b8f6ec9b691c635c18e606ea4bdf2e49441e1b2846393d1beb",
+  "exploratoryPostReportComparison": true,
+  "familyComparisons": 62,
+  "markets": [
+    {
+      "target": "winner",
+      "referenceName": "ensemble-equal-v7",
+      "reference": {
+        "n": 1804,
+        "brier": 0.24573315254242545,
+        "logLoss": 0.6845085483287152,
+        "ece": 0.01617007063408835,
+        "correct": 989,
+        "wrong": 815,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.2460402757946339,
+            "logLoss": 0.6851617554151295,
+            "ece": 0.013312498819725285,
+            "correct": 1002,
+            "wrong": 802,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0004233225108414421,
+            "upper": 0.0007677480483338099,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.24577220783404657,
+            "logLoss": 0.6846031014146949,
+            "ece": 0.016255182138277532,
+            "correct": 996,
+            "wrong": 808,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0003159555077943921,
+            "upper": 0.00022837407274292222,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "first-set",
+      "referenceName": "joint-score-forest-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.24886301923487625,
+        "logLoss": 0.6908835838056518,
+        "ece": 0.0019286655008758993,
+        "correct": 967,
+        "wrong": 837,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.2485016053700288,
+            "logLoss": 0.690141669229351,
+            "ece": 0.013122844322467974,
+            "correct": 964,
+            "wrong": 840,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.000980483929501994,
+            "upper": 0.0003095823217560268,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.24838610083369828,
+            "logLoss": 0.6899087958791613,
+            "ece": 0.016600396213775036,
+            "correct": 970,
+            "wrong": 834,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0010095784775838298,
+            "upper": 0.0004384179271378445,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "first-set-points-over-19.5",
+      "referenceName": "logistic-context-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2184495833843661,
+        "logLoss": 0.6287285124517913,
+        "ece": 0.02105872644390877,
+        "correct": 1225,
+        "wrong": 579,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21870217005523235,
+            "logLoss": 0.6292803158148585,
+            "ece": 0.026969503740479482,
+            "correct": 1225,
+            "wrong": 579,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -6.463839162934226e-05,
+            "upper": 0.0003182828779446856,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21848061170517202,
+            "logLoss": 0.6287906266809865,
+            "ece": 0.022061341298914357,
+            "correct": 1225,
+            "wrong": 579,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -9.873671635154706e-05,
+            "upper": 8.19219693490858e-05,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "sets-over-3.5",
+      "referenceName": "hierarchical-eb-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2017218256637273,
+        "logLoss": 0.5930396286420558,
+        "ece": 0.014972823439709475,
+        "correct": 1297,
+        "wrong": 507,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.20206877399427473,
+            "logLoss": 0.5939873174498034,
+            "ece": 0.010798341610816727,
+            "correct": 1297,
+            "wrong": 507,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.001156140868313647,
+            "upper": 0.001521368948921314,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.20188575530453215,
+            "logLoss": 0.5935250495113733,
+            "ece": 0.004359257768326078,
+            "correct": 1297,
+            "wrong": 507,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0007723031095437567,
+            "upper": 0.0014779381610300548,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "sets-over-4.5",
+      "referenceName": "hierarchical-eb-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.21805639513777353,
+        "logLoss": 0.6277301608861143,
+        "ece": 0.007124307246622043,
+        "correct": 1223,
+        "wrong": 581,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21963185509837674,
+            "logLoss": 0.6312656968296966,
+            "ece": 0.02918103735745987,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0015241464725140547,
+            "upper": 0.003115976261341658,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21877012237755555,
+            "logLoss": 0.6293840756926602,
+            "ece": 0.016858916835585016,
+            "correct": 1223,
+            "wrong": 581,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0011126384647154018,
+            "upper": 0.0020792328856612807,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "points-over-74.5",
+      "referenceName": "hierarchical-eb-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.2487336525440079,
+        "logLoss": 0.6906135440834447,
+        "ece": 0.007580136035163316,
+        "correct": 955,
+        "wrong": 849,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.25074175147817307,
+            "logLoss": 0.6946531472942714,
+            "ece": 0.02486847244432198,
+            "correct": 939,
+            "wrong": 865,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0012830817034789658,
+            "upper": 0.004456055045599963,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.249643542262285,
+            "logLoss": 0.6924347319899886,
+            "ece": 0.00684210862118959,
+            "correct": 945,
+            "wrong": 859,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0011219708299571862,
+            "upper": 0.001972121878486977,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "poisson-total-points",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.24803828149137108,
+            "logLoss": 0.6892069989898932,
+            "ece": 0.002935345330635019,
+            "correct": 965,
+            "wrong": 839,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0030205879789065035,
+            "upper": 2.083694888628732e-05,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "points-over-79.5",
+      "referenceName": "hierarchical-eb-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.23901625665270648,
+        "logLoss": 0.6709100296928953,
+        "ece": 0.007777180608046217,
+        "correct": 1076,
+        "wrong": 728,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.24198952698684262,
+            "logLoss": 0.6770627978638988,
+            "ece": 0.030964474548586925,
+            "correct": 1078,
+            "wrong": 726,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": 0.0010473951809148836,
+            "upper": 0.004940000342793694,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.2408241587323202,
+            "logLoss": 0.6746918150108151,
+            "ece": 0.01619148977370888,
+            "correct": 1078,
+            "wrong": 726,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": 0.000776824552917701,
+            "upper": 0.002794250025143916,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "poisson-total-points",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.239425035158818,
+            "logLoss": 0.671764489363128,
+            "ece": 0.014033130865275745,
+            "correct": 1078,
+            "wrong": 726,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0005346884875876079,
+            "upper": 0.0015259878598775853,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "points-over-84.5",
+      "referenceName": "hierarchical-eb-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.21930171843211535,
+        "logLoss": 0.6302831587010573,
+        "ece": 0.0034197068576070997,
+        "correct": 1215,
+        "wrong": 589,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22132207128393705,
+            "logLoss": 0.6347880897085986,
+            "ece": 0.030212678459503973,
+            "correct": 1215,
+            "wrong": 589,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0002236111614702807,
+            "upper": 0.003134328777078574,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22031427111474206,
+            "logLoss": 0.6326008229085316,
+            "ece": 0.016645599620075176,
+            "correct": 1215,
+            "wrong": 589,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.00010316379507813269,
+            "upper": 0.0017577731786524039,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "poisson-total-points",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22099969829822919,
+            "logLoss": 0.6343133443241646,
+            "ece": 0.032709018381645964,
+            "correct": 1215,
+            "wrong": 589,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": 0.0004011139427944421,
+            "upper": 0.003943405175085023,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-set-handicap-minus-1.5",
+      "referenceName": "hierarchical-eb-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.21850419482603262,
+        "logLoss": 0.6281996280579424,
+        "ece": 0.013384560775053149,
+        "correct": 1209,
+        "wrong": 595,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21816134872803442,
+            "logLoss": 0.6274674275265884,
+            "ece": 0.002907852714837635,
+            "correct": 1209,
+            "wrong": 595,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0022595147409972907,
+            "upper": 0.0012553028110923595,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21773185097563613,
+            "logLoss": 0.6265140165715893,
+            "ece": 0.004033652847022063,
+            "correct": 1210,
+            "wrong": 594,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.002064504298035519,
+            "upper": 0.0008308209630558986,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-set-handicap-plus-1.5",
+      "referenceName": "joint-score-forest-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22532636667911388,
+        "logLoss": 0.6427093788585869,
+        "ece": 0.00509780480774282,
+        "correct": 1175,
+        "wrong": 629,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22551913309216046,
+            "logLoss": 0.6432481082501333,
+            "ece": 0.02648959204693067,
+            "correct": 1176,
+            "wrong": 628,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.001401017088135737,
+            "upper": 0.0009387811935055464,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22494400507991508,
+            "logLoss": 0.6419896026077383,
+            "ece": 0.020892569682607078,
+            "correct": 1176,
+            "wrong": 628,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0023030136966378945,
+            "upper": 0.0008731293890194689,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-minus-5.5",
+      "referenceName": "hierarchical-eb-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22000609634811663,
+        "logLoss": 0.6314497037579903,
+        "ece": 0.020347780158317442,
+        "correct": 1200,
+        "wrong": 604,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21892161644196934,
+            "logLoss": 0.6289014487101607,
+            "ece": 0.006768846259552822,
+            "correct": 1198,
+            "wrong": 606,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0033692434624687803,
+            "upper": 0.0005833109950757467,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.21883986001388306,
+            "logLoss": 0.6287601656340704,
+            "ece": 0.015066788235342202,
+            "correct": 1200,
+            "wrong": 604,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.003317917995603866,
+            "upper": 0.0004528994824475,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-plus-5.5",
+      "referenceName": "hierarchical-eb-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.22897240228276206,
+        "logLoss": 0.6502972893315455,
+        "ece": 0.012278558303859856,
+        "correct": 1149,
+        "wrong": 655,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22880289252372923,
+            "logLoss": 0.6498808488638296,
+            "ece": 0.028215916958329427,
+            "correct": 1149,
+            "wrong": 655,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0009056870841216305,
+            "upper": 0.0007753599705424118,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.22837126366321328,
+            "logLoss": 0.6489611709988846,
+            "ece": 0.020673655984218085,
+            "correct": 1151,
+            "wrong": 653,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0018385824579743718,
+            "upper": 0.0007910962262486983,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-minus-9.5",
+      "referenceName": "hierarchical-eb-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.15395322255057745,
+        "logLoss": 0.48456043780644276,
+        "ece": 0.006560741573036381,
+        "correct": 1455,
+        "wrong": 349,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.154001328613664,
+            "logLoss": 0.48474560827503055,
+            "ece": 0.010991353091583785,
+            "correct": 1455,
+            "wrong": 349,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0007909513507912978,
+            "upper": 0.0008869520498450171,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.15346986700910156,
+            "logLoss": 0.4832075721959951,
+            "ece": 0.015673792593211035,
+            "correct": 1455,
+            "wrong": 349,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0013016993704741808,
+            "upper": 0.0001111029700786673,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    },
+    {
+      "target": "home-point-handicap-plus-9.5",
+      "referenceName": "hierarchical-eb-v8",
+      "reference": {
+        "n": 1804,
+        "brier": 0.16150071096808585,
+        "logLoss": 0.5025056243308909,
+        "ece": 0.009770143341524661,
+        "correct": 1433,
+        "wrong": 371,
+        "undecided": 0
+      },
+      "candidates": [
+        {
+          "name": "rally-iid-logit",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.16254682958012154,
+            "logLoss": 0.506100152580888,
+            "ece": 0.02631141952871184,
+            "correct": 1433,
+            "wrong": 371,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.00020897468918780688,
+            "upper": 0.002710698218960837,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        },
+        {
+          "name": "rally-beta-binomial",
+          "metrics": {
+            "n": 1804,
+            "brier": 0.1619702538173734,
+            "logLoss": 0.5042809818603634,
+            "ece": 0.016041155139697533,
+            "correct": 1433,
+            "wrong": 371,
+            "undecided": 0
+          },
+          "pairedBrierDifference": {
+            "lower": -0.0007928104199117622,
+            "upper": 0.0019038328143038143,
+            "days": 9,
+            "blockDays": 3,
+            "familyComparisons": 62
+          }
+        }
+      ]
+    }
+  ],
+  "independentValidation": false,
+  "operationallyValidated": false,
+  "limitation": "Best previous models were selected on this already inspected archive. Not independent validation and not a replacement criterion."
+}
