@@ -12,9 +12,11 @@
 | ADM | Concessione 16030, Hillside (New Media Malta), dominio `bet365.it`. | Verifica dell’operatore italiano. Le versioni .au e .it restano listini distinti. |
 | SNAI, Sisal, OddsPapi, odss-api.com | Esistono palinsesti italiani o documentazione di possibili fonti. Il progetto non dispone qui di campioni accoppiati con listino italiano, linea esatta, refertazione e prezzo storico verificabile per la Setka. | Fonti da verificare prima di calcolare consenso e ritardi tra operatori. |
 
+Il catalogo pubblico di odss-api.com, verificato il 27 novembre, riporta 1.455 eventi sotto lo sport `tennistavolo`, di cui 140 etichettati `Setka Cup`. Elenca separatamente le competizioni omonime e i palinsesti handicap. Sono conteggi di catalogo, non prove di prezzi italiani disponibili o bookmaker indipendenti. L’endpoint dei prezzi richiede una chiave di questo fornitore. Il piano gratuito documentato indica 500 richieste al mese.
+
 Un confronto tra bookmaker deve escludere il book valutato, usare la stessa linea e granularità e raggruppare fonti che replicano il medesimo fornitore. Oggi gli operatori indipendenti verificati per il consenso sono **zero**. Un margine depurato su Bet365 è un riferimento interno. Cambi del margine, sospensioni, aggiornamenti asincroni e differenze di refertazione possono produrre scarti apparenti. Non si possono inferire le esposizioni o i limiti del bookmaker dai prezzi osservati.
 
-[Concessione ADM](https://www.adm.gov.it/portale/monopoli/giochi/gioco_distanza/gioco_dist_concessionari?cod_conc=16030&nome_conc=&nome_sito=&sub_home=Ricerca) · [Documentazione MoviOdds](https://moviodds.com/doc) · [Palinsesto SNAI](https://www.snai.it/scommesse/sport/tennis-tavolo) · [Tennis tavolo OddsPapi](https://oddspapi.io/blog/table-tennis-odds-api/) · [Documentazione odss-api.com](https://odss-api.com/) · [Studio cronologico sui mercati secondari](STUDIO-MERCATI-PREMATCH-V33.md)
+[Concessione ADM](https://www.adm.gov.it/portale/monopoli/giochi/gioco_distanza/gioco_dist_concessionari?cod_conc=16030&nome_conc=&nome_sito=&sub_home=Ricerca) · [Documentazione MoviOdds](https://moviodds.com/doc) · [Palinsesto SNAI](https://www.snai.it/scommesse/sport/tennis-tavolo) · [Tennis tavolo OddsPapi](https://oddspapi.io/blog/table-tennis-odds-api/) · [Documentazione odss-api.com](https://odss-api.com/) · [Catalogo pubblico odss-api.com](https://odss-api.com/api/v1/leagues) · [Studio cronologico sui mercati secondari](STUDIO-MERCATI-PREMATCH-V33.md)
 
 ## Vincente su più competizioni
 
