@@ -101,6 +101,28 @@ function PricingResearch({report}:{report:PricingReport|null}){
   </details>;
 }
 
+function CalibrationBands({bands}:{bands:BlindAudit['calibration']}){
+  return <details>
+    <summary>Calibrazione per fascia di quota</summary>
+    <p>Confronto sugli stessi esiti con inizio verificato. La probabilità media si confronta con la frequenza di vittoria. Un Brier più basso indica stime migliori.</p>
+    <ul className="competition-list">{bands.map(band=><li key={band.label}><span>
+      <strong>{band.label} · {band.n} esiti su {band.matches} partite</strong>
+      {band.model&&band.market&&<>
+        <small>Vittorie osservate {probability.format(band.model.wins/band.n)} · Stima media modello {probability.format(band.model.mean)} · Bet365 {probability.format(band.market.mean)}</small>
+        <small>Brier modello {band.model.brier.toFixed(4)} · Bet365 {band.market.brier.toFixed(4)}</small>
+        {band.model.ev.filter(row=>row.minimum>0).map(row=><small key={row.minimum}>EV sopra +{probability.format(row.minimum)} · {row.wins} esatte · {row.losses} sbagliate</small>)}
+      </>}
+      {band.prospective.candidate&&band.prospective.market&&band.prospective.model
+        ?<small>Variante su {band.prospective.n} esiti comuni · Brier variante {band.prospective.candidate.brier.toFixed(4)} · Modello {band.prospective.model.brier.toFixed(4)} · Bet365 {band.prospective.market.brier.toFixed(4)}. Vittorie osservate {probability.format(band.prospective.candidate.wins/band.prospective.n)} · Stima variante {probability.format(band.prospective.candidate.mean)}.</small>
+        :<small>Variante in attesa di esiti verificati in questa fascia.</small>}
+      {band.prospective.candidate?.ev.filter(row=>row.minimum>0).map(row=>{
+        const baseline=band.prospective.model?.ev.find(item=>item.minimum===row.minimum);
+        return <small key={row.minimum}>Campione comune · EV sopra +{probability.format(row.minimum)} · Modello {baseline?.wins} esatte e {baseline?.losses} sbagliate · Variante {row.wins} esatte e {row.losses} sbagliate</small>;
+      })}
+    </span></li>)}</ul>
+  </details>;
+}
+
 function FullWinnerArchive({token}:{token:string}){
   const [audit,setAudit]=useState<BlindAudit>();
   const [busy,setBusy]=useState<'summary'|'csv'|null>(null);
@@ -141,6 +163,7 @@ function FullWinnerArchive({token}:{token:string}){
           {peer.eligible>0&&<small>Su {peer.eligible} partite valutabili con entrambi i modelli · solo modello {baseline.exact} esatte e {baseline.wrong} sbagliate · entrambi oltre soglia {peer.exact} esatte e {peer.wrong} sbagliate</small>}
         </span></li>;
       })}</ul>
+      <CalibrationBands bands={audit.calibration}/>
       <details><summary>Per versione del modello</summary><ul className="competition-list">{audit.models.map(row=><li key={row.model}>
         <span><strong>{row.model} · {row.n} partite</strong>{blindEvBands.map(({key,label})=><small key={key}>{label} · {row.bands[key].registered} selezioni · {row.bands[key].exact} esatte · {row.bands[key].wrong} sbagliate</small>)}</span>
       </li>)}</ul></details>

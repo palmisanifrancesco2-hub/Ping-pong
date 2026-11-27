@@ -8,6 +8,7 @@ import { eloProbability, playerKey } from '../src/domain/player-model.js';
 import { bookmakerWinnerPrices } from '../src/shared/quote-selection.js';
 import { prematchBenchmark, verifiedStart } from '../src/domain/research-source.js';
 import { fairMarketProbability } from '../src/shared/value-filter.js';
+import {oddsCalibration} from '../src/domain/odds-calibration.js';
 import { disagreementReport, disagreementStartAt } from '../src/domain/underdog-study.js';
 import { individualWinnerOffers, IndividualSports, singles } from './individual-sports.js';
 import {marketEstimateReport,marketTarget} from './market-estimates.js';
@@ -215,6 +216,11 @@ export function blindAudit(rows:Row[]):BlindAudit {
   const bands=summarizeBands(cases);
   return {...blindSummary(cases,'table_tennis'),from:Number.isFinite(from)?new Date(from).toISOString():null,
     until:Number.isFinite(to)?new Date(to).toISOString():null,
+    calibration:oddsCalibration(cases.flatMap(({parameters:{forecast:f,outcome:o}})=>{
+      if(!o||o.invalid||o.actualGuard===null||!f.prices?.home||!f.prices.away)return [];
+      return [{homeOdds:f.prices.home.odds,awayOdds:f.prices.away.odds,homeProbability:f.homeProbability,
+        candidate:f.agreementBlendHomeProbability,homeWon:o.winner==='home'}];
+    })),
     highEv:bands.above50,bands,peerConfirmed:summarizeBands(cases,true),
     peerBaseline:summarizeBands(cases.filter(row=>row.parameters.forecast.peerHomeProbability!==undefined)),models:[...groups].map(([model,group])=>{
       const byBand=summarizeBands(group);

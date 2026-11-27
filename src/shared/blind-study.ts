@@ -1,3 +1,4 @@
+import type {oddsCalibration} from '../domain/odds-calibration.js';
 import type { IndividualSport } from './individual-sports.js';
 import type { disagreementReport } from '../domain/underdog-study.js';
 
@@ -59,6 +60,6 @@ export type BlindHighEv = {
 };
 export type BlindEvBands=Record<BlindEvBandKey,BlindHighEv>;
 export type BlindAudit = BlindSportSummary & {
-  from:string|null;until:string|null;highEv:BlindHighEv;bands:BlindEvBands;peerConfirmed:BlindEvBands;peerBaseline:BlindEvBands;
+  from:string|null;until:string|null;calibration:ReturnType<typeof oddsCalibration>;highEv:BlindHighEv;bands:BlindEvBands;peerConfirmed:BlindEvBands;peerBaseline:BlindEvBands;
   models:{model:string;n:number;highEv:BlindHighEv;bands:BlindEvBands}[];
 };

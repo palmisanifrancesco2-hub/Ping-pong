@@ -1,0 +1,815 @@
+{
+  "sourceSha256": "0bb2d17f1eafdfc34a44865f1157d454f460fc2d867873173b765d793a30bd9a",
+  "n": 258,
+  "finalN": 156,
+  "finalStart": "2026-11-01",
+  "retrospective": true,
+  "full": [
+    {
+      "label": "2,00–2,50",
+      "matches": 159,
+      "n": 159,
+      "model": {
+        "mean": 0.4843061185684489,
+        "brier": 0.25137786730094525,
+        "wins": 67,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 106,
+            "wins": 45,
+            "losses": 61
+          },
+          {
+            "minimum": 0.5,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.6,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          }
+        ]
+      },
+      "market": {
+        "mean": 0.43095375637726396,
+        "brier": 0.24325094529807317,
+        "wins": 67,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.5,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.6,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          }
+        ]
+      },
+      "prospective": {
+        "matches": 159,
+        "n": 159,
+        "model": {
+          "mean": 0.4843061185684489,
+          "brier": 0.25137786730094525,
+          "wins": 67,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 106,
+              "wins": 45,
+              "losses": 61
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "market": {
+          "mean": 0.43095375637726396,
+          "brier": 0.24325094529807317,
+          "wins": 67,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "candidate": {
+          "mean": 0.4343707717019756,
+          "brier": 0.24302218753257135,
+          "wins": 67,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 2,
+              "wins": 0,
+              "losses": 2
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "Oltre 2,50 e sotto 3,65",
+      "matches": 52,
+      "n": 52,
+      "model": {
+        "mean": 0.4380368569682904,
+        "brier": 0.23774839160511102,
+        "wins": 21,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 46,
+            "wins": 19,
+            "losses": 27
+          },
+          {
+            "minimum": 0.5,
+            "selected": 5,
+            "wins": 2,
+            "losses": 3
+          },
+          {
+            "minimum": 0.6,
+            "selected": 3,
+            "wins": 1,
+            "losses": 2
+          }
+        ]
+      },
+      "market": {
+        "mean": 0.3215543091832542,
+        "brier": 0.2462067860327338,
+        "wins": 21,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.5,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.6,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          }
+        ]
+      },
+      "prospective": {
+        "matches": 52,
+        "n": 52,
+        "model": {
+          "mean": 0.4380368569682904,
+          "brier": 0.23774839160511102,
+          "wins": 21,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 46,
+              "wins": 19,
+              "losses": 27
+            },
+            {
+              "minimum": 0.5,
+              "selected": 5,
+              "wins": 2,
+              "losses": 3
+            },
+            {
+              "minimum": 0.6,
+              "selected": 3,
+              "wins": 1,
+              "losses": 2
+            }
+          ]
+        },
+        "market": {
+          "mean": 0.3215543091832542,
+          "brier": 0.2462067860327338,
+          "wins": 21,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "candidate": {
+          "mean": 0.3413603804665438,
+          "brier": 0.24110882974994793,
+          "wins": 21,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 26,
+              "wins": 12,
+              "losses": 14
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "Da 3,65",
+      "matches": 8,
+      "n": 8,
+      "model": {
+        "mean": 0.45124225823885905,
+        "brier": 0.2246362642198403,
+        "wins": 1,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 8,
+            "wins": 1,
+            "losses": 7
+          },
+          {
+            "minimum": 0.5,
+            "selected": 7,
+            "wins": 1,
+            "losses": 6
+          },
+          {
+            "minimum": 0.6,
+            "selected": 7,
+            "wins": 1,
+            "losses": 6
+          }
+        ]
+      },
+      "market": {
+        "mean": 0.21278881032249616,
+        "brier": 0.12481087811042367,
+        "wins": 1,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.5,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.6,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          }
+        ]
+      },
+      "prospective": {
+        "matches": 8,
+        "n": 8,
+        "model": {
+          "mean": 0.45124225823885905,
+          "brier": 0.2246362642198403,
+          "wins": 1,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 8,
+              "wins": 1,
+              "losses": 7
+            },
+            {
+              "minimum": 0.5,
+              "selected": 7,
+              "wins": 1,
+              "losses": 6
+            },
+            {
+              "minimum": 0.6,
+              "selected": 7,
+              "wins": 1,
+              "losses": 6
+            }
+          ]
+        },
+        "market": {
+          "mean": 0.21278881032249616,
+          "brier": 0.12481087811042367,
+          "wins": 1,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "candidate": {
+          "mean": 0.24712665425109256,
+          "brier": 0.12775842055433204,
+          "wins": 1,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 5,
+              "wins": 1,
+              "losses": 4
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "final": [
+    {
+      "label": "2,00–2,50",
+      "matches": 92,
+      "n": 92,
+      "model": {
+        "mean": 0.4846674564998637,
+        "brier": 0.2531505721240346,
+        "wins": 41,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 57,
+            "wins": 25,
+            "losses": 32
+          },
+          {
+            "minimum": 0.5,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.6,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          }
+        ]
+      },
+      "market": {
+        "mean": 0.4325336422972121,
+        "brier": 0.247289096757605,
+        "wins": 41,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.5,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.6,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          }
+        ]
+      },
+      "prospective": {
+        "matches": 92,
+        "n": 92,
+        "model": {
+          "mean": 0.4846674564998637,
+          "brier": 0.2531505721240346,
+          "wins": 41,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 57,
+              "wins": 25,
+              "losses": 32
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "market": {
+          "mean": 0.4325336422972121,
+          "brier": 0.247289096757605,
+          "wins": 41,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "candidate": {
+          "mean": 0.43543138856277375,
+          "brier": 0.24718405560261844,
+          "wins": 41,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 1,
+              "wins": 0,
+              "losses": 1
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "Oltre 2,50 e sotto 3,65",
+      "matches": 33,
+      "n": 33,
+      "model": {
+        "mean": 0.43545124480645236,
+        "brier": 0.2252927171524577,
+        "wins": 13,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 30,
+            "wins": 12,
+            "losses": 18
+          },
+          {
+            "minimum": 0.5,
+            "selected": 1,
+            "wins": 0,
+            "losses": 1
+          },
+          {
+            "minimum": 0.6,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          }
+        ]
+      },
+      "market": {
+        "mean": 0.3281153633002624,
+        "brier": 0.23705519158902918,
+        "wins": 13,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.5,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.6,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          }
+        ]
+      },
+      "prospective": {
+        "matches": 33,
+        "n": 33,
+        "model": {
+          "mean": 0.43545124480645236,
+          "brier": 0.2252927171524577,
+          "wins": 13,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 30,
+              "wins": 12,
+              "losses": 18
+            },
+            {
+              "minimum": 0.5,
+              "selected": 1,
+              "wins": 0,
+              "losses": 1
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "market": {
+          "mean": 0.3281153633002624,
+          "brier": 0.23705519158902918,
+          "wins": 13,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "candidate": {
+          "mean": 0.3472200580025388,
+          "brier": 0.23222436219530754,
+          "wins": 13,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 15,
+              "wins": 7,
+              "losses": 8
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "Da 3,65",
+      "matches": 5,
+      "n": 5,
+      "model": {
+        "mean": 0.43654803099069295,
+        "brier": 0.2234590333699483,
+        "wins": 1,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 5,
+            "wins": 1,
+            "losses": 4
+          },
+          {
+            "minimum": 0.5,
+            "selected": 4,
+            "wins": 1,
+            "losses": 3
+          },
+          {
+            "minimum": 0.6,
+            "selected": 4,
+            "wins": 1,
+            "losses": 3
+          }
+        ]
+      },
+      "market": {
+        "mean": 0.21240358587769598,
+        "brier": 0.17135940913579967,
+        "wins": 1,
+        "ev": [
+          {
+            "minimum": 0,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.5,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          },
+          {
+            "minimum": 0.6,
+            "selected": 0,
+            "wins": 0,
+            "losses": 0
+          }
+        ]
+      },
+      "prospective": {
+        "matches": 5,
+        "n": 5,
+        "model": {
+          "mean": 0.43654803099069295,
+          "brier": 0.2234590333699483,
+          "wins": 1,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 5,
+              "wins": 1,
+              "losses": 4
+            },
+            {
+              "minimum": 0.5,
+              "selected": 4,
+              "wins": 1,
+              "losses": 3
+            },
+            {
+              "minimum": 0.6,
+              "selected": 4,
+              "wins": 1,
+              "losses": 3
+            }
+          ]
+        },
+        "market": {
+          "mean": 0.21240358587769598,
+          "brier": 0.17135940913579967,
+          "wins": 1,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "candidate": {
+          "mean": 0.2348247106797095,
+          "brier": 0.16051062934829546,
+          "wins": 1,
+          "ev": [
+            {
+              "minimum": 0,
+              "selected": 2,
+              "wins": 1,
+              "losses": 1
+            },
+            {
+              "minimum": 0.5,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "minimum": 0.6,
+              "selected": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
