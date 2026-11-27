@@ -191,3 +191,7 @@ Nel replay v38, il disaccordo con consenso sportivo produce 23 esatti su 45 sele
 ## Disaccordo sul favorito nelle nuove partite
 
 Lo studio settimanale misura ora per fascia quando la previsione sportiva già salvata favorisce lo sfavorito Bet365 e l’EV è positivo. Usa solo esiti con inizio effettivo verificato e coppie di prezzi prematch disponibili. Il conteggio comprende disponibilità, selezioni, esatte, sbagliate, giorni e rendimento a puntata unitaria. Il campione iniziato il 25 novembre 2026 alle 13:00 UTC rimane separato dalle previsioni precedenti. Da quell’ora il flusso salva anche la probabilità Elo di lega quando il modello principale è la logistica e sono disponibili entrambe le stime. Il sottotest ammette solo i casi in cui anche Elo favorisce lo stesso atleta e vede un EV positivo. Questo secondo confronto richiede nuove registrazioni. Le fasce servono all’analisi e non promuovono una regola alla classifica operativa.
+
+## Verifiche delle quote nuove e riduzione dello scarto v40
+
+Le quattro richieste per scansione restano invariate. Le verifiche del campione recente con due quote prematch vengono alternate alla coda precedente, senza usare la quota, il valore atteso o il vincitore per stabilire la precedenza. Il nuovo replay cronologico riduce il Brier rispetto alla media sportiva, ma Bet365 senza margine resta più preciso. La correzione globale individua sei selezioni e due nella fascia da 3,65, entrambe sbagliate. [Studio v40](STUDIO-RIDUZIONE-SCARTO-V40.md).

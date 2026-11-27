@@ -1,5 +1,6 @@
 import {describe,expect,it} from 'vitest';
-import {blindSummary,buildElo,freezeWinner,settleObserved,weeklyScanOverdue} from '../server/blind-study';
+import {blindSummary,buildElo,freezeWinner,settleObserved,weeklyClosingOrder,weeklyScanOverdue} from '../server/blind-study';
+import {disagreementStartAt} from '../src/domain/underdog-study';
 import type {FeedMatch,FeedQuote} from '../src/shared/board';
 
 const now=Date.parse('2026-11-21T18:00:00Z');
@@ -11,6 +12,13 @@ const opponent={...quote,sel_id:'b',label:'B',odds_dec:1.7};
 const result={id:'1',home:'A',away:'B',league:'ATP Test',homeWon:true,availableAt:iso(now+800_000),finishedAt:iso(now+700_000)};
 
 describe('winner observation frozen before outcome',()=>{
+  it('alternates recent priced fixtures with the older queue without using outcomes or odds size',()=>{
+    const f=(id:string,seenAt:number,both=true)=>({id,parameters:{forecast:{seenAt,prices:{home:{odds:1.6,quoteAt:''},away:both?{odds:2.5,quoteAt:''}:null}}}});
+    const rows=[f('old-1',disagreementStartAt-2),f('old-2',disagreementStartAt-1),
+      f('unpriced',disagreementStartAt,false),f('new-1',disagreementStartAt+1),f('new-2',disagreementStartAt+2)];
+    expect(weeklyClosingOrder(rows).map(r=>r.id)).toEqual(['new-1','old-1','new-2','old-2','unpriced']);
+    expect(weeklyClosingOrder(rows.slice(0,2))).toEqual(rows.slice(0,2));
+  });
   it('only retries after a missing heartbeat or a 45 minute gap',()=>{
     expect(weeklyScanOverdue(now,now+44*60_000)).toBe(false);
     expect(weeklyScanOverdue(now,now+45*60_000)).toBe(true);

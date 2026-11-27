@@ -138,6 +138,20 @@ function weeklyRows(rows:Row[]) {
   return rows.filter(({parameters:{forecast:f}})=>f.sport==='table_tennis'&&f.seenAt>=weeklyStart&&f.seenAt<weeklyEnd&&f.scheduledAt<weeklyEnd);
 }
 
+export function weeklyClosingOrder<T extends {parameters:{forecast:Pick<FrozenWinner,'seenAt'|'prices'>}}>(oldestFirst:T[]) {
+  const newer:T[]=[],other:T[]=[];
+  for(const row of oldestFirst){
+    const {seenAt,prices}=row.parameters.forecast;
+    (seenAt>=disagreementStartAt&&prices?.home&&prices?.away?newer:other).push(row);
+  }
+  const order:T[]=[];
+  for(let i=0;i<Math.max(newer.length,other.length);i++){
+    if(newer[i])order.push(newer[i]);
+    if(other[i])order.push(other[i]);
+  }
+  return order;
+}
+
 function weeklySummary(rows:Row[]) {
   let value=0, exact=0, units=0, closingPairs=0, betterThanClosing=0;
   for(const {parameters:{forecast:f,outcome:o}} of rows){
@@ -349,7 +363,19 @@ export class BlindStudy {
     }
     const resultMaps=new Map([...bySport].map(([sport,data])=>[sport,new Map(data.results.map(result=>[result.id,result]))]));
     let calls=0, next=0, closingAvailable=true;
-    for(const row of (weekly?weeklyRows(prior):prior).reverse()){
+    const oldestFirst=(weekly?weeklyRows(prior):prior).reverse();
+    // Reserve half of the existing closing-check budget for the newer priced cohort.
+    // Partition the eligible requests before interleaving so pending fixtures cannot skew it.
+    const closingEligible=(row:Row)=>{
+      const {parameters:p}=row;
+      return !p.outcome?.invalid&&p.outcome?.actualGuard==null&&p.attempts<2
+        &&started-p.lastAttempt>12*hour&&resultMaps.get(p.forecast.sport)?.has(p.forecast.id);
+    };
+    const rows=weekly?[
+      ...weeklyClosingOrder(oldestFirst.filter(closingEligible)),
+      ...oldestFirst.filter(row=>!closingEligible(row)),
+    ]:oldestFirst;
+    for(const row of rows){
       if(this.now()>=deadline-7_000)break;
       const {parameters:p}=row,f=p.forecast,r=resultMaps.get(f.sport)?.get(f.id);
       if(!r||p.outcome?.actualGuard!=null||p.outcome?.invalid)continue;
